@@ -19,7 +19,7 @@
         *   **Search**: Real-time product search by name and description in the Home Screen.
         *   **Reviews**: Users can read and post ratings/comments for each product.
         *   **Profile**: Users can now edit their Name, Email, Phone number, and Profile Image.
-        *   **Product Sorting**: Added ability to sort products by newest, price low to high, and price high to low.
+        *   **Product Sorting**: Added ability to sort products by newest, price, rating, and popularity.
         *   **Address Management**: Full CRUD for delivery addresses with default selection.
         *   **Notifications**: Infrastructure for FCM push notifications integrated.
         *   **Analytics**: Admin dashboard with revenue, top products, and recent sales view.
@@ -38,6 +38,6 @@
 
 ## Next Steps
 1.  **Unit Tests**: Improve code coverage for repositories and controllers.
-2.  **Advanced Sorting**: Sort by rating and popularity.
-3.  **Admin UI**: Full product and category management via the app.
-4.  **Order Status Updates**: Real-time order tracking.
+2.  **Admin UI**: Full product and category management via the app.
+3.  **Order Status Updates**: Real-time order tracking.
+4.  **Wishlist**: Allow users to save favorite products.
