@@ -81,9 +81,10 @@ class AuthController extends Controller
             'email' => 'required_without:phone|email|unique:users,email,'.$user->id.'|nullable',
             'phone' => 'required_without:email|string|unique:users,phone,'.$user->id.'|nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'fcm_token' => 'nullable|string',
         ]);
 
-        $data = $request->only('name', 'email', 'phone');
+        $data = $request->only('name', 'email', 'phone', 'fcm_token');
 
         if ($request->hasFile('image')) {
             // Delete old image

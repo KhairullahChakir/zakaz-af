@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_controller.dart';
+part of 'address_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,44 +9,44 @@ part of 'auth_controller.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(AuthController)
-const authControllerProvider = AuthControllerProvider._();
+@ProviderFor(Addresses)
+const addressesProvider = AddressesProvider._();
 
-final class AuthControllerProvider
-    extends $AsyncNotifierProvider<AuthController, User?> {
-  const AuthControllerProvider._()
+final class AddressesProvider
+    extends $AsyncNotifierProvider<Addresses, List<Address>> {
+  const AddressesProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'authControllerProvider',
+        name: r'addressesProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$authControllerHash();
+  String debugGetCreateSourceHash() => _$addressesHash();
 
   @$internal
   @override
-  AuthController create() => AuthController();
+  Addresses create() => Addresses();
 }
 
-String _$authControllerHash() => r'b42107cee01ce7629d06a9c90b3385e94fa52161';
+String _$addressesHash() => r'8ae1a93ff4db9507eaac6df3072bcd62595a3e83';
 
-abstract class _$AuthController extends $AsyncNotifier<User?> {
-  FutureOr<User?> build();
+abstract class _$Addresses extends $AsyncNotifier<List<Address>> {
+  FutureOr<List<Address>> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<AsyncValue<User?>, User?>;
+    final ref = this.ref as $Ref<AsyncValue<List<Address>>, List<Address>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<User?>, User?>,
-              AsyncValue<User?>,
+              AnyNotifier<AsyncValue<List<Address>>, List<Address>>,
+              AsyncValue<List<Address>>,
               Object?,
               Object?
             >;

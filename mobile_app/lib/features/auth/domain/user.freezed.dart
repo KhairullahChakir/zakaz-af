@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$User {
 
- int get id; String get name; String? get email; String? get phone;@JsonKey(name: 'profile_image') String? get profileImage;@JsonKey(name: 'profile_image_url') String? get profileImageUrl;
+ int get id; String get name; String? get email; String? get phone;@JsonKey(name: 'profile_image') String? get profileImage;@JsonKey(name: 'profile_image_url') String? get profileImageUrl;@JsonKey(name: 'fcm_token') String? get fcmToken;
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $UserCopyWith<User> get copyWith => _$UserCopyWithImpl<User>(this as User, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,email,phone,profileImage,profileImageUrl);
+int get hashCode => Object.hash(runtimeType,id,name,email,phone,profileImage,profileImageUrl,fcmToken);
 
 @override
 String toString() {
-  return 'User(id: $id, name: $name, email: $email, phone: $phone, profileImage: $profileImage, profileImageUrl: $profileImageUrl)';
+  return 'User(id: $id, name: $name, email: $email, phone: $phone, profileImage: $profileImage, profileImageUrl: $profileImageUrl, fcmToken: $fcmToken)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $UserCopyWith<$Res>  {
   factory $UserCopyWith(User value, $Res Function(User) _then) = _$UserCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, String? email, String? phone,@JsonKey(name: 'profile_image') String? profileImage,@JsonKey(name: 'profile_image_url') String? profileImageUrl
+ int id, String name, String? email, String? phone,@JsonKey(name: 'profile_image') String? profileImage,@JsonKey(name: 'profile_image_url') String? profileImageUrl,@JsonKey(name: 'fcm_token') String? fcmToken
 });
 
 
@@ -65,7 +65,7 @@ class _$UserCopyWithImpl<$Res>
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? email = freezed,Object? phone = freezed,Object? profileImage = freezed,Object? profileImageUrl = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? email = freezed,Object? phone = freezed,Object? profileImage = freezed,Object? profileImageUrl = freezed,Object? fcmToken = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -73,6 +73,7 @@ as String,email: freezed == email ? _self.email : email // ignore: cast_nullable
 as String?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String?,profileImage: freezed == profileImage ? _self.profileImage : profileImage // ignore: cast_nullable_to_non_nullable
 as String?,profileImageUrl: freezed == profileImageUrl ? _self.profileImageUrl : profileImageUrl // ignore: cast_nullable_to_non_nullable
+as String?,fcmToken: freezed == fcmToken ? _self.fcmToken : fcmToken // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -158,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String? email,  String? phone, @JsonKey(name: 'profile_image')  String? profileImage, @JsonKey(name: 'profile_image_url')  String? profileImageUrl)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String? email,  String? phone, @JsonKey(name: 'profile_image')  String? profileImage, @JsonKey(name: 'profile_image_url')  String? profileImageUrl, @JsonKey(name: 'fcm_token')  String? fcmToken)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _User() when $default != null:
-return $default(_that.id,_that.name,_that.email,_that.phone,_that.profileImage,_that.profileImageUrl);case _:
+return $default(_that.id,_that.name,_that.email,_that.phone,_that.profileImage,_that.profileImageUrl,_that.fcmToken);case _:
   return orElse();
 
 }
@@ -179,10 +180,10 @@ return $default(_that.id,_that.name,_that.email,_that.phone,_that.profileImage,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String? email,  String? phone, @JsonKey(name: 'profile_image')  String? profileImage, @JsonKey(name: 'profile_image_url')  String? profileImageUrl)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String? email,  String? phone, @JsonKey(name: 'profile_image')  String? profileImage, @JsonKey(name: 'profile_image_url')  String? profileImageUrl, @JsonKey(name: 'fcm_token')  String? fcmToken)  $default,) {final _that = this;
 switch (_that) {
 case _User():
-return $default(_that.id,_that.name,_that.email,_that.phone,_that.profileImage,_that.profileImageUrl);case _:
+return $default(_that.id,_that.name,_that.email,_that.phone,_that.profileImage,_that.profileImageUrl,_that.fcmToken);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +200,10 @@ return $default(_that.id,_that.name,_that.email,_that.phone,_that.profileImage,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String? email,  String? phone, @JsonKey(name: 'profile_image')  String? profileImage, @JsonKey(name: 'profile_image_url')  String? profileImageUrl)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String? email,  String? phone, @JsonKey(name: 'profile_image')  String? profileImage, @JsonKey(name: 'profile_image_url')  String? profileImageUrl, @JsonKey(name: 'fcm_token')  String? fcmToken)?  $default,) {final _that = this;
 switch (_that) {
 case _User() when $default != null:
-return $default(_that.id,_that.name,_that.email,_that.phone,_that.profileImage,_that.profileImageUrl);case _:
+return $default(_that.id,_that.name,_that.email,_that.phone,_that.profileImage,_that.profileImageUrl,_that.fcmToken);case _:
   return null;
 
 }
@@ -214,7 +215,7 @@ return $default(_that.id,_that.name,_that.email,_that.phone,_that.profileImage,_
 @JsonSerializable()
 
 class _User implements User {
-  const _User({required this.id, required this.name, required this.email, required this.phone, @JsonKey(name: 'profile_image') this.profileImage, @JsonKey(name: 'profile_image_url') this.profileImageUrl});
+  const _User({required this.id, required this.name, required this.email, required this.phone, @JsonKey(name: 'profile_image') this.profileImage, @JsonKey(name: 'profile_image_url') this.profileImageUrl, @JsonKey(name: 'fcm_token') this.fcmToken});
   factory _User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
 @override final  int id;
@@ -223,6 +224,7 @@ class _User implements User {
 @override final  String? phone;
 @override@JsonKey(name: 'profile_image') final  String? profileImage;
 @override@JsonKey(name: 'profile_image_url') final  String? profileImageUrl;
+@override@JsonKey(name: 'fcm_token') final  String? fcmToken;
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
@@ -237,16 +239,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.profileImage, profileImage) || other.profileImage == profileImage)&&(identical(other.profileImageUrl, profileImageUrl) || other.profileImageUrl == profileImageUrl)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,email,phone,profileImage,profileImageUrl);
+int get hashCode => Object.hash(runtimeType,id,name,email,phone,profileImage,profileImageUrl,fcmToken);
 
 @override
 String toString() {
-  return 'User(id: $id, name: $name, email: $email, phone: $phone, profileImage: $profileImage, profileImageUrl: $profileImageUrl)';
+  return 'User(id: $id, name: $name, email: $email, phone: $phone, profileImage: $profileImage, profileImageUrl: $profileImageUrl, fcmToken: $fcmToken)';
 }
 
 
@@ -257,7 +259,7 @@ abstract mixin class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) _then) = __$UserCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, String? email, String? phone,@JsonKey(name: 'profile_image') String? profileImage,@JsonKey(name: 'profile_image_url') String? profileImageUrl
+ int id, String name, String? email, String? phone,@JsonKey(name: 'profile_image') String? profileImage,@JsonKey(name: 'profile_image_url') String? profileImageUrl,@JsonKey(name: 'fcm_token') String? fcmToken
 });
 
 
@@ -274,7 +276,7 @@ class __$UserCopyWithImpl<$Res>
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? email = freezed,Object? phone = freezed,Object? profileImage = freezed,Object? profileImageUrl = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? email = freezed,Object? phone = freezed,Object? profileImage = freezed,Object? profileImageUrl = freezed,Object? fcmToken = freezed,}) {
   return _then(_User(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -282,6 +284,7 @@ as String,email: freezed == email ? _self.email : email // ignore: cast_nullable
 as String?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String?,profileImage: freezed == profileImage ? _self.profileImage : profileImage // ignore: cast_nullable_to_non_nullable
 as String?,profileImageUrl: freezed == profileImageUrl ? _self.profileImageUrl : profileImageUrl // ignore: cast_nullable_to_non_nullable
+as String?,fcmToken: freezed == fcmToken ? _self.fcmToken : fcmToken // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

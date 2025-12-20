@@ -23,4 +23,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/orders', [App\Http\Controllers\Api\OrderController::class, 'index']);
     
     Route::post('/reviews', [App\Http\Controllers\Api\ReviewController::class, 'store']);
+    
+    Route::get('/addresses', [App\Http\Controllers\Api\AddressController::class, 'index']);
+    Route::post('/addresses', [App\Http\Controllers\Api\AddressController::class, 'store']);
+    Route::put('/addresses/{id}', [App\Http\Controllers\Api\AddressController::class, 'update']);
+    Route::delete('/addresses/{id}', [App\Http\Controllers\Api\AddressController::class, 'destroy']);
 });

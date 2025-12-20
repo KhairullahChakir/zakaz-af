@@ -131,6 +131,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                 context.push('/orders');
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.location_on),
+              title: const Text('My Addresses'),
+              onTap: () {
+                Navigator.pop(context);
+                context.push('/addresses');
+              },
+            ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),

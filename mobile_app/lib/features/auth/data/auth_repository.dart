@@ -77,12 +77,14 @@ class AuthRepository {
     String? email,
     String? phone,
     String? imagePath,
+    String? fcmToken,
   }) async {
     try {
       final Map<String, dynamic> data = {
         'name': name,
         'email': email,
         'phone': phone,
+        'fcm_token': fcmToken,
       }..removeWhere((key, value) => value == null);
 
       if (imagePath != null) {

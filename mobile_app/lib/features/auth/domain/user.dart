@@ -12,6 +12,7 @@ abstract class User with _$User {
     required String? phone,
     @JsonKey(name: 'profile_image') String? profileImage,
     @JsonKey(name: 'profile_image_url') String? profileImageUrl,
+    @JsonKey(name: 'fcm_token') String? fcmToken,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

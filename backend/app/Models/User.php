@@ -25,6 +25,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'profile_image',
+        'fcm_token',
     ];
 
     protected $appends = ['profile_image_url'];
@@ -58,5 +59,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
     }
 }

@@ -8,6 +8,9 @@ import '../features/home/presentation/home_screen.dart';
 import '../features/products/presentation/product_details_screen.dart';
 import '../features/cart/presentation/cart_screen.dart';
 import '../features/orders/presentation/orders_screen.dart';
+import '../features/addresses/presentation/address_screen.dart';
+import '../features/addresses/presentation/add_edit_address_screen.dart';
+import '../features/addresses/domain/address.dart';
 
 part 'app_router.g.dart';
 
@@ -54,6 +57,23 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/profile',
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/addresses',
+        builder: (context, state) => const AddressScreen(),
+        routes: [
+          GoRoute(
+            path: 'add',
+            builder: (context, state) => const AddEditAddressScreen(),
+          ),
+          GoRoute(
+            path: 'edit',
+            builder: (context, state) {
+              final address = state.extra as Address;
+              return AddEditAddressScreen(address: address);
+            },
+          ),
+        ],
       ),
       GoRoute(
         path: '/',

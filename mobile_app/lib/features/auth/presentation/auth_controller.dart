@@ -73,6 +73,7 @@ class AuthController extends _$AuthController {
     String? email,
     String? phone,
     String? imagePath,
+    String? fcmToken,
   }) async {
     state = const AsyncValue.loading();
     try {
@@ -82,6 +83,7 @@ class AuthController extends _$AuthController {
         email: email,
         phone: phone,
         imagePath: imagePath,
+        fcmToken: fcmToken,
       );
       state = AsyncValue.data(user);
     } catch (e, st) {
