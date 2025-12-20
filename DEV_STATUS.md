@@ -28,6 +28,7 @@
         *   **Checkout Polish**: Full checkout screen with address selection, order summary, and place order flow.
         *   **Wishlist**: Save favorite products with heart button on product details and dedicated wishlist screen.
         *   **Order Tracking**: Visual timeline for order status, detailed order view, and admin status updates.
+        *   **Admin UI**: Full product and category CRUD with image upload, accessible from analytics dashboard.
     *   **Fixes**:
         *   **Auth Header**: `Authorization: Bearer <token>` is now automatically injected into ALL requests via a Dio Interceptor.
         *   **Cart Persistence**: Implemented `SharedPreferences` to save cart items to disk. Cart items now survive app restarts!
@@ -40,6 +41,6 @@
 
 ## Next Steps
 1.  **Unit Tests**: Improve code coverage for repositories and controllers.
-2.  **Admin UI**: Full product and category management via the app.
-3.  **Coupons**: Discount codes at checkout.
-4.  **Stock Management**: Product stock tracking and low-stock alerts.
+2.  **Coupons**: Discount codes at checkout.
+3.  **Stock Management**: Product stock tracking and low-stock alerts.
+4.  **Payment Integration**: Integrate payment gateway.

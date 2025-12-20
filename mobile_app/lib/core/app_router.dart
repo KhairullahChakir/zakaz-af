@@ -15,6 +15,10 @@ import '../features/addresses/presentation/add_edit_address_screen.dart';
 import '../features/addresses/domain/address.dart';
 import '../features/analytics/presentation/analytics_screen.dart';
 import '../features/wishlist/presentation/wishlist_screen.dart';
+import '../features/admin/presentation/admin_products_screen.dart';
+import '../features/admin/presentation/add_edit_product_screen.dart';
+import '../features/admin/presentation/admin_categories_screen.dart';
+import '../features/products/domain/product.dart';
 
 part 'app_router.g.dart';
 
@@ -82,6 +86,27 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/wishlist',
         builder: (context, state) => const WishlistScreen(),
+      ),
+      GoRoute(
+        path: '/admin/products',
+        builder: (context, state) => const AdminProductsScreen(),
+        routes: [
+          GoRoute(
+            path: 'add',
+            builder: (context, state) => const AddEditProductScreen(),
+          ),
+          GoRoute(
+            path: 'edit',
+            builder: (context, state) {
+              final product = state.extra as Product;
+              return AddEditProductScreen(product: product);
+            },
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/admin/categories',
+        builder: (context, state) => const AdminCategoriesScreen(),
       ),
       GoRoute(
         path: '/addresses',

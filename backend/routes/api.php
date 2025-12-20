@@ -37,4 +37,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/wishlist', [App\Http\Controllers\Api\WishlistController::class, 'store']);
     Route::delete('/wishlist/{productId}', [App\Http\Controllers\Api\WishlistController::class, 'destroy']);
     Route::get('/wishlist/check/{productId}', [App\Http\Controllers\Api\WishlistController::class, 'check']);
+    
+    // Admin routes
+    Route::prefix('admin')->group(function () {
+        Route::get('/products', [App\Http\Controllers\Api\AdminProductController::class, 'index']);
+        Route::post('/products', [App\Http\Controllers\Api\AdminProductController::class, 'store']);
+        Route::post('/products/{id}', [App\Http\Controllers\Api\AdminProductController::class, 'update']);
+        Route::delete('/products/{id}', [App\Http\Controllers\Api\AdminProductController::class, 'destroy']);
+        
+        Route::post('/categories', [App\Http\Controllers\Api\AdminCategoryController::class, 'store']);
+        Route::post('/categories/{id}', [App\Http\Controllers\Api\AdminCategoryController::class, 'update']);
+        Route::delete('/categories/{id}', [App\Http\Controllers\Api\AdminCategoryController::class, 'destroy']);
+    });
 });
