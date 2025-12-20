@@ -59,7 +59,7 @@ class AnalyticsScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        currencyFormat.format(stats['total_revenue']),
+                        currencyFormat.format(double.tryParse(stats['total_revenue'].toString()) ?? 0),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 32,
@@ -118,7 +118,7 @@ class AnalyticsScreen extends ConsumerWidget {
                     title: Text(s['user']['name']),
                     subtitle: Text(DateFormat.yMMMd().add_jm().format(DateTime.parse(s['created_at']))),
                     trailing: Text(
-                      currencyFormat.format(s['total_amount']),
+                      currencyFormat.format(double.tryParse(s['total_amount'].toString()) ?? 0),
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
