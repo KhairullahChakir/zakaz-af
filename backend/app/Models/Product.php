@@ -25,6 +25,20 @@ class Product extends Model
         'category_id' => 'integer',
     ];
 
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image) {
+            // Check if it's already a full URL
+            if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+                return $this->image;
+            }
+            return asset('storage/' . $this->image);
+        }
+        return null;
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);

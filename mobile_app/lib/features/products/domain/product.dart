@@ -12,6 +12,7 @@ abstract class Product with _$Product {
     required String? description,
     required double price,
     String? image,
+    @JsonKey(name: 'image_url') String? imageUrl,
     required int stock,
     @JsonKey(name: 'category_id') required int categoryId,
     Category? category,

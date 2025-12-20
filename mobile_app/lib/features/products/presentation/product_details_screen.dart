@@ -46,8 +46,8 @@ class ProductDetailsScreen extends ConsumerWidget {
                         color: Colors.grey[200],
                         width: double.infinity,
                         alignment: Alignment.center,
-                        child: product.image != null
-                            ? Image.network(product.image!, fit: BoxFit.cover, width: double.infinity)
+                        child: (product.imageUrl ?? product.image) != null
+                            ? Image.network(product.imageUrl ?? product.image!, fit: BoxFit.cover, width: double.infinity)
                             : const Icon(Icons.inventory_2_outlined, size: 100, color: Colors.grey),
                       ),
                       Padding(

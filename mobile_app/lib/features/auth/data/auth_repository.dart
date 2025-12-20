@@ -81,13 +81,23 @@ class AuthRepository {
     required String name,
     String? email,
     String? phone,
+    String? imagePath,
   }) async {
     try {
-      final response = await _dio.post('/user/profile', data: {
+      final Map<String, dynamic> data = {
         'name': name,
         'email': email,
         'phone': phone,
-      });
+      };
+
+      if (imagePath != null) {
+        data['image'] = await MultipartFile.fromFile(imagePath);
+      }
+
+      final response = await _dio.post(
+        '/user/profile',
+        data: FormData.fromMap(data),
+      );
       return User.fromJson(response.data['user']);
     } on DioException catch (e) {
       throw Exception(e.response?.data['message'] ?? 'Failed to update profile');

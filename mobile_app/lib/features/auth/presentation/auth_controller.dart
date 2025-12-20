@@ -72,6 +72,7 @@ class AuthController extends _$AuthController {
     required String name,
     String? email,
     String? phone,
+    String? imagePath,
   }) async {
     state = const AsyncValue.loading();
     try {
@@ -80,6 +81,7 @@ class AuthController extends _$AuthController {
         name: name,
         email: email,
         phone: phone,
+        imagePath: imagePath,
       );
       state = AsyncValue.data(user);
     } catch (e, st) {

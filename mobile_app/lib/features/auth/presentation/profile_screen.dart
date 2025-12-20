@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'auth_controller.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -14,6 +16,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
+  File? _imageFile;
 
   @override
   void initState() {
@@ -47,9 +50,34 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const CircleAvatar(
-                radius: 50,
-                child: Icon(Icons.person, size: 60),
+              Center(
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: _imageFile != null
+                          ? FileImage(_imageFile!)
+                          : (ref.watch(authControllerProvider).value?.profileImageUrl != null
+                              ? NetworkImage(ref.watch(authControllerProvider).value!.profileImageUrl!)
+                              : null) as ImageProvider?,
+                      child: _imageFile == null && ref.watch(authControllerProvider).value?.profileImageUrl == null
+                          ? const Icon(Icons.person, size: 60)
+                          : null,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: CircleAvatar(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        radius: 18,
+                        child: IconButton(
+                          icon: const Icon(Icons.camera_alt, size: 18, color: Colors.white),
+                          onPressed: _pickImage,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 32),
               TextFormField(
@@ -114,6 +142,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           name: _nameController.text,
           email: _emailController.text.isEmpty ? null : _emailController.text,
           phone: _phoneController.text.isEmpty ? null : _phoneController.text,
+          imagePath: _imageFile?.path,
         );
 
     if (mounted && !ref.read(authControllerProvider).hasError) {
@@ -121,6 +150,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         const SnackBar(content: Text('Profile updated successfully')),
       );
       Navigator.pop(context);
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
     }
   }
 }

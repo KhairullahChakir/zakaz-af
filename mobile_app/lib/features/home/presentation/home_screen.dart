@@ -75,10 +75,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                   const CircleAvatar(
+                   CircleAvatar(
                      backgroundColor: Colors.white,
                      radius: 30,
-                     child: Icon(Icons.person, size: 40),
+                     backgroundImage: ref.watch(authControllerProvider).value?.profileImageUrl != null
+                         ? NetworkImage(ref.watch(authControllerProvider).value!.profileImageUrl!)
+                         : null,
+                     child: ref.watch(authControllerProvider).value?.profileImageUrl == null
+                         ? const Icon(Icons.person, size: 40)
+                         : null,
                    ),
                    const SizedBox(height: 10),
                    ref.watch(authControllerProvider).when(
@@ -220,8 +225,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                                 child: Container(
                                   color: Colors.grey[200],
                                   alignment: Alignment.center,
-                                  child: product.image != null
-                                      ? Image.network(product.image!, fit: BoxFit.cover)
+                                  child: (product.imageUrl ?? product.image) != null
+                                      ? Image.network(product.imageUrl ?? product.image!, fit: BoxFit.cover)
                                       : const Icon(Icons.inventory_2_outlined, size: 48, color: Colors.grey),
                                 ),
                               ),
