@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'orders_provider.dart';
 import 'package:intl/intl.dart';
 
@@ -37,7 +38,9 @@ class OrdersScreen extends ConsumerWidget {
                 
                 return Card(
                   margin: const EdgeInsets.only(bottom: 16),
-                  child: ExpansionTile(
+                  child: InkWell(
+                    onTap: () => context.push('/orders/${order.id}'),
+                    child: ExpansionTile(
                     title: Text('Order #${order.id}'),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,6 +72,7 @@ class OrdersScreen extends ConsumerWidget {
                             trailing: Text('${item.quantity * item.price} AFN'),
                           )),
                     ],
+                  ),
                   ),
                 );
               },

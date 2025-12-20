@@ -41,4 +41,18 @@ class OrderRepository {
       throw Exception(e.response?.data['message'] ?? 'Failed to fetch orders');
     }
   }
+
+  Future<OrderModel> getOrder(int id) async {
+    try {
+      final response = await _dio.get('/orders/$id');
+      return OrderModel.fromJson(response.data);
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Failed to fetch order');
+    }
+  }
+}
+
+@riverpod
+Future<OrderModel> orderDetails(Ref ref, int orderId) async {
+  return ref.watch(orderRepositoryProvider).getOrder(orderId);
 }

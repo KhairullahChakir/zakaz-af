@@ -75,10 +75,40 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $orders = Order::where('user_id', $request->user()->id)
-            ->with('items.product')
+            ->with(['items.product', 'address'])
             ->orderBy('created_at', 'desc')
             ->get();
             
         return response()->json($orders);
+    }
+
+    public function show(Request $request, $id)
+    {
+        $order = Order::where('id', $id)
+            ->where('user_id', $request->user()->id)
+            ->with(['items.product', 'address'])
+            ->firstOrFail();
+            
+        return response()->json($order);
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'status' => 'required|in:pending,processing,shipped,delivered,cancelled',
+        ]);
+
+        $order = Order::findOrFail($id);
+        $order->status = $request->status;
+        $order->save();
+
+        return response()->json([
+            'message' => 'Order status updated',
+            'order' => $order->load(['items.product', 'address', 'user']),
+        ]);
     }
 }

@@ -21,6 +21,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     Route::post('/orders', [App\Http\Controllers\Api\OrderController::class, 'store']);
     Route::get('/orders', [App\Http\Controllers\Api\OrderController::class, 'index']);
+    Route::get('/orders/{id}', [App\Http\Controllers\Api\OrderController::class, 'show']);
+    Route::patch('/orders/{id}/status', [App\Http\Controllers\Api\OrderController::class, 'updateStatus']);
     
     Route::post('/reviews', [App\Http\Controllers\Api\ReviewController::class, 'store']);
     

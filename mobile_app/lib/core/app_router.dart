@@ -9,6 +9,7 @@ import '../features/products/presentation/product_details_screen.dart';
 import '../features/cart/presentation/cart_screen.dart';
 import '../features/cart/presentation/checkout_screen.dart';
 import '../features/orders/presentation/orders_screen.dart';
+import '../features/orders/presentation/order_details_screen.dart';
 import '../features/addresses/presentation/address_screen.dart';
 import '../features/addresses/presentation/add_edit_address_screen.dart';
 import '../features/addresses/domain/address.dart';
@@ -60,6 +61,15 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/orders',
         builder: (context, state) => const OrdersScreen(),
+        routes: [
+          GoRoute(
+            path: ':id',
+            builder: (context, state) {
+              final id = int.parse(state.pathParameters['id']!);
+              return OrderDetailsScreen(orderId: id);
+            },
+          ),
+        ],
       ),
       GoRoute(
         path: '/profile',
