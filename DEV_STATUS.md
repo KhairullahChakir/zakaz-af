@@ -26,13 +26,14 @@
         *   **Dark Mode**: Theme toggle in drawer with full system/light/dark support.
         *   **Search History**: Recent searches saved locally and displayed in search mode.
         *   **Checkout Polish**: Full checkout screen with address selection, order summary, and place order flow.
+        *   **Wishlist**: Save favorite products with heart button on product details and dedicated wishlist screen.
     *   **Fixes**:
         *   **Auth Header**: `Authorization: Bearer <token>` is now automatically injected into ALL requests via a Dio Interceptor.
         *   **Cart Persistence**: Implemented `SharedPreferences` to save cart items to disk. Cart items now survive app restarts!
     *   **Polish**:
         *   **Cart Badge**: Visual indicator on the shopping cart icon showing the number of items.
         *   **Pull-to-refresh**: Added to Home Screen for categories and products.
-        *   **Side Drawer**: Premium navigation menu with Home, Profile, Order History, Addresses, Admin Dashboard, and Dark Mode toggle.
+        *   **Side Drawer**: Premium navigation with Wishlist, Profile, Order History, Addresses, Admin Dashboard, and Dark Mode.
         *   **Order History Screen**: Users can now view their past orders, including status and line items.
         *   **Real User Data**: Home screen drawer now displays the logged-in user's name and email.
 
@@ -40,4 +41,4 @@
 1.  **Unit Tests**: Improve code coverage for repositories and controllers.
 2.  **Admin UI**: Full product and category management via the app.
 3.  **Order Status Updates**: Real-time order tracking.
-4.  **Wishlist**: Allow users to save favorite products.
+4.  **Coupons**: Discount codes at checkout.

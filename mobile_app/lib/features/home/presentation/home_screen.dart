@@ -147,6 +147,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                 context.push('/addresses');
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.favorite, color: Colors.red),
+              title: const Text('My Wishlist'),
+              onTap: () {
+                Navigator.pop(context);
+                context.push('/wishlist');
+              },
+            ),
             if (ref.watch(authControllerProvider).value?.isAdmin ?? false)
               ListTile(
                 leading: const Icon(Icons.admin_panel_settings, color: Colors.blue),

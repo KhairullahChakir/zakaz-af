@@ -5,6 +5,7 @@ import '../../products/presentation/providers.dart';
 import '../../cart/presentation/cart_provider.dart';
 import '../../reviews/presentation/reviews_provider.dart';
 import '../../reviews/data/review_repository.dart';
+import '../../wishlist/presentation/wishlist_provider.dart';
 import 'package:intl/intl.dart';
 
 class ProductDetailsScreen extends ConsumerWidget {
@@ -29,6 +30,28 @@ class ProductDetailsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Details'),
         actions: [
+          productAsync.when(
+            data: (product) {
+              final isWishlisted = ref.watch(wishlistProvider).value?.any((p) => p.id == product.id) ?? false;
+              return IconButton(
+                icon: Icon(
+                  isWishlisted ? Icons.favorite : Icons.favorite_border,
+                  color: isWishlisted ? Colors.red : null,
+                ),
+                onPressed: () {
+                  ref.read(wishlistProvider.notifier).toggleWishlist(product);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist'),
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
+                },
+              );
+            },
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
+          ),
           const CartIconBadge(),
         ],
       ),

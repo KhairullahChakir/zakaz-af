@@ -30,4 +30,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/addresses', [App\Http\Controllers\Api\AddressController::class, 'store']);
     Route::put('/addresses/{id}', [App\Http\Controllers\Api\AddressController::class, 'update']);
     Route::delete('/addresses/{id}', [App\Http\Controllers\Api\AddressController::class, 'destroy']);
+    
+    Route::get('/wishlist', [App\Http\Controllers\Api\WishlistController::class, 'index']);
+    Route::post('/wishlist', [App\Http\Controllers\Api\WishlistController::class, 'store']);
+    Route::delete('/wishlist/{productId}', [App\Http\Controllers\Api\WishlistController::class, 'destroy']);
+    Route::get('/wishlist/check/{productId}', [App\Http\Controllers\Api\WishlistController::class, 'check']);
 });
