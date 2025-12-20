@@ -14,16 +14,52 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProviderStateMixin {
   int? _selectedCategoryId;
+  bool _isSearching = false;
+  final _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final categoriesAsync = ref.watch(categoriesProvider);
-    final productsAsync = ref.watch(productsProvider(categoryId: _selectedCategoryId));
+    final productsAsync = ref.watch(productsProvider(
+      categoryId: _selectedCategoryId,
+      search: _searchController.text.isEmpty ? null : _searchController.text,
+    ));
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Zakaz - AF'),
+        title: _isSearching
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  hintText: 'Search products...',
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(color: Colors.black54),
+                ),
+                style: const TextStyle(color: Colors.black),
+                onChanged: (value) {
+                  setState(() {}); // Rebuild to fetch with search
+                },
+              )
+            : const Text('Zakaz - AF'),
         actions: [
+          IconButton(
+            icon: Icon(_isSearching ? Icons.close : Icons.search),
+            onPressed: () {
+              setState(() {
+                if (_isSearching) {
+                  _searchController.clear();
+                }
+                _isSearching = !_isSearching;
+              });
+            },
+          ),
           const CartIconBadge(),
         ],
       ),
@@ -65,6 +101,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
               leading: const Icon(Icons.home),
               title: const Text('Home'),
               onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Edit Profile'),
+              onTap: () {
+                Navigator.pop(context);
+                context.push('/profile');
+              },
             ),
             ListTile(
               leading: const Icon(Icons.history),
@@ -134,7 +178,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
             child: RefreshIndicator(
               onRefresh: () async {
                 ref.invalidate(categoriesProvider);
-                ref.invalidate(productsProvider(categoryId: _selectedCategoryId));
+                ref.invalidate(productsProvider(
+                  categoryId: _selectedCategoryId,
+                  search: _searchController.text.isEmpty ? null : _searchController.text,
+                ));
               },
               child: productsAsync.when(
                 data: (products) {
@@ -222,7 +269,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                             Text('Error: $err', textAlign: TextAlign.center, style: const TextStyle(color: Colors.red)),
                             const SizedBox(height: 16),
                             ElevatedButton(
-                              onPressed: () => ref.refresh(productsProvider(categoryId: _selectedCategoryId)),
+                              onPressed: () => ref.refresh(productsProvider(
+                                categoryId: _selectedCategoryId,
+                                search: _searchController.text.isEmpty ? null : _searchController.text,
+                              )),
                               child: const Text('Retry'),
                             )
                           ],

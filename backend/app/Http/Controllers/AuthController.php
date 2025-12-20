@@ -70,4 +70,22 @@ class AuthController extends Controller
     {
         return $request->user();
     }
+
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required_without:phone|email|unique:users,email,'.$user->id.'|nullable',
+            'phone' => 'required_without:email|string|unique:users,phone,'.$user->id.'|nullable',
+        ]);
+
+        $user->update($request->only('name', 'email', 'phone'));
+
+        return response()->json([
+            'message' => 'Profile updated successfully',
+            'user' => $user,
+        ]);
+    }
 }

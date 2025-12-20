@@ -61,7 +61,7 @@ final class ProductsProvider
     with $FutureModifier<List<Product>>, $FutureProvider<List<Product>> {
   const ProductsProvider._({
     required ProductsFamily super.from,
-    required int? super.argument,
+    required ({int? categoryId, String? search}) super.argument,
   }) : super(
          retry: null,
          name: r'productsProvider',
@@ -77,7 +77,7 @@ final class ProductsProvider
   String toString() {
     return r'productsProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
@@ -88,8 +88,12 @@ final class ProductsProvider
 
   @override
   FutureOr<List<Product>> create(Ref ref) {
-    final argument = this.argument as int?;
-    return products(ref, categoryId: argument);
+    final argument = this.argument as ({int? categoryId, String? search});
+    return products(
+      ref,
+      categoryId: argument.categoryId,
+      search: argument.search,
+    );
   }
 
   @override
@@ -103,10 +107,14 @@ final class ProductsProvider
   }
 }
 
-String _$productsHash() => r'2281ec46e0f18beb4f49999b376b5b5168abda11';
+String _$productsHash() => r'2644673ab337e388de2a248beba0d9423d9a340f';
 
 final class ProductsFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<List<Product>>, int?> {
+    with
+        $FunctionalFamilyOverride<
+          FutureOr<List<Product>>,
+          ({int? categoryId, String? search})
+        > {
   const ProductsFamily._()
     : super(
         retry: null,
@@ -116,8 +124,11 @@ final class ProductsFamily extends $Family
         isAutoDispose: true,
       );
 
-  ProductsProvider call({int? categoryId}) =>
-      ProductsProvider._(argument: categoryId, from: this);
+  ProductsProvider call({int? categoryId, String? search}) =>
+      ProductsProvider._(
+        argument: (categoryId: categoryId, search: search),
+        from: this,
+      );
 
   @override
   String toString() => r'productsProvider';

@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/register_screen.dart';
+import '../features/auth/presentation/profile_screen.dart';
 import '../features/home/presentation/home_screen.dart';
 import '../features/products/presentation/product_details_screen.dart';
 import '../features/cart/presentation/cart_screen.dart';
@@ -49,6 +50,10 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/orders',
         builder: (context, state) => const OrdersScreen(),
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) => const ProfileScreen(),
       ),
       GoRoute(
         path: '/',

@@ -76,4 +76,21 @@ class AuthRepository {
       throw Exception('Failed to fetch user');
     }
   }
+
+  Future<User> updateProfile({
+    required String name,
+    String? email,
+    String? phone,
+  }) async {
+    try {
+      final response = await _dio.post('/user/profile', data: {
+        'name': name,
+        'email': email,
+        'phone': phone,
+      });
+      return User.fromJson(response.data['user']);
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Failed to update profile');
+    }
+  }
 }

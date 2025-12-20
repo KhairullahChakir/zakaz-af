@@ -26,9 +26,12 @@ class ProductRepository {
     }
   }
 
-  Future<List<Product>> getProducts({int? categoryId}) async {
+  Future<List<Product>> getProducts({int? categoryId, String? search}) async {
     try {
-      final query = categoryId != null ? {'category_id': categoryId} : null;
+      final query = <String, dynamic>{};
+      if (categoryId != null) query['category_id'] = categoryId;
+      if (search != null && search.isNotEmpty) query['search'] = search;
+      
       final response = await _dio.get('/products', queryParameters: query);
       final List data = response.data;
       return data.map((json) => Product.fromJson(json)).toList();

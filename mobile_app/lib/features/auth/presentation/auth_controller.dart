@@ -67,4 +67,23 @@ class AuthController extends _$AuthController {
     await ref.read(secureStorageProvider).delete(key: 'auth_token');
     state = const AsyncValue.data(null);
   }
+
+  Future<void> updateProfile({
+    required String name,
+    String? email,
+    String? phone,
+  }) async {
+    state = const AsyncValue.loading();
+    try {
+      final repo = ref.read(authRepositoryProvider);
+      final user = await repo.updateProfile(
+        name: name,
+        email: email,
+        phone: phone,
+      );
+      state = AsyncValue.data(user);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
 }
