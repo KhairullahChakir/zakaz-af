@@ -30,7 +30,10 @@ class Cart extends _$Cart {
 
   void _saveCart(List<CartItem> items) {
     final prefs = ref.read(sharedPrefsProvider);
-    final jsonList = items.map((item) => item.toJson()).toList();
+    final jsonList = items.map((item) => {
+      'product': item.product.toJson(),
+      'quantity': item.quantity,
+    }).toList();
     prefs.setString(_storageKey, jsonEncode(jsonList));
   }
 
