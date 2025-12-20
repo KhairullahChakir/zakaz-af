@@ -65,7 +65,7 @@ class _AdminProductsScreenState extends ConsumerState<AdminProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final productsAsync = ref.watch(productsProvider(null, null, null, null));
+    final productsAsync = ref.watch(productsProvider());
 
     return Scaffold(
       appBar: AppBar(
