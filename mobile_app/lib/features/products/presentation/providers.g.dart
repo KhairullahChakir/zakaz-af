@@ -61,7 +61,13 @@ final class ProductsProvider
     with $FutureModifier<List<Product>>, $FutureProvider<List<Product>> {
   const ProductsProvider._({
     required ProductsFamily super.from,
-    required ({int? categoryId, String? search}) super.argument,
+    required ({
+      int? categoryId,
+      String? search,
+      String? sortBy,
+      String? sortOrder,
+    })
+    super.argument,
   }) : super(
          retry: null,
          name: r'productsProvider',
@@ -88,11 +94,20 @@ final class ProductsProvider
 
   @override
   FutureOr<List<Product>> create(Ref ref) {
-    final argument = this.argument as ({int? categoryId, String? search});
+    final argument =
+        this.argument
+            as ({
+              int? categoryId,
+              String? search,
+              String? sortBy,
+              String? sortOrder,
+            });
     return products(
       ref,
       categoryId: argument.categoryId,
       search: argument.search,
+      sortBy: argument.sortBy,
+      sortOrder: argument.sortOrder,
     );
   }
 
@@ -107,13 +122,13 @@ final class ProductsProvider
   }
 }
 
-String _$productsHash() => r'2644673ab337e388de2a248beba0d9423d9a340f';
+String _$productsHash() => r'b5ca6765b3f5dc910995ffd3acb59b1dd9d161fe';
 
 final class ProductsFamily extends $Family
     with
         $FunctionalFamilyOverride<
           FutureOr<List<Product>>,
-          ({int? categoryId, String? search})
+          ({int? categoryId, String? search, String? sortBy, String? sortOrder})
         > {
   const ProductsFamily._()
     : super(
@@ -124,11 +139,20 @@ final class ProductsFamily extends $Family
         isAutoDispose: true,
       );
 
-  ProductsProvider call({int? categoryId, String? search}) =>
-      ProductsProvider._(
-        argument: (categoryId: categoryId, search: search),
-        from: this,
-      );
+  ProductsProvider call({
+    int? categoryId,
+    String? search,
+    String? sortBy,
+    String? sortOrder,
+  }) => ProductsProvider._(
+    argument: (
+      categoryId: categoryId,
+      search: search,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+    ),
+    from: this,
+  );
 
   @override
   String toString() => r'productsProvider';

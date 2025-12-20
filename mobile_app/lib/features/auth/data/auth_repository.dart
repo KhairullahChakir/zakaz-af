@@ -65,12 +65,7 @@ class AuthRepository {
 
   Future<User> getUser(String token) async {
     try {
-      final response = await _dio.get(
-        '/user',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-      );
+      final response = await _dio.get('/user');
       return User.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to fetch user');
@@ -88,7 +83,7 @@ class AuthRepository {
         'name': name,
         'email': email,
         'phone': phone,
-      };
+      }..removeWhere((key, value) => value == null);
 
       if (imagePath != null) {
         data['image'] = await MultipartFile.fromFile(imagePath);

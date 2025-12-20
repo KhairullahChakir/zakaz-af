@@ -24,6 +24,19 @@ class ProductController extends Controller
             });
         }
 
+        if ($request->has('sort_by')) {
+            $sortBy = $request->sort_by; // price, newest
+            $sortOrder = $request->get('sort_order', 'asc');
+
+            if ($sortBy === 'price') {
+                $query->orderBy('price', $sortOrder);
+            } elseif ($sortBy === 'newest') {
+                $query->orderBy('created_at', 'desc');
+            }
+        } else {
+            $query->orderBy('created_at', 'desc'); // Default to newest
+        }
+
         return $query->with('category')->get();
     }
 

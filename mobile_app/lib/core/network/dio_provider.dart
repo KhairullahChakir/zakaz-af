@@ -16,24 +16,35 @@ Dio dio(Ref ref) {
     },
   ));
 
+  dio.interceptors.add(AuthInterceptor(ref));
+  
   dio.interceptors.add(LogInterceptor(
+    requestHeader: true,
     requestBody: true,
+    responseHeader: true,
     responseBody: true,
   ));
 
-  // Add auth token to requests
-  dio.interceptors.add(InterceptorsWrapper(
-    onRequest: (options, handler) async {
-       final storage = ref.read(secureStorageProvider);
-       final token = await storage.read(key: 'auth_token');
-       
-       if (token != null) {
-         options.headers['Authorization'] = 'Bearer $token';
-       }
-       
-       return handler.next(options);
-    },
-  ));
-
   return dio;
+}
+
+class AuthInterceptor extends Interceptor {
+  final Ref _ref;
+
+  AuthInterceptor(this._ref);
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    try {
+      final storage = _ref.read(secureStorageProvider);
+      final token = await storage.read(key: 'auth_token');
+
+      if (token != null) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
+    } catch (e) {
+      print('DEBUG: AuthInterceptor error: $e');
+    }
+    handler.next(options);
+  }
 }

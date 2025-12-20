@@ -16,6 +16,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
   int? _selectedCategoryId;
   bool _isSearching = false;
   final _searchController = TextEditingController();
+  String? _sortBy;
+  String? _sortOrder;
 
   @override
   void dispose() {
@@ -29,6 +31,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
     final productsAsync = ref.watch(productsProvider(
       categoryId: _selectedCategoryId,
       search: _searchController.text.isEmpty ? null : _searchController.text,
+      sortBy: _sortBy,
+      sortOrder: _sortOrder,
     ));
 
     return Scaffold(
@@ -59,6 +63,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                 _isSearching = !_isSearching;
               });
             },
+          ),
+          IconButton(
+            icon: const Icon(Icons.sort),
+            onPressed: _showSortBottomSheet,
           ),
           const CartIconBadge(),
         ],
@@ -290,6 +298,67 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showSortBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Text(
+                'Sort By',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.new_releases),
+              title: const Text('Newest'),
+              trailing: _sortBy == 'newest' || _sortBy == null ? const Icon(Icons.check, color: Colors.blue) : null,
+              onTap: () {
+                setState(() {
+                  _sortBy = 'newest';
+                  _sortOrder = 'desc';
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.arrow_upward),
+              title: const Text('Price: Low to High'),
+              trailing: _sortBy == 'price' && _sortOrder == 'asc' ? const Icon(Icons.check, color: Colors.blue) : null,
+              onTap: () {
+                setState(() {
+                  _sortBy = 'price';
+                  _sortOrder = 'asc';
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.arrow_downward),
+              title: const Text('Price: High to Low'),
+              trailing: _sortBy == 'price' && _sortOrder == 'desc' ? const Icon(Icons.check, color: Colors.blue) : null,
+              onTap: () {
+                setState(() {
+                  _sortBy = 'price';
+                  _sortOrder = 'desc';
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

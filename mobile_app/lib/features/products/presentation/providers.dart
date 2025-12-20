@@ -11,10 +11,17 @@ Future<List<Category>> categories(Ref ref) {
 }
 
 @riverpod
-Future<List<Product>> products(Ref ref, {int? categoryId, String? search}) {
+Future<List<Product>> products(Ref ref, {
+  int? categoryId,
+  String? search,
+  String? sortBy,
+  String? sortOrder,
+}) {
   return ref.watch(productRepositoryProvider).getProducts(
     categoryId: categoryId,
     search: search,
+    sortBy: sortBy,
+    sortOrder: sortOrder,
   );
 }
 

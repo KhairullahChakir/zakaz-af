@@ -26,11 +26,18 @@ class ProductRepository {
     }
   }
 
-  Future<List<Product>> getProducts({int? categoryId, String? search}) async {
+  Future<List<Product>> getProducts({
+    int? categoryId,
+    String? search,
+    String? sortBy,
+    String? sortOrder,
+  }) async {
     try {
       final query = <String, dynamic>{};
       if (categoryId != null) query['category_id'] = categoryId;
       if (search != null && search.isNotEmpty) query['search'] = search;
+      if (sortBy != null) query['sort_by'] = sortBy;
+      if (sortOrder != null) query['sort_order'] = sortOrder;
       
       final response = await _dio.get('/products', queryParameters: query);
       final List data = response.data;

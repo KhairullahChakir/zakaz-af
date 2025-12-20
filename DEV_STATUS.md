@@ -18,7 +18,8 @@
         *   **Checkout**: "Place Order" button connects to backend, saves order, and clears cart.
         *   **Search**: Real-time product search by name and description in the Home Screen.
         *   **Reviews**: Users can read and post ratings/comments for each product.
-        *   **Profile**: Users can now edit their Name, Email, and Phone number.
+        *   **Profile**: Users can now edit their Name, Email, Phone number, and Profile Image.
+        *   **Product Sorting**: Added ability to sort products by newest, price low to high, and price high to low.
     *   **Fixes**:
         *   **Auth Header**: `Authorization: Bearer <token>` is now automatically injected into ALL requests via a Dio Interceptor.
         *   **Cart Persistence**: Implemented `SharedPreferences` to save cart items to disk. Cart items now survive app restarts!
@@ -30,7 +31,7 @@
         *   **Real User Data**: Home screen drawer now displays the logged-in user's name and email.
 
 ## Next Steps
-1.  **Image Uploads**: Allow users to upload a profile picture.
-2.  **Product Sorting**: Sort products by price, date, or rating.
-3.  **Address Management**: Allow users to save multiple delivery addresses.
-4.  **Notifications**: Implement push notifications for order status updates.
+1.  **Address Management**: Allow users to save multiple delivery addresses.
+2.  **Notifications**: Implement push notifications for order status updates.
+3.  **Analytics**: Basic admin dashboard for sales.
+4.  **Dark Mode**: Support system dark theme.
