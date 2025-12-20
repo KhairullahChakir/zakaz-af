@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:mobile_app/core/widgets/cart_icon_badge.dart';
 import '../../products/presentation/providers.dart';
-import '../../products/domain/product.dart';
 import '../../cart/presentation/cart_provider.dart';
 
 class ProductDetailsScreen extends ConsumerWidget {
@@ -27,10 +26,7 @@ class ProductDetailsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Details'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined),
-            onPressed: () => context.push('/cart'),
-          ),
+          const CartIconBadge(),
         ],
       ),
       body: productAsync.when(
@@ -90,6 +86,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: FilledButton.icon(
                   onPressed: () {
+                    // We don't necessarily need to await here unless we want to show success only after save.
                     ref.read(cartProvider.notifier).addToCart(product);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('${product.name} added to cart')),

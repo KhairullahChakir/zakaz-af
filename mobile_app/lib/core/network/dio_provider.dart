@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../core/storage/storage_provider.dart';
 
 part 'dio_provider.g.dart';
 
@@ -18,6 +19,20 @@ Dio dio(Ref ref) {
   dio.interceptors.add(LogInterceptor(
     requestBody: true,
     responseBody: true,
+  ));
+
+  // Add auth token to requests
+  dio.interceptors.add(InterceptorsWrapper(
+    onRequest: (options, handler) async {
+       final storage = ref.read(secureStorageProvider);
+       final token = await storage.read(key: 'auth_token');
+       
+       if (token != null) {
+         options.headers['Authorization'] = 'Bearer $token';
+       }
+       
+       return handler.next(options);
+    },
   ));
 
   return dio;

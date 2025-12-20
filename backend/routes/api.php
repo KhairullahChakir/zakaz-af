@@ -16,4 +16,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    
+    Route::post('/orders', [App\Http\Controllers\Api\OrderController::class, 'store']);
+    Route::get('/orders', [App\Http\Controllers\Api\OrderController::class, 'index']);
 });

@@ -12,7 +12,7 @@ part of 'cart_provider.dart';
 @ProviderFor(Cart)
 const cartProvider = CartProvider._();
 
-final class CartProvider extends $NotifierProvider<Cart, List<CartItem>> {
+final class CartProvider extends $AsyncNotifierProvider<Cart, List<CartItem>> {
   const CartProvider._()
     : super(
         from: null,
@@ -30,30 +30,22 @@ final class CartProvider extends $NotifierProvider<Cart, List<CartItem>> {
   @$internal
   @override
   Cart create() => Cart();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<CartItem> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<List<CartItem>>(value),
-    );
-  }
 }
 
-String _$cartHash() => r'8f193c492e8dc137dd37a8e96c7cc1adaf745f5b';
+String _$cartHash() => r'9ca51a8f2f1f0951abf44be357703cd1fbae01c5';
 
-abstract class _$Cart extends $Notifier<List<CartItem>> {
-  List<CartItem> build();
+abstract class _$Cart extends $AsyncNotifier<List<CartItem>> {
+  FutureOr<List<CartItem>> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<List<CartItem>, List<CartItem>>;
+    final ref = this.ref as $Ref<AsyncValue<List<CartItem>>, List<CartItem>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<List<CartItem>, List<CartItem>>,
-              List<CartItem>,
+              AnyNotifier<AsyncValue<List<CartItem>>, List<CartItem>>,
+              AsyncValue<List<CartItem>>,
               Object?,
               Object?
             >;
