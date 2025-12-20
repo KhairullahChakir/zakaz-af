@@ -25,6 +25,7 @@
         *   **Analytics**: Admin dashboard with revenue, top products, and recent sales view.
         *   **Dark Mode**: Theme toggle in drawer with full system/light/dark support.
         *   **Search History**: Recent searches saved locally and displayed in search mode.
+        *   **Checkout Polish**: Full checkout screen with address selection, order summary, and place order flow.
     *   **Fixes**:
         *   **Auth Header**: `Authorization: Bearer <token>` is now automatically injected into ALL requests via a Dio Interceptor.
         *   **Cart Persistence**: Implemented `SharedPreferences` to save cart items to disk. Cart items now survive app restarts!
@@ -38,5 +39,5 @@
 ## Next Steps
 1.  **Unit Tests**: Improve code coverage for repositories and controllers.
 2.  **Advanced Sorting**: Sort by rating and popularity.
-3.  **Checkout Polish**: Improved UI for address selection during checkout.
-4.  **Admin UI**: Full product and category management via the app.
+3.  **Admin UI**: Full product and category management via the app.
+4.  **Order Status Updates**: Real-time order tracking.
