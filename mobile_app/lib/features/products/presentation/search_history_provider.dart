@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../storage/shared_prefs_provider.dart';
+import '../../../core/storage/shared_prefs_provider.dart';
 
 part 'search_history_provider.g.dart';
 

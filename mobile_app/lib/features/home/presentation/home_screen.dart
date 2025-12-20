@@ -234,8 +234,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                 ref.invalidate(productsProvider(
                   categoryId: _selectedCategoryId,
                   search: _searchController.text.isEmpty ? null : _searchController.text,
-                ));
-              },
+                  sortBy: _sortBy,
+                  sortOrder: _sortOrder,
                 ));
               },
               child: _isSearching && _searchController.text.isEmpty
