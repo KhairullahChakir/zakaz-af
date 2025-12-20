@@ -14,6 +14,7 @@ _User _$UserFromJson(Map<String, dynamic> json) => _User(
   profileImage: json['profile_image'] as String?,
   profileImageUrl: json['profile_image_url'] as String?,
   fcmToken: json['fcm_token'] as String?,
+  role: json['role'] as String? ?? 'user',
 );
 
 Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
@@ -24,4 +25,5 @@ Map<String, dynamic> _$UserToJson(_User instance) => <String, dynamic>{
   'profile_image': instance.profileImage,
   'profile_image_url': instance.profileImageUrl,
   'fcm_token': instance.fcmToken,
+  'role': instance.role,
 };

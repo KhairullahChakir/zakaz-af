@@ -11,6 +11,7 @@ import '../features/orders/presentation/orders_screen.dart';
 import '../features/addresses/presentation/address_screen.dart';
 import '../features/addresses/presentation/add_edit_address_screen.dart';
 import '../features/addresses/domain/address.dart';
+import '../features/analytics/presentation/analytics_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -57,6 +58,10 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/profile',
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/analytics',
+        builder: (context, state) => const AnalyticsScreen(),
       ),
       GoRoute(
         path: '/addresses',

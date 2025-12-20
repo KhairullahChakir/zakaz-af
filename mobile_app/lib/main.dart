@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'core/app_router.dart';
 import 'core/storage/shared_prefs_provider.dart';
 import 'core/services/notification_service.dart';
+import 'core/theme/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +57,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(appRouterProvider);
+    final themeMode = ref.watch(themeNotifierProvider);
 
     return MaterialApp.router(
       title: 'Zakaz - AF',
@@ -64,6 +66,15 @@ class _MyAppState extends ConsumerState<MyApp> {
         useMaterial3: true,
         fontFamily: 'Roboto',
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFFF57C00),
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+        fontFamily: 'Roboto',
+      ),
+      themeMode: themeMode,
       routerConfig: router,
     );
   }

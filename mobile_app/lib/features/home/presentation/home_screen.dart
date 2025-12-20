@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
 import 'package:mobile_app/core/widgets/cart_icon_badge.dart';
+import 'package:mobile_app/core/theme/theme_provider.dart';
+import 'package:mobile_app/features/products/presentation/search_history_provider.dart';
 import '../../products/presentation/providers.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -50,6 +52,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                 onChanged: (value) {
                   setState(() {}); // Rebuild to fetch with search
                 },
+                onSubmitted: (value) {
+                  if (value.isNotEmpty) {
+                    ref.read(searchHistoryProvider.notifier).addSearch(value);
+                  }
+                },
+                textInputAction: TextInputAction.search,
               )
             : const Text('Zakaz - AF'),
         actions: [
@@ -139,6 +147,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                 context.push('/addresses');
               },
             ),
+            if (ref.watch(authControllerProvider).value?.isAdmin ?? false)
+              ListTile(
+                leading: const Icon(Icons.admin_panel_settings, color: Colors.blue),
+                title: const Text('Admin Dashboard', style: TextStyle(color: Colors.blue)),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push('/analytics');
+                },
+              ),
+            ListTile(
+              leading: Icon(
+                ref.watch(themeNotifierProvider) == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode,
+                color: Colors.orange,
+              ),
+              title: const Text('Dark Mode'),
+              trailing: Switch(
+                value: ref.watch(themeNotifierProvider) == ThemeMode.dark,
+                onChanged: (value) {
+                  ref.read(themeNotifierProvider.notifier).setThemeMode(
+                        value ? ThemeMode.dark : ThemeMode.light,
+                      );
+                },
+              ),
+            ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),
@@ -204,7 +236,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                   search: _searchController.text.isEmpty ? null : _searchController.text,
                 ));
               },
-              child: productsAsync.when(
+                ));
+              },
+              child: _isSearching && _searchController.text.isEmpty
+                  ? _buildSearchHistory()
+                  : productsAsync.when(
                 data: (products) {
                   if (products.isEmpty) {
                     return ListView(
@@ -368,6 +404,51 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSearchHistory() {
+    final history = ref.watch(searchHistoryProvider);
+    if (history.isEmpty) {
+      return const Center(child: Text('Start searching...'));
+    }
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Recent Searches', style: TextStyle(fontWeight: FontWeight.bold)),
+              TextButton(
+                onPressed: () => ref.read(searchHistoryProvider.notifier).clearHistory(),
+                child: const Text('Clear All'),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: history.length,
+            itemBuilder: (context, index) {
+              final query = history[index];
+              return ListTile(
+                leading: const Icon(Icons.history),
+                title: Text(query),
+                trailing: IconButton(
+                  icon: const Icon(Icons.close, size: 18),
+                  onPressed: () => ref.read(searchHistoryProvider.notifier).removeSearch(query),
+                ),
+                onTap: () {
+                  _searchController.text = query;
+                  setState(() {});
+                },
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

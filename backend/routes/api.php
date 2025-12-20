@@ -24,6 +24,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     Route::post('/reviews', [App\Http\Controllers\Api\ReviewController::class, 'store']);
     
+    Route::get('/analytics/stats', [App\Http\Controllers\Api\AnalyticsController::class, 'getStats']);
+    
     Route::get('/addresses', [App\Http\Controllers\Api\AddressController::class, 'index']);
     Route::post('/addresses', [App\Http\Controllers\Api\AddressController::class, 'store']);
     Route::put('/addresses/{id}', [App\Http\Controllers\Api\AddressController::class, 'update']);

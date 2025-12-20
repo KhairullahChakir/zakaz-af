@@ -26,7 +26,13 @@ class User extends Authenticatable
         'password',
         'profile_image',
         'fcm_token',
+        'role',
     ];
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 
     protected $appends = ['profile_image_url'];
 

@@ -48,7 +48,7 @@ class AddressScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final address = addresses[index];
               return Card(
-                margin: const EdgeInsets.bottom(16),
+                margin: const EdgeInsets.only(bottom: 16),
                 child: ListTile(
                   leading: const CircleAvatar(
                     child: Icon(Icons.location_on),
