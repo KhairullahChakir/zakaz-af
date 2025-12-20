@@ -7,6 +7,7 @@ import '../features/auth/presentation/profile_screen.dart';
 import '../features/home/presentation/home_screen.dart';
 import '../features/products/presentation/product_details_screen.dart';
 import '../features/cart/presentation/cart_screen.dart';
+import '../features/cart/presentation/checkout_screen.dart';
 import '../features/orders/presentation/orders_screen.dart';
 import '../features/addresses/presentation/address_screen.dart';
 import '../features/addresses/presentation/add_edit_address_screen.dart';
@@ -50,6 +51,10 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/cart',
         builder: (context, state) => const CartScreen(),
+      ),
+      GoRoute(
+        path: '/checkout',
+        builder: (context, state) => const CheckoutScreen(),
       ),
       GoRoute(
         path: '/orders',

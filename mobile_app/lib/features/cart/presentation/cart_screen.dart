@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobile_app/features/orders/data/order_repository.dart';
 import 'cart_provider.dart';
 
 class CartScreen extends ConsumerStatefulWidget {
@@ -12,42 +11,8 @@ class CartScreen extends ConsumerStatefulWidget {
 }
 
 class _CartScreenState extends ConsumerState<CartScreen> {
-  bool _isLoading = false;
-
-  Future<void> _checkout() async {
-    setState(() => _isLoading = true);
-    try {
-      final cartState = ref.read(cartProvider);
-      final items = cartState.value; // Access value directly
-      
-      if (items == null || items.isEmpty) {
-         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Cart is empty or loading error.')),
-        );
-        return;
-      }
-      
-      await ref.read(orderRepositoryProvider).placeOrder(items);
-      
-      ref.read(cartProvider.notifier).clearCart();
-      
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Order placed successfully!')),
-        );
-        context.go('/');
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
+  void _goToCheckout() {
+    context.push('/checkout');
   }
 
   @override
@@ -61,9 +26,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
       appBar: AppBar(
         title: const Text('My Cart'),
       ),
-      body: _isLoading 
-        ? const Center(child: CircularProgressIndicator())
-        : cartItemsAsync.when(
+      body: cartItemsAsync.when(
             data: (cartItems) => cartItems.isEmpty
               ? Center(
                   child: Column(
@@ -193,7 +156,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                             ),
                             const SizedBox(height: 16),
                             FilledButton(
-                              onPressed: _checkout,
+                              onPressed: _goToCheckout,
                               style: FilledButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(vertical: 16),
                               ),

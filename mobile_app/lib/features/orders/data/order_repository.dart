@@ -16,7 +16,7 @@ class OrderRepository {
 
   OrderRepository(this._dio);
 
-  Future<void> placeOrder(List<CartItem> items) async {
+  Future<void> placeOrder(List<CartItem> items, {int? addressId}) async {
     try {
       final itemsData = items.map((item) => {
         'product_id': item.product.id,
@@ -25,6 +25,7 @@ class OrderRepository {
 
       await _dio.post('/orders', data: {
         'items': itemsData,
+        if (addressId != null) 'address_id': addressId,
       });
     } on DioException catch (e) {
       throw Exception(e.response?.data['message'] ?? 'Failed to place order');

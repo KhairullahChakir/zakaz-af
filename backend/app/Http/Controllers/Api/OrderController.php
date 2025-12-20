@@ -17,6 +17,7 @@ class OrderController extends Controller
             'items' => 'required|array',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
+            'address_id' => 'nullable|exists:addresses,id',
         ]);
 
         try {
@@ -44,6 +45,7 @@ class OrderController extends Controller
 
             $order = Order::create([
                 'user_id' => $request->user()->id,
+                'address_id' => $request->address_id,
                 'total_amount' => $total,
                 'status' => 'pending',
             ]);
