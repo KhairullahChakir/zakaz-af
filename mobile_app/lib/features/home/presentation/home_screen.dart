@@ -401,6 +401,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                 Navigator.pop(context);
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.star),
+              title: const Text('Highest Rated'),
+              trailing: _sortBy == 'rating' ? const Icon(Icons.check, color: Colors.blue) : null,
+              onTap: () {
+                setState(() {
+                  _sortBy = 'rating';
+                  _sortOrder = 'desc';
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.trending_up),
+              title: const Text('Most Popular'),
+              trailing: _sortBy == 'popularity' ? const Icon(Icons.check, color: Colors.blue) : null,
+              onTap: () {
+                setState(() {
+                  _sortBy = 'popularity';
+                  _sortOrder = 'desc';
+                });
+                Navigator.pop(context);
+              },
+            ),
           ],
         ),
       ),
