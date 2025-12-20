@@ -158,14 +158,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
               ),
             ListTile(
               leading: Icon(
-                ref.watch(themeNotifierProvider) == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode,
+                ref.watch(themeProvider) == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode,
                 color: Colors.orange,
               ),
               title: const Text('Dark Mode'),
               trailing: Switch(
-                value: ref.watch(themeNotifierProvider) == ThemeMode.dark,
+                value: ref.watch(themeProvider) == ThemeMode.dark,
                 onChanged: (value) {
-                  ref.read(themeNotifierProvider.notifier).setThemeMode(
+                  ref.read(themeProvider.notifier).setThemeMode(
                         value ? ThemeMode.dark : ThemeMode.light,
                       );
                 },
