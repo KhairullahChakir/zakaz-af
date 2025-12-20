@@ -1,0 +1,35 @@
+# Laravel
+backend/vendor/
+backend/node_modules/
+backend/public/storage
+backend/storage/*.key
+backend/.env
+backend/.env.backup
+backend/.phpunit.result.cache
+backend/Homestead.json
+backend/Homestead.yaml
+backend/npm-debug.log
+backend/yarn-error.log
+
+# Flutter
+mobile_app/.dart_tool/
+mobile_app/.idea/
+mobile_app/.vscode/
+mobile_app/android/.gradle
+mobile_app/android/captures/
+mobile_app/android/gradlew
+mobile_app/android/gradlew.bat
+mobile_app/android/local.properties
+mobile_app/build/
+mobile_app/ios/.symlinks/
+mobile_app/ios/Pods/
+mobile_app/.flutter-plugins
+mobile_app/.flutter-plugins-dependencies
+mobile_app/.pub-cache/
+mobile_app/.pub/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
