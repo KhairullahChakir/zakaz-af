@@ -155,6 +155,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                 context.push('/wishlist');
               },
             ),
+            // Show "Become a Shopkeeper" for customers only
+            Builder(
+              builder: (context) {
+                final user = ref.watch(authControllerProvider).value;
+                if (user == null) return const SizedBox.shrink();
+                
+                if (user.isCustomer) {
+                  return ListTile(
+                    leading: const Icon(Icons.store, color: Colors.teal),
+                    title: const Text('Become a Shopkeeper'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      context.push('/shop-status');
+                    },
+                  );
+                } else if (user.isShopkeeper) {
+                  return ListTile(
+                    leading: const Icon(Icons.store, color: Colors.green),
+                    title: const Text('My Shop', style: TextStyle(color: Colors.green)),
+                    onTap: () {
+                      Navigator.pop(context);
+                      context.push('/shop-status');
+                    },
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
             if (ref.watch(authControllerProvider).value?.isAdmin ?? false)
               ListTile(
                 leading: const Icon(Icons.admin_panel_settings, color: Colors.blue),

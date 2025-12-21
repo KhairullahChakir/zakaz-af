@@ -19,6 +19,8 @@ import '../features/admin/presentation/admin_products_screen.dart';
 import '../features/admin/presentation/add_edit_product_screen.dart';
 import '../features/admin/presentation/admin_categories_screen.dart';
 import '../features/products/domain/product.dart';
+import '../features/shop/presentation/become_shopkeeper_screen.dart';
+import '../features/shop/presentation/shop_status_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -107,6 +109,14 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/admin/categories',
         builder: (context, state) => const AdminCategoriesScreen(),
+      ),
+      GoRoute(
+        path: '/become-shopkeeper',
+        builder: (context, state) => const BecomeShopkeeperScreen(),
+      ),
+      GoRoute(
+        path: '/shop-status',
+        builder: (context, state) => const ShopApplicationStatusScreen(),
       ),
       GoRoute(
         path: '/addresses',
