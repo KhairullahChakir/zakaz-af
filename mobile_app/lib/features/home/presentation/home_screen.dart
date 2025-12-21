@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
@@ -577,11 +578,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
                 border: isSelected ? null : Border.all(color: kPrimaryOrange.withOpacity(0.3)),
               ),
-              child: Icon(
-                Icons.category,
-                color: isSelected ? Colors.white : kPrimaryOrange,
-                size: iconSize,
-              ),
+              child: _buildCategoryIcon(category, isSelected, iconSize),
             ),
             SizedBox(height: Responsive.value(context, mobile: 6, tablet: 8)),
             Text(
@@ -1233,5 +1230,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
     );
+    Widget _buildCategoryIcon(Category category, bool isSelected, double size) {
+    if (category.imageUrl != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: CachedNetworkImage(
+          imageUrl: category.imageUrl!,
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorWidget: (_, __, ___) => Icon(Icons.error, size: size, color: Colors.white),
+        ),
+      );
+    }
+
+    String? assetPath;
+    final name = category.name.toLowerCase();
+    if (name.contains('grocer')) assetPath = 'assets/images/groceries.png';
+    else if (name.contains('cloth')) assetPath = 'assets/images/clothes.png';
+    else if (name.contains('tech')) assetPath = 'assets/images/tech.png';
+
+    if (assetPath != null) {
+      return Image.asset(assetPath, width: size, height: size, fit: BoxFit.contain);
+    }
+
+    return Icon(
+      Icons.category,
+      color: isSelected ? Colors.white : kPrimaryOrange,
+      size: size,
+    );
   }
+}
 }
