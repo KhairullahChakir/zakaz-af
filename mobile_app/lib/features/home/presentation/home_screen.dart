@@ -573,7 +573,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _buildFeaturedProductCard(Product product) {
     final cardWidth = Responsive.featuredCardWidth(context);
-    final imageHeight = Responsive.value<double>(context, mobile: 120, tablet: 150);
+    final imageHeight = Responsive.value<double>(context, mobile: 100, tablet: 130);
 
     return GestureDetector(
       onTap: () => context.push('/products/${product.id}'),
@@ -625,7 +625,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   top: 8,
                   right: 8,
                   child: Container(
-                    padding: EdgeInsets.all(Responsive.value(context, mobile: 6, tablet: 8)),
+                    padding: EdgeInsets.all(Responsive.value(context, mobile: 5, tablet: 7)),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
@@ -637,53 +637,54 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ],
                     ),
                     child: Icon(Icons.favorite_border, 
-                      size: Responsive.value(context, mobile: 18, tablet: 22), 
+                      size: Responsive.value(context, mobile: 16, tablet: 20), 
                       color: kPrimaryOrange),
                   ),
                 ),
               ],
             ),
-            // Info
-            Padding(
-              padding: EdgeInsets.all(Responsive.value(context, mobile: 12, tablet: 16)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: Responsive.value(context, mobile: 14, tablet: 16),
-                    ),
-                  ),
-                  SizedBox(height: Responsive.value(context, mobile: 4, tablet: 6)),
-                  Row(
-                    children: [
-                      Icon(Icons.star, 
-                        size: Responsive.value(context, mobile: 14, tablet: 16), 
-                        color: kPrimaryOrange),
-                      const SizedBox(width: 4),
-                      Text(
-                        '4.5',
-                        style: TextStyle(
-                          fontSize: Responsive.value(context, mobile: 12, tablet: 14),
-                          color: Colors.grey[600],
-                        ),
+            // Info - Use Expanded to fill remaining space
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(Responsive.value(context, mobile: 8, tablet: 12)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      product.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: Responsive.value(context, mobile: 13, tablet: 15),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: Responsive.value(context, mobile: 6, tablet: 8)),
-                  Text(
-                    '${product.price.toInt()} AFN',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: Responsive.value(context, mobile: 16, tablet: 18),
-                      color: kPrimaryOrange,
                     ),
-                  ),
-                ],
+                    Row(
+                      children: [
+                        Icon(Icons.star, 
+                          size: Responsive.value(context, mobile: 12, tablet: 14), 
+                          color: kPrimaryOrange),
+                        const SizedBox(width: 2),
+                        Text(
+                          '4.5',
+                          style: TextStyle(
+                            fontSize: Responsive.value(context, mobile: 11, tablet: 13),
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      '${product.price.toInt()} AFN',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: Responsive.value(context, mobile: 14, tablet: 16),
+                        color: kPrimaryOrange,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
