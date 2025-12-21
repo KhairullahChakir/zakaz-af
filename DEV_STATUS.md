@@ -67,6 +67,13 @@
 - **Riverpod**: State management with code generation
 - **GoRouter**: Declarative routing
 
+### 7. Chat (NEW)
+- **Real-time Messaging**: Chat between customers and shopkeepers
+- **Conversations List**: See all chats with unread counts
+- **Message Types**: Text for now (image/product support in schema)
+- **Product Context**: Start chat from specific product page
+- **Sender Identification**: Correctly displays name/avatar for both parties
+
 ## API Endpoints
 
 ### Public
@@ -80,6 +87,13 @@
 - `POST /orders`, `GET /orders`, `GET /orders/{id}`
 - `GET/POST /reviews`, `GET/POST/DELETE /wishlist`
 - `GET/POST/PUT/DELETE /addresses`
+
+### Chat
+- `GET /chat/conversations`
+- `POST /chat/conversations` (Start chat)
+- `GET /chat/conversations/{id}/messages`
+- `POST /chat/conversations/{id}/messages`
+- `GET /chat/unread-count`
 
 ### Shopkeeper
 - `GET /shopkeeper/dashboard`
