@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
 import '../../../core/utils/responsive.dart';
-import '../../auth/presentation/auth_controller.dart';
 import '../data/chat_repository.dart';
 import '../domain/conversation.dart';
 import '../domain/message.dart';
@@ -341,10 +343,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     if (displayImage != null) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: Image.network(
-          displayImage,
+        child: CachedNetworkImage(
+          imageUrl: displayImage,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => Icon(
+          placeholder: (context, url) => Container(
+            color: kSoftOrange,
+            child: Icon(
+              isShopImage ? Icons.store : Icons.person,
+              color: kPrimaryOrange.withOpacity(0.5),
+            ),
+          ),
+          errorWidget: (context, url, error) => Icon(
             isShopImage ? Icons.store : Icons.person,
             color: kPrimaryOrange,
           ),
