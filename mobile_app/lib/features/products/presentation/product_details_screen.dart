@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_app/core/widgets/cart_icon_badge.dart';
+import 'package:mobile_app/core/widgets/full_screen_image_viewer.dart';
 import 'package:mobile_app/core/utils/responsive.dart';
 import '../../products/presentation/providers.dart';
 import '../../cart/presentation/cart_provider.dart';
@@ -65,25 +66,68 @@ class ProductDetailsScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Product Image
-                      Container(
-                        height: Responsive.value(context, mobile: 280, tablet: 350),
-                        decoration: BoxDecoration(
-                          color: kSoftOrange,
-                        ),
-                        width: double.infinity,
-                        child: (product.imageUrl ?? product.image) != null
-                            ? Image.network(
-                                product.imageUrl ?? product.image!, 
-                                fit: BoxFit.cover, 
-                                width: double.infinity,
-                                errorBuilder: (_, __, ___) => const Icon(
-                                  Icons.inventory_2_outlined, 
-                                  size: 100, 
-                                  color: kPrimaryOrange,
+                      // Product Image - Tappable for full screen
+                      GestureDetector(
+                        onTap: () {
+                          final imageUrl = product.imageUrl ?? product.image;
+                          if (imageUrl != null) {
+                            openFullScreenImage(
+                              context, 
+                              imageUrl,
+                              heroTag: 'product_image_$productId',
+                            );
+                          }
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: Responsive.value(context, mobile: 280, tablet: 350),
+                              decoration: BoxDecoration(
+                                color: kSoftOrange,
+                              ),
+                              width: double.infinity,
+                              child: (product.imageUrl ?? product.image) != null
+                                  ? Hero(
+                                      tag: 'product_image_$productId',
+                                      child: Image.network(
+                                        product.imageUrl ?? product.image!, 
+                                        fit: BoxFit.cover, 
+                                        width: double.infinity,
+                                        errorBuilder: (_, __, ___) => const Icon(
+                                          Icons.inventory_2_outlined, 
+                                          size: 100, 
+                                          color: kPrimaryOrange,
+                                        ),
+                                      ),
+                                    )
+                                  : const Icon(Icons.inventory_2_outlined, size: 100, color: kPrimaryOrange),
+                            ),
+                            // Tap to zoom hint
+                            if ((product.imageUrl ?? product.image) != null)
+                              Positioned(
+                                bottom: 12,
+                                right: 12,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.6),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.zoom_in, color: Colors.white, size: 16),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        'Tap to zoom',
+                                        style: TextStyle(color: Colors.white, fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              )
-                            : const Icon(Icons.inventory_2_outlined, size: 100, color: kPrimaryOrange),
+                              ),
+                          ],
+                        ),
                       ),
                       
                       Padding(
