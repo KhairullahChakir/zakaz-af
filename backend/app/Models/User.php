@@ -34,6 +34,16 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function isShopkeeper()
+    {
+        return $this->role === 'shopkeeper';
+    }
+
+    public function isCustomer()
+    {
+        return $this->role === 'customer';
+    }
+
     protected $appends = ['profile_image_url'];
 
     public function getProfileImageUrlAttribute()
@@ -70,5 +80,10 @@ class User extends Authenticatable
     public function addresses()
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function shop()
+    {
+        return $this->hasOne(Shop::class, 'owner_id');
     }
 }

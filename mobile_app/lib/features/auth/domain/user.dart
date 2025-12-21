@@ -13,11 +13,14 @@ abstract class User with _$User {
     @JsonKey(name: 'profile_image') String? profileImage,
     @JsonKey(name: 'profile_image_url') String? profileImageUrl,
     @JsonKey(name: 'fcm_token') String? fcmToken,
-    @Default('user') String role,
+    @Default('customer') String role,
   }) = _User;
 
   const User._();
+  
   bool get isAdmin => role == 'admin';
+  bool get isShopkeeper => role == 'shopkeeper';
+  bool get isCustomer => role == 'customer';
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }

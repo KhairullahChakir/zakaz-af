@@ -19,8 +19,9 @@ class ShopSeeder extends Seeder
             'category_id' => $groceries->id,
             'name' => 'Afghan Rice (Palaw)',
             'description' => 'Premium quality Sela rice for Palaw.',
-            'price' => 1200, // AFN
+            'price' => 1200,
             'stock' => 50,
+            'image' => 'https://picsum.photos/seed/rice/400/400',
         ]);
         Product::create([
             'category_id' => $groceries->id,
@@ -28,6 +29,7 @@ class ShopSeeder extends Seeder
             'description' => 'Traditional refreshing green tea.',
             'price' => 300,
             'stock' => 100,
+            'image' => 'https://picsum.photos/seed/tea/400/400',
         ]);
 
         // Products - Clothes
@@ -37,6 +39,7 @@ class ShopSeeder extends Seeder
             'description' => 'Traditional Afghan clothing for men.',
             'price' => 2500,
             'stock' => 20,
+            'image' => 'https://picsum.photos/seed/clothes1/400/400',
         ]);
          Product::create([
             'category_id' => $clothes->id,
@@ -44,6 +47,7 @@ class ShopSeeder extends Seeder
             'description' => 'Colorful traditional dress for special occasions.',
             'price' => 5000,
             'stock' => 10,
+            'image' => 'https://picsum.photos/seed/dress/400/400',
         ]);
     }
 }

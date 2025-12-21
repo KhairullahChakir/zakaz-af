@@ -216,7 +216,7 @@ return $default(_that.id,_that.name,_that.email,_that.phone,_that.profileImage,_
 @JsonSerializable()
 
 class _User extends User {
-  const _User({required this.id, required this.name, required this.email, required this.phone, @JsonKey(name: 'profile_image') this.profileImage, @JsonKey(name: 'profile_image_url') this.profileImageUrl, @JsonKey(name: 'fcm_token') this.fcmToken, this.role = 'user'}): super._();
+  const _User({required this.id, required this.name, required this.email, required this.phone, @JsonKey(name: 'profile_image') this.profileImage, @JsonKey(name: 'profile_image_url') this.profileImageUrl, @JsonKey(name: 'fcm_token') this.fcmToken, this.role = 'customer'}): super._();
   factory _User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
 @override final  int id;

@@ -48,5 +48,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/categories', [App\Http\Controllers\Api\AdminCategoryController::class, 'store']);
         Route::post('/categories/{id}', [App\Http\Controllers\Api\AdminCategoryController::class, 'update']);
         Route::delete('/categories/{id}', [App\Http\Controllers\Api\AdminCategoryController::class, 'destroy']);
+        
+        // Shop management
+        Route::get('/shops', [App\Http\Controllers\Api\ShopApplicationController::class, 'index']);
+        Route::get('/shops/pending', [App\Http\Controllers\Api\ShopApplicationController::class, 'pending']);
+        Route::post('/shops/{id}/approve', [App\Http\Controllers\Api\ShopApplicationController::class, 'approve']);
+        Route::post('/shops/{id}/reject', [App\Http\Controllers\Api\ShopApplicationController::class, 'reject']);
+        Route::post('/shops/{id}/suspend', [App\Http\Controllers\Api\ShopApplicationController::class, 'suspend']);
     });
+    
+    // Shop application (for customers wanting to become shopkeepers)
+    Route::post('/shop/apply', [App\Http\Controllers\Api\ShopApplicationController::class, 'apply']);
+    Route::get('/shop/status', [App\Http\Controllers\Api\ShopApplicationController::class, 'status']);
 });

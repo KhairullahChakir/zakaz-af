@@ -12,6 +12,7 @@ class Product extends Model
 
     protected $fillable = [
         'category_id',
+        'shop_id',
         'name',
         'description',
         'price',
@@ -23,6 +24,7 @@ class Product extends Model
         'price' => 'float',
         'stock' => 'integer',
         'category_id' => 'integer',
+        'shop_id' => 'integer',
     ];
 
     protected $appends = ['image_url'];
@@ -42,6 +44,11 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
     }
 
     public function reviews()
