@@ -293,14 +293,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ],
                   ),
                   child: Stack(
+                    clipBehavior: Clip.hardEdge,
                     children: [
+                      // Decorative circles
                       Positioned(
-                        right: -20,
-                        bottom: -20,
-                        child: Icon(
-                          banner['icon'] as IconData,
-                          size: Responsive.value(context, mobile: 120, tablet: 160, desktop: 200),
-                          color: Colors.white.withOpacity(0.2),
+                        right: -30,
+                        top: -30,
+                        child: Container(
+                          width: Responsive.value(context, mobile: 100, tablet: 140),
+                          height: Responsive.value(context, mobile: 100, tablet: 140),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.15),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 20,
+                        bottom: -40,
+                        child: Container(
+                          width: Responsive.value(context, mobile: 80, tablet: 120),
+                          height: Responsive.value(context, mobile: 80, tablet: 120),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.1),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 50,
+                        top: 20,
+                        child: Container(
+                          width: Responsive.value(context, mobile: 40, tablet: 60),
+                          height: Responsive.value(context, mobile: 40, tablet: 60),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.2),
+                          ),
                         ),
                       ),
                       Positioned.fill(
