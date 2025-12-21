@@ -1037,6 +1037,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   _buildProfileOption(Icons.shopping_bag, 'My Orders', () => context.push('/orders')),
                   _buildProfileOption(Icons.location_on, 'Addresses', () => context.push('/addresses')),
                   _buildProfileOption(Icons.favorite, 'Wishlist', () => context.push('/wishlist')),
+                  _buildProfileOption(Icons.chat_bubble, 'Messages', () => context.push('/conversations')),
                   const Divider(height: 32),
                   if (user?.isCustomer == true)
                     _buildProfileOption(Icons.store, 'Become a Shopkeeper', () => context.push('/shop-status'), color: kPrimaryOrange),
