@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
@@ -41,19 +41,18 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
     if (Platform.isAndroid) {
       // For Android 13+ (API 33+), we need READ_MEDIA_IMAGES
       // For older versions, we need WRITE_EXTERNAL_STORAGE
-      if (await Permission.photos.request().isGranted) {
-        return true;
-      }
-      if (await Permission.storage.request().isGranted) {
-        return true;
-      }
-      // Try requesting specifically for media images
-      final status = await Permission.photos.status;
-      if (status.isDenied) {
-        final result = await Permission.photos.request();
-        return result.isGranted;
-      }
-      return status.isGranted;
+      var status = await Permission.photos.status;
+      if (status.isGranted) return true;
+      
+      status = await Permission.storage.status;
+      if (status.isGranted) return true;
+      
+      // Request permissions
+      final photosResult = await Permission.photos.request();
+      if (photosResult.isGranted) return true;
+      
+      final storageResult = await Permission.storage.request();
+      return storageResult.isGranted;
     }
     return true; // iOS handles permissions automatically
   }
@@ -67,8 +66,8 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
       if (!hasPermission) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Permission denied. Please allow storage access in settings.'),
+            SnackBar(
+              content: const Text('Permission denied. Please allow storage access in settings.'),
               backgroundColor: Colors.red,
               action: SnackBarAction(
                 label: 'Settings',
@@ -87,28 +86,20 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
         throw Exception('Failed to download image');
       }
       
-      // Get temporary directory
-      final tempDir = await getTemporaryDirectory();
-      final fileName = 'zakaz_${DateTime.now().millisecondsSinceEpoch}.jpg';
-      final filePath = '${tempDir.path}/$fileName';
-      final file = File(filePath);
+      // Save to gallery using image_gallery_saver
+      final result = await ImageGallerySaver.saveImage(
+        Uint8List.fromList(response.bodyBytes),
+        quality: 100,
+        name: 'zakaz_${DateTime.now().millisecondsSinceEpoch}',
+      );
       
-      // Write to file
-      await file.writeAsBytes(response.bodyBytes);
-      
-      // Save to gallery
-      final result = await GallerySaver.saveImage(filePath, albumName: 'Zakaz-AF');
-      
-      // Clean up temp file
-      try {
-        await file.delete();
-      } catch (_) {}
+      final isSuccess = result['isSuccess'] == true;
       
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(result == true ? '✓ Image saved to gallery!' : 'Failed to save image'),
-            backgroundColor: result == true ? Colors.green : Colors.red,
+            content: Text(isSuccess ? '✓ Image saved to gallery!' : 'Failed to save image'),
+            backgroundColor: isSuccess ? Colors.green : Colors.red,
           ),
         );
       }
