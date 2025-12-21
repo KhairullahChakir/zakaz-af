@@ -8,6 +8,7 @@ import 'package:mobile_app/core/utils/responsive.dart';
 import '../../products/presentation/providers.dart';
 import '../../products/domain/product.dart';
 import '../../products/domain/category.dart';
+import '../../chat/presentation/conversations_screen.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -81,7 +82,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         index: _currentNavIndex,
         children: [
           _buildHomeTab(),
-          _buildCategoriesTab(),
+          const ConversationsScreen(),
           _buildCartTab(),
           _buildProfileTab(),
         ],
@@ -122,9 +123,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               label: 'Home',
             ),
             NavigationDestination(
-              icon: Icon(Icons.category_outlined, color: Colors.grey[600]),
-              selectedIcon: const Icon(Icons.category, color: kPrimaryOrange),
-              label: 'Categories',
+              icon: Icon(Icons.chat_bubble_outline, color: Colors.grey[600]),
+              selectedIcon: const Icon(Icons.chat_bubble, color: kPrimaryOrange),
+              label: 'Messages',
             ),
             NavigationDestination(
               icon: const CartIconBadge(showBackground: false),
@@ -1037,7 +1038,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   _buildProfileOption(Icons.shopping_bag, 'My Orders', () => context.push('/orders')),
                   _buildProfileOption(Icons.location_on, 'Addresses', () => context.push('/addresses')),
                   _buildProfileOption(Icons.favorite, 'Wishlist', () => context.push('/wishlist')),
-                  _buildProfileOption(Icons.chat_bubble, 'Messages', () => context.push('/conversations')),
                   const Divider(height: 32),
                   if (user?.isCustomer == true)
                     _buildProfileOption(Icons.store, 'Become a Shopkeeper', () => context.push('/shop-status'), color: kPrimaryOrange),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "595873251328",
+    "project_id": "zakazaf-8b9d1",
+    "storage_bucket": "zakazaf-8b9d1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595873251328:android:99ea65f6e1836b10da18e5",
+        "android_client_info": {
+          "package_name": "com.zakaz.af"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzrLzjmMrnHecZCldEK_dauKlgFoZ1Xes"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,7 +4,7 @@ import '../../core/storage/storage_provider.dart';
 
 part 'dio_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Dio dio(Ref ref) {
   final dio = Dio(BaseOptions(
     baseUrl: 'http://10.60.33.10:8000/api', // Use your computer's IP for physical devices

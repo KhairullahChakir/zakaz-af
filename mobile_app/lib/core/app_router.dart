@@ -32,6 +32,8 @@ import '../features/chat/presentation/conversations_screen.dart';
 import '../features/chat/presentation/chat_screen.dart';
 import '../features/chat/domain/conversation.dart';
 
+import '../core/widgets/splash_screen.dart';
+
 part 'app_router.g.dart';
 
 @riverpod
@@ -41,11 +43,15 @@ GoRouter appRouter(Ref ref) {
   return GoRouter(
     initialLocation: '/',
     redirect: (context, state) {
-      // If auth state is loading, do nothing (or show splash)
-      if (authState.isLoading || authState.hasError) return null;
+      if (authState.isLoading) return '/splash';
+      if (authState.hasError) return '/login'; // Redirect to login on error
 
       final isAuthenticated = authState.value != null;
       final isLoggingIn = state.uri.path == '/login' || state.uri.path == '/register';
+      final isSplash = state.uri.path == '/splash';
+
+      if (isSplash && !isAuthenticated) return '/login';
+      if (isSplash && isAuthenticated) return '/';
 
       if (!isAuthenticated) {
          return isLoggingIn ? null : '/login';
@@ -58,6 +64,10 @@ GoRouter appRouter(Ref ref) {
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),

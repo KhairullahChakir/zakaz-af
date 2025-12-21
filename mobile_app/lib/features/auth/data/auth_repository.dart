@@ -68,7 +68,11 @@ class AuthRepository {
       final response = await _dio.get('/user');
       return User.fromJson(response.data);
     } catch (e) {
-      throw Exception('Failed to fetch user');
+      print('DEBUG: getUser failed: $e');
+      if (e is DioException) {
+        print('DEBUG: Dio Error: ${e.response?.statusCode} ${e.response?.data}');
+      }
+      rethrow;
     }
   }
 

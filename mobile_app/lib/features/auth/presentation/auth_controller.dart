@@ -9,13 +9,21 @@ part 'auth_controller.g.dart';
 class AuthController extends _$AuthController {
   @override
   FutureOr<User?> build() async {
-    final token = await ref.read(secureStorageProvider).read(key: 'auth_token');
+    String? token;
+    try {
+      token = await ref.read(secureStorageProvider).read(key: 'auth_token');
+    } catch (e) {
+      // Storage read failed, assume no token
+      return null;
+    }
+    
     if (token == null) return null;
 
     try {
       final repo = ref.read(authRepositoryProvider);
       return await repo.getUser(token);
     } catch (e) {
+      print('DEBUG: AuthController build failed: $e');
       // Token invalid or network error
       await ref.read(secureStorageProvider).delete(key: 'auth_token');
       return null;
@@ -87,7 +95,11 @@ class AuthController extends _$AuthController {
       );
       state = AsyncValue.data(user);
     } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      // Don't set state to error as it will log the user out
+      print('Profile update failed: $e');
+      if (state.hasValue) {
+        state = AsyncValue.data(state.value); // Keep old data
+      }
     }
   }
 }

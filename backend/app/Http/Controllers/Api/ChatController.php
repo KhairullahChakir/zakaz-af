@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\Shop;
+use App\Events\MessageSent;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
@@ -22,7 +23,7 @@ class ChatController extends Controller
             ->where(function ($query) use ($user) {
                 $query->where('customer_id', $user->id)
                     ->orWhereHas('shop', function ($q) use ($user) {
-                        $q->where('user_id', $user->id);
+                        $q->where('owner_id', $user->id);
                     });
             })
             ->orderBy('last_message_at', 'desc')
@@ -84,7 +85,7 @@ class ChatController extends Controller
         $shop = Shop::findOrFail($request->shop_id);
 
         // Can't chat with your own shop
-        if ($shop->user_id == $user->id) {
+        if ($shop->owner_id == $user->id) {
             return response()->json(['error' => 'Cannot chat with your own shop'], 400);
         }
 
@@ -144,7 +145,7 @@ class ChatController extends Controller
             ->where(function ($query) use ($user) {
                 $query->where('customer_id', $user->id)
                     ->orWhereHas('shop', function ($q) use ($user) {
-                        $q->where('user_id', $user->id);
+                        $q->where('owner_id', $user->id);
                     });
             })
             ->findOrFail($conversationId);
@@ -161,16 +162,16 @@ class ChatController extends Controller
             ->get()
             ->map(function ($message) {
                 return [
-                    'id' => $message->id,
-                    'conversation_id' => $message->conversation_id,
-                    'sender_id' => $message->sender_id,
+                    'id' => (int) $message->id,
+                    'conversation_id' => (int) $message->conversation_id,
+                    'sender_id' => (int) $message->sender_id,
                     'content' => $message->content,
                     'type' => $message->type,
                     'metadata' => $message->metadata,
-                    'is_read' => $message->is_read,
+                    'is_read' => (bool) $message->is_read,
                     'created_at' => $message->created_at,
                     'sender' => $message->sender ? [
-                        'id' => $message->sender->id,
+                        'id' => (int) $message->sender->id,
                         'name' => $message->sender->name,
                         'profile_image_url' => $message->sender->profile_image_url,
                     ] : null,
@@ -198,7 +199,7 @@ class ChatController extends Controller
             ->where(function ($query) use ($user) {
                 $query->where('customer_id', $user->id)
                     ->orWhereHas('shop', function ($q) use ($user) {
-                        $q->where('user_id', $user->id);
+                        $q->where('owner_id', $user->id);
                     });
             })
             ->findOrFail($conversationId);
@@ -215,22 +216,24 @@ class ChatController extends Controller
         $conversation->update(['last_message_at' => now()]);
 
         $message->load('sender');
+        
+        // broadcast(new MessageSent($message))->toOthers();
 
-        return response()->json([
-            'id' => $message->id,
-            'conversation_id' => $message->conversation_id,
-            'sender_id' => $message->sender_id,
-            'content' => $message->content,
-            'type' => $message->type,
-            'metadata' => $message->metadata,
-            'is_read' => $message->is_read,
-            'created_at' => $message->created_at,
-            'sender' => $message->sender ? [
-                'id' => $message->sender->id,
-                'name' => $message->sender->name,
-                'profile_image_url' => $message->sender->profile_image_url,
-            ] : null,
-        ], 201);
+    return response()->json([
+        'id' => (int) $message->id,
+        'conversation_id' => (int) $message->conversation_id,
+        'sender_id' => (int) $message->sender_id,
+        'content' => $message->content,
+        'type' => $message->type,
+        'metadata' => $message->metadata,
+        'is_read' => (bool) $message->is_read,
+        'created_at' => $message->created_at,
+        'sender' => $message->sender ? [
+            'id' => (int) $message->sender->id,
+            'name' => $message->sender->name,
+            'profile_image_url' => $message->sender->profile_image_url,
+        ] : null,
+    ], 201);
     }
 
     /**
@@ -243,7 +246,7 @@ class ChatController extends Controller
         $count = Message::whereHas('conversation', function ($query) use ($user) {
             $query->where('customer_id', $user->id)
                 ->orWhereHas('shop', function ($q) use ($user) {
-                    $q->where('user_id', $user->id);
+                    $q->where('owner_id', $user->id);
                 });
         })
         ->where('sender_id', '!=', $user->id)

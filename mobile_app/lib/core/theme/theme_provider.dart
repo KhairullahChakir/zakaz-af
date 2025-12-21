@@ -13,9 +13,10 @@ class ThemeNotifier extends _$ThemeNotifier {
     final prefs = ref.watch(sharedPrefsProvider);
     final savedMode = prefs.getString(_key);
     
+    debugPrint('Saved theme mode: $savedMode');
     if (savedMode == 'light') return ThemeMode.light;
     if (savedMode == 'dark') return ThemeMode.dark;
-    return ThemeMode.system;
+    return ThemeMode.light; // Force default to Light instead of System
   }
 
   void setThemeMode(ThemeMode mode) {
