@@ -1,0 +1,297 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import '../../../core/utils/responsive.dart';
+import '../data/chat_repository.dart';
+import '../domain/conversation.dart';
+
+// Orange Theme Colors
+const Color kPrimaryOrange = Color(0xFFFF6B00);
+const Color kLightOrange = Color(0xFFFF8A33);
+const Color kSoftOrange = Color(0xFFFFF3E6);
+
+class ConversationsScreen extends ConsumerWidget {
+  const ConversationsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final conversationsAsync = ref.watch(conversationsProvider);
+
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        backgroundColor: kPrimaryOrange,
+        foregroundColor: Colors.white,
+        title: const Text('Messages'),
+        elevation: 0,
+      ),
+      body: conversationsAsync.when(
+        loading: () => const Center(
+          child: CircularProgressIndicator(color: kPrimaryOrange),
+        ),
+        error: (error, _) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+              const SizedBox(height: 16),
+              Text('Error: $error'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => ref.invalidate(conversationsProvider),
+                style: ElevatedButton.styleFrom(backgroundColor: kPrimaryOrange),
+                child: const Text('Retry', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
+        ),
+        data: (conversations) {
+          if (conversations.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: kSoftOrange,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.chat_bubble_outline,
+                      size: 64,
+                      color: kPrimaryOrange,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'No conversations yet',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Start chatting with a seller\nfrom a product page',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return RefreshIndicator(
+            color: kPrimaryOrange,
+            onRefresh: () async => ref.invalidate(conversationsProvider),
+            child: ListView.separated(
+              padding: EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: Responsive.padding(context),
+              ),
+              itemCount: conversations.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 8),
+              itemBuilder: (context, index) {
+                final conversation = conversations[index];
+                return _ConversationTile(conversation: conversation);
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ConversationTile extends StatelessWidget {
+  final Conversation conversation;
+
+  const _ConversationTile({required this.conversation});
+
+  @override
+  Widget build(BuildContext context) {
+    final participant = conversation.otherParticipant;
+    final shop = conversation.shop;
+    final latestMessage = conversation.latestMessage;
+    final hasUnread = conversation.unreadCount > 0;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: hasUnread ? kSoftOrange : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            context.push('/chat/${conversation.id}', extra: conversation);
+          },
+          child: Padding(
+            padding: EdgeInsets.all(Responsive.value(context, mobile: 12, tablet: 16)),
+            child: Row(
+              children: [
+                // Avatar
+                Container(
+                  width: Responsive.value(context, mobile: 56, tablet: 64),
+                  height: Responsive.value(context, mobile: 56, tablet: 64),
+                  decoration: BoxDecoration(
+                    color: kSoftOrange,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: shop?.mainPhotoUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.network(
+                            shop!.mainPhotoUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => const Icon(
+                              Icons.store,
+                              color: kPrimaryOrange,
+                            ),
+                          ),
+                        )
+                      : participant?.profileImageUrl != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.network(
+                                participant!.profileImageUrl!,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => const Icon(
+                                  Icons.person,
+                                  color: kPrimaryOrange,
+                                ),
+                              ),
+                            )
+                          : const Icon(Icons.store, color: kPrimaryOrange),
+                ),
+                const SizedBox(width: 12),
+                // Content
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              shop?.name ?? participant?.name ?? 'Unknown',
+                              style: TextStyle(
+                                fontWeight: hasUnread ? FontWeight.bold : FontWeight.w600,
+                                fontSize: Responsive.value(context, mobile: 15, tablet: 17),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (latestMessage?.createdAt != null)
+                            Text(
+                              _formatTime(latestMessage!.createdAt!),
+                              style: TextStyle(
+                                color: hasUnread ? kPrimaryOrange : Colors.grey[500],
+                                fontSize: 12,
+                                fontWeight: hasUnread ? FontWeight.bold : FontWeight.normal,
+                              ),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              latestMessage?.content ?? 'No messages yet',
+                              style: TextStyle(
+                                color: hasUnread ? Colors.grey[800] : Colors.grey[600],
+                                fontSize: Responsive.value(context, mobile: 13, tablet: 14),
+                                fontWeight: hasUnread ? FontWeight.w500 : FontWeight.normal,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (hasUnread) ...[
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: kPrimaryOrange,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                '${conversation.unreadCount}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      // Product context
+                      if (conversation.product != null) ...[
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.shopping_bag, size: 14, color: Colors.grey),
+                              const SizedBox(width: 4),
+                              Flexible(
+                                child: Text(
+                                  conversation.product!.name,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[600],
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _formatTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays == 0) {
+      return DateFormat.jm().format(dateTime);
+    } else if (difference.inDays == 1) {
+      return 'Yesterday';
+    } else if (difference.inDays < 7) {
+      return DateFormat.E().format(dateTime);
+    } else {
+      return DateFormat.MMMd().format(dateTime);
+    }
+  }
+}
