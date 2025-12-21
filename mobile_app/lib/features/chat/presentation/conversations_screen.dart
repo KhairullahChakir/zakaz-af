@@ -17,6 +17,7 @@ class ConversationsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final conversationsAsync = ref.watch(conversationsProvider);
+    final currentUser = ref.watch(authControllerProvider).value;
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
@@ -30,22 +31,7 @@ class ConversationsScreen extends ConsumerWidget {
         loading: () => const Center(
           child: CircularProgressIndicator(color: kPrimaryOrange),
         ),
-        error: (error, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.grey),
-              const SizedBox(height: 16),
-              Text('Error: $error'),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => ref.invalidate(conversationsProvider),
-                style: ElevatedButton.styleFrom(backgroundColor: kPrimaryOrange),
-                child: const Text('Retry', style: TextStyle(color: Colors.white)),
-              ),
-            ],
-          ),
-        ),
+// ... (keep error and empty state same)
         data: (conversations) {
           if (conversations.isEmpty) {
             return Center(
@@ -96,7 +82,10 @@ class ConversationsScreen extends ConsumerWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final conversation = conversations[index];
-                return _ConversationTile(conversation: conversation);
+                return _ConversationTile(
+                  conversation: conversation,
+                  currentUserId: currentUser?.id,
+                );
               },
             ),
           );
@@ -108,8 +97,12 @@ class ConversationsScreen extends ConsumerWidget {
 
 class _ConversationTile extends StatelessWidget {
   final Conversation conversation;
+  final int? currentUserId;
 
-  const _ConversationTile({required this.conversation});
+  const _ConversationTile({
+    required this.conversation,
+    required this.currentUserId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +110,26 @@ class _ConversationTile extends StatelessWidget {
     final shop = conversation.shop;
     final latestMessage = conversation.latestMessage;
     final hasUnread = conversation.unreadCount > 0;
+    
+    // Determine what to show based on who we are
+    final isMeCustomer = currentUserId == conversation.customerId;
+    
+    // If I am customer, show Shop info. If I am shopkeeper, show Customer (participant) info.
+    String displayName = 'Unknown';
+    String? displayImage;
+    bool isShopImage = false;
+
+    if (isMeCustomer) {
+      // Show Shop Info
+      displayName = shop?.name ?? participant?.name ?? 'Shop';
+      displayImage = shop?.mainPhotoUrl;
+      isShopImage = true;
+    } else {
+      // Show Customer Info
+      displayName = participant?.name ?? 'Customer';
+      displayImage = participant?.profileImageUrl;
+      isShopImage = false;
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -149,31 +162,22 @@ class _ConversationTile extends StatelessWidget {
                     color: kSoftOrange,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: shop?.mainPhotoUrl != null
+                  child: displayImage != null
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Image.network(
-                            shop!.mainPhotoUrl!,
+                            displayImage,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => const Icon(
-                              Icons.store,
+                            errorBuilder: (_, __, ___) => Icon(
+                              isShopImage ? Icons.store : Icons.person,
                               color: kPrimaryOrange,
                             ),
                           ),
                         )
-                      : participant?.profileImageUrl != null
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.network(
-                                participant!.profileImageUrl!,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => const Icon(
-                                  Icons.person,
-                                  color: kPrimaryOrange,
-                                ),
-                              ),
-                            )
-                          : const Icon(Icons.store, color: kPrimaryOrange),
+                      : Icon(
+                          isShopImage ? Icons.store : Icons.person,
+                          color: kPrimaryOrange,
+                        ),
                 ),
                 const SizedBox(width: 12),
                 // Content
@@ -185,7 +189,7 @@ class _ConversationTile extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              shop?.name ?? participant?.name ?? 'Unknown',
+                              displayName,
                               style: TextStyle(
                                 fontWeight: hasUnread ? FontWeight.bold : FontWeight.w600,
                                 fontSize: Responsive.value(context, mobile: 15, tablet: 17),

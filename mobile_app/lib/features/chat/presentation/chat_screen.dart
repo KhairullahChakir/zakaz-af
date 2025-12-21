@@ -106,20 +106,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 color: kSoftOrange,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: conversation?.shop?.mainPhotoUrl != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        conversation!.shop!.mainPhotoUrl!,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => const Icon(
-                          Icons.store,
-                          color: kPrimaryOrange,
-                          size: 20,
-                        ),
-                      ),
-                    )
-                  : const Icon(Icons.store, color: kPrimaryOrange, size: 20),
+              child: _buildAvatar(conversation, currentUser?.id),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -127,9 +114,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    conversation?.shop?.name ?? 
-                    conversation?.otherParticipant?.name ?? 
-                    'Chat',
+                    _getDisplayName(conversation, currentUser?.id),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -138,6 +123,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   if (conversation?.product != null)
+                    Text(
+                      conversation!.product!.name,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white.withOpacity(0.8),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: Column(
+        children: [
                     Text(
                       conversation!.product!.name,
                       style: TextStyle(
@@ -337,6 +339,52 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   bool _isSameDay(DateTime? a, DateTime? b) {
     if (a == null || b == null) return false;
     return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  Widget _buildAvatar(Conversation? conversation, int? currentUserId) {
+    if (conversation == null) return const Icon(Icons.store, color: kPrimaryOrange);
+
+    final isMeCustomer = currentUserId == conversation.customerId;
+    String? displayImage;
+    bool isShopImage = false;
+
+    if (isMeCustomer) {
+      displayImage = conversation.shop?.mainPhotoUrl;
+      isShopImage = true;
+    } else {
+      displayImage = conversation.otherParticipant?.profileImageUrl;
+    }
+
+    if (displayImage != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.network(
+          displayImage,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => Icon(
+            isShopImage ? Icons.store : Icons.person,
+            color: kPrimaryOrange,
+          ),
+        ),
+      );
+    }
+    
+    return Icon(
+      isShopImage ? Icons.store : Icons.person,
+      color: kPrimaryOrange,
+    );
+  }
+
+  String _getDisplayName(Conversation? conversation, int? currentUserId) {
+    if (conversation == null) return 'Chat';
+
+    final isMeCustomer = currentUserId == conversation.customerId;
+
+    if (isMeCustomer) {
+      return conversation.shop?.name ?? conversation.otherParticipant?.name ?? 'Shop';
+    } else {
+      return conversation.otherParticipant?.name ?? 'Customer';
+    }
   }
 }
 
