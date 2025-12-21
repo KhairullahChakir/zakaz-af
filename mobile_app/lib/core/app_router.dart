@@ -192,6 +192,14 @@ GoRouter appRouter(Ref ref) {
           ),
         ]
       ),
+      // Products route (plural)
+      GoRoute(
+        path: '/products/:id',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return ProductDetailsScreen(productId: id);
+        },
+      ),
     ],
   );
 }
