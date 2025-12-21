@@ -17,6 +17,11 @@ class AnalyticsScreen extends ConsumerWidget {
         title: const Text('Sales Analytics'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.store),
+            tooltip: 'Shop Applications',
+            onPressed: () => context.push('/admin/shops'),
+          ),
+          IconButton(
             icon: const Icon(Icons.inventory),
             tooltip: 'Manage Products',
             onPressed: () => context.push('/admin/products'),

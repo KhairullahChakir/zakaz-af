@@ -18,7 +18,10 @@ import '../features/wishlist/presentation/wishlist_screen.dart';
 import '../features/admin/presentation/admin_products_screen.dart';
 import '../features/admin/presentation/add_edit_product_screen.dart';
 import '../features/admin/presentation/admin_categories_screen.dart';
+import '../features/admin/presentation/admin_shops_screen.dart';
+import '../features/admin/presentation/admin_shop_detail_screen.dart';
 import '../features/products/domain/product.dart';
+import '../features/shop/domain/shop.dart';
 import '../features/shop/presentation/become_shopkeeper_screen.dart';
 import '../features/shop/presentation/shop_status_screen.dart';
 
@@ -109,6 +112,17 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/admin/categories',
         builder: (context, state) => const AdminCategoriesScreen(),
+      ),
+      GoRoute(
+        path: '/admin/shops',
+        builder: (context, state) => const AdminShopsScreen(),
+      ),
+      GoRoute(
+        path: '/admin/shops/:id',
+        builder: (context, state) {
+          final shop = state.extra as Shop;
+          return AdminShopDetailScreen(shop: shop);
+        },
       ),
       GoRoute(
         path: '/become-shopkeeper',
