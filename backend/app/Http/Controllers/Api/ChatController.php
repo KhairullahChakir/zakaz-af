@@ -100,30 +100,37 @@ class ChatController extends Controller
         );
 
         // Load relationships
-        $conversation->load(['customer', 'shop.owner', 'product']);
+    $conversation->load(['customer', 'shop.owner', 'product']);
 
-        return response()->json([
-            'id' => $conversation->id,
-            'customer_id' => $conversation->customer_id,
-            'shop_id' => $conversation->shop_id,
-            'product_id' => $conversation->product_id,
-            'shop' => $conversation->shop ? [
-                'id' => $conversation->shop->id,
-                'name' => $conversation->shop->name,
-                'main_photo_url' => $conversation->shop->main_photo_url,
-                'owner' => $conversation->shop->owner ? [
-                    'id' => $conversation->shop->owner->id,
-                    'name' => $conversation->shop->owner->name,
-                ] : null,
+    $otherParticipant = $conversation->shop->owner;
+
+    return response()->json([
+        'id' => $conversation->id,
+        'customer_id' => $conversation->customer_id,
+        'shop_id' => $conversation->shop_id,
+        'product_id' => $conversation->product_id,
+        'other_participant' => $otherParticipant ? [
+            'id' => $otherParticipant->id,
+            'name' => $otherParticipant->name,
+            'profile_image_url' => $otherParticipant->profile_image_url,
+        ] : null,
+        'shop' => $conversation->shop ? [
+            'id' => $conversation->shop->id,
+            'name' => $conversation->shop->name,
+            'main_photo_url' => $conversation->shop->main_photo_url,
+            'owner' => $conversation->shop->owner ? [
+                'id' => $conversation->shop->owner->id,
+                'name' => $otherParticipant->name,
             ] : null,
-            'product' => $conversation->product ? [
-                'id' => $conversation->product->id,
-                'name' => $conversation->product->name,
-                'image_url' => $conversation->product->image_url,
-                'price' => $conversation->product->price,
-            ] : null,
-            'created_at' => $conversation->created_at,
-        ]);
+        ] : null,
+        'product' => $conversation->product ? [
+            'id' => $conversation->product->id,
+            'name' => $conversation->product->name,
+            'image_url' => $conversation->product->image_url,
+            'price' => $conversation->product->price,
+        ] : null,
+        'created_at' => $conversation->created_at,
+    ]);
     }
 
     /**
