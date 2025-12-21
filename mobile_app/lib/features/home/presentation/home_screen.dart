@@ -8,6 +8,12 @@ import '../../products/presentation/providers.dart';
 import '../../products/domain/product.dart';
 import '../../products/domain/category.dart';
 
+// Orange Theme Colors
+const Color kPrimaryOrange = Color(0xFFFF6B00);
+const Color kDarkOrange = Color(0xFFE55A00);
+const Color kLightOrange = Color(0xFFFF8A33);
+const Color kSoftOrange = Color(0xFFFFF3E6);
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -25,18 +31,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final List<Map<String, dynamic>> _banners = [
     {
       'title': 'Welcome to Zakaz-AF',
-      'subtitle': 'Shop from local stores',
-      'gradient': [Color(0xFF667EEA), Color(0xFF764BA2)],
+      'subtitle': 'Shop from local Afghan stores',
+      'icon': Icons.storefront,
     },
     {
       'title': 'Fresh Groceries',
       'subtitle': 'Delivered to your door',
-      'gradient': [Color(0xFF11998E), Color(0xFF38EF7D)],
+      'icon': Icons.local_grocery_store,
     },
     {
       'title': 'Fashion & Style',
       'subtitle': 'Traditional & Modern',
-      'gradient': [Color(0xFFEB3349), Color(0xFFF45C43)],
+      'icon': Icons.checkroom,
     },
   ];
 
@@ -86,6 +92,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildBottomNav() {
     return Container(
       decoration: BoxDecoration(
+        color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -95,24 +102,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       child: NavigationBar(
+        backgroundColor: Colors.white,
+        indicatorColor: kSoftOrange,
         selectedIndex: _currentNavIndex,
         onDestinationSelected: (index) {
           if (index == 2) {
-            // Cart - navigate to cart screen
             context.push('/cart');
           } else {
             setState(() => _currentNavIndex = index);
           }
         },
         destinations: [
-          const NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined, color: Colors.grey[600]),
+            selectedIcon: const Icon(Icons.home, color: kPrimaryOrange),
             label: 'Home',
           ),
-          const NavigationDestination(
-            icon: Icon(Icons.category_outlined),
-            selectedIcon: Icon(Icons.category),
+          NavigationDestination(
+            icon: Icon(Icons.category_outlined, color: Colors.grey[600]),
+            selectedIcon: const Icon(Icons.category, color: kPrimaryOrange),
             label: 'Categories',
           ),
           NavigationDestination(
@@ -120,9 +128,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             selectedIcon: const CartIconBadge(showBackground: false),
             label: 'Cart',
           ),
-          const NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline, color: Colors.grey[600]),
+            selectedIcon: const Icon(Icons.person, color: kPrimaryOrange),
             label: 'Profile',
           ),
         ],
@@ -139,36 +147,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return CustomScrollView(
       slivers: [
-        // Modern App Bar
+        // Orange App Bar
         SliverAppBar(
           floating: true,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: kPrimaryOrange,
+          foregroundColor: Colors.white,
           elevation: 0,
           title: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
-                  ),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.store, color: Colors.white, size: 24),
+                child: const Icon(Icons.store, color: kPrimaryOrange, size: 24),
               ),
               const SizedBox(width: 12),
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Zakaz-AF',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
                   ),
                   Text(
                     'Shop local, support local',
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: 12, color: Colors.white70),
                   ),
                 ],
               ),
@@ -176,11 +185,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.favorite_border),
+              icon: const Icon(Icons.favorite_border, color: Colors.white),
               onPressed: () => context.push('/wishlist'),
             ),
             IconButton(
-              icon: const Icon(Icons.notifications_none),
+              icon: const Icon(Icons.notifications_none, color: Colors.white),
               onPressed: () {},
             ),
           ],
@@ -188,45 +197,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
         // Search Bar
         SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: GestureDetector(
-              onTap: () => _showSearchModal(),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.search, color: Colors.grey[500]),
-                    const SizedBox(width: 12),
-                    Text(
-                      'Search products, shops...',
-                      style: TextStyle(color: Colors.grey[500]),
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
+          child: Container(
+            color: kPrimaryOrange,
+            child: Container(
+              margin: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: GestureDetector(
+                onTap: () => _showSearchModal(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  child: Row(
+                    children: [
+                      Icon(Icons.search, color: Colors.grey[500]),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Search products, shops...',
+                        style: TextStyle(color: Colors.grey[500]),
                       ),
-                      child: Icon(
-                        Icons.tune,
-                        size: 18,
-                        color: Theme.of(context).primaryColor,
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: kSoftOrange,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(Icons.tune, size: 18, color: kPrimaryOrange),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -244,14 +252,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               itemBuilder: (context, index) {
                 final banner = _banners[index];
                 return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: banner['gradient'] as List<Color>,
+                    gradient: const LinearGradient(
+                      colors: [kPrimaryOrange, kLightOrange],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: kPrimaryOrange.withOpacity(0.3),
+                        blurRadius: 15,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
                   ),
                   child: Stack(
                     children: [
@@ -259,7 +274,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         right: -20,
                         bottom: -20,
                         child: Icon(
-                          Icons.shopping_bag,
+                          banner['icon'] as IconData,
                           size: 150,
                           color: Colors.white.withOpacity(0.2),
                         ),
@@ -289,17 +304,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             const SizedBox(height: 16),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
+                                horizontal: 20,
+                                vertical: 10,
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(25),
                               ),
                               child: const Text(
                                 'Shop Now',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
+                                  color: kPrimaryOrange,
                                 ),
                               ),
                             ),
@@ -317,7 +333,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         // Banner dots
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
@@ -328,9 +344,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   width: _bannerIndex == index ? 24 : 8,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: _bannerIndex == index
-                        ? Theme.of(context).primaryColor
-                        : Colors.grey[300],
+                    color: _bannerIndex == index ? kPrimaryOrange : Colors.grey[300],
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -346,15 +360,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Categories',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
                 TextButton(
                   onPressed: () => setState(() => _currentNavIndex = 1),
-                  child: const Text('See All'),
+                  child: const Text('See All', style: TextStyle(color: kPrimaryOrange)),
                 ),
               ],
             ),
@@ -375,7 +390,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   return _buildCategoryCard(category, isSelected);
                 },
               ),
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
               error: (e, _) => Center(child: Text('Error: $e')),
             ),
           ),
@@ -388,15 +403,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Featured Products',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
                 TextButton(
                   onPressed: () {},
-                  child: const Text('See All'),
+                  child: const Text('See All', style: TextStyle(color: kPrimaryOrange)),
                 ),
               ],
             ),
@@ -416,7 +432,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   return _buildFeaturedProductCard(product);
                 },
               ),
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
               error: (e, _) => Center(child: Text('Error: $e')),
             ),
           ),
@@ -426,11 +442,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Text(
+            child: const Text(
               'All Products',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
           ),
         ),
@@ -452,7 +469,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
           loading: () => const SliverToBoxAdapter(
-            child: Center(child: CircularProgressIndicator()),
+            child: Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
           ),
           error: (e, _) => SliverToBoxAdapter(
             child: Center(child: Text('Error: $e')),
@@ -465,29 +482,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildCategoryCard(Category category, bool isSelected) {
-    final icons = {
-      'grocery': Icons.local_grocery_store,
-      'groceries': Icons.local_grocery_store,
-      'clothes': Icons.checkroom,
-      'electronics': Icons.devices,
-      'restaurant': Icons.restaurant,
-      'pharmacy': Icons.local_pharmacy,
-      'hardware': Icons.hardware,
-    };
-
-    final colors = {
-      'grocery': Colors.green,
-      'groceries': Colors.green,
-      'clothes': Colors.pink,
-      'electronics': Colors.blue,
-      'restaurant': Colors.orange,
-      'pharmacy': Colors.red,
-      'hardware': Colors.brown,
-    };
-
-    final icon = icons[category.type?.toLowerCase()] ?? Icons.category;
-    final color = colors[category.type?.toLowerCase()] ?? Theme.of(context).primaryColor;
-
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -503,13 +497,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: isSelected ? color : color.withOpacity(0.1),
+                color: isSelected ? kPrimaryOrange : kSoftOrange,
                 borderRadius: BorderRadius.circular(16),
-                border: isSelected ? null : Border.all(color: color.withOpacity(0.3)),
+                border: isSelected ? null : Border.all(color: kPrimaryOrange.withOpacity(0.3)),
               ),
               child: Icon(
-                icon,
-                color: isSelected ? Colors.white : color,
+                Icons.category,
+                color: isSelected ? Colors.white : kPrimaryOrange,
                 size: 28,
               ),
             ),
@@ -522,7 +516,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? color : null,
+                color: isSelected ? kPrimaryOrange : null,
               ),
             ),
           ],
@@ -538,7 +532,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         width: 160,
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -557,7 +551,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Container(
                   height: 120,
                   decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                    color: kSoftOrange,
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                   ),
                   child: product.imageUrl != null
@@ -567,12 +561,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             product.imageUrl!,
                             width: double.infinity,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => const Center(
-                              child: Icon(Icons.image, size: 40, color: Colors.grey),
+                            errorBuilder: (_, __, ___) => Center(
+                              child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withOpacity(0.5)),
                             ),
                           ),
                         )
-                      : const Center(child: Icon(Icons.image, size: 40, color: Colors.grey)),
+                      : Center(child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withOpacity(0.5))),
                 ),
                 Positioned(
                   top: 8,
@@ -589,7 +583,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ],
                     ),
-                    child: const Icon(Icons.favorite_border, size: 18, color: Colors.red),
+                    child: const Icon(Icons.favorite_border, size: 18, color: kPrimaryOrange),
                   ),
                 ),
               ],
@@ -609,7 +603,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(Icons.star, size: 14, color: Colors.amber),
+                      const Icon(Icons.star, size: 14, color: kPrimaryOrange),
                       const SizedBox(width: 4),
                       Text(
                         '4.5',
@@ -620,10 +614,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const SizedBox(height: 8),
                   Text(
                     '${product.price.toInt()} AFN',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Theme.of(context).primaryColor,
+                      color: kPrimaryOrange,
                     ),
                   ),
                 ],
@@ -640,7 +634,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       onTap: () => context.push('/products/${product.id}'),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -660,7 +654,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: kSoftOrange,
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                     ),
                     child: product.imageUrl != null
@@ -670,12 +664,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               product.imageUrl!,
                               width: double.infinity,
                               fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => const Center(
-                                child: Icon(Icons.image, size: 40, color: Colors.grey),
+                              errorBuilder: (_, __, ___) => Center(
+                                child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withOpacity(0.5)),
                               ),
                             ),
                           )
-                        : const Center(child: Icon(Icons.image, size: 40, color: Colors.grey)),
+                        : Center(child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withOpacity(0.5))),
                   ),
                   Positioned(
                     top: 8,
@@ -686,7 +680,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         color: Colors.white.withOpacity(0.9),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.favorite_border, size: 18, color: Colors.red),
+                      child: const Icon(Icons.favorite_border, size: 18, color: kPrimaryOrange),
                     ),
                   ),
                   if (product.stock < 10)
@@ -696,7 +690,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: kPrimaryOrange,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Text(
@@ -728,15 +722,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       children: [
                         Text(
                           '${product.price.toInt()} AFN',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor,
+                            color: kPrimaryOrange,
                           ),
                         ),
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
+                            color: kPrimaryOrange,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(Icons.add, size: 16, color: Colors.white),
@@ -760,6 +754,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: AppBar(
         title: const Text('Categories'),
         centerTitle: true,
+        backgroundColor: kPrimaryOrange,
+        foregroundColor: Colors.white,
       ),
       body: categoriesAsync.when(
         data: (categories) => GridView.builder(
@@ -776,22 +772,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             return _buildCategoryGridCard(category);
           },
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
         error: (e, _) => Center(child: Text('Error: $e')),
       ),
     );
   }
 
   Widget _buildCategoryGridCard(Category category) {
-    final colors = [
-      [const Color(0xFF667EEA), const Color(0xFF764BA2)],
-      [const Color(0xFF11998E), const Color(0xFF38EF7D)],
-      [const Color(0xFFEB3349), const Color(0xFFF45C43)],
-      [const Color(0xFF2193B0), const Color(0xFF6DD5ED)],
-    ];
-
-    final gradient = colors[category.id % colors.length];
-
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -801,12 +788,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       },
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradient,
+          gradient: const LinearGradient(
+            colors: [kPrimaryOrange, kLightOrange],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: kPrimaryOrange.withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Stack(
           children: [
@@ -843,8 +837,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildCartTab() {
-    // This tab navigates to cart screen
-    return const Center(child: CircularProgressIndicator());
+    return const Center(child: CircularProgressIndicator(color: kPrimaryOrange));
   }
 
   Widget _buildProfileTab() {
@@ -856,11 +849,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           SliverAppBar(
             expandedHeight: 200,
             pinned: true,
+            backgroundColor: kPrimaryOrange,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+                    colors: [kPrimaryOrange, kLightOrange],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -870,15 +864,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 40),
-                      CircleAvatar(
-                        radius: 45,
-                        backgroundColor: Colors.white,
-                        backgroundImage: user?.profileImageUrl != null
-                            ? NetworkImage(user!.profileImageUrl!)
-                            : null,
-                        child: user?.profileImageUrl == null
-                            ? const Icon(Icons.person, size: 50, color: Colors.grey)
-                            : null,
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          radius: 45,
+                          backgroundColor: kSoftOrange,
+                          backgroundImage: user?.profileImageUrl != null
+                              ? NetworkImage(user!.profileImageUrl!)
+                              : null,
+                          child: user?.profileImageUrl == null
+                              ? const Icon(Icons.person, size: 50, color: kPrimaryOrange)
+                              : null,
+                        ),
                       ),
                       const SizedBox(height: 12),
                       Text(
@@ -911,13 +918,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   _buildProfileOption(Icons.location_on, 'Addresses', () => context.push('/addresses')),
                   _buildProfileOption(Icons.favorite, 'Wishlist', () => context.push('/wishlist')),
                   const Divider(height: 32),
-                  // Role-based options
                   if (user?.isCustomer == true)
-                    _buildProfileOption(Icons.store, 'Become a Shopkeeper', () => context.push('/shop-status'), color: Colors.teal),
+                    _buildProfileOption(Icons.store, 'Become a Shopkeeper', () => context.push('/shop-status'), color: kPrimaryOrange),
                   if (user?.isShopkeeper == true)
-                    _buildProfileOption(Icons.store, 'My Shop', () => context.push('/shopkeeper/dashboard'), color: Colors.green),
+                    _buildProfileOption(Icons.store, 'My Shop', () => context.push('/shopkeeper/dashboard'), color: kPrimaryOrange),
                   if (user?.isAdmin == true)
-                    _buildProfileOption(Icons.admin_panel_settings, 'Admin Dashboard', () => context.push('/analytics'), color: Colors.blue),
+                    _buildProfileOption(Icons.admin_panel_settings, 'Admin Dashboard', () => context.push('/analytics'), color: kPrimaryOrange),
                   const Divider(height: 32),
                   _buildProfileOption(
                     ref.watch(themeProvider) == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode,
@@ -925,6 +931,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     () {},
                     trailing: Switch(
                       value: ref.watch(themeProvider) == ThemeMode.dark,
+                      activeColor: kPrimaryOrange,
                       onChanged: (value) {
                         ref.read(themeProvider.notifier).setThemeMode(
                               value ? ThemeMode.dark : ThemeMode.light,
@@ -951,17 +958,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildProfileOption(IconData icon, String title, VoidCallback onTap, {Color? color, Widget? trailing}) {
+    final displayColor = color ?? kPrimaryOrange;
     return ListTile(
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: (color ?? Colors.grey).withOpacity(0.1),
+          color: displayColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(icon, color: color ?? Colors.grey[700]),
+        child: Icon(icon, color: displayColor),
       ),
       title: Text(title, style: TextStyle(color: color)),
-      trailing: trailing ?? const Icon(Icons.chevron_right),
+      trailing: trailing ?? Icon(Icons.chevron_right, color: Colors.grey[400]),
       onTap: onTap,
     );
   }
@@ -976,9 +984,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         minChildSize: 0.5,
         maxChildSize: 0.95,
         builder: (context, scrollController) => Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
             children: [
@@ -996,9 +1004,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: TextField(
                   controller: _searchController,
                   autofocus: true,
+                  cursorColor: kPrimaryOrange,
                   decoration: InputDecoration(
                     hintText: 'Search products...',
-                    prefixIcon: const Icon(Icons.search),
+                    prefixIcon: const Icon(Icons.search, color: kPrimaryOrange),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () {
@@ -1008,6 +1017,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: kPrimaryOrange),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
                     ),
                   ),
                   onChanged: (value) => setState(() {}),
@@ -1037,17 +1051,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     height: 50,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
-                                      color: Colors.grey[200],
+                                      color: kSoftOrange,
                                     ),
                                     child: product.imageUrl != null
                                         ? ClipRRect(
                                             borderRadius: BorderRadius.circular(8),
                                             child: Image.network(product.imageUrl!, fit: BoxFit.cover),
                                           )
-                                        : const Icon(Icons.image, color: Colors.grey),
+                                        : const Icon(Icons.image, color: kPrimaryOrange),
                                   ),
                                   title: Text(product.name),
-                                  subtitle: Text('${product.price.toInt()} AFN'),
+                                  subtitle: Text(
+                                    '${product.price.toInt()} AFN',
+                                    style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold),
+                                  ),
                                   onTap: () {
                                     Navigator.pop(context);
                                     context.push('/products/${product.id}');
@@ -1055,7 +1072,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 );
                               },
                             ),
-                      loading: () => const Center(child: CircularProgressIndicator()),
+                      loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
                       error: (e, _) => Center(child: Text('Error: $e')),
                     );
                   },
