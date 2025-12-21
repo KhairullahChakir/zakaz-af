@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
 import '../../../core/utils/responsive.dart';
 import '../data/chat_repository.dart';
 import '../domain/conversation.dart';
@@ -31,7 +32,22 @@ class ConversationsScreen extends ConsumerWidget {
         loading: () => const Center(
           child: CircularProgressIndicator(color: kPrimaryOrange),
         ),
-// ... (keep error and empty state same)
+        error: (error, _) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+              const SizedBox(height: 16),
+              Text('Error: $error'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => ref.invalidate(conversationsProvider),
+                style: ElevatedButton.styleFrom(backgroundColor: kPrimaryOrange),
+                child: const Text('Retry', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
+        ),
         data: (conversations) {
           if (conversations.isEmpty) {
             return Center(
