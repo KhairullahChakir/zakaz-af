@@ -47,11 +47,11 @@ class ProductController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
-        return $query->with('category')->get();
+        return $query->with(['category', 'shop.owner'])->get();
     }
 
     public function show($id)
     {
-        return Product::with('category')->findOrFail($id);
+        return Product::with(['category', 'shop.owner', 'reviews.user'])->findOrFail($id);
     }
 }

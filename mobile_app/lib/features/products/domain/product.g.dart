@@ -15,9 +15,13 @@ _Product _$ProductFromJson(Map<String, dynamic> json) => _Product(
   imageUrl: json['image_url'] as String?,
   stock: (json['stock'] as num).toInt(),
   categoryId: (json['category_id'] as num).toInt(),
+  shopId: (json['shop_id'] as num?)?.toInt(),
   category: json['category'] == null
       ? null
       : Category.fromJson(json['category'] as Map<String, dynamic>),
+  shop: json['shop'] == null
+      ? null
+      : ProductShop.fromJson(json['shop'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$ProductToJson(_Product instance) => <String, dynamic>{
@@ -29,5 +33,7 @@ Map<String, dynamic> _$ProductToJson(_Product instance) => <String, dynamic>{
   'image_url': instance.imageUrl,
   'stock': instance.stock,
   'category_id': instance.categoryId,
+  'shop_id': instance.shopId,
   'category': instance.category,
+  'shop': instance.shop,
 };
