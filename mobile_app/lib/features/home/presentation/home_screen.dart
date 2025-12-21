@@ -280,41 +280,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
                               banner['title'] as String,
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 24,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 4),
                             Text(
                               banner['subtitle'] as String,
                               style: TextStyle(
                                 color: Colors.white.withOpacity(0.9),
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 12),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 10,
+                                horizontal: 16,
+                                vertical: 8,
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(25),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                               child: const Text(
                                 'Shop Now',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 13,
                                   color: kPrimaryOrange,
                                 ),
                               ),
