@@ -303,49 +303,54 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           color: Colors.white.withOpacity(0.2),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(Responsive.value(context, mobile: 20, tablet: 28)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              banner['title'] as String,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: Responsive.value(context, mobile: 18, tablet: 24, desktop: 28),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: Responsive.value(context, mobile: 4, tablet: 8)),
-                            Text(
-                              banner['subtitle'] as String,
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.9),
-                                fontSize: Responsive.value(context, mobile: 13, tablet: 16),
-                              ),
-                            ),
-                            SizedBox(height: Responsive.value(context, mobile: 12, tablet: 16)),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: Responsive.value(context, mobile: 16, tablet: 20),
-                                vertical: Responsive.value(context, mobile: 8, tablet: 10),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                'Shop Now',
+                      Positioned.fill(
+                        child: Padding(
+                          padding: EdgeInsets.all(Responsive.value(context, mobile: 16, tablet: 24)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                banner['title'] as String,
                                 style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: Responsive.value(context, mobile: 18, tablet: 24, desktop: 28),
                                   fontWeight: FontWeight.bold,
-                                  fontSize: Responsive.value(context, mobile: 13, tablet: 15),
-                                  color: kPrimaryOrange,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                banner['subtitle'] as String,
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.9),
+                                  fontSize: Responsive.value(context, mobile: 12, tablet: 16),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 8),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: Responsive.value(context, mobile: 12, tablet: 16),
+                                  vertical: Responsive.value(context, mobile: 6, tablet: 8),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Text(
+                                  'Shop Now',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Responsive.value(context, mobile: 12, tablet: 14),
+                                    color: kPrimaryOrange,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
