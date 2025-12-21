@@ -4,45 +4,67 @@ import 'package:go_router/go_router.dart';
 import '../../features/cart/presentation/cart_provider.dart';
 
 class CartIconBadge extends ConsumerWidget {
-  const CartIconBadge({super.key});
+  final bool showBackground;
+  
+  const CartIconBadge({super.key, this.showBackground = true});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cartItems = ref.watch(cartProvider).value ?? [];
     final count = cartItems.fold(0, (sum, item) => sum + item.quantity);
 
+    if (showBackground) {
+      return Stack(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart_outlined),
+            onPressed: () => context.push('/cart'),
+          ),
+          if (count > 0)
+            Positioned(
+              right: 8,
+              top: 8,
+              child: _buildBadge(count),
+            ),
+        ],
+      );
+    }
+
+    // For navigation bar - just icon with badge
     return Stack(
+      clipBehavior: Clip.none,
       children: [
-        IconButton(
-          icon: const Icon(Icons.shopping_cart_outlined),
-          onPressed: () => context.push('/cart'),
-        ),
+        const Icon(Icons.shopping_cart_outlined),
         if (count > 0)
           Positioned(
-            right: 8,
-            top: 8,
-            child: Container(
-              padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              constraints: const BoxConstraints(
-                minWidth: 16,
-                minHeight: 16,
-              ),
-              child: Text(
-                '$count',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
+            right: -8,
+            top: -4,
+            child: _buildBadge(count),
           ),
       ],
+    );
+  }
+
+  Widget _buildBadge(int count) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      constraints: const BoxConstraints(
+        minWidth: 16,
+        minHeight: 16,
+      ),
+      child: Text(
+        count > 99 ? '99+' : '$count',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }

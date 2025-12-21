@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Category {
 
- int get id; String get name; String get type; String? get image;
+ int get id; String get name; String? get type; String? get image;
 /// Create a copy of Category
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $CategoryCopyWith<$Res>  {
   factory $CategoryCopyWith(Category value, $Res Function(Category) _then) = _$CategoryCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, String type, String? image
+ int id, String name, String? type, String? image
 });
 
 
@@ -65,12 +65,12 @@ class _$CategoryCopyWithImpl<$Res>
 
 /// Create a copy of Category
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? type = null,Object? image = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? type = freezed,Object? image = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as String,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
+as String,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String?,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -156,7 +156,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String type,  String? image)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String? type,  String? image)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Category() when $default != null:
 return $default(_that.id,_that.name,_that.type,_that.image);case _:
@@ -177,7 +177,7 @@ return $default(_that.id,_that.name,_that.type,_that.image);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String type,  String? image)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String? type,  String? image)  $default,) {final _that = this;
 switch (_that) {
 case _Category():
 return $default(_that.id,_that.name,_that.type,_that.image);case _:
@@ -197,7 +197,7 @@ return $default(_that.id,_that.name,_that.type,_that.image);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String type,  String? image)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String? type,  String? image)?  $default,) {final _that = this;
 switch (_that) {
 case _Category() when $default != null:
 return $default(_that.id,_that.name,_that.type,_that.image);case _:
@@ -212,12 +212,12 @@ return $default(_that.id,_that.name,_that.type,_that.image);case _:
 @JsonSerializable()
 
 class _Category implements Category {
-  const _Category({required this.id, required this.name, required this.type, this.image});
+  const _Category({required this.id, required this.name, this.type, this.image});
   factory _Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
 
 @override final  int id;
 @override final  String name;
-@override final  String type;
+@override final  String? type;
 @override final  String? image;
 
 /// Create a copy of Category
@@ -253,7 +253,7 @@ abstract mixin class _$CategoryCopyWith<$Res> implements $CategoryCopyWith<$Res>
   factory _$CategoryCopyWith(_Category value, $Res Function(_Category) _then) = __$CategoryCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, String type, String? image
+ int id, String name, String? type, String? image
 });
 
 
@@ -270,12 +270,12 @@ class __$CategoryCopyWithImpl<$Res>
 
 /// Create a copy of Category
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? type = null,Object? image = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? type = freezed,Object? image = freezed,}) {
   return _then(_Category(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as String,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
+as String,type: freezed == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String?,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

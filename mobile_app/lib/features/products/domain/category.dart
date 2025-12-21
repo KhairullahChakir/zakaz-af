@@ -8,7 +8,7 @@ abstract class Category with _$Category {
   const factory Category({
     required int id,
     required String name,
-    required String type,
+    String? type,
     String? image,
   }) = _Category;
 

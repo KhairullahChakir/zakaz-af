@@ -60,6 +60,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     final themeMode = ref.watch(themeProvider);
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'Zakaz - AF',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFF57C00)),
