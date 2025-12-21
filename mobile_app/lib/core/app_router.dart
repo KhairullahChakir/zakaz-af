@@ -28,6 +28,9 @@ import '../features/shop/presentation/shopkeeper_dashboard_screen.dart';
 import '../features/shop/presentation/shopkeeper_products_screen.dart';
 import '../features/shop/presentation/shopkeeper_add_edit_product_screen.dart';
 import '../features/shop/presentation/shopkeeper_orders_screen.dart';
+import '../features/chat/presentation/conversations_screen.dart';
+import '../features/chat/presentation/chat_screen.dart';
+import '../features/chat/domain/conversation.dart';
 
 part 'app_router.g.dart';
 
@@ -95,6 +98,19 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/wishlist',
         builder: (context, state) => const WishlistScreen(),
+      ),
+      // Chat routes
+      GoRoute(
+        path: '/conversations',
+        builder: (context, state) => const ConversationsScreen(),
+      ),
+      GoRoute(
+        path: '/chat/:id',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          final conversation = state.extra as Conversation?;
+          return ChatScreen(conversationId: id, conversation: conversation);
+        },
       ),
       GoRoute(
         path: '/admin/products',
