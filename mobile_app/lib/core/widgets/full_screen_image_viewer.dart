@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:gal/gal.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
@@ -37,47 +37,31 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
     _transformationController.value = Matrix4.identity();
   }
 
-  Future<bool> _requestPermissions() async {
-    if (Platform.isAndroid) {
-      // For Android 13+ (API 33+), we need READ_MEDIA_IMAGES
-      // For older versions, we need WRITE_EXTERNAL_STORAGE
-      var status = await Permission.photos.status;
-      if (status.isGranted) return true;
-      
-      status = await Permission.storage.status;
-      if (status.isGranted) return true;
-      
-      // Request permissions
-      final photosResult = await Permission.photos.request();
-      if (photosResult.isGranted) return true;
-      
-      final storageResult = await Permission.storage.request();
-      return storageResult.isGranted;
-    }
-    return true; // iOS handles permissions automatically
-  }
-
   Future<void> _saveToGallery() async {
     setState(() => _isSaving = true);
     
     try {
-      // Request permissions first
-      final hasPermission = await _requestPermissions();
-      if (!hasPermission) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('Permission denied. Please allow storage access in settings.'),
-              backgroundColor: Colors.red,
-              action: SnackBarAction(
-                label: 'Settings',
-                textColor: Colors.white,
-                onPressed: openAppSettings,
+      // Check if we have access
+      final hasAccess = await Gal.hasAccess(toAlbum: true);
+      if (!hasAccess) {
+        // Request access
+        final granted = await Gal.requestAccess(toAlbum: true);
+        if (!granted) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: const Text('Permission denied. Please allow storage access in settings.'),
+                backgroundColor: Colors.red,
+                action: SnackBarAction(
+                  label: 'Settings',
+                  textColor: Colors.white,
+                  onPressed: openAppSettings,
+                ),
               ),
-            ),
-          );
+            );
+          }
+          return;
         }
-        return;
       }
 
       // Download image
@@ -86,20 +70,36 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
         throw Exception('Failed to download image');
       }
       
-      // Save to gallery using image_gallery_saver
-      final result = await ImageGallerySaver.saveImage(
-        Uint8List.fromList(response.bodyBytes),
-        quality: 100,
-        name: 'zakaz_${DateTime.now().millisecondsSinceEpoch}',
-      );
+      // Save to temp file first
+      final tempDir = await getTemporaryDirectory();
+      final fileName = 'zakaz_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final filePath = '${tempDir.path}/$fileName';
+      final file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
       
-      final isSuccess = result['isSuccess'] == true;
+      // Save to gallery using Gal
+      await Gal.putImage(filePath, album: 'Zakaz-AF');
+      
+      // Clean up temp file
+      try {
+        await file.delete();
+      } catch (_) {}
       
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✓ Image saved to gallery!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } on GalException catch (e) {
+      debugPrint('Gal error: ${e.type.name}');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(isSuccess ? '✓ Image saved to gallery!' : 'Failed to save image'),
-            backgroundColor: isSuccess ? Colors.green : Colors.red,
+            content: Text('Error: ${e.type.name}'),
+            backgroundColor: Colors.red,
           ),
         );
       }
