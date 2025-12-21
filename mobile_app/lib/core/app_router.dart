@@ -24,6 +24,10 @@ import '../features/products/domain/product.dart';
 import '../features/shop/domain/shop.dart';
 import '../features/shop/presentation/become_shopkeeper_screen.dart';
 import '../features/shop/presentation/shop_status_screen.dart';
+import '../features/shop/presentation/shopkeeper_dashboard_screen.dart';
+import '../features/shop/presentation/shopkeeper_products_screen.dart';
+import '../features/shop/presentation/shopkeeper_add_edit_product_screen.dart';
+import '../features/shop/presentation/shopkeeper_orders_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -131,6 +135,32 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/shop-status',
         builder: (context, state) => const ShopApplicationStatusScreen(),
+      ),
+      // Shopkeeper routes
+      GoRoute(
+        path: '/shopkeeper/dashboard',
+        builder: (context, state) => const ShopkeeperDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/shopkeeper/products',
+        builder: (context, state) => const ShopkeeperProductsScreen(),
+        routes: [
+          GoRoute(
+            path: 'add',
+            builder: (context, state) => const ShopkeeperAddEditProductScreen(),
+          ),
+          GoRoute(
+            path: 'edit',
+            builder: (context, state) {
+              final product = state.extra as Product;
+              return ShopkeeperAddEditProductScreen(product: product);
+            },
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/shopkeeper/orders',
+        builder: (context, state) => const ShopkeeperOrdersScreen(),
       ),
       GoRoute(
         path: '/addresses',

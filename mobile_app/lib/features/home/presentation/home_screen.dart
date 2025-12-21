@@ -176,7 +176,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
                     title: const Text('My Shop', style: TextStyle(color: Colors.green)),
                     onTap: () {
                       Navigator.pop(context);
-                      context.push('/shop-status');
+                      context.push('/shopkeeper/dashboard');
                     },
                   );
                 }

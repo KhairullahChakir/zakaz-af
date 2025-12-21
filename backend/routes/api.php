@@ -60,4 +60,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Shop application (for customers wanting to become shopkeepers)
     Route::post('/shop/apply', [App\Http\Controllers\Api\ShopApplicationController::class, 'apply']);
     Route::get('/shop/status', [App\Http\Controllers\Api\ShopApplicationController::class, 'status']);
+    
+    // Shopkeeper routes
+    Route::prefix('shopkeeper')->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\Api\ShopkeeperController::class, 'dashboard']);
+        Route::get('/products', [App\Http\Controllers\Api\ShopkeeperController::class, 'products']);
+        Route::post('/products', [App\Http\Controllers\Api\ShopkeeperController::class, 'storeProduct']);
+        Route::post('/products/{id}', [App\Http\Controllers\Api\ShopkeeperController::class, 'updateProduct']);
+        Route::delete('/products/{id}', [App\Http\Controllers\Api\ShopkeeperController::class, 'destroyProduct']);
+        Route::get('/orders', [App\Http\Controllers\Api\ShopkeeperController::class, 'orders']);
+        Route::patch('/orders/{id}/status', [App\Http\Controllers\Api\ShopkeeperController::class, 'updateOrderStatus']);
+    });
 });
