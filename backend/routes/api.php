@@ -71,4 +71,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/orders', [App\Http\Controllers\Api\ShopkeeperController::class, 'orders']);
         Route::patch('/orders/{id}/status', [App\Http\Controllers\Api\ShopkeeperController::class, 'updateOrderStatus']);
     });
+    
+    // Chat routes
+    Route::prefix('chat')->group(function () {
+        Route::get('/conversations', [App\Http\Controllers\Api\ChatController::class, 'index']);
+        Route::post('/conversations', [App\Http\Controllers\Api\ChatController::class, 'startConversation']);
+        Route::get('/conversations/{id}/messages', [App\Http\Controllers\Api\ChatController::class, 'getMessages']);
+        Route::post('/conversations/{id}/messages', [App\Http\Controllers\Api\ChatController::class, 'sendMessage']);
+        Route::get('/unread-count', [App\Http\Controllers\Api\ChatController::class, 'unreadCount']);
+    });
 });
