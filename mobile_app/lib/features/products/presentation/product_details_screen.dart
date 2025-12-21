@@ -347,24 +347,105 @@ class ProductDetailsScreen extends ConsumerWidget {
                                   ],
                                 ),
                               ),
-                              // Contact button
+                              // Contact buttons
                               if (product.shop!.phone != null) ...[
-                                const SizedBox(height: 12),
-                                OutlinedButton.icon(
-                                  onPressed: () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Contact: ${product.shop!.phone}'),
-                                        backgroundColor: kPrimaryOrange,
+                                const SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    // Call button
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            colors: [kPrimaryOrange, kLightOrange],
+                                          ),
+                                          borderRadius: BorderRadius.circular(12),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: kPrimaryOrange.withOpacity(0.3),
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 4),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            onTap: () {
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                  content: Row(
+                                                    children: [
+                                                      const Icon(Icons.phone, color: Colors.white),
+                                                      const SizedBox(width: 12),
+                                                      Text('Contact: ${product.shop!.phone}'),
+                                                    ],
+                                                  ),
+                                                  backgroundColor: kPrimaryOrange,
+                                                  behavior: SnackBarBehavior.floating,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(12),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            borderRadius: BorderRadius.circular(12),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: Responsive.value(context, mobile: 14, tablet: 16),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(Icons.phone, color: Colors.white, size: 20),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    'Call Seller',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: Responsive.value(context, mobile: 14, tablet: 16),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.phone, color: kPrimaryOrange),
-                                  label: const Text('Contact Seller', style: TextStyle(color: kPrimaryOrange)),
-                                  style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(color: kPrimaryOrange),
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
-                                  ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    // Message button
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: kSoftOrange,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: kPrimaryOrange.withOpacity(0.3)),
+                                      ),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          onTap: () {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: const Text('Chat feature coming soon!'),
+                                                backgroundColor: kPrimaryOrange,
+                                                behavior: SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(Responsive.value(context, mobile: 14, tablet: 16)),
+                                            child: const Icon(Icons.chat_bubble_outline, color: kPrimaryOrange, size: 22),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                               const Divider(height: 32),
