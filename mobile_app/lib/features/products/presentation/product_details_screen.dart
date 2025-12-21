@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile_app/core/widgets/cart_icon_badge.dart';
 import 'package:mobile_app/core/widgets/full_screen_image_viewer.dart';
 import 'package:mobile_app/core/utils/responsive.dart';
@@ -8,6 +9,7 @@ import '../../cart/presentation/cart_provider.dart';
 import '../../reviews/presentation/reviews_provider.dart';
 import '../../reviews/data/review_repository.dart';
 import '../../wishlist/presentation/wishlist_provider.dart';
+import '../../chat/data/chat_repository.dart';
 import 'package:intl/intl.dart';
 
 // Orange Theme Colors
@@ -425,17 +427,29 @@ class ProductDetailsScreen extends ConsumerWidget {
                                       child: Material(
                                         color: Colors.transparent,
                                         child: InkWell(
-                                          onTap: () {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: const Text('Chat feature coming soon!'),
-                                                backgroundColor: kPrimaryOrange,
-                                                behavior: SnackBarBehavior.floating,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
-                                                ),
-                                              ),
-                                            );
+                                          onTap: () async {
+                                            try {
+                                              // Start or get existing conversation
+                                              final conversation = await ref
+                                                  .read(chatRepositoryProvider)
+                                                  .startConversation(
+                                                    shopId: product.shop!.id,
+                                                    productId: product.id,
+                                                  );
+                                              
+                                              if (context.mounted) {
+                                                context.push('/chat/${conversation.id}', extra: conversation);
+                                              }
+                                            } catch (e) {
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text('Error: $e'),
+                                                    backgroundColor: Colors.red,
+                                                  ),
+                                                );
+                                              }
+                                            }
                                           },
                                           borderRadius: BorderRadius.circular(12),
                                           child: Padding(
