@@ -92,7 +92,7 @@ class ConversationsScreen extends ConsumerWidget {
             child: ListView.separated(
               padding: EdgeInsets.symmetric(
                 vertical: 8,
-                horizontal: Responsive.padding(context),
+                horizontal: Responsive.value(context, mobile: 16.0, tablet: 24.0),
               ),
               itemCount: conversations.length,
               separatorBuilder: (_, __) => const SizedBox(height: 8),

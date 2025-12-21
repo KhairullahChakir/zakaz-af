@@ -199,7 +199,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 return ListView.builder(
                   controller: _scrollController,
                   padding: EdgeInsets.symmetric(
-                    horizontal: Responsive.padding(context),
+                    horizontal: Responsive.value(context, mobile: 16.0, tablet: 24.0),
                     vertical: 16,
                   ),
                   itemCount: allMessages.length,
