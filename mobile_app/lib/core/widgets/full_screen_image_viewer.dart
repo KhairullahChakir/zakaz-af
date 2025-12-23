@@ -154,7 +154,7 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.black.withOpacity(0.7),
+                    Colors.black.withValues(alpha: 0.7),
                     Colors.transparent,
                   ],
                 ),
@@ -214,7 +214,7 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                   colors: [
-                    Colors.black.withOpacity(0.7),
+                    Colors.black.withValues(alpha: 0.7),
                     Colors.transparent,
                   ],
                 ),
@@ -226,7 +226,7 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
                     child: Text(
                       'Pinch to zoom • Double-tap to reset',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                         fontSize: 12,
                       ),
                     ),

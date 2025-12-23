@@ -16,7 +16,10 @@ Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::get('/products/{id}/reviews', [App\Http\Controllers\Api\ReviewController::class, 'index']);
 
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:6,1');
-Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:6,1');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/auth/google', [AuthController::class, 'googleLogin']);
+Route::post('/password/forgot', [AuthController::class, 'forgotPassword']);
+Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

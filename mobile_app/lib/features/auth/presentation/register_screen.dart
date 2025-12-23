@@ -290,7 +290,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     elevation: 4,
-                    shadowColor: kPrimaryOrange.withOpacity(0.4),
+                    shadowColor: kPrimaryOrange.withValues(alpha: 0.4),
                   ),
                   child: isLoading
                       ? const SizedBox(
@@ -352,7 +352,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             width: 2,
           ),
           boxShadow: isSelected
-              ? [BoxShadow(color: kPrimaryOrange.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 4))]
+              ? [BoxShadow(color: kPrimaryOrange.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))]
               : [],
         ),
         child: Column(

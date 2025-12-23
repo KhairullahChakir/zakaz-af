@@ -12,7 +12,20 @@
           "package_name": "com.zakaz.af"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "595873251328-t6g8dpdu3njj9dq2t7asg6mbrrd5uhbb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zakaz.af",
+            "certificate_hash": "49e24e290e30657af79f2937dacb22ffa2e2798b"
+          }
+        },
+        {
+          "client_id": "595873251328-2s87jigma3sske2qa4o2arum6libt39f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBzrLzjmMrnHecZCldEK_dauKlgFoZ1Xes"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "595873251328-2s87jigma3sske2qa4o2arum6libt39f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

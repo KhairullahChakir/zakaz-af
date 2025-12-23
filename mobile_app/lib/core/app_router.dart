@@ -4,6 +4,7 @@ import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/register_screen.dart';
 import '../features/auth/presentation/otp_verification_screen.dart';
+import '../features/auth/presentation/forgot_password_screen.dart';
 import '../features/auth/presentation/profile_screen.dart';
 import '../features/home/presentation/home_screen.dart';
 import '../features/products/presentation/product_details_screen.dart';
@@ -55,6 +56,7 @@ GoRouter appRouter(Ref ref) {
       final isVerified = authState.value?.isVerified ?? false;
       final isLoggingIn = state.uri.path == '/login' || state.uri.path == '/register';
       final isVerifying = state.uri.path == '/verify-otp';
+      final isForgot = state.uri.path == '/forgot-password';
       final isSplash = state.uri.path == '/splash';
 
       if (isSplash && !isAuthenticated) return '/login';
@@ -63,7 +65,7 @@ GoRouter appRouter(Ref ref) {
       }
 
       if (!isAuthenticated) {
-         return isLoggingIn || isVerifying ? null : '/login';
+         return isLoggingIn || isVerifying || isForgot ? null : '/login';
       }
 
       if (isAuthenticated && !isVerified && !isVerifying) {
@@ -88,6 +90,10 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/register',
         builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: '/forgot-password',
+        builder: (context, state) => const ForgotPasswordScreen(),
       ),
       GoRoute(
         path: '/verify-otp',

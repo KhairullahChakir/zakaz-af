@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -116,8 +117,61 @@ class AuthController extends Controller
         $user = User::where($login_type, $request->login)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'login' => ['Invalid credentials'],
+            return response()->json([
+                'message' => 'The email or password you entered is incorrect.',
+                'errors' => ['login' => ['Invalid credentials']]
+            ], 401);
+        }
+
+        if (!$user->is_verified) {
+            $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+            $user->update([
+                'otp' => $otp,
+                'otp_expires_at' => Carbon::now()->addMinutes(10),
+            ]);
+
+            if ($user->email) {
+                Mail::to($user->email)->send(new VerifyEmail($otp));
+            }
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'user' => $user,
+                'message' => 'Please verify your email to continue.',
+                'requires_verification' => true,
+            ]);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user,
+        ]);
+    }
+
+    public function googleLogin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'name' => 'required|string',
+            'google_id' => 'required|string',
+            'avatar' => 'nullable|string',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make(Str::random(16)),
+                'is_verified' => true, // Google accounts are pre-verified
+                'email_verified_at' => now(),
             ]);
         }
 
@@ -170,5 +224,54 @@ class AuthController extends Controller
             'message' => 'Profile updated successfully',
             'user' => $user->fresh(), // fresh to get the profile_image_url
         ]);
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate(['email' => 'required|email|exists:users,email']);
+
+        $user = User::where('email', $request->email)->first();
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        $user->update([
+            'otp' => $otp,
+            'otp_expires_at' => Carbon::now()->addMinutes(10),
+        ]);
+
+        Mail::to($user->email)->send(new VerifyEmail($otp));
+
+        return response()->json(['message' => 'Password reset code sent to your email']);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'otp' => 'required|string|size:6',
+            'password' => [
+                'required',
+                'string',
+                'confirmed',
+                Password::min(8)->numbers()->symbols(),
+            ],
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user->otp !== $request->otp) {
+            return response()->json(['message' => 'Invalid reset code'], 422);
+        }
+
+        if (Carbon::now()->isAfter($user->otp_expires_at)) {
+            return response()->json(['message' => 'Reset code expired'], 422);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password),
+            'otp' => null,
+            'otp_expires_at' => null,
+        ]);
+
+        return response()->json(['message' => 'Password has been reset successfully']);
     }
 }
