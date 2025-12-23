@@ -43,7 +43,7 @@ class AuthInterceptor extends Interceptor {
         options.headers['Authorization'] = 'Bearer $token';
       }
     } catch (e) {
-      print('DEBUG: AuthInterceptor error: $e');
+      // AuthInterceptor error
     }
     handler.next(options);
   }

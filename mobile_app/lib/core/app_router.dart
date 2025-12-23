@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
 import '../features/auth/presentation/login_screen.dart';
@@ -42,37 +43,37 @@ import '../core/widgets/splash_screen.dart';
 
 part 'app_router.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 GoRouter appRouter(Ref ref) {
-  final authState = ref.watch(authControllerProvider);
+  // Use select on the state (AsyncValue) to only trigger rebuilds when auth status changes.
+  // This prevents the "weird loading" and app resets during name/avatar updates.
+  final isAuthenticated = ref.watch(authControllerProvider.select((s) => s.value != null));
+  final isVerified = ref.watch(authControllerProvider.select((s) => s.value?.isVerified ?? false));
+  final isInitialLoading = ref.watch(authControllerProvider.select((s) => s.isLoading && !s.hasValue));
+  final hasError = ref.watch(authControllerProvider.select((s) => s.hasError));
 
   return GoRouter(
     initialLocation: '/',
     redirect: (context, state) {
-      if (authState.isLoading) return '/splash';
-      if (authState.hasError) return '/login'; // Redirect to login on error
+      if (isInitialLoading) return '/splash';
+      if (hasError && !isAuthenticated) return '/login';
 
-      final isAuthenticated = authState.value != null;
-      final isVerified = authState.value?.isVerified ?? false;
       final isLoggingIn = state.uri.path == '/login' || state.uri.path == '/register';
       final isVerifying = state.uri.path == '/verify-otp';
       final isForgot = state.uri.path == '/forgot-password';
       final isSplash = state.uri.path == '/splash';
 
-      if (isSplash && !isAuthenticated) return '/login';
-      if (isSplash && isAuthenticated) {
-        return isVerified ? '/' : '/verify-otp';
-      }
-
       if (!isAuthenticated) {
-         return isLoggingIn || isVerifying || isForgot ? null : '/login';
+        if (isLoggingIn || isVerifying || isForgot || isSplash) return null;
+        return '/login';
       }
 
-      if (isAuthenticated && !isVerified && !isVerifying) {
+      if (isAuthenticated && !isVerified) {
+        if (isVerifying || isSplash) return null;
         return '/verify-otp';
       }
 
-      if (isAuthenticated && isVerified && (isLoggingIn || isVerifying)) {
+      if (isAuthenticated && isVerified && (isLoggingIn || isVerifying || isSplash)) {
         return '/';
       }
 

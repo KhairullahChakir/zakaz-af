@@ -138,7 +138,8 @@ class AuthController extends _$AuthController {
     String? imagePath,
     String? fcmToken,
   }) async {
-    state = const AsyncValue.loading();
+    // ignore: invalid_use_of_internal_member
+    state = AsyncLoading<User?>().copyWithPrevious(state);
     try {
       final repo = ref.read(authRepositoryProvider);
       final user = await repo.updateProfile(
