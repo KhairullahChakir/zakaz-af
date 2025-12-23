@@ -16,6 +16,8 @@ _Product _$ProductFromJson(Map<String, dynamic> json) => _Product(
   stock: (json['stock'] as num).toInt(),
   categoryId: (json['category_id'] as num).toInt(),
   shopId: (json['shop_id'] as num?)?.toInt(),
+  reviewsAvgRating: _parseRating(json['reviews_avg_rating']),
+  orderCount: (json['order_count'] as num?)?.toInt(),
   category: json['category'] == null
       ? null
       : Category.fromJson(json['category'] as Map<String, dynamic>),
@@ -34,6 +36,8 @@ Map<String, dynamic> _$ProductToJson(_Product instance) => <String, dynamic>{
   'stock': instance.stock,
   'category_id': instance.categoryId,
   'shop_id': instance.shopId,
+  'reviews_avg_rating': instance.reviewsAvgRating,
+  'order_count': instance.orderCount,
   'category': instance.category,
   'shop': instance.shop,
 };

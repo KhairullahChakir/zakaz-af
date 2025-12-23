@@ -42,7 +42,9 @@ class ProductRepository {
       final response = await _dio.get('/products', queryParameters: query);
       final List data = response.data;
       return data.map((json) => Product.fromJson(json)).toList();
-    } catch (e) {
+    } catch (e, st) {
+      print('Error loading products: $e');
+      print('Stack trace: $st');
       throw Exception('Failed to load products');
     }
   }

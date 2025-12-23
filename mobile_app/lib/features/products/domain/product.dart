@@ -17,9 +17,19 @@ abstract class Product with _$Product {
     required int stock,
     @JsonKey(name: 'category_id') required int categoryId,
     @JsonKey(name: 'shop_id') int? shopId,
+    @JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) double? reviewsAvgRating,
+    @JsonKey(name: 'order_count') int? orderCount,
     Category? category,
     ProductShop? shop,
   }) = _Product;
 
   factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
+}
+
+/// Parses rating from either String or num (backend sends it as String)
+double? _parseRating(dynamic value) {
+  if (value == null) return null;
+  if (value is num) return value.toDouble();
+  if (value is String) return double.tryParse(value);
+  return null;
 }

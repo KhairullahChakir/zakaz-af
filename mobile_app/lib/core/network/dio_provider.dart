@@ -7,7 +7,7 @@ part 'dio_provider.g.dart';
 @Riverpod(keepAlive: true)
 Dio dio(Ref ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: 'http://10.60.33.10:8000/api', // Use your computer's IP for physical devices
+    baseUrl: 'http://172.20.10.2:8000/api', // Use your computer's IP for physical devices
     connectTimeout: const Duration(seconds: 15),
     receiveTimeout: const Duration(seconds: 15),
     headers: {

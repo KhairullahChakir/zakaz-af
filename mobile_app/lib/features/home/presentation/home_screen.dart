@@ -430,7 +430,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () => setState(() => _currentNavIndex = 1),
+                  onPressed: () => _showSearchModal(),
                   child: Text(
                     'See All',
                     style: TextStyle(
@@ -559,6 +559,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final cardSize = Responsive.categoryCardSize(context);
     final iconSize = Responsive.value<double>(context, mobile: 28, tablet: 34);
 
+    // Check if category has a photo (database or asset)
+    final hasPhoto = category.image != null || 
+        ['grocer', 'cloth', 'tech'].any((t) => category.name.toLowerCase().contains(t));
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -572,13 +576,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           children: [
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: EdgeInsets.all(Responsive.value(context, mobile: 14, tablet: 18)),
+              padding: hasPhoto ? EdgeInsets.zero : EdgeInsets.all(Responsive.value(context, mobile: 14, tablet: 18)),
               decoration: BoxDecoration(
-                color: isSelected ? kPrimaryOrange : kSoftOrange,
+                color: hasPhoto ? Colors.transparent : (isSelected ? kPrimaryOrange : kSoftOrange),
                 borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
                 border: isSelected ? null : Border.all(color: kPrimaryOrange.withOpacity(0.3)),
               ),
-              child: _buildCategoryIcon(category, isSelected, iconSize),
+              // Ensure photo fills the container if present
+              width: hasPhoto ? cardSize : null,
+              height: hasPhoto ? cardSize : null,
+              child: hasPhoto 
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
+                    child: _buildCategoryIcon(category, isSelected, iconSize * 2.5), // Larger size for photo
+                  )
+                : _buildCategoryIcon(category, isSelected, iconSize),
             ),
             SizedBox(height: Responsive.value(context, mobile: 6, tablet: 8)),
             Text(
@@ -595,6 +607,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildCategoryIcon(Category category, bool isSelected, double size) {
+    if (category.image != null) {
+      final imageUrl = category.image!.startsWith('http') 
+          ? category.image! 
+          : 'http://172.20.10.2:8000/storage/${category.image}';
+
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: CachedNetworkImage(
+          imageUrl: imageUrl, 
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorWidget: (_, __, ___) => Icon(Icons.error, size: size, color: Colors.white),
+        ),
+      );
+    }
+
+    String? assetPath;
+    final name = category.name.toLowerCase();
+    if (name.contains('grocer')) assetPath = 'assets/images/groceries.png';
+    else if (name.contains('cloth')) assetPath = 'assets/images/clothes.png';
+    else if (name.contains('tech')) assetPath = 'assets/images/tech.png';
+
+    if (assetPath != null) {
+      return Image.asset(assetPath, width: size, height: size, fit: BoxFit.contain);
+    }
+
+    return Icon(
+      Icons.category,
+      color: isSelected ? Colors.white : kPrimaryOrange,
+      size: size,
     );
   }
 
@@ -651,21 +698,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Positioned(
                   top: 8,
                   right: 8,
-                  child: Container(
-                    padding: EdgeInsets.all(Responsive.value(context, mobile: 5, tablet: 7)),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 4,
-                        ),
-                      ],
+                  child: GestureDetector(
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Added to Wishlist!'), duration: Duration(seconds: 1)),
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(Responsive.value(context, mobile: 5, tablet: 7)),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: Icon(Icons.favorite_border, 
+                        size: Responsive.value(context, mobile: 16, tablet: 20), 
+                        color: kPrimaryOrange),
                     ),
-                    child: Icon(Icons.favorite_border, 
-                      size: Responsive.value(context, mobile: 16, tablet: 20), 
-                      color: kPrimaryOrange),
                   ),
                 ),
               ],
@@ -694,7 +748,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           color: kPrimaryOrange),
                         const SizedBox(width: 2),
                         Text(
-                          '4.5',
+                          product.reviewsAvgRating?.toStringAsFixed(1) ?? 'New',
                           style: TextStyle(
                             fontSize: Responsive.value(context, mobile: 11, tablet: 13),
                             color: Colors.grey[600],
@@ -1230,35 +1284,5 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
     );
-    Widget _buildCategoryIcon(Category category, bool isSelected, double size) {
-    if (category.imageUrl != null) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: CachedNetworkImage(
-          imageUrl: category.imageUrl!,
-          width: size,
-          height: size,
-          fit: BoxFit.cover,
-          errorWidget: (_, __, ___) => Icon(Icons.error, size: size, color: Colors.white),
-        ),
-      );
-    }
-
-    String? assetPath;
-    final name = category.name.toLowerCase();
-    if (name.contains('grocer')) assetPath = 'assets/images/groceries.png';
-    else if (name.contains('cloth')) assetPath = 'assets/images/clothes.png';
-    else if (name.contains('tech')) assetPath = 'assets/images/tech.png';
-
-    if (assetPath != null) {
-      return Image.asset(assetPath, width: size, height: size, fit: BoxFit.contain);
-    }
-
-    return Icon(
-      Icons.category,
-      color: isSelected ? Colors.white : kPrimaryOrange,
-      size: size,
-    );
   }
-}
 }
