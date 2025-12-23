@@ -193,10 +193,117 @@ class ProductDetailsScreen extends ConsumerWidget {
                               ],
                             ),
                             
+                            // Description
+                            Text(
+                              'Description',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: Responsive.value(context, mobile: 16, tablet: 18),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              product.description ?? 'No description available',
+                              style: TextStyle(
+                                color: Colors.grey[700],
+                                fontSize: Responsive.value(context, mobile: 14, tablet: 16),
+                                height: 1.5,
+                              ),
+                            ),
+                            
                             const Divider(height: 32),
                             
-                            // Shopkeeper Info Section - PREMIUM
+                            // Reviews Section
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Reviews',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Responsive.value(context, mobile: 16, tablet: 18),
+                                  ),
+                                ),
+                                TextButton.icon(
+                                  onPressed: () => _showAddReviewDialog(context, ref),
+                                  icon: const Icon(Icons.add_comment, color: kPrimaryOrange),
+                                  label: const Text('Add Review', style: TextStyle(color: kPrimaryOrange)),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            ref.watch(productReviewsProvider(productId)).when(
+                              data: (reviews) {
+                                if (reviews.isEmpty) {
+                                  return Container(
+                                    padding: const EdgeInsets.all(24),
+                                    decoration: BoxDecoration(
+                                      color: kSoftOrange,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Column(
+                                      children: [
+                                        Icon(Icons.rate_review, size: 40, color: kPrimaryOrange),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          'No reviews yet',
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                        Text('Be the first to review this product!'),
+                                      ],
+                                    ),
+                                  );
+                                }
+                                return ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: reviews.length,
+                                  separatorBuilder: (context, index) => const Divider(),
+                                  itemBuilder: (context, index) {
+                                    final review = reviews[index];
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Row(
+                                              children: List.generate(5, (starIndex) {
+                                                return Icon(
+                                                  starIndex < review.rating ? Icons.star : Icons.star_border,
+                                                  color: kPrimaryOrange,
+                                                  size: 16,
+                                                );
+                                              }),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              review.user?.name ?? 'User',
+                                              style: const TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                            const Spacer(),
+                                            Text(
+                                              DateFormat('MMM dd, yyyy').format(review.createdAt),
+                                              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                        if (review.comment != null && review.comment!.isNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 4),
+                                            child: Text(review.comment!),
+                                          ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
+                              error: (err, _) => Text('Error loading reviews: $err'),
+                            ),
+                            
+                            // Shopkeeper Info Section - PREMIUM (after reviews)
                             if (product.shop != null) ...[
+                              const Divider(height: 32),
                               Container(
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
@@ -534,7 +641,6 @@ class ProductDetailsScreen extends ConsumerWidget {
                                               child: InkWell(
                                                 onTap: () async {
                                                   try {
-                                                    // Start or get existing conversation
                                                     final conversation = await ref
                                                         .read(chatRepositoryProvider)
                                                         .startConversation(
@@ -615,116 +721,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                   ],
                                 ),
                               ),
-                              const Divider(height: 32),
                             ],
-                            
-                            // Description
-                            Text(
-                              'Description',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: Responsive.value(context, mobile: 16, tablet: 18),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              product.description ?? 'No description available',
-                              style: TextStyle(
-                                color: Colors.grey[700],
-                                fontSize: Responsive.value(context, mobile: 14, tablet: 16),
-                                height: 1.5,
-                              ),
-                            ),
-                            
-                            const Divider(height: 32),
-                            
-                            // Reviews Section
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Reviews',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Responsive.value(context, mobile: 16, tablet: 18),
-                                  ),
-                                ),
-                                TextButton.icon(
-                                  onPressed: () => _showAddReviewDialog(context, ref),
-                                  icon: const Icon(Icons.add_comment, color: kPrimaryOrange),
-                                  label: const Text('Add Review', style: TextStyle(color: kPrimaryOrange)),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            ref.watch(productReviewsProvider(productId)).when(
-                              data: (reviews) {
-                                if (reviews.isEmpty) {
-                                  return Container(
-                                    padding: const EdgeInsets.all(24),
-                                    decoration: BoxDecoration(
-                                      color: kSoftOrange,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: const Column(
-                                      children: [
-                                        Icon(Icons.rate_review, size: 40, color: kPrimaryOrange),
-                                        SizedBox(height: 8),
-                                        Text(
-                                          'No reviews yet',
-                                          style: TextStyle(fontWeight: FontWeight.bold),
-                                        ),
-                                        Text('Be the first to review this product!'),
-                                      ],
-                                    ),
-                                  );
-                                }
-                                return ListView.separated(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: reviews.length,
-                                  separatorBuilder: (context, index) => const Divider(),
-                                  itemBuilder: (context, index) {
-                                    final review = reviews[index];
-                                    return Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Row(
-                                              children: List.generate(5, (starIndex) {
-                                                return Icon(
-                                                  starIndex < review.rating ? Icons.star : Icons.star_border,
-                                                  color: kPrimaryOrange,
-                                                  size: 16,
-                                                );
-                                              }),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                              review.user?.name ?? 'User',
-                                              style: const TextStyle(fontWeight: FontWeight.bold),
-                                            ),
-                                            const Spacer(),
-                                            Text(
-                                              DateFormat('MMM dd, yyyy').format(review.createdAt),
-                                              style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                                            ),
-                                          ],
-                                        ),
-                                        if (review.comment != null && review.comment!.isNotEmpty)
-                                          Padding(
-                                            padding: const EdgeInsets.only(top: 4),
-                                            child: Text(review.comment!),
-                                          ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-                              error: (err, _) => Text('Error loading reviews: $err'),
-                            ),
                             const SizedBox(height: 32),
                           ],
                         ),
