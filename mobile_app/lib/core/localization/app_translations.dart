@@ -1,5 +1,6 @@
 /// App translations for all supported languages
 /// Supports: English (en), Dari (fa), Pashto (ps)
+library app_translations;
 
 class AppTranslations {
   static const Map<String, Map<String, String>> translations = {

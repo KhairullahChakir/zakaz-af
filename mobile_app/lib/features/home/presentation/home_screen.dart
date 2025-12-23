@@ -1025,33 +1025,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 
 
-  Widget _buildProfileOption(IconData icon, String title, VoidCallback onTap, {Color? color, Widget? trailing}) {
-    final displayColor = color ?? kPrimaryOrange;
-    final iconSize = Responsive.value<double>(context, mobile: 24, tablet: 28);
-    
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(
-        vertical: Responsive.value(context, mobile: 4, tablet: 8),
-      ),
-      leading: Container(
-        padding: EdgeInsets.all(Responsive.value(context, mobile: 8, tablet: 12)),
-        decoration: BoxDecoration(
-          color: displayColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 8, tablet: 12)),
-        ),
-        child: Icon(icon, color: displayColor, size: iconSize),
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: color,
-          fontSize: Responsive.value(context, mobile: 15, tablet: 17),
-        ),
-      ),
-      trailing: trailing ?? Icon(Icons.chevron_right, color: Colors.grey[400]),
-      onTap: onTap,
-    );
-  }
+
 
   void _showSortModal() {
     showModalBottomSheet(
