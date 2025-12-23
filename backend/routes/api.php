@@ -84,4 +84,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/conversations/{id}/messages', [App\Http\Controllers\Api\ChatController::class, 'sendMessage']);
         Route::get('/unread-count', [App\Http\Controllers\Api\ChatController::class, 'unreadCount']);
     });
+
+    // Notification routes
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', [App\Http\Controllers\NotificationController::class, 'index']);
+        Route::get('/unread-count', [App\Http\Controllers\NotificationController::class, 'unreadCount']);
+        Route::post('/{notification}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead']);
+        Route::post('/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead']);
+        Route::post('/send', [App\Http\Controllers\NotificationController::class, 'send']); // Admin only
+    });
 });
