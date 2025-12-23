@@ -20,6 +20,7 @@ import '../../profile/presentation/about_screen.dart';
 import '../../profile/presentation/privacy_policy_screen.dart';
 import '../../profile/presentation/notification_settings_screen.dart';
 import '../../profile/presentation/account_security_screen.dart';
+import '../../shop/presentation/shopkeeper_dashboard_screen.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -93,21 +94,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(authControllerProvider).value;
+    final isShopkeeper = user?.isShopkeeper == true;
+    
     return Scaffold(
       body: IndexedStack(
         index: _currentNavIndex,
         children: [
           _buildHomeTab(),
           const ConversationsScreen(),
+          if (isShopkeeper) const ShopkeeperDashboardScreen(),
           _CartTab(onNavigateToHome: () => setState(() => _currentNavIndex = 0)),
           const _ProfileTab(),
         ],
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: _buildBottomNav(isShopkeeper),
     );
   }
 
-  Widget _buildBottomNav() {
+  Widget _buildBottomNav(bool isShopkeeper) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -139,6 +144,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               selectedIcon: const Icon(Icons.chat_bubble, color: kPrimaryOrange),
               label: 'Messages',
             ),
+            if (isShopkeeper)
+              NavigationDestination(
+                icon: Icon(Icons.store_outlined, color: Colors.grey[600]),
+                selectedIcon: const Icon(Icons.store, color: kPrimaryOrange),
+                label: 'My Shop',
+              ),
             NavigationDestination(
               icon: const CartIconBadge(showBackground: false),
               selectedIcon: const CartIconBadge(showBackground: false, isSelected: true),
@@ -1481,16 +1492,12 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
 
                   const SizedBox(height: 24),
 
-                  // Shopkeeper/Admin Section
-                  if (user?.isShopkeeper == true || user?.isAdmin == true) ...[
-                    _buildSectionHeader('BUSINESS'),
+                  // Admin Section (only for admins, shopkeepers now have bottom tab)
+                  if (user?.isAdmin == true) ...[
+                    _buildSectionHeader('ADMIN'),
                     _buildSectionCard([
-                      if (user?.isShopkeeper == true)
-                        _buildProfileOption(Icons.store, 'My Shop', () => context.push('/shopkeeper/dashboard')),
-                      if (user?.isAdmin == true) ...[
-                        _buildProfileOption(Icons.admin_panel_settings, 'Admin Dashboard', () => context.push('/analytics')),
-                        _buildProfileOption(Icons.campaign, 'Send Notifications', () => context.push('/admin/notifications')),
-                      ],
+                      _buildProfileOption(Icons.admin_panel_settings, 'Admin Dashboard', () => context.push('/analytics')),
+                      _buildProfileOption(Icons.campaign, 'Send Notifications', () => context.push('/admin/notifications')),
                     ]),
                     const SizedBox(height: 24),
                   ],
