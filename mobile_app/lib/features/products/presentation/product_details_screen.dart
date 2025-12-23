@@ -11,6 +11,7 @@ import '../../reviews/data/review_repository.dart';
 import '../../wishlist/presentation/wishlist_provider.dart';
 import '../../chat/data/chat_repository.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -354,17 +355,17 @@ class ProductDetailsScreen extends ConsumerWidget {
                                 const SizedBox(height: 16),
                                 Row(
                                   children: [
-                                    // Call button
+                                    // WhatsApp button
                                     Expanded(
                                       child: Container(
                                         decoration: BoxDecoration(
                                           gradient: const LinearGradient(
-                                            colors: [kPrimaryOrange, kLightOrange],
+                                            colors: [Color(0xFF25D366), Color(0xFF128C7E)],
                                           ),
                                           borderRadius: BorderRadius.circular(12),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: kPrimaryOrange.withOpacity(0.3),
+                                              color: const Color(0xFF25D366).withOpacity(0.3),
                                               blurRadius: 8,
                                               offset: const Offset(0, 4),
                                             ),
@@ -373,23 +374,18 @@ class ProductDetailsScreen extends ConsumerWidget {
                                         child: Material(
                                           color: Colors.transparent,
                                           child: InkWell(
-                                            onTap: () {
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(
-                                                  content: Row(
-                                                    children: [
-                                                      const Icon(Icons.phone, color: Colors.white),
-                                                      const SizedBox(width: 12),
-                                                      Text('Contact: ${product.shop!.phone}'),
-                                                    ],
-                                                  ),
-                                                  backgroundColor: kPrimaryOrange,
-                                                  behavior: SnackBarBehavior.floating,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(12),
-                                                  ),
-                                                ),
-                                              );
+                                            onTap: () async {
+                                              try {
+                                                final phone = product.shop!.phone!.replaceAll(RegExp(r'[^0-9]'), '');
+                                                final whatsappUrl = Uri.parse('https://wa.me/$phone?text=Hi, I\'m interested in ${product.name}');
+                                                await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+                                              } catch (e) {
+                                                if (context.mounted) {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    const SnackBar(content: Text('Could not open WhatsApp')),
+                                                  );
+                                                }
+                                              }
                                             },
                                             borderRadius: BorderRadius.circular(12),
                                             child: Padding(
@@ -399,10 +395,16 @@ class ProductDetailsScreen extends ConsumerWidget {
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
-                                                  const Icon(Icons.phone, color: Colors.white, size: 20),
+                                                  Image.asset(
+                                                    'assets/images/whatsapp.png',
+                                                    width: 20,
+                                                    height: 20,
+                                                    color: Colors.white,
+                                                    errorBuilder: (_, __, ___) => const Icon(Icons.chat, color: Colors.white, size: 20),
+                                                  ),
                                                   const SizedBox(width: 8),
                                                   Text(
-                                                    'Call Seller',
+                                                    'WhatsApp',
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight: FontWeight.bold,

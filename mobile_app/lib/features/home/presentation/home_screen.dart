@@ -10,6 +10,7 @@ import '../../products/presentation/providers.dart';
 import '../../products/domain/product.dart';
 import '../../products/domain/category.dart';
 import '../../chat/presentation/conversations_screen.dart';
+import '../../wishlist/presentation/wishlist_provider.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -698,28 +699,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Positioned(
                   top: 8,
                   right: 8,
-                  child: GestureDetector(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Added to Wishlist!'), duration: Duration(seconds: 1)),
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      final wishlistAsync = ref.watch(wishlistProvider);
+                      final isInWishlist = wishlistAsync.value?.any((p) => p.id == product.id) ?? false;
+                      
+                      return GestureDetector(
+                        onTap: () {
+                          ref.read(wishlistProvider.notifier).toggleWishlist(product);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(isInWishlist ? 'Removed from Wishlist' : 'Added to Wishlist!'),
+                              duration: const Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(Responsive.value(context, mobile: 5, tablet: 7)),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                          child: Icon(
+                            isInWishlist ? Icons.favorite : Icons.favorite_border, 
+                            size: Responsive.value(context, mobile: 16, tablet: 20), 
+                            color: kPrimaryOrange,
+                          ),
+                        ),
                       );
                     },
-                    child: Container(
-                      padding: EdgeInsets.all(Responsive.value(context, mobile: 5, tablet: 7)),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                      child: Icon(Icons.favorite_border, 
-                        size: Responsive.value(context, mobile: 16, tablet: 20), 
-                        color: kPrimaryOrange),
-                    ),
                   ),
                 ),
               ],
@@ -823,15 +837,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: Container(
-                      padding: EdgeInsets.all(Responsive.value(context, mobile: 6, tablet: 8)),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.favorite_border, 
-                        size: Responsive.value(context, mobile: 18, tablet: 22), 
-                        color: kPrimaryOrange),
+                    child: Consumer(
+                      builder: (context, ref, _) {
+                        final wishlistAsync = ref.watch(wishlistProvider);
+                        final isInWishlist = wishlistAsync.value?.any((p) => p.id == product.id) ?? false;
+                        
+                        return GestureDetector(
+                          onTap: () {
+                            ref.read(wishlistProvider.notifier).toggleWishlist(product);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(isInWishlist ? 'Removed from Wishlist' : 'Added to Wishlist!'),
+                                duration: const Duration(seconds: 1),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(Responsive.value(context, mobile: 6, tablet: 8)),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.9),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              isInWishlist ? Icons.favorite : Icons.favorite_border, 
+                              size: Responsive.value(context, mobile: 18, tablet: 22), 
+                              color: kPrimaryOrange,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   if (product.stock < 10)
