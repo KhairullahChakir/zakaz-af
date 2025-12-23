@@ -172,4 +172,18 @@ class AuthRepository {
       throw Exception(e.response?.data['message'] ?? 'Failed to reset password');
     }
   }
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      await _dio.post('/password/change', data: {
+        'current_password': currentPassword,
+        'new_password': newPassword,
+      });
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Failed to change password');
+    }
+  }
 }

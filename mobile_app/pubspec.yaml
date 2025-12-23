@@ -54,6 +54,7 @@ dependencies:
   flutter_local_notifications: ^18.0.1
   path_provider: ^2.1.5
   google_sign_in: ^6.2.2
+  package_info_plus: ^8.1.2
 
 dev_dependencies:
   flutter_test:

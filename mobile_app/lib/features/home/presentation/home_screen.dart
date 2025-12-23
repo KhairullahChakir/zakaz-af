@@ -15,6 +15,11 @@ import '../../cart/presentation/cart_provider.dart';
 import '../../notifications/presentation/notification_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../cart/presentation/cart_screen.dart';
+import '../../profile/presentation/help_center_screen.dart';
+import '../../profile/presentation/about_screen.dart';
+import '../../profile/presentation/privacy_policy_screen.dart';
+import '../../profile/presentation/notification_settings_screen.dart';
+import '../../profile/presentation/account_security_screen.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -993,132 +998,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
 
-  Widget _buildCartTab() {
-    return const Center(child: CircularProgressIndicator(color: kPrimaryOrange));
-  }
 
-  Widget _buildProfileTab() {
-    final user = ref.watch(authControllerProvider).value;
-    final padding = Responsive.value<double>(context, mobile: 16, tablet: 24, desktop: 32);
-
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: Responsive.value(context, mobile: 200, tablet: 250),
-            pinned: true,
-            backgroundColor: kPrimaryOrange,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [kPrimaryOrange, kLightOrange],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: Responsive.value(context, mobile: 40, tablet: 50)),
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 10,
-                            ),
-                          ],
-                        ),
-                        child: CircleAvatar(
-                          radius: Responsive.value(context, mobile: 45, tablet: 60),
-                          backgroundColor: kSoftOrange,
-                          backgroundImage: user?.profileImageUrl != null
-                              ? NetworkImage(user!.profileImageUrl!)
-                              : null,
-                          child: user?.profileImageUrl == null
-                              ? Icon(Icons.person, 
-                                  size: Responsive.value(context, mobile: 50, tablet: 70), 
-                                  color: kPrimaryOrange)
-                              : null,
-                        ),
-                      ),
-                      SizedBox(height: Responsive.value(context, mobile: 12, tablet: 16)),
-                      Text(
-                        user?.name ?? 'Guest',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: Responsive.value(context, mobile: 20, tablet: 24),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        user?.email ?? '',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontSize: Responsive.value(context, mobile: 14, tablet: 16),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(padding),
-              child: Column(
-                children: [
-                  _buildProfileOption(Icons.person, 'Edit Profile', () => context.push('/profile')),
-                  _buildProfileOption(Icons.shopping_bag, 'My Orders', () => context.push('/orders')),
-                  _buildProfileOption(Icons.location_on, 'Addresses', () => context.push('/addresses')),
-                  _buildProfileOption(Icons.favorite, 'Wishlist', () => context.push('/wishlist')),
-                  const Divider(height: 32),
-                  if (user?.isCustomer == true)
-                    _buildProfileOption(Icons.store, 'Become a Shopkeeper', () => context.push('/shop-status'), color: kPrimaryOrange),
-                  if (user?.isShopkeeper == true)
-                    _buildProfileOption(Icons.store, 'My Shop', () => context.push('/shopkeeper/dashboard'), color: kPrimaryOrange),
-                  if (user?.isAdmin == true) ...[
-                    _buildProfileOption(Icons.admin_panel_settings, 'Admin Dashboard', () => context.push('/analytics'), color: kPrimaryOrange),
-                    _buildProfileOption(Icons.campaign, 'Send Notifications', () => context.push('/admin/notifications'), color: kPrimaryOrange),
-                  ],
-                  const Divider(height: 32),
-                  _buildProfileOption(
-                    ref.watch(themeProvider) == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode,
-                    'Dark Mode',
-                    () {},
-                    trailing: Switch(
-                      value: ref.watch(themeProvider) == ThemeMode.dark,
-                      activeColor: kPrimaryOrange,
-                      onChanged: (value) {
-                        ref.read(themeProvider.notifier).setThemeMode(
-                              value ? ThemeMode.dark : ThemeMode.light,
-                            );
-                      },
-                    ),
-                  ),
-                  _buildProfileOption(
-                    Icons.logout,
-                    'Logout',
-                    () {
-                      ref.read(authControllerProvider.notifier).logout();
-                      context.go('/login');
-                    },
-                    color: Colors.red,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildProfileOption(IconData icon, String title, VoidCallback onTap, {Color? color, Widget? trailing}) {
     final displayColor = color ?? kPrimaryOrange;
@@ -1474,12 +1354,18 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                               child: CircleAvatar(
                                 radius: Responsive.value(context, mobile: 50, tablet: 65),
                                 backgroundColor: kSoftOrange,
-                                backgroundImage: user?.profileImageUrl != null
-                                    ? NetworkImage(user!.profileImageUrl!)
-                                    : null,
-                                child: user?.profileImageUrl == null
-                                    ? Icon(Icons.person, size: 50, color: kPrimaryOrange)
-                                    : null,
+                                child: ClipOval(
+                                  child: user?.profileImageUrl != null
+                                      ? CachedNetworkImage(
+                                          imageUrl: user!.profileImageUrl!,
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) => const CircularProgressIndicator(strokeWidth: 2),
+                                          errorWidget: (context, url, error) => const Icon(Icons.person, size: 50, color: kPrimaryOrange),
+                                        )
+                                      : const Icon(Icons.person, size: 50, color: kPrimaryOrange),
+                                ),
                               ),
                             ),
                             if (isLoading)
@@ -1568,7 +1454,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                   _buildSectionCard([
                     _buildProfileOption(Icons.shopping_bag_outlined, 'My Orders', () => context.push('/orders')),
                     _buildProfileOption(Icons.location_on_outlined, 'Shipping Addresses', () => context.push('/addresses')),
-                    _buildProfileOption(Icons.payment_outlined, 'Payment Methods', () {}),
+                    _buildProfileOption(Icons.security_outlined, 'Account Security', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AccountSecurityScreen()))),
                     _buildProfileOption(Icons.person_outline, 'Edit Profile', () => context.push('/profile')),
                   ]),
 
@@ -1589,7 +1475,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                         },
                       ),
                     ),
-                    _buildProfileOption(Icons.notifications_none_outlined, 'Notifications', () {}),
+                    _buildProfileOption(Icons.notifications_none_outlined, 'Notifications', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationSettingsScreen()))),
                     _buildProfileOption(Icons.language_outlined, 'Language', () {}, subtitle: 'English'),
                   ]),
 
@@ -1612,9 +1498,9 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                   // Support Section
                   _buildSectionHeader('SUPPORT'),
                   _buildSectionCard([
-                    _buildProfileOption(Icons.help_outline, 'Help Center', () {}),
-                    _buildProfileOption(Icons.info_outline, 'About Zakaz-AF', () {}),
-                    _buildProfileOption(Icons.privacy_tip_outlined, 'Privacy Policy', () {}),
+                    _buildProfileOption(Icons.help_outline, 'Help Center', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HelpCenterScreen()))),
+                    _buildProfileOption(Icons.info_outline, 'About Zakaz-AF', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutScreen()))),
+                    _buildProfileOption(Icons.privacy_tip_outlined, 'Privacy Policy', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen()))),
                   ]),
 
                   const SizedBox(height: 32),
@@ -1623,10 +1509,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
-                      onPressed: () {
-                        ref.read(authControllerProvider.notifier).logout();
-                        context.go('/login');
-                      },
+                      onPressed: () => _showLogoutConfirmation(context),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         side: const BorderSide(color: Colors.red),
@@ -1639,6 +1522,31 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLogoutConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Log Out', style: TextStyle(fontWeight: FontWeight.bold)),
+        content: const Text('Are you sure you want to log out of your account?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: TextStyle(color: Colors.grey[600])),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              ref.read(authControllerProvider.notifier).logout();
+              context.go('/login');
+            },
+            child: const Text('Log Out', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
           ),
         ],
       ),

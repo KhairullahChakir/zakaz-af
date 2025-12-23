@@ -193,4 +193,14 @@ class AuthController extends _$AuthController {
           passwordConfirmation: passwordConfirmation,
         );
   }
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    await ref.read(authRepositoryProvider).changePassword(
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+        );
+  }
 }
