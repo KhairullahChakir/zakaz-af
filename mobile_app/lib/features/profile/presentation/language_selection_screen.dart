@@ -44,7 +44,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -66,7 +66,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
                   Text(
                     'ژبه وټاکئ • زبان را انتخاب کنید',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                       fontSize: 16,
                     ),
                   ),
@@ -160,7 +160,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -173,7 +173,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
                   width: 50,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: _getLanguageColor(language).withOpacity(0.1),
+                    color: _getLanguageColor(language).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(

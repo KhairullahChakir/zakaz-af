@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
@@ -99,7 +100,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('Notifications', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(ref.tr('notifications'), style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -107,23 +108,23 @@ class NotificationSettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildMasterToggle(settings, notifier),
+          _buildMasterToggle(settings, notifier, ref),
           const SizedBox(height: 24),
-          _buildSectionTitle('Shopping Alerts'),
+          _buildSectionTitle(ref.tr('shopping_alerts')),
           _buildCard([
-            _buildToggle('Order Updates', 'Order status and delivery', Icons.local_shipping_outlined, 
+            _buildToggle(ref.tr('order_updates'), ref.tr('order_updates_desc'), Icons.local_shipping_outlined, 
               settings.orderUpdates, settings.pushEnabled ? (v) => notifier.toggle('orders', v) : null),
-            _buildToggle('Promotions', 'Deals and discounts', Icons.discount_outlined,
+            _buildToggle(ref.tr('type_promotion'), ref.tr('promotions_desc'), Icons.discount_outlined,
               settings.promotions, settings.pushEnabled ? (v) => notifier.toggle('promos', v) : null),
-            _buildToggle('Price Drops', 'Wishlist price changes', Icons.trending_down,
+            _buildToggle(ref.tr('price_drops'), ref.tr('price_drops_desc'), Icons.trending_down,
               settings.priceDrops, settings.pushEnabled ? (v) => notifier.toggle('price', v) : null),
-            _buildToggle('Seller Messages', 'Messages from sellers', Icons.chat_bubble_outline,
+            _buildToggle(ref.tr('seller_messages'), ref.tr('seller_messages_desc'), Icons.chat_bubble_outline,
               settings.sellerMessages, settings.pushEnabled ? (v) => notifier.toggle('seller', v) : null),
           ]),
           const SizedBox(height: 24),
-          _buildSectionTitle('Other Channels'),
+          _buildSectionTitle(ref.tr('other_channels')),
           _buildCard([
-            _buildToggle('Email Notifications', 'Receive updates via email', Icons.email_outlined,
+            _buildToggle(ref.tr('email_notifications'), ref.tr('email_notifications_desc'), Icons.email_outlined,
               settings.emailNotifications, (v) => notifier.toggle('email', v)),
           ]),
         ],
@@ -131,7 +132,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMasterToggle(NotificationSettings settings, NotificationSettingsNotifier notifier) {
+  Widget _buildMasterToggle(NotificationSettings settings, NotificationSettingsNotifier notifier, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -146,8 +147,8 @@ class NotificationSettingsScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Push Notifications', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                Text(settings.pushEnabled ? 'Enabled' : 'Disabled', style: TextStyle(color: Colors.white.withValues(alpha: 0.8))),
+                Text(ref.tr('push_notifications'), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                Text(settings.pushEnabled ? ref.tr('enabled') : ref.tr('disabled'), style: TextStyle(color: Colors.white.withValues(alpha: 0.8))),
               ],
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../data/admin_shop_repository.dart';
 import '../../shop/domain/shop.dart';
@@ -31,16 +32,16 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Approve Shop'),
-        content: Text('Are you sure you want to approve "${_shop.name}"?'),
+        title: Text(ref.tr('approve_shop')),
+        content: Text(ref.tr('approve_shop_confirm', args: {'name': _shop.name})),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(ref.tr('cancel')),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Approve'),
+            child: Text(ref.tr('approve')),
           ),
         ],
       ),
@@ -55,7 +56,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
         ref.invalidate(pendingShopsProvider);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Shop approved!'), backgroundColor: Colors.green),
+            SnackBar(content: Text(ref.tr('shop_approved')), backgroundColor: Colors.green),
           );
         }
       } catch (e) {
@@ -76,18 +77,18 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Reject Shop'),
+        title: Text(ref.tr('reject_shop')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Why are you rejecting "${_shop.name}"?'),
+            Text(ref.tr('reject_shop_confirm', args: {'name': _shop.name})),
             const SizedBox(height: 16),
             TextField(
               controller: reasonController,
-              decoration: const InputDecoration(
-                labelText: 'Reason *',
-                border: OutlineInputBorder(),
-                hintText: 'e.g., Invalid business license',
+              decoration: InputDecoration(
+                labelText: ref.tr('rejection_reason'),
+                border: const OutlineInputBorder(),
+                hintText: ref.tr('rejection_reason_hint'),
               ),
               maxLines: 3,
             ),
@@ -96,20 +97,20 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(ref.tr('cancel')),
           ),
           FilledButton(
             onPressed: () {
               if (reasonController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please provide a reason')),
+                  SnackBar(content: Text(ref.tr('provide_reason'))),
                 );
                 return;
               }
               Navigator.pop(context, true);
             },
             style: FilledButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Reject'),
+            child: Text(ref.tr('reject')),
           ),
         ],
       ),
@@ -125,7 +126,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
         ref.invalidate(pendingShopsProvider);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Shop rejected'), backgroundColor: Colors.orange),
+            SnackBar(content: Text(ref.tr('shop_rejected')), backgroundColor: Colors.orange),
           );
           context.pop();
         }
@@ -147,18 +148,18 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Suspend Shop'),
+        title: Text(ref.tr('suspend_shop')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Why are you suspending "${_shop.name}"?'),
+            Text(ref.tr('suspend_shop_confirm', args: {'name': _shop.name})),
             const SizedBox(height: 16),
             TextField(
               controller: reasonController,
-              decoration: const InputDecoration(
-                labelText: 'Reason *',
-                border: OutlineInputBorder(),
-                hintText: 'e.g., Policy violation',
+              decoration: InputDecoration(
+                labelText: ref.tr('rejection_reason'),
+                border: const OutlineInputBorder(),
+                hintText: ref.tr('type_hint'),
               ),
               maxLines: 3,
             ),
@@ -167,20 +168,20 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(ref.tr('cancel')),
           ),
           FilledButton(
             onPressed: () {
               if (reasonController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please provide a reason')),
+                  SnackBar(content: Text(ref.tr('provide_reason'))),
                 );
                 return;
               }
               Navigator.pop(context, true);
             },
             style: FilledButton.styleFrom(backgroundColor: Colors.grey),
-            child: const Text('Suspend'),
+            child: Text(ref.tr('suspend')),
           ),
         ],
       ),
@@ -195,7 +196,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
         ref.invalidate(allShopsProvider);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Shop suspended'), backgroundColor: Colors.grey),
+            SnackBar(content: Text(ref.tr('shop_suspended')), backgroundColor: Colors.grey),
           );
         }
       } catch (e) {
@@ -247,9 +248,9 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: _getStatusColor(_shop.status).withOpacity(0.1),
+                      color: _getStatusColor(_shop.status).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: _getStatusColor(_shop.status).withOpacity(0.3)),
+                      border: Border.all(color: _getStatusColor(_shop.status).withValues(alpha: 0.3)),
                     ),
                     child: Row(
                       children: [
@@ -260,7 +261,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Status: ${_shop.status.toUpperCase()}',
+                                '${ref.tr('status_label')}: ${ref.tr('status_${_shop.status}').toUpperCase()}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: _getStatusColor(_shop.status),
@@ -268,7 +269,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                               ),
                               if (_shop.approvedAt != null)
                                 Text(
-                                  'Approved: ${dateFormat.format(_shop.approvedAt!)}',
+                                  '${ref.tr('approved_label')}: ${dateFormat.format(_shop.approvedAt!)}',
                                   style: TextStyle(color: Colors.grey[600], fontSize: 12),
                                 ),
                             ],
@@ -280,7 +281,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                   const SizedBox(height: 24),
 
                   // Shop Photos
-                  Text('Shop Photos', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                  Text(ref.tr('shop_photos'), style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
                   SizedBox(
                     height: 140,
@@ -289,26 +290,26 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                   const SizedBox(height: 24),
 
                   // Shop Details
-                  Text('Shop Details', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                  Text(ref.tr('shop_details'), style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
-                  _buildDetailRow(Icons.store, 'Name', _shop.name),
-                  _buildDetailRow(Icons.category, 'Type', _shop.type),
+                  _buildDetailRow(Icons.store, ref.tr('product_name'), _shop.name),
+                  _buildDetailRow(Icons.category, ref.tr('product_category'), _shop.type),
                   if (_shop.description != null)
-                    _buildDetailRow(Icons.description, 'Description', _shop.description!),
-                  _buildDetailRow(Icons.location_on, 'Address', _shop.address),
-                  _buildDetailRow(Icons.location_city, 'Location', '${_shop.city}, ${_shop.province}'),
-                  _buildDetailRow(Icons.phone, 'Phone', _shop.phone),
-                  if (_shop.email != null) _buildDetailRow(Icons.email, 'Email', _shop.email!),
+                    _buildDetailRow(Icons.description, ref.tr('description'), _shop.description!),
+                  _buildDetailRow(Icons.location_on, ref.tr('addresses'), _shop.address),
+                  _buildDetailRow(Icons.location_city, ref.tr('nav_home'), '${_shop.city}, ${_shop.province}'),
+                  _buildDetailRow(Icons.phone, ref.tr('phone'), _shop.phone),
+                  if (_shop.email != null) _buildDetailRow(Icons.email, ref.tr('email'), _shop.email!),
                   const SizedBox(height: 24),
 
                   // Documents
-                  Text('Documents', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                  Text(ref.tr('documents'), style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
                   Row(
                     children: [
                       Expanded(
                         child: _buildDocumentCard(
-                          'Business License',
+                          ref.tr('business_license'),
                           _shop.businessLicenseUrl,
                           Icons.description,
                         ),
@@ -316,7 +317,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: _buildDocumentCard(
-                          'Owner NID',
+                          ref.tr('owner_nid'),
                           null, // NID URL would go here
                           Icons.badge,
                         ),
@@ -333,7 +334,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                           child: OutlinedButton.icon(
                             onPressed: _rejectShop,
                             icon: const Icon(Icons.close, color: Colors.red),
-                            label: const Text('Reject', style: TextStyle(color: Colors.red)),
+                            label: Text(ref.tr('reject'), style: const TextStyle(color: Colors.red)),
                             style: OutlinedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               side: const BorderSide(color: Colors.red),
@@ -346,7 +347,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                           child: FilledButton.icon(
                             onPressed: _approveShop,
                             icon: const Icon(Icons.check),
-                            label: const Text('Approve'),
+                            label: Text(ref.tr('approve')),
                             style: FilledButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               backgroundColor: Colors.green,
@@ -376,7 +377,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Rejection Reason:',
+                                  ref.tr('rejection_reason_label'),
                                   style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red[700]),
                                 ),
                                 Text(_shop.rejectionReason!, style: TextStyle(color: Colors.red[700])),
@@ -399,25 +400,25 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.exit_to_app, color: Colors.orange),
-            SizedBox(width: 12),
-            Text('Leave Review?'),
+            const Icon(Icons.exit_to_app, color: Colors.orange),
+            const SizedBox(width: 12),
+            Expanded(child: Text(ref.tr('leave_review_title'))),
           ],
         ),
-        content: const Text(
-          'Are you sure you want to go back? Any unsaved changes will be lost.',
+        content: Text(
+          ref.tr('leave_review_msg'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Stay'),
+            child: Text(ref.tr('stay')),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
             style: FilledButton.styleFrom(backgroundColor: Colors.orange),
-            child: const Text('Leave'),
+            child: Text(ref.tr('leave')),
           ),
         ],
       ),
@@ -456,7 +457,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
           children: [
             Icon(Icons.store, size: 48, color: Colors.grey[400]),
             const SizedBox(height: 8),
-            Text('No photos', style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+            Text(ref.tr('no_photos'), style: TextStyle(color: Colors.grey[500], fontSize: 12)),
           ],
         ),
       );
@@ -499,7 +500,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                     children: [
                       Icon(Icons.broken_image, color: Colors.grey[400]),
                       const SizedBox(height: 4),
-                      Text('Failed', style: TextStyle(color: Colors.grey[500], fontSize: 10)),
+                      Text(ref.tr('error'), style: TextStyle(color: Colors.grey[500], fontSize: 10)),
                     ],
                   ),
                 ),
@@ -526,7 +527,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                'Photo $current of $total',
+                '${ref.tr('product_image')} $current of $total',
                 style: const TextStyle(color: Colors.white),
               ),
             ),
@@ -623,7 +624,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                   Icon(icon, color: Colors.grey),
                   const SizedBox(height: 4),
                   Text(title, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-                  Text('Not provided', style: TextStyle(color: Colors.grey[400], fontSize: 10)),
+                  Text(ref.tr('not_provided'), style: TextStyle(color: Colors.grey[400], fontSize: 10)),
                 ],
               ),
       ),

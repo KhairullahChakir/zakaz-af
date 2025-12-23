@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../data/admin_shop_repository.dart';
 import '../../products/presentation/providers.dart';
+import '../../../core/localization/language_provider.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -58,13 +59,13 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
     if (_isLoading) {
       return Scaffold(
         backgroundColor: Colors.grey[50],
-        body: const Center(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(color: kPrimaryOrange),
-              SizedBox(height: 16),
-              Text('Loading admin data...', style: TextStyle(color: Colors.grey)),
+              const CircularProgressIndicator(color: kPrimaryOrange),
+              const SizedBox(height: 16),
+              Text(ref.tr('loading_admin_data'), style: const TextStyle(color: Colors.grey)),
             ],
           ),
         ),
@@ -96,8 +97,8 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     const SizedBox(height: 24),
                     
                     // Stats Grid
-                    const Text(
-                      'Quick Stats',
+                    Text(
+                      ref.tr('quick_stats'),
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -110,8 +111,8 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     const SizedBox(height: 24),
                     
                     // Quick Actions
-                    const Text(
-                      'Quick Actions',
+                    Text(
+                      ref.tr('quick_actions'),
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -161,7 +162,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(
@@ -171,23 +172,23 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Admin Dashboard',
-                          style: TextStyle(
+                          ref.tr('admin_dashboard'),
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
-                          'Platform Management',
+                          ref.tr('platform_management'),
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: Colors.white.withValues(alpha: 0.8),
                             fontSize: 14,
                           ),
                         ),
@@ -198,7 +199,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Stack(
@@ -235,17 +236,17 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
+                  color: Colors.white.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildMiniStat('Shops', '${_stats['totalShops'] ?? 0}', Icons.store),
+                    _buildMiniStat(ref.tr('shops'), '${_stats['totalShops'] ?? 0}', Icons.store),
                     Container(width: 1, height: 40, color: Colors.white24),
-                    _buildMiniStat('Products', '${_stats['totalProducts'] ?? 0}', Icons.inventory_2),
+                    _buildMiniStat(ref.tr('products'), '${_stats['totalProducts'] ?? 0}', Icons.inventory_2),
                     Container(width: 1, height: 40, color: Colors.white24),
-                    _buildMiniStat('Pending', '${_stats['pendingShops'] ?? 0}', Icons.pending_actions),
+                    _buildMiniStat(ref.tr('pending'), '${_stats['pendingShops'] ?? 0}', Icons.pending_actions),
                   ],
                 ),
               ),
@@ -295,7 +296,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF10B981).withOpacity(0.3),
+            color: const Color(0xFF10B981).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -309,14 +310,14 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(Icons.analytics, color: Colors.white, size: 24),
               ),
               const SizedBox(width: 12),
-              const Text(
-                'Platform Overview',
+              Text(
+                ref.tr('platform_overview'),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -327,16 +328,16 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.trending_up, color: Colors.white, size: 16),
-                    SizedBox(width: 4),
+                    const Icon(Icons.trending_up, color: Colors.white, size: 16),
+                    const SizedBox(width: 4),
                     Text(
-                      'Active',
-                      style: TextStyle(color: Colors.white, fontSize: 12),
+                      ref.tr('active'),
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ],
                 ),
@@ -348,7 +349,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
             children: [
               Expanded(
                 child: _buildOverviewItem(
-                  'Active Shops',
+                  ref.tr('active_shops'),
                   '${_stats['approvedShops'] ?? 0}',
                   Icons.store,
                 ),
@@ -356,7 +357,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
               const SizedBox(width: 16),
               Expanded(
                 child: _buildOverviewItem(
-                  'Products Listed',
+                  ref.tr('products_listed'),
                   '${_stats['totalProducts'] ?? 0}',
                   Icons.inventory,
                 ),
@@ -372,7 +373,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
+        color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -410,29 +411,29 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
       childAspectRatio: 1.5,
       children: [
         _buildStatCard(
-          'Manage Shops',
+          ref.tr('manage_shops'),
           '${_stats['totalShops'] ?? 0}',
           Icons.store,
           const Color(0xFF3B82F6),
           () => context.push('/admin/shops'),
         ),
         _buildStatCard(
-          'Manage Products',
+          ref.tr('manage_products'),
           '${_stats['totalProducts'] ?? 0}',
           Icons.inventory_2,
           const Color(0xFF10B981),
           () => context.push('/admin/products'),
         ),
         _buildStatCard(
-          'Categories',
-          'Manage',
+          ref.tr('manage_categories'),
+          ref.tr('edit'),
           Icons.category,
           const Color(0xFFF59E0B),
           () => context.push('/admin/categories'),
         ),
         _buildStatCard(
-          'Analytics',
-          'View',
+          ref.tr('analytics'),
+          ref.tr('view_all'),
           Icons.analytics,
           const Color(0xFF8B5CF6),
           () => context.push('/analytics'),
@@ -451,7 +452,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -467,7 +468,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(icon, color: color, size: 20),
@@ -509,7 +510,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -519,32 +520,32 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
         children: [
           _buildActionItem(
             Icons.storefront_outlined,
-            'Review Shop Applications',
-            '${_stats['pendingShops'] ?? 0} pending',
+            ref.tr('review_shop_apps'),
+            '${_stats['pendingShops'] ?? 0} ${ref.tr('pending').toLowerCase()}',
             const Color(0xFFF59E0B),
             () => context.push('/admin/shops'),
           ),
           const Divider(height: 24),
           _buildActionItem(
             Icons.campaign_outlined,
-            'Send Notifications',
-            'Broadcast to all users',
+            ref.tr('send_notifications'),
+            ref.tr('broadcast_users'),
             const Color(0xFF3B82F6),
             () => context.push('/admin/notifications'),
           ),
           const Divider(height: 24),
           _buildActionItem(
             Icons.add_box_outlined,
-            'Add New Product',
-            'List a new product',
+            ref.tr('add_product'),
+            ref.tr('add_new_product_desc'),
             const Color(0xFF10B981),
             () => context.push('/admin/products/add'),
           ),
           const Divider(height: 24),
           _buildActionItem(
             Icons.category_outlined,
-            'Manage Categories',
-            'Add or edit categories',
+            ref.tr('manage_categories'),
+            ref.tr('manage_categories_desc'),
             const Color(0xFF8B5CF6),
             () => context.push('/admin/categories'),
           ),
@@ -564,7 +565,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: color, size: 24),
@@ -611,8 +612,8 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Pending Approvals',
+            Text(
+              ref.tr('pending_approvals'),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -621,7 +622,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
             ),
             TextButton(
               onPressed: () => context.push('/admin/shops'),
-              child: const Text('View All', style: TextStyle(color: kPrimaryOrange)),
+              child: Text(ref.tr('view_all'), style: const TextStyle(color: kPrimaryOrange)),
             ),
           ],
         ),
@@ -649,7 +650,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$pendingCount Shop${pendingCount > 1 ? 's' : ''} Waiting',
+                      '${_stats['pendingShops']} ${ref.tr('shops')} ${ref.tr('shops_waiting')}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -658,7 +659,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Review and approve new shop applications',
+                      ref.tr('review_shop_desc'),
                       style: TextStyle(
                         color: Colors.orange[700],
                         fontSize: 13,
@@ -676,7 +677,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('Review'),
+                child: Text(ref.tr('edit')),
               ),
             ],
           ),

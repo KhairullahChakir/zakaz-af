@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/notification_repository.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -20,10 +21,10 @@ class _AdminSendNotificationScreenState extends ConsumerState<AdminSendNotificat
   String _selectedType = 'general';
   bool _isLoading = false;
 
-  final List<Map<String, dynamic>> _notificationTypes = [
-    {'value': 'general', 'label': 'General', 'icon': Icons.notifications},
-    {'value': 'promotion', 'label': 'Promotion', 'icon': Icons.local_offer},
-    {'value': 'order', 'label': 'Order Update', 'icon': Icons.shopping_bag},
+  List<Map<String, dynamic>> get _notificationTypes => [
+    {'value': 'general', 'label': ref.tr('type_general'), 'icon': Icons.notifications},
+    {'value': 'promotion', 'label': ref.tr('type_promotion'), 'icon': Icons.local_offer},
+    {'value': 'order', 'label': ref.tr('type_order_update'), 'icon': Icons.shopping_bag},
   ];
 
   @override
@@ -47,8 +48,8 @@ class _AdminSendNotificationScreenState extends ConsumerState<AdminSendNotificat
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Notification sent to all users!'),
+          SnackBar(
+            content: Text(ref.tr('notification_sent_msg')),
             backgroundColor: Colors.green,
           ),
         );
@@ -74,7 +75,7 @@ class _AdminSendNotificationScreenState extends ConsumerState<AdminSendNotificat
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Send Notification'),
+        title: Text(ref.tr('send_notification')),
         centerTitle: true,
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
@@ -101,15 +102,15 @@ class _AdminSendNotificationScreenState extends ConsumerState<AdminSendNotificat
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Broadcast Notification',
-                            style: TextStyle(
+                          Text(
+                            ref.tr('broadcast_notification'),
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            'Send notification to all users',
+                            ref.tr('broadcast_desc'),
                             style: TextStyle(
                               color: Colors.grey[600],
                               fontSize: 13,
@@ -125,9 +126,9 @@ class _AdminSendNotificationScreenState extends ConsumerState<AdminSendNotificat
               const SizedBox(height: 24),
               
               // Type Selection
-              const Text(
-                'Notification Type',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+              Text(
+                ref.tr('notification_type'),
+                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               ),
               const SizedBox(height: 12),
               Wrap(
@@ -162,15 +163,15 @@ class _AdminSendNotificationScreenState extends ConsumerState<AdminSendNotificat
               const SizedBox(height: 24),
               
               // Title Field
-              const Text(
-                'Title',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+              Text(
+                ref.tr('notification_title'),
+                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _titleController,
                 decoration: InputDecoration(
-                  hintText: 'Enter notification title',
+                  hintText: ref.tr('notification_title_hint'),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -179,22 +180,22 @@ class _AdminSendNotificationScreenState extends ConsumerState<AdminSendNotificat
                     borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
                   ),
                 ),
-                validator: (v) => v?.isEmpty ?? true ? 'Title is required' : null,
+                validator: (v) => v?.isEmpty ?? true ? ref.tr('title_required') : null,
               ),
               
               const SizedBox(height: 20),
               
               // Body Field
-              const Text(
-                'Message',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+              Text(
+                ref.tr('notification_body'),
+                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _bodyController,
                 maxLines: 4,
                 decoration: InputDecoration(
-                  hintText: 'Enter notification message',
+                  hintText: ref.tr('notification_body_hint'),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -203,7 +204,7 @@ class _AdminSendNotificationScreenState extends ConsumerState<AdminSendNotificat
                     borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
                   ),
                 ),
-                validator: (v) => v?.isEmpty ?? true ? 'Message is required' : null,
+                validator: (v) => v?.isEmpty ?? true ? ref.tr('message_required') : null,
               ),
               
               const SizedBox(height: 32),
@@ -230,14 +231,14 @@ class _AdminSendNotificationScreenState extends ConsumerState<AdminSendNotificat
                             color: Colors.white,
                           ),
                         )
-                      : const Row(
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.send),
-                            SizedBox(width: 8),
+                            const Icon(Icons.send),
+                            const SizedBox(width: 8),
                             Text(
-                              'Send Notification',
-                              style: TextStyle(
+                              ref.tr('send_notification'),
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),

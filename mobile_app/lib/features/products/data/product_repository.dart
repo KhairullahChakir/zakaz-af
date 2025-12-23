@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:mobile_app/core/network/dio_provider.dart';
+import 'package:flutter/foundation.dart' hide Category;
 import 'package:mobile_app/features/products/domain/category.dart';
 import 'package:mobile_app/features/products/domain/product.dart';
 
@@ -19,8 +20,7 @@ class ProductRepository {
   Future<List<Category>> getCategories() async {
     try {
       final response = await _dio.get('/categories');
-      final List data = response.data;
-      return data.map((json) => Category.fromJson(json)).toList();
+      return (response.data as List).map((json) => Category.fromJson(json)).toList();
     } catch (e) {
       throw Exception('Failed to load categories');
     }
@@ -43,8 +43,8 @@ class ProductRepository {
       final List data = response.data;
       return data.map((json) => Product.fromJson(json)).toList();
     } catch (e, st) {
-      print('Error loading products: $e');
-      print('Stack trace: $st');
+      debugPrint('Error loading products: $e');
+      debugPrint('Stack trace: $st');
       throw Exception('Failed to load products');
     }
   }

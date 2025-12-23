@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'notification_provider.dart';
 import '../domain/app_notification.dart';
+import '../../../core/localization/language_provider.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -17,7 +18,7 @@ class NotificationsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text(ref.tr('notifications')),
         centerTitle: true,
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
@@ -30,9 +31,9 @@ class NotificationsScreen extends ConsumerWidget {
               }
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'read_all',
-                child: Text('Mark all as read'),
+                child: Text(ref.tr('mark_all_read')),
               ),
             ],
           ),
@@ -47,7 +48,7 @@ class NotificationsScreen extends ConsumerWidget {
                     Icon(Icons.notifications_off_outlined, size: 64, color: Colors.grey[400]),
                     const SizedBox(height: 16),
                     Text(
-                      'No notifications yet',
+                      ref.tr('no_notifications'),
                       style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                     ),
                   ],
@@ -93,12 +94,12 @@ class _NotificationCard extends ConsumerWidget {
           color: isUnread ? kSoftOrange : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isUnread ? kPrimaryOrange.withOpacity(0.3) : Colors.grey.withOpacity(0.2),
+            color: isUnread ? kPrimaryOrange.withValues(alpha: 0.3) : Colors.grey.withValues(alpha: 0.2),
           ),
           boxShadow: [
             if (isUnread)
               BoxShadow(
-                color: kPrimaryOrange.withOpacity(0.1),
+                color: kPrimaryOrange.withValues(alpha: 0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -110,7 +111,7 @@ class _NotificationCard extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: _getIconColor().withOpacity(0.1),
+                color: _getIconColor().withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(_getIcon(), color: _getIconColor(), size: 24),
@@ -154,7 +155,7 @@ class _NotificationCard extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    _formatDate(notification.createdAt),
+                    _formatDate(ref, notification.createdAt),
                     style: TextStyle(
                       color: Colors.grey[400],
                       fontSize: 11,
@@ -195,19 +196,21 @@ class _NotificationCard extends ConsumerWidget {
     }
   }
 
-  String _formatDate(String? dateString) {
+  String _formatDate(WidgetRef ref, String? dateString) {
     if (dateString == null) return '';
     try {
       final date = DateTime.parse(dateString);
       final now = DateTime.now();
       final diff = now.difference(date);
       
-      if (diff.inMinutes < 60) {
-        return '${diff.inMinutes}m ago';
+      if (diff.inMinutes < 1) {
+        return ref.tr('now');
+      } else if (diff.inMinutes < 60) {
+        return ref.tr('minutes_ago', args: {'m': diff.inMinutes.toString()});
       } else if (diff.inHours < 24) {
-        return '${diff.inHours}h ago';
+        return ref.tr('hours_ago', args: {'h': diff.inHours.toString()});
       } else if (diff.inDays < 7) {
-        return '${diff.inDays}d ago';
+        return ref.tr('days_ago', args: {'d': diff.inDays.toString()});
       } else {
         return DateFormat('MMM d').format(date);
       }

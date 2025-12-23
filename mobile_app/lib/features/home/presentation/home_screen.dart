@@ -51,7 +51,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   List<Map<String, dynamic>> get _banners => [
     {
-      'title': ref.tr('welcome_to') + ' ' + ref.tr('app_name'),
+      'title': '${ref.tr('welcome_to')} ${ref.tr('app_name')}',
       'subtitle': ref.tr('shop_from_local'),
       'icon': Icons.storefront,
     },
@@ -126,7 +126,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, -5),
           ),
@@ -271,7 +271,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -339,7 +339,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 20, tablet: 24)),
                     boxShadow: [
                       BoxShadow(
-                        color: kPrimaryOrange.withOpacity(0.3),
+                        color: kPrimaryOrange.withValues(alpha: 0.3),
                         blurRadius: 15,
                         offset: const Offset(0, 8),
                       ),
@@ -357,7 +357,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           height: Responsive.value(context, mobile: 100, tablet: 140),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white.withOpacity(0.15),
+                            color: Colors.white.withValues(alpha: 0.15),
                           ),
                         ),
                       ),
@@ -369,7 +369,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           height: Responsive.value(context, mobile: 80, tablet: 120),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white.withOpacity(0.1),
+                            color: Colors.white.withValues(alpha: 0.1),
                           ),
                         ),
                       ),
@@ -381,7 +381,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           height: Responsive.value(context, mobile: 40, tablet: 60),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                           ),
                         ),
                       ),
@@ -406,7 +406,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               Text(
                                 banner['subtitle'] as String,
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.9),
+                                  color: Colors.white.withValues(alpha: 0.9),
                                   fontSize: Responsive.value(context, mobile: 12, tablet: 16),
                                 ),
                                 maxLines: 1,
@@ -641,7 +641,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               decoration: BoxDecoration(
                 color: hasPhoto ? Colors.transparent : (isSelected ? kPrimaryOrange : kSoftOrange),
                 borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
-                border: isSelected ? null : Border.all(color: kPrimaryOrange.withOpacity(0.3)),
+                border: isSelected ? null : Border.all(color: kPrimaryOrange.withValues(alpha: 0.3)),
               ),
               // Ensure photo fills the container if present
               width: hasPhoto ? cardSize : null,
@@ -691,9 +691,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     String? assetPath;
     final name = category.name.toLowerCase();
-    if (name.contains('grocer')) assetPath = 'assets/images/groceries.png';
-    else if (name.contains('cloth')) assetPath = 'assets/images/clothes.png';
-    else if (name.contains('tech')) assetPath = 'assets/images/tech.png';
+    if (name.contains('grocer')) {
+      assetPath = 'assets/images/groceries.png';
+    } else if (name.contains('cloth')) {
+      assetPath = 'assets/images/clothes.png';
+    } else if (name.contains('tech')) {
+      assetPath = 'assets/images/tech.png';
+    }
 
     if (assetPath != null) {
       return Image.asset(assetPath, width: size, height: size, fit: BoxFit.contain);
@@ -720,7 +724,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -750,11 +754,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             width: double.infinity,
                             fit: BoxFit.cover,
                             errorBuilder: (_, __, ___) => Center(
-                              child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withOpacity(0.5)),
+                              child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withValues(alpha: 0.5)),
                             ),
                           ),
                         )
-                      : Center(child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withOpacity(0.5))),
+                      : Center(child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withValues(alpha: 0.5))),
                 ),
                 Positioned(
                   top: 8,
@@ -781,7 +785,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black.withValues(alpha: 0.1),
                                 blurRadius: 4,
                               ),
                             ],
@@ -857,7 +861,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -888,11 +892,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               width: double.infinity,
                               fit: BoxFit.cover,
                               errorBuilder: (_, __, ___) => Center(
-                                child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withOpacity(0.5)),
+                                  child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withValues(alpha: 0.5)),
                               ),
                             ),
                           )
-                        : Center(child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withOpacity(0.5))),
+                        : Center(child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withValues(alpha: 0.5))),
                   ),
                   Positioned(
                     top: 8,
@@ -915,7 +919,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           child: Container(
                             padding: EdgeInsets.all(Responsive.value(context, mobile: 6, tablet: 8)),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.9),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(

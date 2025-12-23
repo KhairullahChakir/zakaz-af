@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'auth_controller.dart';
+import '../../../core/localization/language_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kSoftOrange = Color(0xFFFFF3E6);
@@ -103,10 +104,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  const Text(
-                    'Welcome Back!',
+                  Text(
+                    ref.tr('welcome_back'),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
@@ -114,35 +115,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Sign in to your account',
+                  Text(
+                    ref.tr('login_subtitle'),
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                   const SizedBox(height: 48),
 
                   // Login Field
                   _buildTextField(
                     controller: _loginController,
-                    label: 'Email or Phone',
-                    hint: 'Enter your email or phone',
+                    label: ref.tr('email_or_phone'),
+                    hint: ref.tr('enter_email_phone'),
                     icon: Icons.person_outline,
-                    validator: (v) => v!.isEmpty ? 'Please enter your login' : null,
+                    validator: (v) => v!.isEmpty ? ref.tr('error_required_field') : null,
                   ),
                   const SizedBox(height: 20),
 
                   // Password Field
                   _buildTextField(
                     controller: _passwordController,
-                    label: 'Password',
-                    hint: 'Enter your password',
+                    label: ref.tr('password'),
+                    hint: ref.tr('enter_password'),
                     icon: Icons.lock_outline,
                     obscureText: _obscurePassword,
                     suffixIcon: IconButton(
                       icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
                       onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                     ),
-                    validator: (v) => v!.isEmpty ? 'Please enter your password' : null,
+                    validator: (v) => v!.isEmpty ? ref.tr('error_required_field') : null,
                   ),
 
                   // Remember Me & Forgot Password
@@ -163,14 +164,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Text('Remember me', style: TextStyle(fontSize: 14)),
+                          Text(ref.tr('remember_me'), style: const TextStyle(fontSize: 14)),
                         ],
                       ),
                       TextButton(
                         onPressed: () => context.push('/forgot-password'),
-                        child: const Text(
-                          'Forgot Password?',
-                          style: TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold, fontSize: 14),
+                        child: Text(
+                          ref.tr('forgot_password'),
+                          style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold, fontSize: 14),
                         ),
                       ),
                     ],
@@ -194,7 +195,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             width: 24,
                             child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                           )
-                        : const Text('Sign In', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        : Text(ref.tr('sign_in'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   ),
                   const SizedBox(height: 32),
 
@@ -205,7 +206,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          'OR CONTINUE WITH',
+                          ref.tr('or_continue_with').toUpperCase(),
                           style: TextStyle(color: Colors.grey.shade400, letterSpacing: 1.2, fontSize: 12, fontWeight: FontWeight.w600),
                         ),
                       ),
@@ -228,7 +229,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       _buildSocialButton(
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Facebook login Coming Soon!')),
+                            SnackBar(content: Text('Facebook ${ref.tr('coming_soon')}')),
                           );
                         },
                         child: Icon(Icons.facebook_rounded, color: Colors.blue.shade800, size: 28),
@@ -236,7 +237,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       _buildSocialButton(
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Apple ID login Coming Soon!')),
+                            SnackBar(content: Text('Apple ID ${ref.tr('coming_soon')}')),
                           );
                         },
                         child: const Icon(Icons.apple_rounded, color: Colors.black, size: 28),
@@ -249,10 +250,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Don\'t have an account? '),
+                      Text('${ref.tr('dont_have_account')} '),
                       TextButton(
                         onPressed: () => context.push('/register'),
-                        child: const Text('Sign Up', style: TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold)),
+                        child: Text(ref.tr('sign_up'), style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),

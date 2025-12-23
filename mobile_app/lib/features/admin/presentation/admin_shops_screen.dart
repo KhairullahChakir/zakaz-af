@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 import '../data/admin_shop_repository.dart';
 import '../../shop/domain/shop.dart';
 
@@ -31,15 +32,15 @@ class _AdminShopsScreenState extends ConsumerState<AdminShopsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Shop Applications'),
+        title: Text(ref.tr('shop_applications')),
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
-          tabs: const [
-            Tab(text: 'Pending'),
-            Tab(text: 'Approved'),
-            Tab(text: 'Rejected'),
-            Tab(text: 'Suspended'),
+          tabs: [
+            Tab(text: ref.tr('status_pending')),
+            Tab(text: ref.tr('status_approved')),
+            Tab(text: ref.tr('status_rejected')),
+            Tab(text: ref.tr('status_suspended')),
           ],
         ),
       ),
@@ -77,7 +78,7 @@ class _ShopList extends ConsumerWidget {
                   Icon(Icons.store_outlined, size: 64, color: Colors.grey[400]),
                   const SizedBox(height: 16),
                   Text(
-                    'No ${status} applications',
+                    ref.tr('no_status_applications', args: {'status': ref.tr('status_$status')}),
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                 ],
@@ -101,13 +102,13 @@ class _ShopList extends ConsumerWidget {
   }
 }
 
-class _ShopCard extends StatelessWidget {
+class _ShopCard extends ConsumerWidget {
   final Shop shop;
 
   const _ShopCard({required this.shop});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
@@ -153,7 +154,7 @@ class _ShopCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      shop.type[0].toUpperCase() + shop.type.substring(1),
+                      ref.tr('type_${shop.type.toLowerCase()}'),
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 4),
@@ -177,7 +178,7 @@ class _ShopCard extends StatelessWidget {
               // Status & arrow
               Column(
                 children: [
-                  _buildStatusBadge(shop.status),
+                  _buildStatusBadge(ref, shop.status),
                   const SizedBox(height: 8),
                   const Icon(Icons.chevron_right, color: Colors.grey),
                 ],
@@ -189,7 +190,7 @@ class _ShopCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusBadge(String status) {
+  Widget _buildStatusBadge(WidgetRef ref, String status) {
     Color color;
     switch (status) {
       case 'pending':
@@ -211,12 +212,12 @@ class _ShopCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.5)),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
       child: Text(
-        status[0].toUpperCase() + status.substring(1),
+        ref.tr('status_$status').toUpperCase(),
         style: TextStyle(
           color: color,
           fontSize: 11,

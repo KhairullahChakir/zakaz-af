@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'auth_controller.dart';
+import '../../../core/localization/language_provider.dart';
 
 // Reuse constants from HomeScreen or define them here for consistency
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -45,7 +46,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Future<void> _submit() async {
     if (!_acceptTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please accept the Terms and Conditions')),
+        SnackBar(content: Text(ref.tr('accept_terms_msg'))),
       );
       return;
     }
@@ -53,7 +54,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (_formKey.currentState!.validate()) {
       if (_passwordController.text != _confirmPasswordController.text) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Passwords do not match')),
+          SnackBar(content: Text(ref.tr('error_passwords_dont_match'))),
         );
         return;
       }
@@ -106,7 +107,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Create Account'),
+        title: Text(ref.tr('create_account')),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -136,20 +137,20 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'Join Zakaz-AF',
+                Text(
+                  ref.tr('join_zakaz'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Create an account to start shopping or selling local products.',
+                Text(
+                  ref.tr('register_subtitle'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
                   ),
@@ -161,7 +162,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   children: [
                     Expanded(
                       child: _buildRoleCard(
-                        title: 'Customer',
+                        title: ref.tr('customer'),
                         icon: Icons.shopping_cart_outlined,
                         role: 'user',
                       ),
@@ -169,7 +170,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     const SizedBox(width: 16),
                     Expanded(
                       child: _buildRoleCard(
-                        title: 'Shopkeeper',
+                        title: ref.tr('shopkeeper'),
                         icon: Icons.storefront_outlined,
                         role: 'shopkeeper',
                       ),
@@ -181,21 +182,21 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 // Name field
                 _buildTextField(
                   controller: _nameController,
-                  label: 'Full Name',
-                  hint: 'Enter your full name',
+                  label: ref.tr('full_name'),
+                  hint: ref.tr('enter_full_name'),
                   icon: Icons.person_outline,
-                  validator: (v) => v!.isEmpty ? 'Name is required' : null,
+                  validator: (v) => v!.isEmpty ? ref.tr('error_required_field') : null,
                 ),
                 const SizedBox(height: 20),
 
                 // Contact field
                 _buildTextField(
                   controller: _contactController,
-                  label: 'Email or Phone',
+                  label: ref.tr('email_or_phone'),
                   hint: 'e.g. name@email.com or 070...',
                   icon: Icons.contact_mail_outlined,
                   validator: (v) {
-                    if (v == null || v.isEmpty) return 'Required';
+                    if (v == null || v.isEmpty) return ref.tr('error_required_field');
                     if (_isEmail(v)) {
                       if (!_isValidEmail(v)) return 'Enter a valid email address';
                     } else {
@@ -209,7 +210,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 // Password field
                 _buildTextField(
                   controller: _passwordController,
-                  label: 'Password',
+                  label: ref.tr('password'),
                   hint: 'Min. 8 chars, 1 number, 1 special',
                   icon: Icons.lock_outline,
                   obscureText: _obscurePassword,
@@ -229,8 +230,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 // Confirm Password field
                 _buildTextField(
                   controller: _confirmPasswordController,
-                  label: 'Confirm Password',
-                  hint: 'Repeat your password',
+                  label: ref.tr('confirm_password'),
+                  hint: ref.tr('repeat_password'),
                   icon: Icons.lock_reset_outlined,
                   obscureText: _obscureConfirmPassword,
                   suffixIcon: IconButton(
@@ -238,8 +239,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
                   ),
                   validator: (v) {
-                    if (v!.isEmpty) return 'Please confirm password';
-                    if (v != _passwordController.text) return 'Passwords do not match';
+                    if (v!.isEmpty) return ref.tr('error_required_field');
+                    if (v != _passwordController.text) return ref.tr('error_passwords_dont_match');
                     return null;
                   },
                 ),
@@ -256,22 +257,22 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () => setState(() => _acceptTerms = !_acceptTerms),
-                        child: const Text.rich(
+                        child: Text.rich(
                           TextSpan(
-                            text: 'I agree to the ',
+                            text: '${ref.tr('i_agree_to')} ',
                             children: [
                               TextSpan(
-                                text: 'Terms of Service',
-                                style: TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold),
+                                text: ref.tr('terms_conditions'),
+                                style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold),
                               ),
-                              TextSpan(text: ' and '),
+                              TextSpan(text: ' ${ref.tr('and')} '),
                               TextSpan(
-                                text: 'Privacy Policy',
-                                style: TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold),
+                                text: ref.tr('privacy_policy'),
+                                style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
-                          style: TextStyle(fontSize: 13),
+                          style: const TextStyle(fontSize: 13),
                         ),
                       ),
                     ),
@@ -301,9 +302,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             strokeWidth: 2,
                           ),
                         )
-                      : const Text(
-                          'Create Account',
-                          style: TextStyle(
+                      : Text(
+                          ref.tr('create_account'),
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -315,12 +316,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Already have an account? '),
+                    Text('${ref.tr('already_have_account')} '),
                     TextButton(
                       onPressed: () => context.pop(),
-                      child: const Text(
-                        'Sign In',
-                        style: TextStyle(
+                      child: Text(
+                        ref.tr('sign_in'),
+                        style: const TextStyle(
                           color: kPrimaryOrange,
                           fontWeight: FontWeight.bold,
                         ),

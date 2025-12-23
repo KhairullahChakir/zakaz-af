@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 import '../data/shopkeeper_repository.dart';
 import '../../orders/domain/order.dart';
 
@@ -23,7 +24,10 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Order #${order.id} updated to $newStatus'),
+            content: Text(ref.tr('order_updated_msg', args: {
+              'id': order.id.toString(),
+              'status': ref.tr('status_$newStatus'),
+            })),
             backgroundColor: Colors.green,
           ),
         );
@@ -43,15 +47,15 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Update Order #${order.id}'),
+        title: Text(ref.tr('update_order_status', args: {'id': order.id.toString()})),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildStatusOption(order, 'pending', 'Pending', Icons.schedule, Colors.orange),
-            _buildStatusOption(order, 'processing', 'Processing', Icons.sync, Colors.blue),
-            _buildStatusOption(order, 'shipped', 'Shipped', Icons.local_shipping, Colors.purple),
-            _buildStatusOption(order, 'delivered', 'Delivered', Icons.check_circle, Colors.green),
-            _buildStatusOption(order, 'cancelled', 'Cancelled', Icons.cancel, Colors.red),
+            _buildStatusOption(order, 'pending', ref.tr('status_pending'), Icons.schedule, Colors.orange),
+            _buildStatusOption(order, 'processing', ref.tr('status_processing'), Icons.sync, Colors.blue),
+            _buildStatusOption(order, 'shipped', ref.tr('status_shipped'), Icons.local_shipping, Colors.purple),
+            _buildStatusOption(order, 'delivered', ref.tr('status_delivered'), Icons.check_circle, Colors.green),
+            _buildStatusOption(order, 'cancelled', ref.tr('status_cancelled'), Icons.cancel, Colors.red),
           ],
         ),
       ),
@@ -64,7 +68,7 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
       leading: Icon(icon, color: color),
       title: Text(label, style: TextStyle(color: color)),
       trailing: isSelected ? Icon(Icons.check, color: color) : null,
-      tileColor: isSelected ? color.withOpacity(0.1) : null,
+      tileColor: isSelected ? color.withValues(alpha: 0.1) : null,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       onTap: isSelected
           ? null
@@ -82,7 +86,7 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Orders'),
+        title: Text(ref.tr('orders')),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -98,12 +102,12 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
                           Icon(Icons.shopping_bag_outlined, size: 64, color: Colors.grey[400]),
                           const SizedBox(height: 16),
                           Text(
-                            'No orders yet',
+                            ref.tr('no_shop_orders'),
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Orders will appear here when customers buy your products.',
+                            ref.tr('no_shop_orders_desc'),
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.grey[600]),
                           ),
@@ -125,7 +129,7 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: _getStatusColor(order.status).withOpacity(0.1),
+                                color: _getStatusColor(order.status).withValues(alpha: 0.1),
                                 borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                               ),
                               child: Row(
@@ -140,7 +144,7 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Order #${order.id}',
+                                          '${ref.tr('order_number')} ${order.id}',
                                           style: const TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                         Text(
@@ -152,7 +156,7 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
                                   ),
                                   OutlinedButton(
                                     onPressed: () => _showStatusDialog(order),
-                                    child: Text(order.status.toUpperCase()),
+                                    child: Text(ref.tr('status_${order.status}').toUpperCase()),
                                   ),
                                 ],
                               ),
@@ -195,7 +199,7 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text('Total', style: TextStyle(fontWeight: FontWeight.bold)),
+                                  Text(ref.tr('cart_total'), style: const TextStyle(fontWeight: FontWeight.bold)),
                                   Text(
                                     '${order.totalAmount} AFN',
                                     style: TextStyle(

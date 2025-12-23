@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../../../core/localization/language_provider.dart';
 import '../../products/presentation/providers.dart';
 import '../../products/domain/category.dart';
 import '../../../core/utils/responsive.dart';
@@ -22,7 +23,7 @@ class CategoriesScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('All Categories'),
+        title: Text(ref.tr('all_categories')),
         centerTitle: true,
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
@@ -61,7 +62,7 @@ class CategoriesScreen extends ConsumerWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),

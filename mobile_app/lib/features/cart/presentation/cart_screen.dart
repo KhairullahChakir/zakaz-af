@@ -53,7 +53,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '$itemCount items',
+                  '$itemCount ${ref.tr('items')}',
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -122,7 +122,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
           ),
           const SizedBox(height: 12),
           Text(
-            'Looks like you haven\'t added anything yet.\nDiscover amazing local products!',
+            ref.tr('discover_products_msg'),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
@@ -150,7 +150,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 elevation: 8,
                 shadowColor: kPrimaryOrange.withValues(alpha: 0.4),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.shopping_bag_outlined),
@@ -221,7 +221,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                             ),
                           ),
                           Text(
-                            '${total.toInt()} AFN',
+                            '${total.toInt()} ${ref.tr('afn')}',
                             style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
@@ -240,8 +240,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                               color: Colors.grey.shade700,
                             ),
                           ),
-                          const Text(
-                            'Free',
+                          Text(
+                            ref.tr('free'),
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
@@ -265,7 +265,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                             ),
                           ),
                           Text(
-                            '${total.toInt()} AFN',
+                            '${total.toInt()} ${ref.tr('afn')}',
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -292,7 +292,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                       elevation: 4,
                       shadowColor: kPrimaryOrange.withValues(alpha: 0.3),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -395,7 +395,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '${item.product.price.toInt()} AFN',
+                    '${item.product.price.toInt()} ${ref.tr('afn')}',
                   style: const TextStyle(
                     color: kPrimaryOrange,
                     fontWeight: FontWeight.bold,
@@ -498,7 +498,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(ref.tr('remove_from_cart')),
         content: Text(
-          'Are you sure you want to remove "${item.product.name}" from your cart?',
+          ref.tr('remove_cart_item_confirm'),
         ),
         actions: [
           TextButton(
@@ -514,7 +514,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${item.product.name} removed from cart'),
+                  content: Text('${item.product.name} ${ref.tr('cart_item_removed')}'),
                   behavior: SnackBarBehavior.floating,
                 ),
               );

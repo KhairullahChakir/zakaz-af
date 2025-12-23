@@ -33,7 +33,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isSending = false;
   Timer? _pollingTimer;
-  List<Message> _messages = [];
+  final List<Message> _messages = [];
 
   @override
   void initState() {
@@ -148,7 +148,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       conversation!.product!.name,
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -256,7 +256,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, -5),
                 ),
@@ -300,7 +300,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: kPrimaryOrange.withOpacity(0.3),
+                          color: kPrimaryOrange.withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -369,7 +369,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             color: kSoftOrange,
             child: Icon(
               isShopImage ? Icons.store : Icons.person,
-              color: kPrimaryOrange.withOpacity(0.5),
+              color: kPrimaryOrange.withValues(alpha: 0.5),
             ),
           ),
           errorWidget: (context, url, error) => Icon(
@@ -487,7 +487,7 @@ class _MessageBubble extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 5,
                     offset: const Offset(0, 2),
                   ),
@@ -511,7 +511,7 @@ class _MessageBubble extends StatelessWidget {
                         Text(
                           DateFormat.jm().format(message.createdAt!),
                           style: TextStyle(
-                            color: isMe ? Colors.white.withOpacity(0.7) : Colors.grey[500],
+                            color: isMe ? Colors.white.withValues(alpha: 0.7) : Colors.grey[500],
                             fontSize: 10,
                           ),
                         ),
@@ -522,7 +522,7 @@ class _MessageBubble extends StatelessWidget {
                           size: 14,
                           color: message.isRead 
                               ? Colors.white 
-                              : Colors.white.withOpacity(0.7),
+                              : Colors.white.withValues(alpha: 0.7),
                         ),
                       ],
                     ],

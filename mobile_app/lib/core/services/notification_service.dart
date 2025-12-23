@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
 
@@ -40,12 +41,12 @@ class NotificationService {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      debugPrint('User granted permission');
       
       // Get token
       String? token = await _fcm.getToken();
       if (token != null) {
-        print('FCM Token: $token');
+        debugPrint('FCM Token: $token');
         _updateToken(token);
       }
 
@@ -54,8 +55,8 @@ class NotificationService {
 
       // Handle foreground messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        print('Got a message whilst in the foreground!');
-        print('Message data: ${message.data}');
+        debugPrint('Got a message whilst in the foreground!');
+        debugPrint('Message data: ${message.data}');
 
         RemoteNotification? notification = message.notification;
         AndroidNotification? android = message.notification?.android;
@@ -79,7 +80,7 @@ class NotificationService {
         }
       });
     } else {
-      print('User declined or has not accepted permission');
+      debugPrint('User declined or has not accepted permission');
     }
   }
 

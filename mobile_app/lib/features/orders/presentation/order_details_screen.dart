@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../data/order_repository.dart';
+import '../../../core/localization/language_provider.dart';
 
 class OrderDetailsScreen extends ConsumerWidget {
   final int orderId;
@@ -15,7 +16,7 @@ class OrderDetailsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order Details'),
+        title: Text(ref.tr('order_details')),
       ),
       body: orderAsync.when(
         data: (order) => SingleChildScrollView(
@@ -34,12 +35,12 @@ class OrderDetailsScreen extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Order #${order.id}',
+                            '${ref.tr('order_number')}${order.id}',
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
-                          _buildStatusChip(order.status),
+                          _buildStatusChip(context, ref, order.status),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -63,13 +64,13 @@ class OrderDetailsScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Order Status',
+                        ref.tr('order_status'),
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                       ),
                       const SizedBox(height: 16),
-                      _buildTimeline(order.status),
+                      _buildTimeline(ref, order.status),
                     ],
                   ),
                 ),
@@ -84,7 +85,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Items',
+                        ref.tr('items'),
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -123,7 +124,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                             fontWeight: FontWeight.w500),
                                       ),
                                       Text(
-                                        '${item.price} AFN x ${item.quantity}',
+                                        '${item.price} ${ref.tr('afn')} x ${item.quantity}',
                                         style: TextStyle(
                                           color: Colors.grey[600],
                                           fontSize: 13,
@@ -145,15 +146,15 @@ class OrderDetailsScreen extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Total',
-                            style: TextStyle(
+                          Text(
+                            ref.tr('total'),
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            '${order.totalAmount} AFN',
+                            '${order.totalAmount} ${ref.tr('afn')}',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -175,42 +176,49 @@ class OrderDetailsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatusChip(String status) {
+  Widget _buildStatusChip(BuildContext context, WidgetRef ref, String status) {
     Color color;
     IconData icon;
+    String label;
     
     switch (status.toLowerCase()) {
       case 'pending':
         color = Colors.orange;
         icon = Icons.schedule;
+        label = ref.tr('status_pending');
         break;
       case 'processing':
         color = Colors.blue;
         icon = Icons.sync;
+        label = ref.tr('status_processing');
         break;
       case 'shipped':
         color = Colors.purple;
         icon = Icons.local_shipping;
+        label = ref.tr('status_shipped');
         break;
       case 'delivered':
         color = Colors.green;
         icon = Icons.check_circle;
+        label = ref.tr('status_delivered');
         break;
       case 'cancelled':
         color = Colors.red;
         icon = Icons.cancel;
+        label = ref.tr('status_cancelled');
         break;
       default:
         color = Colors.grey;
         icon = Icons.help_outline;
+        label = status;
     }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.5)),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -218,7 +226,7 @@ class OrderDetailsScreen extends ConsumerWidget {
           Icon(icon, size: 16, color: color),
           const SizedBox(width: 4),
           Text(
-            status[0].toUpperCase() + status.substring(1),
+            label,
             style: TextStyle(
               color: color,
               fontWeight: FontWeight.bold,
@@ -230,8 +238,14 @@ class OrderDetailsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTimeline(String currentStatus) {
+  Widget _buildTimeline(WidgetRef ref, String currentStatus) {
     final statuses = ['pending', 'processing', 'shipped', 'delivered'];
+    final statusLabels = {
+      'pending': ref.tr('status_pending'),
+      'processing': ref.tr('status_processing'),
+      'shipped': ref.tr('status_shipped'),
+      'delivered': ref.tr('status_delivered'),
+    };
     final currentIndex = statuses.indexOf(currentStatus.toLowerCase());
     final isCancelled = currentStatus.toLowerCase() == 'cancelled';
 
@@ -272,7 +286,7 @@ class OrderDetailsScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 30),
                 child: Text(
-                  status[0].toUpperCase() + status.substring(1),
+                  statusLabels[status] ?? status,
                   style: TextStyle(
                     fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
                     color: isCompleted ? Colors.black : Colors.grey,

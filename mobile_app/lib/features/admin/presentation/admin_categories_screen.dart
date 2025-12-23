@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 import '../data/admin_repository.dart';
 import '../../products/domain/category.dart';
 import '../../products/presentation/providers.dart';
@@ -20,17 +21,17 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Category'),
-        content: Text('Are you sure you want to delete "$name"?\n\nNote: Categories with products cannot be deleted.'),
+        title: Text(ref.tr('delete_category')),
+        content: Text(ref.tr('delete_category_confirm', args: {'name': name})),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(ref.tr('cancel')),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(ref.tr('delete')),
           ),
         ],
       ),
@@ -41,13 +42,12 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
       try {
         await ref.read(adminRepositoryProvider).deleteCategory(categoryId);
         ref.invalidate(categoriesProvider);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Category deleted'), backgroundColor: Colors.green),
-          );
-        }
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(ref.tr('category_deleted')), backgroundColor: Colors.green),
+        );
       } catch (e) {
-        if (mounted) {
+        if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
           );
@@ -67,7 +67,7 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: Text(category == null ? 'Add Category' : 'Edit Category'),
+          title: Text(category == null ? ref.tr('add_category') : ref.tr('edit_category')),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -98,18 +98,18 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                 const SizedBox(height: 16),
                 TextField(
                   controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Category Name',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: ref.tr('category_name'),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: typeController,
-                  decoration: const InputDecoration(
-                    labelText: 'Type (optional)',
-                    border: OutlineInputBorder(),
-                    hintText: 'e.g., grocery, clothes',
+                  decoration: InputDecoration(
+                    labelText: ref.tr('type_optional'),
+                    border: const OutlineInputBorder(),
+                    hintText: ref.tr('type_hint'),
                   ),
                 ),
               ],
@@ -118,13 +118,13 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(ref.tr('cancel')),
             ),
             FilledButton(
               onPressed: () async {
                 if (nameController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Name is required')),
+                    SnackBar(content: Text(ref.tr('name_required'))),
                   );
                   return;
                 }
@@ -149,25 +149,23 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                     );
                   }
                   ref.invalidate(categoriesProvider);
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(category == null ? 'Category created' : 'Category updated'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  }
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(category == null ? ref.tr('category_created') : ref.tr('category_updated')),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
                 } catch (e) {
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
-                    );
-                  }
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+                  );
                 } finally {
                   if (mounted) setState(() => _isLoading = false);
                 }
               },
-              child: Text(category == null ? 'Create' : 'Update'),
+              child: Text(category == null ? ref.tr('add') : ref.tr('save')),
             ),
           ],
         ),
@@ -181,12 +179,12 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage Categories'),
+        title: Text(ref.tr('manage_categories')),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showCategoryDialog(),
         icon: const Icon(Icons.add),
-        label: const Text('Add Category'),
+        label: Text(ref.tr('add_category')),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -195,7 +193,7 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
               child: categoriesAsync.when(
                 data: (categories) {
                   if (categories.isEmpty) {
-                    return const Center(child: Text('No categories found'));
+                    return Center(child: Text(ref.tr('no_categories_found')));
                   }
                   return ListView.builder(
                     padding: const EdgeInsets.all(16),
@@ -228,23 +226,23 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                               }
                             },
                             itemBuilder: (context) => [
-                              const PopupMenuItem(
+                              PopupMenuItem(
                                 value: 'edit',
                                 child: Row(
                                   children: [
-                                    Icon(Icons.edit, size: 20),
-                                    SizedBox(width: 8),
-                                    Text('Edit'),
+                                    const Icon(Icons.edit, size: 20),
+                                    const SizedBox(width: 8),
+                                    Text(ref.tr('edit')),
                                   ],
                                 ),
                               ),
-                              const PopupMenuItem(
+                              PopupMenuItem(
                                 value: 'delete',
                                 child: Row(
                                   children: [
-                                    Icon(Icons.delete, size: 20, color: Colors.red),
-                                    SizedBox(width: 8),
-                                    Text('Delete', style: TextStyle(color: Colors.red)),
+                                    const Icon(Icons.delete, size: 20, color: Colors.red),
+                                    const SizedBox(width: 8),
+                                    Text(ref.tr('delete'), style: const TextStyle(color: Colors.red)),
                                   ],
                                 ),
                               ),

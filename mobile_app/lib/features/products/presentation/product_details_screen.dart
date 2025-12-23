@@ -12,6 +12,7 @@ import '../../wishlist/presentation/wishlist_provider.dart';
 import '../../chat/data/chat_repository.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../core/localization/language_provider.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -32,7 +33,7 @@ class ProductDetailsScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
-        title: const Text('Product Details'),
+        title: Text(ref.tr('product_details')),
         actions: [
           productAsync.when(
             data: (product) {
@@ -46,7 +47,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                   ref.read(wishlistProvider.notifier).toggleWishlist(product);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist'),
+                      content: Text(ref.tr(isWishlisted ? 'removed_from_wishlist' : 'added_to_wishlist')),
                       backgroundColor: kPrimaryOrange,
                       duration: const Duration(seconds: 1),
                     ),
@@ -113,17 +114,17 @@ class ProductDetailsScreen extends ConsumerWidget {
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                   decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.6),
+                                    color: Colors.black.withValues(alpha: 0.6),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: const Row(
+                                  child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Icon(Icons.zoom_in, color: Colors.white, size: 16),
-                                      SizedBox(width: 4),
+                                      const Icon(Icons.zoom_in, color: Colors.white, size: 16),
+                                      const SizedBox(width: 4),
                                       Text(
-                                        'Tap to zoom',
-                                        style: TextStyle(color: Colors.white, fontSize: 12),
+                                        ref.tr('tap_to_zoom'),
+                                        style: const TextStyle(color: Colors.white, fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -184,7 +185,9 @@ class ProductDetailsScreen extends ConsumerWidget {
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
-                                  product.stock > 0 ? 'In Stock (${product.stock} available)' : 'Out of Stock',
+                                  product.stock > 0 
+                                    ? '${ref.tr('in_stock')} (${product.stock})' 
+                                    : ref.tr('out_of_stock'),
                                   style: TextStyle(
                                     color: product.stock > 0 ? Colors.green : Colors.red,
                                     fontWeight: FontWeight.w500,
@@ -195,7 +198,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                             
                             // Description
                             Text(
-                              'Description',
+                              ref.tr('description'),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: Responsive.value(context, mobile: 16, tablet: 18),
@@ -203,7 +206,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              product.description ?? 'No description available',
+                              product.description ?? ref.tr('no_description'),
                               style: TextStyle(
                                 color: Colors.grey[700],
                                 fontSize: Responsive.value(context, mobile: 14, tablet: 16),
@@ -218,7 +221,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Reviews',
+                                  ref.tr('reviews'),
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: Responsive.value(context, mobile: 16, tablet: 18),
@@ -227,7 +230,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                 TextButton.icon(
                                   onPressed: () => _showAddReviewDialog(context, ref),
                                   icon: const Icon(Icons.add_comment, color: kPrimaryOrange),
-                                  label: const Text('Add Review', style: TextStyle(color: kPrimaryOrange)),
+                                  label: Text(ref.tr('write_review'), style: const TextStyle(color: kPrimaryOrange)),
                                 ),
                               ],
                             ),
@@ -241,15 +244,15 @@ class ProductDetailsScreen extends ConsumerWidget {
                                       color: kSoftOrange,
                                       borderRadius: BorderRadius.circular(12),
                                     ),
-                                    child: const Column(
+                                    child: Column(
                                       children: [
-                                        Icon(Icons.rate_review, size: 40, color: kPrimaryOrange),
-                                        SizedBox(height: 8),
+                                        const Icon(Icons.rate_review, size: 40, color: kPrimaryOrange),
+                                        const SizedBox(height: 8),
                                         Text(
-                                          'No reviews yet',
-                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                          ref.tr('no_reviews'),
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
                                         ),
-                                        Text('Be the first to review this product!'),
+                                        Text(ref.tr('be_first_to_review')),
                                       ],
                                     ),
                                   );
@@ -277,7 +280,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                             ),
                                             const SizedBox(width: 8),
                                             Text(
-                                              review.user?.name ?? 'User',
+                                              review.user?.name ?? ref.tr('nav_account'),
                                               style: const TextStyle(fontWeight: FontWeight.bold),
                                             ),
                                             const Spacer(),
@@ -298,7 +301,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                 );
                               },
                               loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-                              error: (err, _) => Text('Error loading reviews: $err'),
+                              error: (err, _) => Text('${ref.tr('error_loading_reviews')}: $err'),
                             ),
                             
                             // Shopkeeper Info Section - PREMIUM (after reviews)
@@ -313,10 +316,10 @@ class ProductDetailsScreen extends ConsumerWidget {
                                     end: Alignment.bottomRight,
                                   ),
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: kPrimaryOrange.withOpacity(0.2)),
+                                  border: Border.all(color: kPrimaryOrange.withValues(alpha: 0.2)),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: kPrimaryOrange.withOpacity(0.1),
+                                      color: kPrimaryOrange.withValues(alpha: 0.1),
                                       blurRadius: 16,
                                       offset: const Offset(0, 4),
                                     ),
@@ -331,7 +334,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                         Icon(Icons.store, color: kPrimaryOrange, size: 20),
                                         const SizedBox(width: 8),
                                         Text(
-                                          'Sold By',
+                                          ref.tr('sold_by'),
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: Responsive.value(context, mobile: 14, tablet: 16),
@@ -351,7 +354,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                               Icon(Icons.verified, color: Colors.green.shade700, size: 14),
                                               const SizedBox(width: 4),
                                               Text(
-                                                'Verified Seller',
+                                                ref.tr('verified_seller'),
                                                 style: TextStyle(
                                                   color: Colors.green.shade700,
                                                   fontSize: 11,
@@ -376,10 +379,10 @@ class ProductDetailsScreen extends ConsumerWidget {
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius: BorderRadius.circular(16),
-                                            border: Border.all(color: kPrimaryOrange.withOpacity(0.3), width: 2),
+                                            border: Border.all(color: kPrimaryOrange.withValues(alpha: 0.3), width: 2),
                                             boxShadow: [
                                               BoxShadow(
-                                                color: Colors.black.withOpacity(0.1),
+                                                color: Colors.black.withValues(alpha: 0.1),
                                                 blurRadius: 8,
                                                 offset: const Offset(0, 2),
                                               ),
@@ -424,7 +427,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                 Container(
                                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                                   decoration: BoxDecoration(
-                                                    color: kPrimaryOrange.withOpacity(0.1),
+                                                    color: kPrimaryOrange.withValues(alpha: 0.1),
                                                     borderRadius: BorderRadius.circular(8),
                                                   ),
                                                   child: Text(
@@ -511,7 +514,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Shop Owner',
+                                                    ref.tr('shop_owner'),
                                                     style: TextStyle(
                                                       fontSize: 11,
                                                       color: Colors.grey[500],
@@ -537,11 +540,19 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                 child: IconButton(
                                                   icon: Icon(Icons.call, color: Colors.green.shade600, size: 20),
                                                   onPressed: () async {
-                                                    final phone = product.shop!.owner!.phone!;
-                                                    final uri = Uri.parse('tel:$phone');
+                                                  final phone = product.shop!.owner!.phone!;
+                                                  final uri = Uri.parse('tel:$phone');
+                                                  try {
                                                     if (await canLaunchUrl(uri)) {
                                                       await launchUrl(uri);
                                                     }
+                                                  } catch (e) {
+                                                    if (context.mounted) {
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                        SnackBar(content: Text('Error: $e')),
+                                                      );
+                                                    }
+                                                  }
                                                   },
                                                 ),
                                               ),
@@ -565,7 +576,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                 borderRadius: BorderRadius.circular(12),
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color: const Color(0xFF25D366).withOpacity(0.3),
+                                                    color: const Color(0xFF25D366).withValues(alpha: 0.3),
                                                     blurRadius: 8,
                                                     offset: const Offset(0, 4),
                                                   ),
@@ -582,7 +593,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                     } catch (e) {
                                                       if (context.mounted) {
                                                         ScaffoldMessenger.of(context).showSnackBar(
-                                                          const SnackBar(content: Text('Could not open WhatsApp')),
+                                                          SnackBar(content: Text(ref.tr('could_not_open_whatsapp'))),
                                                         );
                                                       }
                                                     }
@@ -630,7 +641,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                               borderRadius: BorderRadius.circular(12),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: kPrimaryOrange.withOpacity(0.3),
+                                                  color: kPrimaryOrange.withValues(alpha: 0.3),
                                                   blurRadius: 8,
                                                   offset: const Offset(0, 4),
                                                 ),
@@ -673,7 +684,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                       const Icon(Icons.chat_bubble_outline, color: Colors.white, size: 20),
                                                       const SizedBox(width: 8),
                                                       Text(
-                                                        'Message',
+                                                        ref.tr('nav_messages'),
                                                         style: TextStyle(
                                                           color: Colors.white,
                                                           fontWeight: FontWeight.bold,
@@ -737,7 +748,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, -5),
                     ),
@@ -749,13 +760,13 @@ class ProductDetailsScreen extends ConsumerWidget {
                       ref.read(cartProvider.notifier).addToCart(product);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('${product.name} added to cart'),
+                          content: Text('${product.name} ${ref.tr('added_to_cart_success')}'),
                           backgroundColor: kPrimaryOrange,
                         ),
                       );
                     } : null,
                     icon: const Icon(Icons.add_shopping_cart),
-                    label: Text(product.stock > 0 ? 'Add to Cart' : 'Out of Stock'),
+                    label: Text(product.stock > 0 ? ref.tr('add_to_cart') : ref.tr('out_of_stock')),
                     style: FilledButton.styleFrom(
                       backgroundColor: kPrimaryOrange,
                       disabledBackgroundColor: Colors.grey,
@@ -771,7 +782,7 @@ class ProductDetailsScreen extends ConsumerWidget {
             ],
           ),
         loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-        error: (err, stack) => Center(child: Text('Error: $err')),
+        error: (err, stack) => Center(child: Text('${ref.tr('error')}: $err')),
       ),
     );
   }
@@ -784,7 +795,7 @@ class ProductDetailsScreen extends ConsumerWidget {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: const Text('Add Review'),
+          title: Text(ref.tr('write_review')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -806,7 +817,7 @@ class ProductDetailsScreen extends ConsumerWidget {
               TextField(
                 controller: commentController,
                 decoration: InputDecoration(
-                  labelText: 'Comment (optional)',
+                  labelText: ref.tr('comment_optional'),
                   border: const OutlineInputBorder(),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
@@ -819,7 +830,7 @@ class ProductDetailsScreen extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(ref.tr('cancel')),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -833,8 +844,8 @@ class ProductDetailsScreen extends ConsumerWidget {
                     Navigator.pop(context);
                     ref.invalidate(productReviewsProvider(productId));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Review submitted successfully'),
+                      SnackBar(
+                        content: Text(ref.tr('review_submitted')),
                         backgroundColor: kPrimaryOrange,
                       ),
                     );
@@ -842,13 +853,13 @@ class ProductDetailsScreen extends ConsumerWidget {
                 } catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
+                      SnackBar(content: Text('${ref.tr('error')}: $e')),
                     );
                   }
                 }
               },
               style: ElevatedButton.styleFrom(backgroundColor: kPrimaryOrange),
-              child: const Text('Submit', style: TextStyle(color: Colors.white)),
+              child: Text(ref.tr('submit'), style: const TextStyle(color: Colors.white)),
             ),
           ],
         ),

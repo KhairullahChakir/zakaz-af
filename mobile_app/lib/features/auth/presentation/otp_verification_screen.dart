@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'auth_controller.dart';
+import '../../../core/localization/language_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kSoftOrange = Color(0xFFFFF3E6);
@@ -67,7 +68,7 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Verify Email'),
+        title: Text(ref.tr('verify_email')),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -95,18 +96,18 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              const Text(
-                'Enter Verification Code',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                Text(
+                  ref.tr('enter_verification_code'),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
-              ),
               const SizedBox(height: 12),
               Text(
-                'We have sent a 6-digit code to\n${widget.emailOrPhone}',
+                '${ref.tr('otp_sent_msg')}\n${widget.emailOrPhone}',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 16,
@@ -175,9 +176,9 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
                         width: 24,
                         child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                       )
-                    : const Text(
-                        'Verify and Continue',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    : Text(
+                        ref.tr('verify_continue'),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
               ),
               
@@ -185,17 +186,17 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Didn't receive the code? "),
+                  Text("${ref.tr('didnt_receive_code')} "),
                   TextButton(
                     onPressed: () {
                       ref.read(authControllerProvider.notifier).resendOtp();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Verification code resent!')),
+                        SnackBar(content: Text(ref.tr('otp_resent'))),
                       );
                     },
-                    child: const Text(
-                      'Resend',
-                      style: TextStyle(
+                    child: Text(
+                      ref.tr('resend'),
+                      style: const TextStyle(
                         color: kPrimaryOrange,
                         fontWeight: FontWeight.bold,
                       ),

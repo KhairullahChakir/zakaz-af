@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'wishlist_provider.dart';
+import '../../../core/localization/language_provider.dart';
 
 class WishlistScreen extends ConsumerWidget {
   const WishlistScreen({super.key});
@@ -12,7 +13,7 @@ class WishlistScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Wishlist'),
+        title: Text(ref.tr('wishlist')),
       ),
       body: wishlistAsync.when(
         data: (products) {
@@ -28,14 +29,14 @@ class WishlistScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Your wishlist is empty',
+                    ref.tr('wishlist_empty'),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: Colors.grey,
                         ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Start adding products you love!',
+                    ref.tr('wishlist_start_msg'),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.grey,
                         ),
@@ -43,7 +44,7 @@ class WishlistScreen extends ConsumerWidget {
                   const SizedBox(height: 24),
                   FilledButton(
                     onPressed: () => context.go('/'),
-                    child: const Text('Browse Products'),
+                    child: Text(ref.tr('browse_products')),
                   ),
                 ],
               ),
@@ -83,7 +84,7 @@ class WishlistScreen extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   subtitle: Text(
-                    '${product.price} AFN',
+                    '${product.price} ${ref.tr('afn')}',
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.w600,
@@ -95,7 +96,7 @@ class WishlistScreen extends ConsumerWidget {
                       ref.read(wishlistProvider.notifier).removeFromWishlist(product.id);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('${product.name} removed from wishlist'),
+                          content: Text('${product.name} ${ref.tr('removed_from_wishlist')}'),
                           duration: const Duration(seconds: 2),
                         ),
                       );

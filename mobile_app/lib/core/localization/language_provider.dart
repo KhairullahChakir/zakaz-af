@@ -49,9 +49,16 @@ class LanguageNotifier extends Notifier<AppLanguage> {
   }
 
   /// Get translation for a key
-  String translate(String key) {
+  String translate(String key, {Map<String, String>? args}) {
     final translations = AppTranslations.translations[state.code];
-    return translations?[key] ?? AppTranslations.translations['en']?[key] ?? key;
+    String value = translations?[key] ?? AppTranslations.translations['en']?[key] ?? key;
+    
+    if (args != null) {
+      args.forEach((k, v) {
+        value = value.replaceAll('{$k}', v);
+      });
+    }
+    return value;
   }
 }
 
@@ -62,10 +69,17 @@ final languageProvider = NotifierProvider<LanguageNotifier, AppLanguage>(() {
 
 /// Extension to easily get translations
 extension TranslationsExtension on WidgetRef {
-  String tr(String key) {
+  String tr(String key, {Map<String, String>? args}) {
     final language = watch(languageProvider);
     final translations = AppTranslations.translations[language.code];
-    return translations?[key] ?? AppTranslations.translations['en']?[key] ?? key;
+    String value = translations?[key] ?? AppTranslations.translations['en']?[key] ?? key;
+    
+    if (args != null) {
+      args.forEach((k, v) {
+        value = value.replaceAll('{$k}', v);
+      });
+    }
+    return value;
   }
 }
 
@@ -78,9 +92,16 @@ extension LanguageExtension on AppLanguage {
 
 /// Helper class for translations usage in widgets
 class Tr {
-  static String of(WidgetRef ref, String key) {
-    final language = ref.watch(languageProvider);
+  static String of(WidgetRef ref, String key, {Map<String, String>? args}) {
+    final language = ref.read(languageProvider);
     final translations = AppTranslations.translations[language.code];
-    return translations?[key] ?? AppTranslations.translations['en']?[key] ?? key;
+    String value = translations?[key] ?? AppTranslations.translations['en']?[key] ?? key;
+    
+    if (args != null) {
+      args.forEach((k, v) {
+        value = value.replaceAll('{$k}', v);
+      });
+    }
+    return value;
   }
 }

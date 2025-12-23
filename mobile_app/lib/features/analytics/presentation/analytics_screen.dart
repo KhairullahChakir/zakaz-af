@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'analytics_provider.dart';
+import '../../../core/localization/language_provider.dart';
 
 class AnalyticsScreen extends ConsumerWidget {
   const AnalyticsScreen({super.key});
@@ -10,11 +11,11 @@ class AnalyticsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final statsAsync = ref.watch(analyticsStatsProvider);
-    final currencyFormat = NumberFormat.currency(symbol: '\$');
+    final currencyFormat = NumberFormat.currency(symbol: '${ref.tr('afn')} ', decimalDigits: 0);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sales Analytics'),
+        title: Text(ref.tr('sales_analytics')),
         actions: [
           IconButton(
             icon: const Icon(Icons.store),
@@ -55,7 +56,7 @@ class AnalyticsScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.orange.withOpacity(0.3),
+                        color: Colors.orange.withValues(alpha: 0.3),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -64,9 +65,9 @@ class AnalyticsScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Total Revenue',
-                        style: TextStyle(color: Colors.white70, fontSize: 16),
+                      Text(
+                        ref.tr('total_revenue'),
+                        style: const TextStyle(color: Colors.white70, fontSize: 16),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -90,24 +91,24 @@ class AnalyticsScreen extends ConsumerWidget {
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 16,
                   children: [
-                    _buildStatMiniCard('Orders', stats['total_orders'].toString(), Icons.shopping_bag, Colors.blue),
-                    _buildStatMiniCard('Users', stats['total_users'].toString(), Icons.people, Colors.green),
-                    _buildStatMiniCard('Products', stats['total_products'].toString(), Icons.inventory, Colors.purple),
+                    _buildStatMiniCard(ref.tr('orders'), stats['total_orders'].toString(), Icons.shopping_bag, Colors.blue),
+                    _buildStatMiniCard(ref.tr('users'), stats['total_users'].toString(), Icons.people, Colors.green),
+                    _buildStatMiniCard(ref.tr('products'), stats['total_products'].toString(), Icons.inventory, Colors.purple),
                   ],
                 ),
                 const SizedBox(height: 32),
 
                 // Top Products
-                const Text(
-                  'Top Selling Products',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Text(
+                  ref.tr('top_selling_products'),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
                 ...topProducts.map((p) => Card(
                   margin: const EdgeInsets.only(bottom: 8),
                   child: ListTile(
                     title: Text(p['name']),
-                    subtitle: Text('Sold: ${p['total_sold']} units'),
+                    subtitle: Text(ref.tr('sold_units', args: {'n': p['total_sold'].toString()})),
                     trailing: Text(
                       currencyFormat.format(double.parse(p['revenue'].toString())),
                       style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
@@ -117,9 +118,9 @@ class AnalyticsScreen extends ConsumerWidget {
                 const SizedBox(height: 32),
 
                 // Recent Sales
-                const Text(
-                  'Recent Sales',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Text(
+                  ref.tr('recent_sales'),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
                 ...recentSales.map((s) => Card(
@@ -148,9 +149,9 @@ class AnalyticsScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2)),
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -164,7 +165,7 @@ class AnalyticsScreen extends ConsumerWidget {
           const SizedBox(height: 4),
           Text(
             label,
-            style: TextStyle(fontSize: 12, color: color.withOpacity(0.8)),
+            style: TextStyle(fontSize: 12, color: color.withValues(alpha: 0.8)),
             textAlign: TextAlign.center,
           ),
         ],

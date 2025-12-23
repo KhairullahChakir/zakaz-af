@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'auth_controller.dart';
+import '../../../core/localization/language_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kSoftOrange = Color(0xFFFFF3E6);
@@ -38,14 +39,16 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     setState(() => _isLoading = true);
     try {
       await ref.read(authControllerProvider.notifier).forgotPassword(_emailController.text.trim());
+      if (!mounted) return;
       setState(() {
         _otpSent = true;
         _isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Reset code sent to your email')),
+        SnackBar(content: Text(ref.tr('reset_code_sent'))),
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() => _isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString()), backgroundColor: Colors.redAccent),
@@ -58,7 +61,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     
     if (_passwordController.text != _confirmPasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
+        SnackBar(content: Text(ref.tr('error_passwords_dont_match'))),
       );
       return;
     }
@@ -71,12 +74,14 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         password: _passwordController.text,
         passwordConfirmation: _confirmPasswordController.text,
       );
+      if (!mounted) return;
       setState(() => _isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password reset successfully')),
+        SnackBar(content: Text(ref.tr('password_reset_success'))),
       );
       context.pop(); // Go back to Login
     } catch (e) {
+      if (!mounted) return;
       setState(() => _isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString()), backgroundColor: Colors.redAccent),
@@ -92,7 +97,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.black87,
-        title: Text(_otpSent ? 'Reset Password' : 'Forgot Password'),
+        title: Text(_otpSent ? ref.tr('create_new_password') : ref.tr('forgot_password')),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -108,15 +113,15 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               ),
               const SizedBox(height: 32),
               Text(
-                _otpSent ? 'Create New Password' : 'Reset your password',
+                _otpSent ? ref.tr('create_new_password') : ref.tr('forgot_password_subtitle'),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
                 _otpSent 
-                  ? 'Enter the 6-digit code sent to your email and your new password.'
-                  : 'Enter your email address and we will send you a 6-digit code to reset your password.',
+                  ? ref.tr('enter_6_digit_code')
+                  : ref.tr('enter_email_to_reset'),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.grey, fontSize: 16),
               ),
@@ -125,27 +130,27 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               if (!_otpSent) ...[
                 _buildTextField(
                   controller: _emailController,
-                  label: 'Email Address',
-                  hint: 'Enter your email',
+                  label: ref.tr('email'),
+                  hint: ref.tr('enter_email'),
                   icon: Icons.email_outlined,
                 ),
                 const SizedBox(height: 32),
                 _buildButton(
                   onPressed: _isLoading ? null : _sendCode,
-                  text: 'Send Reset Code',
+                  text: ref.tr('send_reset_code'),
                 ),
               ] else ...[
                 _buildTextField(
                   controller: _otpController,
-                  label: 'Reset Code',
-                  hint: 'Enter 6-digit code',
+                  label: ref.tr('reset_code'),
+                  hint: ref.tr('enter_otp'),
                   icon: Icons.numbers,
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
                 _buildTextField(
                   controller: _passwordController,
-                  label: 'New Password',
+                  label: ref.tr('new_password'),
                   hint: 'Min. 8 characters',
                   icon: Icons.lock_outline,
                   obscureText: _obscurePassword,
@@ -157,19 +162,19 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 const SizedBox(height: 20),
                 _buildTextField(
                   controller: _confirmPasswordController,
-                  label: 'Confirm Password',
-                  hint: 'Repeat new password',
+                  label: ref.tr('confirm_password'),
+                  hint: ref.tr('repeat_password'),
                   icon: Icons.lock_reset_outlined,
                   obscureText: _obscurePassword,
                 ),
                 const SizedBox(height: 32),
                 _buildButton(
                   onPressed: _isLoading ? null : _resetPassword,
-                  text: 'Reset Password',
+                  text: ref.tr('reset_password'),
                 ),
                 TextButton(
                   onPressed: () => setState(() => _otpSent = false),
-                  child: const Text('Back to enter email', style: TextStyle(color: kPrimaryOrange)),
+                  child: Text(ref.tr('back_to_email'), style: const TextStyle(color: kPrimaryOrange)),
                 ),
               ],
             ],

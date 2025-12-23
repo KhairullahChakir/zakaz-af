@@ -6,6 +6,7 @@ import '../../products/domain/product.dart';
 import '../../../core/utils/responsive.dart';
 import '../../cart/presentation/cart_provider.dart';
 import '../../wishlist/presentation/wishlist_provider.dart';
+import '../../../core/localization/language_provider.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -44,7 +45,7 @@ class CategoryProductsScreen extends ConsumerWidget {
                     Icon(Icons.category_outlined, size: 64, color: Colors.grey[400]),
                     const SizedBox(height: 16),
                     Text(
-                      'No products in this category',
+                      ref.tr('no_products'),
                       style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                     ),
                   ],
@@ -79,7 +80,7 @@ class CategoryProductsScreen extends ConsumerWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -106,11 +107,11 @@ class CategoryProductsScreen extends ConsumerWidget {
                               width: double.infinity,
                               fit: BoxFit.cover,
                               errorBuilder: (_, __, ___) => Center(
-                                child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withOpacity(0.5)),
+                                child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withValues(alpha: 0.5)),
                               ),
                             ),
                           )
-                        : Center(child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withOpacity(0.5))),
+                        : Center(child: Icon(Icons.image, size: 40, color: kPrimaryOrange.withValues(alpha: 0.5))),
                   ),
                   // Wishlist button
                   Positioned(
@@ -126,7 +127,7 @@ class CategoryProductsScreen extends ConsumerWidget {
                             ref.read(wishlistProvider.notifier).toggleWishlist(product);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(isInWishlist ? 'Removed from Wishlist' : 'Added to Wishlist!'),
+                                content: Text(ref.tr(isInWishlist ? 'removed_from_wishlist' : 'added_to_wishlist')),
                                 duration: const Duration(seconds: 1),
                               ),
                             );
@@ -134,7 +135,7 @@ class CategoryProductsScreen extends ConsumerWidget {
                           child: Container(
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.9),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -169,8 +170,8 @@ class CategoryProductsScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Text(
-                            '${product.price.toInt()} AFN',
+                            child: Text(
+                              '${product.price.toInt()} ${ref.tr('afn')}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
@@ -183,10 +184,10 @@ class CategoryProductsScreen extends ConsumerWidget {
                             ref.read(cartProvider.notifier).addToCart(product);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('${product.name} added to cart!'),
+                                content: Text('${product.name} ${ref.tr('added_to_cart_success')}'),
                                 duration: const Duration(seconds: 1),
                                 action: SnackBarAction(
-                                  label: 'VIEW',
+                                  label: ref.tr('view').toUpperCase(),
                                   onPressed: () => context.push('/cart'),
                                 ),
                               ),
