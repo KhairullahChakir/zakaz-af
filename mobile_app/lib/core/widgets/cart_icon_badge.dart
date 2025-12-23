@@ -3,10 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/cart/presentation/cart_provider.dart';
 
+const Color _kPrimaryOrange = Color(0xFFFF6B00);
+
 class CartIconBadge extends ConsumerWidget {
   final bool showBackground;
+  final bool isSelected;
   
-  const CartIconBadge({super.key, this.showBackground = true});
+  const CartIconBadge({
+    super.key, 
+    this.showBackground = true,
+    this.isSelected = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,7 +24,10 @@ class CartIconBadge extends ConsumerWidget {
       return Stack(
         children: [
           IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined),
+            icon: Icon(
+              Icons.shopping_cart_outlined,
+              color: isSelected ? _kPrimaryOrange : null,
+            ),
             onPressed: () => context.push('/cart'),
           ),
           if (count > 0)
@@ -34,7 +44,10 @@ class CartIconBadge extends ConsumerWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        const Icon(Icons.shopping_cart_outlined),
+        Icon(
+          isSelected ? Icons.shopping_cart : Icons.shopping_cart_outlined,
+          color: isSelected ? _kPrimaryOrange : Colors.grey[600],
+        ),
         if (count > 0)
           Positioned(
             right: -8,

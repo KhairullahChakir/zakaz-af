@@ -136,7 +136,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             NavigationDestination(
               icon: const CartIconBadge(showBackground: false),
-              selectedIcon: const CartIconBadge(showBackground: false),
+              selectedIcon: const CartIconBadge(showBackground: false, isSelected: true),
               label: 'Cart',
             ),
             NavigationDestination(
