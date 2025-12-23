@@ -61,9 +61,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'icon': Icons.local_grocery_store,
     },
     {
-      'icon': Icons.local_grocery_store,
-    },
-    {
       'title': 'Fashion & Style',
       'subtitle': 'Traditional & Modern',
       'icon': Icons.checkroom,
@@ -393,7 +390,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                banner['title'] as String,
+                                banner['title']?.toString() ?? '',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: Responsive.value(context, mobile: 18, tablet: 24, desktop: 28),
@@ -404,7 +401,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                banner['subtitle'] as String,
+                                banner['subtitle']?.toString() ?? '',
                                 style: TextStyle(
                                   color: Colors.white.withValues(alpha: 0.9),
                                   fontSize: Responsive.value(context, mobile: 12, tablet: 16),
