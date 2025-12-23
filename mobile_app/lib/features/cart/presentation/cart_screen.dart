@@ -9,7 +9,9 @@ const Color kDarkOrange = Color(0xFFE55A00);
 const Color kSoftOrange = Color(0xFFFFF3E6);
 
 class CartScreen extends ConsumerStatefulWidget {
-  const CartScreen({super.key});
+  final VoidCallback? onNavigateToHome;
+  
+  const CartScreen({super.key, this.onNavigateToHome});
 
   @override
   ConsumerState<CartScreen> createState() => _CartScreenState();
@@ -132,7 +134,13 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             width: 220,
             height: 56,
             child: FilledButton(
-              onPressed: () => context.go('/'),
+              onPressed: () {
+                if (widget.onNavigateToHome != null) {
+                  widget.onNavigateToHome!();
+                } else {
+                  context.go('/');
+                }
+              },
               style: FilledButton.styleFrom(
                 backgroundColor: kPrimaryOrange,
                 shape: RoundedRectangleBorder(

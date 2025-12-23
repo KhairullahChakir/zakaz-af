@@ -94,7 +94,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           _buildHomeTab(),
           const ConversationsScreen(),
-          const _CartTab(),
+          _CartTab(onNavigateToHome: () => setState(() => _currentNavIndex = 0)),
           const _ProfileTab(),
         ],
       ),
@@ -1372,11 +1372,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 // This prevents HomeScreen from rebuilding when cart changes occur
 // ============================================================================
 class _CartTab extends StatelessWidget {
-  const _CartTab();
+  final VoidCallback? onNavigateToHome;
+  
+  const _CartTab({this.onNavigateToHome});
 
   @override
   Widget build(BuildContext context) {
-    return const CartScreen();
+    return CartScreen(onNavigateToHome: onNavigateToHome);
   }
 }
 
