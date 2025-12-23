@@ -13,6 +13,7 @@ import '../../chat/presentation/conversations_screen.dart';
 import '../../wishlist/presentation/wishlist_provider.dart';
 import '../../cart/presentation/cart_provider.dart';
 import '../../notifications/presentation/notification_provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -93,7 +94,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           _buildHomeTab(),
           const ConversationsScreen(),
           _buildCartTab(),
-          _buildProfileTab(),
+          const _ProfileTab(),
         ],
       ),
       bottomNavigationBar: _buildBottomNav(),
@@ -1368,3 +1369,389 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 }
+
+// ============================================================================
+// ISOLATED PROFILE TAB WIDGET
+// This prevents HomeScreen from rebuilding when profile updates occur
+// ============================================================================
+class _ProfileTab extends ConsumerStatefulWidget {
+  const _ProfileTab();
+
+  @override
+  ConsumerState<_ProfileTab> createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends ConsumerState<_ProfileTab> {
+  Future<void> _handleImageChange() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final user = ref.read(authControllerProvider).value;
+      if (user != null) {
+        await ref.read(authControllerProvider.notifier).updateProfile(
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          imagePath: pickedFile.path,
+        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Profile picture updated!')),
+          );
+        }
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final user = ref.watch(authControllerProvider).value;
+    final isLoading = ref.watch(authControllerProvider).isLoading;
+    final padding = Responsive.value<double>(context, mobile: 16, tablet: 24, desktop: 32);
+
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      body: CustomScrollView(
+        slivers: [
+          // Premium Header with Glassmorphism feel
+          SliverAppBar(
+            expandedHeight: Responsive.value(context, mobile: 240, tablet: 280),
+            pinned: true,
+            backgroundColor: kPrimaryOrange,
+            elevation: 0,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [kPrimaryOrange, kDarkOrange],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                  ),
+                  // Decorative shapes
+                  Positioned(
+                    top: -50,
+                    right: -50,
+                    child: CircleAvatar(radius: 100, backgroundColor: Colors.white.withValues(alpha: 0.1)),
+                  ),
+                  Positioned(
+                    bottom: -30,
+                    left: -30,
+                    child: CircleAvatar(radius: 80, backgroundColor: Colors.white.withValues(alpha: 0.05)),
+                  ),
+                  // Content
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 40),
+                      // Interactive Avatar
+                      GestureDetector(
+                        onTap: isLoading ? null : () => _handleImageChange(),
+                        child: Stack(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: CircleAvatar(
+                                radius: Responsive.value(context, mobile: 50, tablet: 65),
+                                backgroundColor: kSoftOrange,
+                                backgroundImage: user?.profileImageUrl != null
+                                    ? NetworkImage(user!.profileImageUrl!)
+                                    : null,
+                                child: user?.profileImageUrl == null
+                                    ? Icon(Icons.person, size: 50, color: kPrimaryOrange)
+                                    : null,
+                              ),
+                            ),
+                            if (isLoading)
+                              Positioned.fill(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withValues(alpha: 0.3),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Center(
+                                    child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                                  ),
+                                ),
+                              ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: kPrimaryOrange, width: 2),
+                                ),
+                                child: const Icon(Icons.camera_alt, size: 14, color: kPrimaryOrange),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Name & Badge
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            user?.name ?? 'Guest',
+                            style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.verified, color: Colors.white, size: 14),
+                                const SizedBox(width: 4),
+                                Text(
+                                  user?.isShopkeeper == true ? 'Merchant' : 'Gold',
+                                  style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        user?.email ?? 'Sign in to sync data',
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: padding, vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Become a Seller Promotion (only if not already a seller)
+                  if (user?.isShopkeeper == false && user?.isAdmin == false)
+                    _buildSellerPromo(context),
+
+                  const SizedBox(height: 16),
+                  
+                  // Account Section
+                  _buildSectionHeader('MY ACCOUNT'),
+                  _buildSectionCard([
+                    _buildProfileOption(Icons.shopping_bag_outlined, 'My Orders', () => context.push('/orders')),
+                    _buildProfileOption(Icons.location_on_outlined, 'Shipping Addresses', () => context.push('/addresses')),
+                    _buildProfileOption(Icons.payment_outlined, 'Payment Methods', () {}),
+                    _buildProfileOption(Icons.person_outline, 'Edit Profile', () => context.push('/profile')),
+                  ]),
+
+                  const SizedBox(height: 24),
+
+                  // Preferences Section
+                  _buildSectionHeader('PREFERENCES'),
+                  _buildSectionCard([
+                    _buildProfileOption(
+                      ref.watch(themeProvider) == ThemeMode.dark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
+                      'Dark Mode',
+                      () {},
+                      trailing: Switch(
+                        value: ref.watch(themeProvider) == ThemeMode.dark,
+                        activeColor: kPrimaryOrange,
+                        onChanged: (value) {
+                          ref.read(themeProvider.notifier).setThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+                        },
+                      ),
+                    ),
+                    _buildProfileOption(Icons.notifications_none_outlined, 'Notifications', () {}),
+                    _buildProfileOption(Icons.language_outlined, 'Language', () {}, subtitle: 'English'),
+                  ]),
+
+                  const SizedBox(height: 24),
+
+                  // Shopkeeper/Admin Section
+                  if (user?.isShopkeeper == true || user?.isAdmin == true) ...[
+                    _buildSectionHeader('BUSINESS'),
+                    _buildSectionCard([
+                      if (user?.isShopkeeper == true)
+                        _buildProfileOption(Icons.store, 'My Shop', () => context.push('/shopkeeper/dashboard')),
+                      if (user?.isAdmin == true) ...[
+                        _buildProfileOption(Icons.admin_panel_settings, 'Admin Dashboard', () => context.push('/analytics')),
+                        _buildProfileOption(Icons.campaign, 'Send Notifications', () => context.push('/admin/notifications')),
+                      ],
+                    ]),
+                    const SizedBox(height: 24),
+                  ],
+
+                  // Support Section
+                  _buildSectionHeader('SUPPORT'),
+                  _buildSectionCard([
+                    _buildProfileOption(Icons.help_outline, 'Help Center', () {}),
+                    _buildProfileOption(Icons.info_outline, 'About Zakaz-AF', () {}),
+                    _buildProfileOption(Icons.privacy_tip_outlined, 'Privacy Policy', () {}),
+                  ]),
+
+                  const SizedBox(height: 32),
+
+                  // Logout Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        ref.read(authControllerProvider.notifier).logout();
+                        context.go('/login');
+                      },
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        side: const BorderSide(color: Colors.red),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
+                      child: const Text('Log Out', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  const SizedBox(height: 48),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 12),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          color: Colors.grey.shade500,
+          letterSpacing: 1.2,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionCard(List<Widget> children) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(children: children),
+    );
+  }
+
+  Widget _buildSellerPromo(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blue.shade600, Colors.blue.shade400],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blue.withValues(alpha: 0.2),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Reach Millions of Buyers',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Start your shop on Zakaz-AF today and grow your business.',
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 12),
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton(
+                  onPressed: () => context.push('/shop-status'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.blue.shade700,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: const Text('Become a Seller', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Icon(Icons.storefront, color: Colors.white.withValues(alpha: 0.3), size: 80),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileOption(
+    IconData icon, 
+    String title, 
+    VoidCallback onTap, {
+    Color? color, 
+    Widget? trailing,
+    String? subtitle,
+  }) {
+    final displayColor = color ?? kPrimaryOrange;
+    
+    return ListTile(
+      onTap: onTap,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      leading: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: displayColor.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, color: displayColor, size: 22),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          color: color ?? Colors.black87,
+        ),
+      ),
+      subtitle: subtitle != null ? Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey.shade500)) : null,
+      trailing: trailing ?? Icon(Icons.chevron_right, size: 20, color: Colors.grey.shade400),
+    );
+  }
+}
+
