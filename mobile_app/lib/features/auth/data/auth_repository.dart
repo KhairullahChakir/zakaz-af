@@ -40,6 +40,7 @@ class AuthRepository {
     required String password,
     String? email,
     String? phone,
+    String? role,
   }) async {
     try {
       final response = await _dio.post('/register', data: {
@@ -48,6 +49,7 @@ class AuthRepository {
         'phone': phone,
         'password': password,
         'password_confirmation': password,
+        'role': role,
       });
 
       final data = response.data;
@@ -102,6 +104,23 @@ class AuthRepository {
       return User.fromJson(response.data['user']);
     } on DioException catch (e) {
       throw Exception(e.response?.data['message'] ?? 'Failed to update profile');
+    }
+  }
+
+  Future<User> verifyOtp(String otp) async {
+    try {
+      final response = await _dio.post('/verify-otp', data: {'otp': otp});
+      return User.fromJson(response.data['user']);
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Verification failed');
+    }
+  }
+
+  Future<void> resendOtp() async {
+    try {
+      await _dio.post('/resend-otp');
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Failed to resend code');
     }
   }
 }

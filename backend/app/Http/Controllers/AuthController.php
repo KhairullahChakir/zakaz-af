@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Status;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyEmail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -16,15 +21,32 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required_without:phone|email|unique:users,email|nullable',
             'phone' => 'required_without:email|string|unique:users,phone|nullable',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => [
+                'required',
+                'string',
+                'confirmed',
+                Password::min(8)
+                    ->numbers()
+                    ->symbols(),
+            ],
+            'role' => 'nullable|string|in:user,shopkeeper',
         ]);
+
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
+            'role' => $request->role ?? 'user',
+            'otp' => $otp,
+            'otp_expires_at' => Carbon::now()->addMinutes(10),
         ]);
+
+        if ($user->email) {
+            Mail::to($user->email)->send(new VerifyEmail($otp));
+        }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -32,7 +54,54 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
             'user' => $user,
+            'message' => 'Registration successful. Please verify your email.',
         ]);
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|string|size:6',
+        ]);
+
+        $user = $request->user();
+
+        if ($user->otp !== $request->otp) {
+            return response()->json(['message' => 'Invalid verification code'], 422);
+        }
+
+        if (Carbon::now()->isAfter($user->otp_expires_at)) {
+            return response()->json(['message' => 'Verification code expired'], 422);
+        }
+
+        $user->update([
+            'otp' => null,
+            'otp_expires_at' => null,
+            'is_verified' => true,
+        ]);
+
+        return response()->json([
+            'message' => 'Email verified successfully',
+            'user' => $user->fresh(),
+        ]);
+    }
+
+    public function resendOtp(Request $request)
+    {
+        $user = $request->user();
+        
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        
+        $user->update([
+            'otp' => $otp,
+            'otp_expires_at' => Carbon::now()->addMinutes(10),
+        ]);
+
+        if ($user->email) {
+            Mail::to($user->email)->send(new VerifyEmail($otp));
+        }
+
+        return response()->json(['message' => 'Verification code resent']);
     }
 
     public function login(Request $request)

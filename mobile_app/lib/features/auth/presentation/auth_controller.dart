@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:mobile_app/core/storage/storage_provider.dart';
 import 'package:mobile_app/features/auth/data/auth_repository.dart';
 import 'package:mobile_app/features/auth/domain/user.dart';
+import 'package:mobile_app/features/cart/presentation/cart_provider.dart';
 
 part 'auth_controller.g.dart';
 
@@ -39,6 +40,9 @@ class AuthController extends _$AuthController {
       // Save token
       await ref.read(secureStorageProvider).write(key: 'auth_token', value: result.token);
       
+      // Clear cart for new login session
+      await ref.read(cartProvider.notifier).clearCart();
+      
       state = AsyncValue.data(result.user);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
@@ -50,6 +54,7 @@ class AuthController extends _$AuthController {
     required String password,
     String? email,
     String? phone,
+    String? role,
   }) async {
     state = const AsyncValue.loading();
     try {
@@ -59,10 +64,14 @@ class AuthController extends _$AuthController {
         password: password,
         email: email,
         phone: phone,
+        role: role,
       );
 
       // Save token
       await ref.read(secureStorageProvider).write(key: 'auth_token', value: result.token);
+
+      // Clear cart for new registration
+      await ref.read(cartProvider.notifier).clearCart();
 
       state = AsyncValue.data(result.user);
     } catch (e, st) {
@@ -73,6 +82,8 @@ class AuthController extends _$AuthController {
   Future<void> logout() async {
     // TODO: Call API logout
     await ref.read(secureStorageProvider).delete(key: 'auth_token');
+    // Clear cart on logout
+    await ref.read(cartProvider.notifier).clearCart();
     state = const AsyncValue.data(null);
   }
 
@@ -94,12 +105,30 @@ class AuthController extends _$AuthController {
         fcmToken: fcmToken,
       );
       state = AsyncValue.data(user);
-    } catch (e, st) {
+    } catch (e) {
       // Don't set state to error as it will log the user out
       print('Profile update failed: $e');
       if (state.hasValue) {
         state = AsyncValue.data(state.value); // Keep old data
       }
+    }
+  }
+
+  Future<void> verifyOtp(String otp) async {
+    state = const AsyncValue.loading();
+    try {
+      final user = await ref.read(authRepositoryProvider).verifyOtp(otp);
+      state = AsyncValue.data(user);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+  Future<void> resendOtp() async {
+    try {
+      await ref.read(authRepositoryProvider).resendOtp();
+    } catch (e) {
+      print('Resend OTP failed: $e');
     }
   }
 }

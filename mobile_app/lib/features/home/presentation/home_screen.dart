@@ -11,6 +11,8 @@ import '../../products/domain/product.dart';
 import '../../products/domain/category.dart';
 import '../../chat/presentation/conversations_screen.dart';
 import '../../wishlist/presentation/wishlist_provider.dart';
+import '../../cart/presentation/cart_provider.dart';
+import '../../notifications/presentation/notification_provider.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -28,8 +30,12 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _currentNavIndex = 0;
   int? _selectedCategoryId;
+  String? _sortBy;
+  String? _sortOrder;
   final _searchController = TextEditingController();
   final _pageController = PageController();
+  final _scrollController = ScrollController();
+  final _allProductsKey = GlobalKey();
   int _bannerIndex = 0;
 
   final List<Map<String, dynamic>> _banners = [
@@ -74,6 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void dispose() {
     _searchController.dispose();
     _pageController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -150,6 +157,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final productsAsync = ref.watch(productsProvider(
       categoryId: _selectedCategoryId,
       search: _searchController.text.isEmpty ? null : _searchController.text,
+      sortBy: _sortBy,
+      sortOrder: _sortOrder,
     ));
 
     final padding = Responsive.value<double>(context, mobile: 16, tablet: 24, desktop: 32);
@@ -157,6 +166,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final gridColumns = Responsive.gridColumns(context);
 
     return CustomScrollView(
+      controller: _scrollController,
       slivers: [
         // Orange App Bar
         SliverAppBar(
@@ -206,9 +216,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               onPressed: () => context.push('/wishlist'),
             ),
             IconButton(
-              icon: const Icon(Icons.notifications_none, color: Colors.white),
+              icon: ref.watch(unreadNotificationCountProvider).maybeWhen(
+                data: (count) => count > 0 
+                  ? Badge(
+                      label: Text('$count'),
+                      backgroundColor: Colors.red,
+                      child: const Icon(Icons.notifications_none, color: Colors.white),
+                    )
+                  : const Icon(Icons.notifications_none, color: Colors.white),
+                orElse: () => const Icon(Icons.notifications_none, color: Colors.white),
+              ),
               iconSize: Responsive.value(context, mobile: 24, tablet: 28),
-              onPressed: () {},
+              onPressed: () => context.push('/notifications'),
             ),
           ],
         ),
@@ -250,15 +269,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        padding: EdgeInsets.all(Responsive.value(context, mobile: 8, tablet: 10)),
-                        decoration: BoxDecoration(
-                          color: kSoftOrange,
-                          borderRadius: BorderRadius.circular(8),
+                      GestureDetector(
+                        onTap: () => _showSortModal(),
+                        child: Container(
+                          padding: EdgeInsets.all(Responsive.value(context, mobile: 8, tablet: 10)),
+                          decoration: BoxDecoration(
+                            color: kSoftOrange,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(Icons.tune, 
+                            size: Responsive.value(context, mobile: 18, tablet: 22), 
+                            color: kPrimaryOrange),
                         ),
-                        child: Icon(Icons.tune, 
-                          size: Responsive.value(context, mobile: 18, tablet: 22), 
-                          color: kPrimaryOrange),
                       ),
                     ],
                   ),
@@ -431,7 +453,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () => _showSearchModal(),
+                  onPressed: () => context.push('/categories'),
                   child: Text(
                     'See All',
                     style: TextStyle(
@@ -480,7 +502,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    final context = _allProductsKey.currentContext;
+                    if (context != null) {
+                      Scrollable.ensureVisible(
+                        context,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  },
                   child: Text(
                     'See All',
                     style: TextStyle(
@@ -515,6 +546,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
         // All Products Grid
         SliverToBoxAdapter(
+          key: _allProductsKey,
           child: Padding(
             padding: EdgeInsets.fromLTRB(padding, 16, padding, 8),
             child: Text(
@@ -925,15 +957,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                           ),
                         ),
-                        Container(
-                          padding: EdgeInsets.all(Responsive.value(context, mobile: 6, tablet: 8)),
-                          decoration: BoxDecoration(
-                            color: kPrimaryOrange,
-                            borderRadius: BorderRadius.circular(8),
+                        GestureDetector(
+                          onTap: () {
+                            ref.read(cartProvider.notifier).addToCart(product);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('${product.name} added to cart!'),
+                                duration: const Duration(seconds: 1),
+                                action: SnackBarAction(
+                                  label: 'VIEW',
+                                  onPressed: () => context.push('/cart'),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(Responsive.value(context, mobile: 6, tablet: 8)),
+                            decoration: BoxDecoration(
+                              color: kPrimaryOrange,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(Icons.add, 
+                              size: Responsive.value(context, mobile: 16, tablet: 20), 
+                              color: Colors.white),
                           ),
-                          child: Icon(Icons.add, 
-                            size: Responsive.value(context, mobile: 16, tablet: 20), 
-                            color: Colors.white),
                         ),
                       ],
                     ),
@@ -947,96 +994,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _buildCategoriesTab() {
-    final categoriesAsync = ref.watch(categoriesProvider);
-    final padding = Responsive.value<double>(context, mobile: 16, tablet: 24, desktop: 32);
-    final gridColumns = Responsive.gridColumns(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Categories'),
-        centerTitle: true,
-        backgroundColor: kPrimaryOrange,
-        foregroundColor: Colors.white,
-      ),
-      body: categoriesAsync.when(
-        data: (categories) => GridView.builder(
-          padding: EdgeInsets.all(padding),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: gridColumns,
-            childAspectRatio: 1.2,
-            crossAxisSpacing: Responsive.value(context, mobile: 12, tablet: 16),
-            mainAxisSpacing: Responsive.value(context, mobile: 12, tablet: 16),
-          ),
-          itemCount: categories.length,
-          itemBuilder: (context, index) {
-            final category = categories[index];
-            return _buildCategoryGridCard(category);
-          },
-        ),
-        loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-        error: (e, _) => Center(child: Text('Error: $e')),
-      ),
-    );
-  }
-
-  Widget _buildCategoryGridCard(Category category) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedCategoryId = category.id;
-          _currentNavIndex = 0;
-        });
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [kPrimaryOrange, kLightOrange],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
-          boxShadow: [
-            BoxShadow(
-              color: kPrimaryOrange.withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              right: -10,
-              bottom: -10,
-              child: Icon(
-                Icons.category,
-                size: Responsive.value(context, mobile: 80, tablet: 100),
-                color: Colors.white.withOpacity(0.2),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(Responsive.value(context, mobile: 16, tablet: 20)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    category.name,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: Responsive.value(context, mobile: 16, tablet: 20),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildCartTab() {
     return const Center(child: CircularProgressIndicator(color: kPrimaryOrange));
@@ -1128,8 +1085,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     _buildProfileOption(Icons.store, 'Become a Shopkeeper', () => context.push('/shop-status'), color: kPrimaryOrange),
                   if (user?.isShopkeeper == true)
                     _buildProfileOption(Icons.store, 'My Shop', () => context.push('/shopkeeper/dashboard'), color: kPrimaryOrange),
-                  if (user?.isAdmin == true)
+                  if (user?.isAdmin == true) ...[
                     _buildProfileOption(Icons.admin_panel_settings, 'Admin Dashboard', () => context.push('/analytics'), color: kPrimaryOrange),
+                    _buildProfileOption(Icons.campaign, 'Send Notifications', () => context.push('/admin/notifications'), color: kPrimaryOrange),
+                  ],
                   const Divider(height: 32),
                   _buildProfileOption(
                     ref.watch(themeProvider) == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode,
@@ -1191,129 +1150,218 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  void _showSearchModal() {
-    final padding = Responsive.value<double>(context, mobile: 16, tablet: 24);
-    
+  void _showSortModal() {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.9,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        builder: (context, scrollController) => Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(Responsive.value(context, mobile: 20, tablet: 28)),
-            ),
-          ),
-          child: Column(
-            children: [
-              Container(
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
                 width: 40,
                 height: 4,
-                margin: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.grey[400],
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(padding),
-                child: TextField(
-                  controller: _searchController,
-                  autofocus: true,
-                  cursorColor: kPrimaryOrange,
-                  style: TextStyle(fontSize: Responsive.value(context, mobile: 16, tablet: 18)),
-                  decoration: InputDecoration(
-                    hintText: 'Search products...',
-                    prefixIcon: const Icon(Icons.search, color: kPrimaryOrange),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        _searchController.clear();
-                        Navigator.pop(context);
-                      },
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 12, tablet: 16)),
-                      borderSide: const BorderSide(color: kPrimaryOrange),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 12, tablet: 16)),
-                      borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
-                    ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Sort By',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildSortOption('Price: Low to High', 'price', 'asc'),
+            _buildSortOption('Price: High to Low', 'price', 'desc'),
+            _buildSortOption('Newest First', 'created_at', 'desc'),
+            _buildSortOption('Rating', 'rating', 'desc'),
+            const SizedBox(height: 8),
+            if (_sortBy != null)
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _sortBy = null;
+                    _sortOrder = null;
+                  });
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'Clear Sort',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSortOption(String title, String sortBy, String sortOrder) {
+    final isSelected = _sortBy == sortBy && _sortOrder == sortOrder;
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(
+        isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
+        color: isSelected ? kPrimaryOrange : Colors.grey,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: isSelected ? kPrimaryOrange : null,
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          _sortBy = sortBy;
+          _sortOrder = sortOrder;
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  void _showSearchModal() {
+    final padding = Responsive.value<double>(context, mobile: 16, tablet: 24);
+    String searchQuery = '';
+    
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (modalContext) => StatefulBuilder(
+        builder: (context, setModalState) => DraggableScrollableSheet(
+          initialChildSize: 0.9,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          builder: (context, scrollController) => Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(Responsive.value(context, mobile: 20, tablet: 28)),
+              ),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(2),
                   ),
-                  onChanged: (value) => setState(() {}),
-                  onSubmitted: (value) {
-                    Navigator.pop(context);
-                    setState(() {});
-                  },
                 ),
-              ),
-              Expanded(
-                child: Consumer(
-                  builder: (context, ref, _) {
-                    final productsAsync = ref.watch(productsProvider(
-                      search: _searchController.text.isEmpty ? null : _searchController.text,
-                    ));
-                    return productsAsync.when(
-                      data: (products) => products.isEmpty
-                          ? const Center(child: Text('No products found'))
-                          : ListView.builder(
-                              controller: scrollController,
-                              padding: EdgeInsets.symmetric(horizontal: padding),
-                              itemCount: products.length,
-                              itemBuilder: (context, index) {
-                                final product = products[index];
-                                return ListTile(
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: Responsive.value(context, mobile: 4, tablet: 8),
-                                  ),
-                                  leading: Container(
-                                    width: Responsive.value(context, mobile: 50, tablet: 60),
-                                    height: Responsive.value(context, mobile: 50, tablet: 60),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: kSoftOrange,
-                                    ),
-                                    child: product.imageUrl != null
-                                        ? ClipRRect(
-                                            borderRadius: BorderRadius.circular(8),
-                                            child: Image.network(product.imageUrl!, fit: BoxFit.cover),
-                                          )
-                                        : const Icon(Icons.image, color: kPrimaryOrange),
-                                  ),
-                                  title: Text(
-                                    product.name,
-                                    style: TextStyle(
-                                      fontSize: Responsive.value(context, mobile: 15, tablet: 17),
-                                    ),
-                                  ),
-                                  subtitle: Text(
-                                    '${product.price.toInt()} AFN',
-                                    style: TextStyle(
-                                      color: kPrimaryOrange,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Responsive.value(context, mobile: 14, tablet: 16),
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    context.push('/products/${product.id}');
-                                  },
-                                );
-                              },
-                            ),
-                      loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-                      error: (e, _) => Center(child: Text('Error: $e')),
-                    );
-                  },
+                Padding(
+                  padding: EdgeInsets.all(padding),
+                  child: TextField(
+                    autofocus: true,
+                    cursorColor: kPrimaryOrange,
+                    style: TextStyle(fontSize: Responsive.value(context, mobile: 16, tablet: 18)),
+                    decoration: InputDecoration(
+                      hintText: 'Search products...',
+                      prefixIcon: const Icon(Icons.search, color: kPrimaryOrange),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 12, tablet: 16)),
+                        borderSide: const BorderSide(color: kPrimaryOrange),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 12, tablet: 16)),
+                        borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
+                      ),
+                    ),
+                    onChanged: (value) => setModalState(() => searchQuery = value),
+                  ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      final productsAsync = ref.watch(productsProvider(
+                        search: searchQuery.isEmpty ? null : searchQuery,
+                      ));
+                      return productsAsync.when(
+                        data: (products) => products.isEmpty
+                            ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.search_off, size: 64, color: Colors.grey[400]),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      searchQuery.isEmpty ? 'Start typing to search' : 'No products found',
+                                      style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : ListView.builder(
+                                controller: scrollController,
+                                padding: EdgeInsets.symmetric(horizontal: padding),
+                                itemCount: products.length,
+                                itemBuilder: (context, index) {
+                                  final product = products[index];
+                                  return ListTile(
+                                    contentPadding: EdgeInsets.symmetric(
+                                      vertical: Responsive.value(context, mobile: 4, tablet: 8),
+                                    ),
+                                    leading: Container(
+                                      width: Responsive.value(context, mobile: 50, tablet: 60),
+                                      height: Responsive.value(context, mobile: 50, tablet: 60),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: kSoftOrange,
+                                      ),
+                                      child: product.imageUrl != null
+                                          ? ClipRRect(
+                                              borderRadius: BorderRadius.circular(8),
+                                              child: Image.network(product.imageUrl!, fit: BoxFit.cover),
+                                            )
+                                          : const Icon(Icons.image, color: kPrimaryOrange),
+                                    ),
+                                    title: Text(
+                                      product.name,
+                                      style: TextStyle(
+                                        fontSize: Responsive.value(context, mobile: 15, tablet: 17),
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      '${product.price.toInt()} AFN',
+                                      style: TextStyle(
+                                        color: kPrimaryOrange,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Responsive.value(context, mobile: 14, tablet: 16),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      this.context.push('/products/${product.id}');
+                                    },
+                                  );
+                                },
+                              ),
+                        loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
+                        error: (e, _) => Center(child: Text('Error: $e')),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

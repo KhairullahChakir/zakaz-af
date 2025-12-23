@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/register_screen.dart';
+import '../features/auth/presentation/otp_verification_screen.dart';
 import '../features/auth/presentation/profile_screen.dart';
 import '../features/home/presentation/home_screen.dart';
 import '../features/products/presentation/product_details_screen.dart';
@@ -15,6 +16,10 @@ import '../features/addresses/presentation/add_edit_address_screen.dart';
 import '../features/addresses/domain/address.dart';
 import '../features/analytics/presentation/analytics_screen.dart';
 import '../features/wishlist/presentation/wishlist_screen.dart';
+import '../features/products/presentation/categories_screen.dart';
+import '../features/products/presentation/category_products_screen.dart';
+import '../features/notifications/presentation/notifications_screen.dart';
+import '../features/notifications/presentation/admin_send_notification_screen.dart';
 import '../features/admin/presentation/admin_products_screen.dart';
 import '../features/admin/presentation/add_edit_product_screen.dart';
 import '../features/admin/presentation/admin_categories_screen.dart';
@@ -47,17 +52,25 @@ GoRouter appRouter(Ref ref) {
       if (authState.hasError) return '/login'; // Redirect to login on error
 
       final isAuthenticated = authState.value != null;
+      final isVerified = authState.value?.isVerified ?? false;
       final isLoggingIn = state.uri.path == '/login' || state.uri.path == '/register';
+      final isVerifying = state.uri.path == '/verify-otp';
       final isSplash = state.uri.path == '/splash';
 
       if (isSplash && !isAuthenticated) return '/login';
-      if (isSplash && isAuthenticated) return '/';
-
-      if (!isAuthenticated) {
-         return isLoggingIn ? null : '/login';
+      if (isSplash && isAuthenticated) {
+        return isVerified ? '/' : '/verify-otp';
       }
 
-      if (isLoggingIn) {
+      if (!isAuthenticated) {
+         return isLoggingIn || isVerifying ? null : '/login';
+      }
+
+      if (isAuthenticated && !isVerified && !isVerifying) {
+        return '/verify-otp';
+      }
+
+      if (isAuthenticated && isVerified && (isLoggingIn || isVerifying)) {
         return '/';
       }
 
@@ -75,6 +88,13 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/register',
         builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: '/verify-otp',
+        builder: (context, state) {
+          final emailOrPhone = state.extra as String? ?? '';
+          return OTPVerificationScreen(emailOrPhone: emailOrPhone);
+        },
       ),
       GoRoute(
         path: '/cart',
@@ -109,6 +129,22 @@ GoRouter appRouter(Ref ref) {
         path: '/wishlist',
         builder: (context, state) => const WishlistScreen(),
       ),
+      GoRoute(
+        path: '/categories',
+        builder: (context, state) => const CategoriesScreen(),
+      ),
+      GoRoute(
+        path: '/products/category/:id',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          final name = state.uri.queryParameters['name'] ?? 'Products';
+          return CategoryProductsScreen(categoryId: id, categoryName: name);
+        },
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) => const NotificationsScreen(),
+      ),
       // Chat routes
       GoRoute(
         path: '/conversations',
@@ -142,6 +178,10 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/admin/categories',
         builder: (context, state) => const AdminCategoriesScreen(),
+      ),
+      GoRoute(
+        path: '/admin/notifications',
+        builder: (context, state) => const AdminSendNotificationScreen(),
       ),
       GoRoute(
         path: '/admin/shops',
