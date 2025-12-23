@@ -195,275 +195,426 @@ class ProductDetailsScreen extends ConsumerWidget {
                             
                             const Divider(height: 32),
                             
-                            // Shopkeeper Info Section
+                            // Shopkeeper Info Section - PREMIUM
                             if (product.shop != null) ...[
-                              Text(
-                                'Sold by',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Responsive.value(context, mobile: 16, tablet: 18),
-                                  color: Colors.grey[700],
-                                ),
-                              ),
-                              const SizedBox(height: 12),
                               Container(
-                                padding: EdgeInsets.all(Responsive.value(context, mobile: 12, tablet: 16)),
+                                padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12),
+                                  gradient: LinearGradient(
+                                    colors: [kSoftOrange, Colors.white],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
                                   border: Border.all(color: kPrimaryOrange.withOpacity(0.2)),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.05),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 2),
+                                      color: kPrimaryOrange.withOpacity(0.1),
+                                      blurRadius: 16,
+                                      offset: const Offset(0, 4),
                                     ),
                                   ],
                                 ),
-                                child: Row(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Shop Photo
-                                    Container(
-                                      width: Responsive.value(context, mobile: 60, tablet: 80),
-                                      height: Responsive.value(context, mobile: 60, tablet: 80),
-                                      decoration: BoxDecoration(
-                                        color: kSoftOrange,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: product.shop!.mainPhotoUrl != null
-                                          ? ClipRRect(
-                                              borderRadius: BorderRadius.circular(12),
-                                              child: Image.network(
-                                                product.shop!.mainPhotoUrl!,
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (_, __, ___) => const Icon(
-                                                  Icons.store,
-                                                  color: kPrimaryOrange,
-                                                  size: 30,
-                                                ),
-                                              ),
-                                            )
-                                          : const Icon(Icons.store, color: kPrimaryOrange, size: 30),
-                                    ),
-                                    SizedBox(width: Responsive.value(context, mobile: 12, tablet: 16)),
-                                    // Shop Info
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
+                                    // Header
+                                    Row(
+                                      children: [
+                                        Icon(Icons.store, color: kPrimaryOrange, size: 20),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          'Sold By',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Responsive.value(context, mobile: 14, tablet: 16),
+                                            color: kPrimaryOrange,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green.shade100,
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              Expanded(
-                                                child: Text(
-                                                  product.shop!.name,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: Responsive.value(context, mobile: 15, tablet: 17),
-                                                  ),
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                                decoration: BoxDecoration(
-                                                  color: kSoftOrange,
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
-                                                child: Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    const Icon(Icons.verified, color: kPrimaryOrange, size: 14),
-                                                    const SizedBox(width: 4),
-                                                    Text(
-                                                      'Verified',
-                                                      style: TextStyle(
-                                                        color: kPrimaryOrange,
-                                                        fontSize: Responsive.value(context, mobile: 11, tablet: 13),
-                                                        fontWeight: FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ],
+                                              Icon(Icons.verified, color: Colors.green.shade700, size: 14),
+                                              const SizedBox(width: 4),
+                                              Text(
+                                                'Verified Seller',
+                                                style: TextStyle(
+                                                  color: Colors.green.shade700,
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(height: 4),
-                                          if (product.shop!.shopType != null)
-                                            Text(
-                                              product.shop!.shopType!,
-                                              style: TextStyle(
-                                                color: Colors.grey[600],
-                                                fontSize: Responsive.value(context, mobile: 12, tablet: 14),
-                                              ),
-                                            ),
-                                          const SizedBox(height: 4),
-                                          if (product.shop!.city != null || product.shop!.district != null)
-                                            Row(
-                                              children: [
-                                                Icon(Icons.location_on, size: 14, color: Colors.grey[500]),
-                                                const SizedBox(width: 4),
-                                                Expanded(
-                                                  child: Text(
-                                                    [product.shop!.district, product.shop!.city]
-                                                        .where((e) => e != null)
-                                                        .join(', '),
-                                                    style: TextStyle(
-                                                      color: Colors.grey[600],
-                                                      fontSize: Responsive.value(context, mobile: 12, tablet: 14),
-                                                    ),
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          // Owner info
-                                          if (product.shop!.owner != null) ...[
-                                            const SizedBox(height: 8),
-                                            Row(
-                                              children: [
-                                                CircleAvatar(
-                                                  radius: 12,
-                                                  backgroundColor: kSoftOrange,
-                                                  backgroundImage: product.shop!.owner!.profileImageUrl != null
-                                                      ? NetworkImage(product.shop!.owner!.profileImageUrl!)
-                                                      : null,
-                                                  child: product.shop!.owner!.profileImageUrl == null
-                                                      ? const Icon(Icons.person, size: 14, color: kPrimaryOrange)
-                                                      : null,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Text(
-                                                  'Owner: ${product.shop!.owner!.name}',
-                                                  style: TextStyle(
-                                                    fontSize: Responsive.value(context, mobile: 12, tablet: 14),
-                                                    color: Colors.grey[700],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Contact buttons
-                              if (product.shop!.phone != null) ...[
-                                const SizedBox(height: 16),
-                                Row(
-                                  children: [
-                                    // WhatsApp button
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          gradient: const LinearGradient(
-                                            colors: [Color(0xFF25D366), Color(0xFF128C7E)],
-                                          ),
-                                          borderRadius: BorderRadius.circular(12),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: const Color(0xFF25D366).withOpacity(0.3),
-                                              blurRadius: 8,
-                                              offset: const Offset(0, 4),
-                                            ),
-                                          ],
                                         ),
-                                        child: Material(
-                                          color: Colors.transparent,
-                                          child: InkWell(
-                                            onTap: () async {
-                                              try {
-                                                final phone = product.shop!.phone!.replaceAll(RegExp(r'[^0-9]'), '');
-                                                final whatsappUrl = Uri.parse('https://wa.me/$phone?text=Hi, I\'m interested in ${product.name}');
-                                                await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
-                                              } catch (e) {
-                                                if (context.mounted) {
-                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                    const SnackBar(content: Text('Could not open WhatsApp')),
-                                                  );
-                                                }
-                                              }
-                                            },
-                                            borderRadius: BorderRadius.circular(12),
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                vertical: Responsive.value(context, mobile: 14, tablet: 16),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 16),
+                                    
+                                    // Shop Info Row
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // Shop Photo
+                                        Container(
+                                          width: Responsive.value(context, mobile: 80, tablet: 100),
+                                          height: Responsive.value(context, mobile: 80, tablet: 100),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(16),
+                                            border: Border.all(color: kPrimaryOrange.withOpacity(0.3), width: 2),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.1),
+                                                blurRadius: 8,
+                                                offset: const Offset(0, 2),
                                               ),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/images/whatsapp.png',
-                                                    width: 20,
-                                                    height: 20,
-                                                    color: Colors.white,
-                                                    errorBuilder: (_, __, ___) => const Icon(Icons.chat, color: Colors.white, size: 20),
+                                            ],
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(14),
+                                            child: product.shop!.mainPhotoUrl != null
+                                                ? Image.network(
+                                                    product.shop!.mainPhotoUrl!,
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder: (_, __, ___) => const Icon(
+                                                      Icons.store,
+                                                      color: kPrimaryOrange,
+                                                      size: 40,
+                                                    ),
+                                                  )
+                                                : const Icon(Icons.store, color: kPrimaryOrange, size: 40),
+                                          ),
+                                        ),
+                                        SizedBox(width: Responsive.value(context, mobile: 16, tablet: 20)),
+                                        
+                                        // Shop Details
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              // Shop Name
+                                              Text(
+                                                product.shop!.name,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: Responsive.value(context, mobile: 18, tablet: 20),
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(height: 6),
+                                              
+                                              // Shop Type Badge
+                                              if (product.shop!.shopType != null)
+                                                Container(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                                  decoration: BoxDecoration(
+                                                    color: kPrimaryOrange.withOpacity(0.1),
+                                                    borderRadius: BorderRadius.circular(8),
                                                   ),
-                                                  const SizedBox(width: 8),
-                                                  Text(
-                                                    'WhatsApp',
+                                                  child: Text(
+                                                    product.shop!.shopType!,
                                                     style: TextStyle(
-                                                      color: Colors.white,
+                                                      color: kPrimaryOrange,
+                                                      fontSize: Responsive.value(context, mobile: 12, tablet: 14),
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              
+                                              const SizedBox(height: 8),
+                                              
+                                              // Location
+                                              if (product.shop!.city != null || product.shop!.district != null)
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.location_on_outlined, size: 16, color: Colors.grey[600]),
+                                                    const SizedBox(width: 4),
+                                                    Expanded(
+                                                      child: Text(
+                                                        [product.shop!.district, product.shop!.city]
+                                                            .where((e) => e != null)
+                                                            .join(', '),
+                                                        style: TextStyle(
+                                                          color: Colors.grey[700],
+                                                          fontSize: Responsive.value(context, mobile: 13, tablet: 15),
+                                                        ),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              
+                                              // Phone
+                                              if (product.shop!.phone != null) ...[
+                                                const SizedBox(height: 4),
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.phone_outlined, size: 16, color: Colors.grey[600]),
+                                                    const SizedBox(width: 4),
+                                                    Text(
+                                                      product.shop!.phone!,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[700],
+                                                        fontSize: Responsive.value(context, mobile: 13, tablet: 15),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    
+                                    // Owner Info
+                                    if (product.shop!.owner != null) ...[
+                                      const SizedBox(height: 16),
+                                      Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor: kSoftOrange,
+                                              backgroundImage: product.shop!.owner!.profileImageUrl != null
+                                                  ? NetworkImage(product.shop!.owner!.profileImageUrl!)
+                                                  : null,
+                                              child: product.shop!.owner!.profileImageUrl == null
+                                                  ? const Icon(Icons.person, size: 20, color: kPrimaryOrange)
+                                                  : null,
+                                            ),
+                                            const SizedBox(width: 12),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Shop Owner',
+                                                    style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: Colors.grey[500],
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    product.shop!.owner!.name,
+                                                    style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
-                                                      fontSize: Responsive.value(context, mobile: 14, tablet: 16),
+                                                      fontSize: 15,
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                          ),
+                                            // Quick Call
+                                            if (product.shop!.owner!.phone != null)
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.green.shade50,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: IconButton(
+                                                  icon: Icon(Icons.call, color: Colors.green.shade600, size: 20),
+                                                  onPressed: () async {
+                                                    final phone = product.shop!.owner!.phone!;
+                                                    final uri = Uri.parse('tel:$phone');
+                                                    if (await canLaunchUrl(uri)) {
+                                                      await launchUrl(uri);
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    // Message button
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: kSoftOrange,
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(color: kPrimaryOrange.withOpacity(0.3)),
-                                      ),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          onTap: () async {
-                                            try {
-                                              // Start or get existing conversation
-                                              final conversation = await ref
-                                                  .read(chatRepositoryProvider)
-                                                  .startConversation(
-                                                    shopId: product.shop!.id,
-                                                    productId: product.id,
-                                                  );
-                                              
-                                              if (context.mounted) {
-                                                context.push('/chat/${conversation.id}', extra: conversation);
-                                              }
-                                            } catch (e) {
-                                              if (context.mounted) {
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(
-                                                    content: Text('Error: $e'),
-                                                    backgroundColor: Colors.red,
+                                    ],
+                                    
+                                    // Contact Buttons
+                                    const SizedBox(height: 16),
+                                    Row(
+                                      children: [
+                                        // WhatsApp button
+                                        if (product.shop!.phone != null)
+                                          Expanded(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                gradient: const LinearGradient(
+                                                  colors: [Color(0xFF25D366), Color(0xFF128C7E)],
+                                                ),
+                                                borderRadius: BorderRadius.circular(12),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: const Color(0xFF25D366).withOpacity(0.3),
+                                                    blurRadius: 8,
+                                                    offset: const Offset(0, 4),
                                                   ),
-                                                );
-                                              }
-                                            }
-                                          },
-                                          borderRadius: BorderRadius.circular(12),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(Responsive.value(context, mobile: 14, tablet: 16)),
-                                            child: const Icon(Icons.chat_bubble_outline, color: kPrimaryOrange, size: 22),
+                                                ],
+                                              ),
+                                              child: Material(
+                                                color: Colors.transparent,
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    try {
+                                                      final phone = product.shop!.phone!.replaceAll(RegExp(r'[^0-9]'), '');
+                                                      final whatsappUrl = Uri.parse('https://wa.me/$phone?text=Hi, I\'m interested in ${product.name}');
+                                                      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+                                                    } catch (e) {
+                                                      if (context.mounted) {
+                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                          const SnackBar(content: Text('Could not open WhatsApp')),
+                                                        );
+                                                      }
+                                                    }
+                                                  },
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.symmetric(
+                                                      vertical: Responsive.value(context, mobile: 14, tablet: 16),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Image.asset(
+                                                          'assets/images/whatsapp.png',
+                                                          width: 20,
+                                                          height: 20,
+                                                          color: Colors.white,
+                                                          errorBuilder: (_, __, ___) => const Icon(Icons.chat, color: Colors.white, size: 20),
+                                                        ),
+                                                        const SizedBox(width: 8),
+                                                        Text(
+                                                          'WhatsApp',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: Responsive.value(context, mobile: 14, tablet: 16),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        if (product.shop!.phone != null) const SizedBox(width: 12),
+                                        
+                                        // In-app Chat button
+                                        Expanded(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [kPrimaryOrange, kLightOrange],
+                                              ),
+                                              borderRadius: BorderRadius.circular(12),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: kPrimaryOrange.withOpacity(0.3),
+                                                  blurRadius: 8,
+                                                  offset: const Offset(0, 4),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  try {
+                                                    // Start or get existing conversation
+                                                    final conversation = await ref
+                                                        .read(chatRepositoryProvider)
+                                                        .startConversation(
+                                                          shopId: product.shop!.id,
+                                                          productId: product.id,
+                                                        );
+                                                    
+                                                    if (context.mounted) {
+                                                      context.push('/chat/${conversation.id}', extra: conversation);
+                                                    }
+                                                  } catch (e) {
+                                                    if (context.mounted) {
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                        SnackBar(
+                                                          content: Text('Error: $e'),
+                                                          backgroundColor: Colors.red,
+                                                        ),
+                                                      );
+                                                    }
+                                                  }
+                                                },
+                                                borderRadius: BorderRadius.circular(12),
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: Responsive.value(context, mobile: 14, tablet: 16),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Icon(Icons.chat_bubble_outline, color: Colors.white, size: 20),
+                                                      const SizedBox(width: 8),
+                                                      Text(
+                                                        'Message',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: Responsive.value(context, mobile: 14, tablet: 16),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                        
+                                        // Call button
+                                        if (product.shop!.phone != null) ...[
+                                          const SizedBox(width: 12),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.blue.shade50,
+                                              borderRadius: BorderRadius.circular(12),
+                                              border: Border.all(color: Colors.blue.shade200),
+                                            ),
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  final phone = product.shop!.phone!;
+                                                  final uri = Uri.parse('tel:$phone');
+                                                  if (await canLaunchUrl(uri)) {
+                                                    await launchUrl(uri);
+                                                  }
+                                                },
+                                                borderRadius: BorderRadius.circular(12),
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(Responsive.value(context, mobile: 14, tablet: 16)),
+                                                  child: Icon(Icons.call, color: Colors.blue.shade600, size: 22),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                               const Divider(height: 32),
                             ],
                             
