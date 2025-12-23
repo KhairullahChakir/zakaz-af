@@ -219,29 +219,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       _buildSocialButton(
-                        icon: Icons.g_mobiledata_rounded,
-                        color: Colors.red,
-                        onTap: () {
-                          ref.read(authControllerProvider.notifier).googleLogin();
-                        },
+                        onTap: () => ref.read(authControllerProvider.notifier).googleLogin(),
+                        child: Image.network(
+                          'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png',
+                          height: 24,
+                        ),
                       ),
                       _buildSocialButton(
-                        icon: Icons.facebook_rounded,
-                        color: Colors.blue.shade800,
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Facebook login Coming Soon!')),
                           );
                         },
+                        child: Icon(Icons.facebook_rounded, color: Colors.blue.shade800, size: 28),
                       ),
                       _buildSocialButton(
-                        icon: Icons.apple_rounded,
-                        color: Colors.black,
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Apple ID login Coming Soon!')),
                           );
                         },
+                        child: const Icon(Icons.apple_rounded, color: Colors.black, size: 28),
                       ),
                     ],
                   ),
@@ -303,17 +301,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Widget _buildSocialButton({required IconData icon, required Color color, required VoidCallback onTap}) {
+  Widget _buildSocialButton({
+    required Widget child,
+    required VoidCallback onTap,
+    Color? borderColor,
+  }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: borderColor ?? Colors.grey.shade200),
           borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-        child: Icon(icon, color: color, size: 32),
+        child: SizedBox(
+          height: 30,
+          width: 30,
+          child: Center(child: child),
+        ),
       ),
     );
   }
