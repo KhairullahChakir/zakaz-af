@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../../core/localization/language_provider.dart';
 import 'cart_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -33,9 +34,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text(
-          'My Cart',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          ref.tr('cart_title'),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
@@ -111,9 +112,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             ),
           ),
           const SizedBox(height: 40),
-          const Text(
-            'Your cart is empty',
-            style: TextStyle(
+          Text(
+            ref.tr('cart_empty'),
+            style: const TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
@@ -155,8 +156,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                   Icon(Icons.shopping_bag_outlined),
                   SizedBox(width: 8),
                   Text(
-                    'Start Shopping',
-                    style: TextStyle(
+                    ref.tr('start_shopping'),
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -213,7 +214,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Subtotal',
+                            ref.tr('subtotal'),
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.grey.shade700,
@@ -233,7 +234,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Delivery',
+                            ref.tr('delivery_fee'),
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.grey.shade700,
@@ -256,9 +257,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Total',
-                            style: TextStyle(
+                          Text(
+                            ref.tr('cart_total'),
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -295,8 +296,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Proceed to Checkout',
-                          style: TextStyle(
+                          ref.tr('proceed_to_checkout'),
+                          style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
@@ -495,7 +496,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Remove from Cart?'),
+        title: Text(ref.tr('remove_from_cart')),
         content: Text(
           'Are you sure you want to remove "${item.product.name}" from your cart?',
         ),
@@ -503,7 +504,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              ref.tr('cancel'),
               style: TextStyle(color: Colors.grey.shade600),
             ),
           ),
@@ -521,7 +522,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             style: FilledButton.styleFrom(
               backgroundColor: Colors.red,
             ),
-            child: const Text('Remove'),
+            child: Text(ref.tr('delete')),
           ),
         ],
       ),

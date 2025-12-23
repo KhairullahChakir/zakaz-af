@@ -22,6 +22,8 @@ import '../../profile/presentation/notification_settings_screen.dart';
 import '../../profile/presentation/account_security_screen.dart';
 import '../../shop/presentation/shopkeeper_dashboard_screen.dart';
 import '../../admin/presentation/admin_dashboard_screen.dart';
+import '../../profile/presentation/language_selection_screen.dart';
+import '../../../core/localization/language_provider.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -47,15 +49,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final _allProductsKey = GlobalKey();
   int _bannerIndex = 0;
 
-  final List<Map<String, dynamic>> _banners = [
+  List<Map<String, dynamic>> get _banners => [
     {
-      'title': 'Welcome to Zakaz-AF',
-      'subtitle': 'Shop from local Afghan stores',
+      'title': ref.tr('welcome_to') + ' ' + ref.tr('app_name'),
+      'subtitle': ref.tr('shop_from_local'),
       'icon': Icons.storefront,
     },
     {
-      'title': 'Fresh Groceries',
-      'subtitle': 'Delivered to your door',
+      'title': ref.tr('fresh_groceries'),
+      'subtitle': ref.tr('delivered_to_door'),
+      'icon': Icons.local_grocery_store,
+    },
+    {
       'icon': Icons.local_grocery_store,
     },
     {
@@ -140,34 +145,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             NavigationDestination(
               icon: Icon(Icons.home_outlined, color: Colors.grey[600]),
               selectedIcon: const Icon(Icons.home, color: kPrimaryOrange),
-              label: 'Home',
+              label: ref.tr('nav_home'),
             ),
             NavigationDestination(
               icon: Icon(Icons.chat_bubble_outline, color: Colors.grey[600]),
               selectedIcon: const Icon(Icons.chat_bubble, color: kPrimaryOrange),
-              label: 'Messages',
+              label: ref.tr('nav_messages'),
             ),
             if (isShopkeeper)
               NavigationDestination(
                 icon: Icon(Icons.store_outlined, color: Colors.grey[600]),
                 selectedIcon: const Icon(Icons.store, color: kPrimaryOrange),
-                label: 'My Shop',
+                label: ref.tr('nav_my_shop'),
               ),
             if (isAdmin)
               NavigationDestination(
                 icon: Icon(Icons.admin_panel_settings_outlined, color: Colors.grey[600]),
                 selectedIcon: const Icon(Icons.admin_panel_settings, color: Color(0xFF6366F1)),
-                label: 'Admin',
+                label: ref.tr('nav_admin'),
               ),
             NavigationDestination(
               icon: const CartIconBadge(showBackground: false),
               selectedIcon: const CartIconBadge(showBackground: false, isSelected: true),
-              label: 'Cart',
+              label: ref.tr('nav_cart'),
             ),
             NavigationDestination(
               icon: Icon(Icons.person_outline, color: Colors.grey[600]),
               selectedIcon: const Icon(Icons.person, color: kPrimaryOrange),
-              label: 'Profile',
+              label: ref.tr('nav_profile'),
             ),
           ],
         ),
@@ -214,7 +219,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Zakaz-AF',
+                    ref.tr('app_name'),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: Responsive.value(context, mobile: 20, tablet: 24),
@@ -222,7 +227,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ),
                   Text(
-                    'Shop local, support local',
+                    ref.tr('shop_from_local'),
                     style: TextStyle(
                       fontSize: Responsive.value(context, mobile: 12, tablet: 14),
                       color: Colors.white70,
@@ -285,7 +290,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         size: Responsive.value(context, mobile: 24, tablet: 28)),
                       SizedBox(width: Responsive.value(context, mobile: 12, tablet: 16)),
                       Text(
-                        'Search products, shops...',
+                        ref.tr('search_products'),
                         style: TextStyle(
                           color: Colors.grey[500],
                           fontSize: Responsive.value(context, mobile: 14, tablet: 16),
@@ -469,7 +474,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Categories',
+                  ref.tr('categories'),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: Responsive.value(context, mobile: 18, tablet: 22),
@@ -478,7 +483,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 TextButton(
                   onPressed: () => context.push('/categories'),
                   child: Text(
-                    'See All',
+                    ref.tr('see_all'),
                     style: TextStyle(
                       color: kPrimaryOrange,
                       fontSize: Responsive.value(context, mobile: 14, tablet: 16),
@@ -518,7 +523,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Featured Products',
+                  ref.tr('featured_products'),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: Responsive.value(context, mobile: 18, tablet: 22),
@@ -536,7 +541,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     }
                   },
                   child: Text(
-                    'See All',
+                    ref.tr('see_all'),
                     style: TextStyle(
                       color: kPrimaryOrange,
                       fontSize: Responsive.value(context, mobile: 14, tablet: 16),
@@ -573,7 +578,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Padding(
             padding: EdgeInsets.fromLTRB(padding, 16, padding, 8),
             child: Text(
-              'All Products',
+              ref.tr('all_products'),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: Responsive.value(context, mobile: 18, tablet: 22),
@@ -1447,7 +1452,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                         ],
                       ),
                       Text(
-                        user?.email ?? 'Sign in to sync data',
+                        user?.email ?? ref.tr('login_subtitle'),
                         style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 14),
                       ),
                     ],
@@ -1470,22 +1475,22 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                   const SizedBox(height: 16),
                   
                   // Account Section
-                  _buildSectionHeader('MY ACCOUNT'),
+                  _buildSectionHeader(ref.tr('my_account')),
                   _buildSectionCard([
-                    _buildProfileOption(Icons.shopping_bag_outlined, 'My Orders', () => context.push('/orders')),
-                    _buildProfileOption(Icons.location_on_outlined, 'Shipping Addresses', () => context.push('/addresses')),
-                    _buildProfileOption(Icons.security_outlined, 'Account Security', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AccountSecurityScreen()))),
-                    _buildProfileOption(Icons.person_outline, 'Edit Profile', () => context.push('/profile')),
+                    _buildProfileOption(Icons.shopping_bag_outlined, ref.tr('my_orders'), () => context.push('/orders')),
+                    _buildProfileOption(Icons.location_on_outlined, ref.tr('addresses'), () => context.push('/addresses')),
+                    _buildProfileOption(Icons.security_outlined, ref.tr('account_security'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AccountSecurityScreen()))),
+                    _buildProfileOption(Icons.person_outline, ref.tr('edit_profile'), () => context.push('/profile')),
                   ]),
 
                   const SizedBox(height: 24),
 
                   // Preferences Section
-                  _buildSectionHeader('PREFERENCES'),
+                  _buildSectionHeader(ref.tr('preferences')),
                   _buildSectionCard([
                     _buildProfileOption(
                       ref.watch(themeProvider) == ThemeMode.dark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
-                      'Dark Mode',
+                      ref.tr('dark_mode'),
                       () {},
                       trailing: Switch(
                         value: ref.watch(themeProvider) == ThemeMode.dark,
@@ -1495,18 +1500,18 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                         },
                       ),
                     ),
-                    _buildProfileOption(Icons.notifications_none_outlined, 'Notifications', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationSettingsScreen()))),
-                    _buildProfileOption(Icons.language_outlined, 'Language', () {}, subtitle: 'English'),
+                    _buildProfileOption(Icons.notifications_none_outlined, ref.tr('notifications'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationSettingsScreen()))),
+                    _buildProfileOption(Icons.language_outlined, ref.tr('language'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LanguageSelectionScreen())), subtitle: ref.watch(languageProvider).nativeName),
                   ]),
 
                   const SizedBox(height: 24),
 
                   // Support Section
-                  _buildSectionHeader('SUPPORT'),
+                  _buildSectionHeader(ref.tr('support')),
                   _buildSectionCard([
-                    _buildProfileOption(Icons.help_outline, 'Help Center', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HelpCenterScreen()))),
-                    _buildProfileOption(Icons.info_outline, 'About Zakaz-AF', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutScreen()))),
-                    _buildProfileOption(Icons.privacy_tip_outlined, 'Privacy Policy', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen()))),
+                    _buildProfileOption(Icons.help_outline, ref.tr('help_center'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HelpCenterScreen()))),
+                    _buildProfileOption(Icons.info_outline, ref.tr('about_app'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutScreen()))),
+                    _buildProfileOption(Icons.privacy_tip_outlined, ref.tr('privacy_policy'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen()))),
                   ]),
 
                   const SizedBox(height: 32),
@@ -1521,7 +1526,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                         side: const BorderSide(color: Colors.red),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),
-                      child: const Text('Log Out', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                      child: Text(ref.tr('logout'), style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
                     ),
                   ),
                   const SizedBox(height: 48),
@@ -1539,20 +1544,20 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Log Out', style: TextStyle(fontWeight: FontWeight.bold)),
-        content: const Text('Are you sure you want to log out of your account?'),
+        title: Text(ref.tr('logout_confirm_title'), style: const TextStyle(fontWeight: FontWeight.bold)),
+        content: Text(ref.tr('logout_confirmation')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: TextStyle(color: Colors.grey[600])),
+            child: Text(ref.tr('cancel'), style: const TextStyle(color: Colors.grey)),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context); // Close dialog
               ref.read(authControllerProvider.notifier).logout();
               context.go('/login');
             },
-            child: const Text('Log Out', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            child: Text(ref.tr('logout'), style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
           ),
         ],
       ),

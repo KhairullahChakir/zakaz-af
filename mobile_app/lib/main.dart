@@ -4,8 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'core/app_router.dart';
 import 'core/storage/shared_prefs_provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/services/notification_service.dart';
 import 'core/theme/theme_provider.dart';
+import 'core/localization/language_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,10 +60,18 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final router = ref.watch(appRouterProvider);
     final themeMode = ref.watch(themeProvider);
+    final language = ref.watch(languageProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Zakaz - AF',
+      locale: language.locale,
+      supportedLocales: AppLanguage.values.map((e) => e.locale),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFF57C00)),
         useMaterial3: true,
