@@ -121,11 +121,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           height: Responsive.value(context, mobile: 65, tablet: 75),
           selectedIndex: _currentNavIndex,
           onDestinationSelected: (index) {
-            if (index == 2) {
-              context.push('/cart');
-            } else {
-              setState(() => _currentNavIndex = index);
-            }
+            setState(() => _currentNavIndex = index);
           },
           destinations: [
             NavigationDestination(
