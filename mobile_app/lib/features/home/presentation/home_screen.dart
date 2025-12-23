@@ -14,6 +14,7 @@ import '../../wishlist/presentation/wishlist_provider.dart';
 import '../../cart/presentation/cart_provider.dart';
 import '../../notifications/presentation/notification_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../cart/presentation/cart_screen.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -93,7 +94,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           _buildHomeTab(),
           const ConversationsScreen(),
-          _buildCartTab(),
+          const _CartTab(),
           const _ProfileTab(),
         ],
       ),
@@ -1367,6 +1368,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
     );
+  }
+}
+
+// ============================================================================
+// ISOLATED CART TAB WIDGET
+// This prevents HomeScreen from rebuilding when cart changes occur
+// ============================================================================
+class _CartTab extends StatelessWidget {
+  const _CartTab();
+
+  @override
+  Widget build(BuildContext context) {
+    return const CartScreen();
   }
 }
 
