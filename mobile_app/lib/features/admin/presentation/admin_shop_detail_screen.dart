@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../data/admin_shop_repository.dart';
 import '../../shop/domain/shop.dart';
+
+const String _baseStorageUrl = 'http://172.20.10.2:8000/storage/';
 
 class AdminShopDetailScreen extends ConsumerStatefulWidget {
   final Shop shop;
@@ -211,7 +214,16 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
   Widget build(BuildContext context) {
     final dateFormat = DateFormat.yMMMd();
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        final shouldPop = await _showExitConfirmation();
+        if (shouldPop == true && context.mounted) {
+          context.pop();
+        }
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: Text(_shop.name),
         actions: [
@@ -271,35 +283,8 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                   Text('Shop Photos', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
                   SizedBox(
-                    height: 120,
-                    child: _shop.photos != null && _shop.photos!.isNotEmpty
-                        ? ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _shop.photos!.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                width: 120,
-                                margin: const EdgeInsets.only(right: 8),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(
-                                    _shop.photos![index],
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) => Container(
-                                      color: Colors.grey[200],
-                                      child: const Icon(Icons.broken_image),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                        : Container(
-                            width: 120,
-                            height: 120,
-                            color: Colors.grey[200],
-                            child: const Icon(Icons.store, size: 40, color: Colors.grey),
-                          ),
+                    height: 140,
+                    child: _buildShopPhotos(),
                   ),
                   const SizedBox(height: 24),
 
@@ -405,6 +390,175 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                 ],
               ),
             ),
+      ),
+    );
+  }
+
+  Future<bool?> _showExitConfirmation() {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Row(
+          children: [
+            Icon(Icons.exit_to_app, color: Colors.orange),
+            SizedBox(width: 12),
+            Text('Leave Review?'),
+          ],
+        ),
+        content: const Text(
+          'Are you sure you want to go back? Any unsaved changes will be lost.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Stay'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: FilledButton.styleFrom(backgroundColor: Colors.orange),
+            child: const Text('Leave'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShopPhotos() {
+    // Collect all available photos
+    List<String> photoUrls = [];
+    
+    // Add primary photo URL if available
+    if (_shop.primaryPhotoUrl != null && _shop.primaryPhotoUrl!.isNotEmpty) {
+      photoUrls.add(_shop.primaryPhotoUrl!);
+    }
+    
+    // Add photos from the photos list (converting relative paths to full URLs)
+    if (_shop.photos != null && _shop.photos!.isNotEmpty) {
+      for (var photo in _shop.photos!) {
+        String fullUrl = photo.startsWith('http') ? photo : '$_baseStorageUrl$photo';
+        if (!photoUrls.contains(fullUrl)) {
+          photoUrls.add(fullUrl);
+        }
+      }
+    }
+    
+    if (photoUrls.isEmpty) {
+      return Container(
+        width: 140,
+        height: 140,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.store, size: 48, color: Colors.grey[400]),
+            const SizedBox(height: 8),
+            Text('No photos', style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+          ],
+        ),
+      );
+    }
+    
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: photoUrls.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () => _showPhotoDialog(photoUrls[index], index + 1, photoUrls.length),
+          child: Container(
+            width: 140,
+            margin: const EdgeInsets.only(right: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                imageUrl: photoUrls[index],
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  color: Colors.grey[200],
+                  child: const Center(
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
+                errorWidget: (_, __, ___) => Container(
+                  color: Colors.grey[200],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.broken_image, color: Colors.grey[400]),
+                      const SizedBox(height: 4),
+                      Text('Failed', style: TextStyle(color: Colors.grey[500], fontSize: 10)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showPhotoDialog(String url, int current, int total) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'Photo $current of $total',
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: CachedNetworkImage(
+                imageUrl: url,
+                fit: BoxFit.contain,
+                placeholder: (_, __) => const CircularProgressIndicator(color: Colors.white),
+                errorWidget: (_, __, ___) => Container(
+                  padding: const EdgeInsets.all(32),
+                  color: Colors.grey[800],
+                  child: const Icon(Icons.broken_image, color: Colors.white, size: 64),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.close),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
