@@ -21,6 +21,7 @@ import '../../profile/presentation/privacy_policy_screen.dart';
 import '../../profile/presentation/notification_settings_screen.dart';
 import '../../profile/presentation/account_security_screen.dart';
 import '../../shop/presentation/shopkeeper_dashboard_screen.dart';
+import '../../admin/presentation/admin_dashboard_screen.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -96,6 +97,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider).value;
     final isShopkeeper = user?.isShopkeeper == true;
+    final isAdmin = user?.isAdmin == true;
     
     return Scaffold(
       body: IndexedStack(
@@ -104,15 +106,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           _buildHomeTab(),
           const ConversationsScreen(),
           if (isShopkeeper) const ShopkeeperDashboardScreen(),
+          if (isAdmin) const AdminDashboardScreen(),
           _CartTab(onNavigateToHome: () => setState(() => _currentNavIndex = 0)),
           const _ProfileTab(),
         ],
       ),
-      bottomNavigationBar: _buildBottomNav(isShopkeeper),
+      bottomNavigationBar: _buildBottomNav(isShopkeeper: isShopkeeper, isAdmin: isAdmin),
     );
   }
 
-  Widget _buildBottomNav(bool isShopkeeper) {
+  Widget _buildBottomNav({required bool isShopkeeper, required bool isAdmin}) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -149,6 +152,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 icon: Icon(Icons.store_outlined, color: Colors.grey[600]),
                 selectedIcon: const Icon(Icons.store, color: kPrimaryOrange),
                 label: 'My Shop',
+              ),
+            if (isAdmin)
+              NavigationDestination(
+                icon: Icon(Icons.admin_panel_settings_outlined, color: Colors.grey[600]),
+                selectedIcon: const Icon(Icons.admin_panel_settings, color: Color(0xFF6366F1)),
+                label: 'Admin',
               ),
             NavigationDestination(
               icon: const CartIconBadge(showBackground: false),
@@ -1491,16 +1500,6 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                   ]),
 
                   const SizedBox(height: 24),
-
-                  // Admin Section (only for admins, shopkeepers now have bottom tab)
-                  if (user?.isAdmin == true) ...[
-                    _buildSectionHeader('ADMIN'),
-                    _buildSectionCard([
-                      _buildProfileOption(Icons.admin_panel_settings, 'Admin Dashboard', () => context.push('/analytics')),
-                      _buildProfileOption(Icons.campaign, 'Send Notifications', () => context.push('/admin/notifications')),
-                    ]),
-                    const SizedBox(height: 24),
-                  ],
 
                   // Support Section
                   _buildSectionHeader('SUPPORT'),
