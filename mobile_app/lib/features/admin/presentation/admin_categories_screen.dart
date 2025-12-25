@@ -42,13 +42,13 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
       try {
         await ref.read(adminRepositoryProvider).deleteCategory(categoryId);
         ref.invalidate(categoriesProvider);
-        if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
+        if (!mounted) return;
+        ScaffoldMessenger.of(this.context).showSnackBar(
           SnackBar(content: Text(ref.tr('category_deleted')), backgroundColor: Colors.green),
         );
       } catch (e) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
+        if (mounted) {
+          ScaffoldMessenger.of(this.context).showSnackBar(
             SnackBar(content: Text('${ref.tr('error')}: $e'), backgroundColor: Colors.red),
           );
         }
@@ -149,16 +149,16 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                     );
                   }
                   ref.invalidate(categoriesProvider);
-                  if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(this.context).showSnackBar(
                     SnackBar(
                       content: Text(category == null ? ref.tr('category_created') : ref.tr('category_updated')),
                       backgroundColor: Colors.green,
                     ),
                   );
                 } catch (e) {
-                  if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(this.context).showSnackBar(
                     SnackBar(content: Text('${ref.tr('error')}: $e'), backgroundColor: Colors.red),
                   );
                 } finally {

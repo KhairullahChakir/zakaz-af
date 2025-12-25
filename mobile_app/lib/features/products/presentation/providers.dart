@@ -1,5 +1,4 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_app/features/products/data/product_repository.dart';
 import 'package:mobile_app/features/products/domain/category.dart';
 import 'package:mobile_app/features/products/domain/product.dart';

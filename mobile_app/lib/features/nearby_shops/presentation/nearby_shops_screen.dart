@@ -3,9 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import '../../../core/services/location_service.dart';
 import '../data/nearby_shops_repository.dart';
 import '../domain/nearby_shop.dart';
+import '../../../core/localization/language_provider.dart';
 
 class NearbyShopsScreen extends ConsumerStatefulWidget {
   const NearbyShopsScreen({super.key});
@@ -19,6 +22,8 @@ class _NearbyShopsScreenState extends ConsumerState<NearbyShopsScreen> {
   bool _isLoadingLocation = false;
   String? _locationError;
   double _selectedRadius = 10.0;
+  bool _isMapView = false;
+  final MapController _mapController = MapController();
 
   final List<double> _radiusOptions = [5, 10, 25, 50];
 
@@ -69,13 +74,26 @@ class _NearbyShopsScreenState extends ConsumerState<NearbyShopsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nearby Shops'),
+        title: Text(ref.tr('nearby_shops')),
         centerTitle: true,
         elevation: 0,
         actions: [
           IconButton(
+            icon: Icon(_isMapView ? Icons.list : Icons.map_outlined),
+            onPressed: () => setState(() => _isMapView = !_isMapView),
+            tooltip: _isMapView ? ref.tr('switch_to_list') : ref.tr('switch_to_map'),
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: _fetchLocation,
+            onPressed: () {
+              _fetchLocation();
+              if (_isMapView && _currentPosition != null) {
+                _mapController.move(
+                  LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+                  13.0,
+                );
+              }
+            },
             tooltip: 'Refresh location',
           ),
         ],
@@ -104,7 +122,7 @@ class _NearbyShopsScreenState extends ConsumerState<NearbyShopsScreen> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Search radius:',
+                  ref.tr('search_radius'),
                   style: theme.textTheme.bodyMedium,
                 ),
                 const SizedBox(width: 12),
@@ -163,7 +181,7 @@ class _NearbyShopsScreenState extends ConsumerState<NearbyShopsScreen> {
             const CircularProgressIndicator(),
             const SizedBox(height: 16),
             Text(
-              'Getting your location...',
+              ref.tr('getting_location'),
               style: theme.textTheme.bodyLarge,
             ),
           ],
@@ -190,7 +208,9 @@ class _NearbyShopsScreenState extends ConsumerState<NearbyShopsScreen> {
         if (response.shops.isEmpty) {
           return _buildEmptyState(theme);
         }
-        return _buildShopsList(response.shops, theme, isDark);
+        return _isMapView 
+            ? _buildShopsMap(response.shops, theme, isDark)
+            : _buildShopsList(response.shops, theme, isDark);
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, _) => Center(
@@ -233,14 +253,14 @@ class _NearbyShopsScreenState extends ConsumerState<NearbyShopsScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Location Access Required',
+              ref.tr('location_access_required'),
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 12),
             Text(
-              _locationError ?? 'Please enable location services to find shops near you.',
+              _locationError ?? ref.tr('enable_location_msg'),
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.textTheme.bodySmall?.color,
@@ -255,13 +275,13 @@ class _NearbyShopsScreenState extends ConsumerState<NearbyShopsScreen> {
                     await ref.read(locationServiceProvider).openLocationSettings();
                   },
                   icon: const Icon(Icons.settings),
-                  label: const Text('Open Settings'),
+                  label: Text(ref.tr('open_settings')),
                 ),
                 const SizedBox(width: 12),
                 ElevatedButton.icon(
                   onPressed: _fetchLocation,
                   icon: const Icon(Icons.refresh),
-                  label: const Text('Try Again'),
+                  label: Text(ref.tr('retry')),
                 ),
               ],
             ),
@@ -292,14 +312,14 @@ class _NearbyShopsScreenState extends ConsumerState<NearbyShopsScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              'No Shops Nearby',
+              ref.tr('no_shops_nearby'),
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 12),
             Text(
-              'No shops found within ${_selectedRadius.toInt()} km of your location.\nTry increasing the search radius.',
+              ref.tr('no_shops_in_radius').replaceFirst('{radius}', _selectedRadius.toInt().toString()),
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.textTheme.bodySmall?.color,
@@ -328,9 +348,121 @@ class _NearbyShopsScreenState extends ConsumerState<NearbyShopsScreen> {
       ),
     );
   }
+
+  Widget _buildShopsMap(List<NearbyShop> shops, ThemeData theme, bool isDark) {
+    if (_currentPosition == null) return const SizedBox.shrink();
+
+    final userLatLng = LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
+
+    return FlutterMap(
+      mapController: _mapController,
+      options: MapOptions(
+        center: userLatLng,
+        zoom: 13.0,
+        maxZoom: 18.0,
+        minZoom: 3.0,
+      ),
+      children: [
+        TileLayer(
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'com.zakaz.af',
+        ),
+        MarkerLayer(
+          markers: [
+            // User location marker
+            Marker(
+              point: userLatLng,
+              width: 40,
+              height: 40,
+              builder: (ctx) => Container(
+                decoration: BoxDecoration(
+                  color: Colors.blue.withValues(alpha: 0.3),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.my_location,
+                    color: Colors.blue,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ),
+            // Shop markers
+            ...shops.where((s) => s.latitude != null && s.longitude != null).map((shop) {
+              return Marker(
+                point: LatLng(shop.latitude!, shop.longitude!),
+                width: 50,
+                height: 50,
+                builder: (ctx) => GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: _NearbyShopCard(
+                          shop: shop,
+                          isDark: isDark,
+                          onTap: () {
+                            Navigator.pop(context);
+                            context.push('/shops/${shop.id}');
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Icon(
+                        Icons.location_on,
+                        color: theme.colorScheme.primary,
+                        size: 40,
+                      ),
+                      Positioned(
+                        top: 5,
+                        child: shop.primaryPhotoUrl != null
+                            ? Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: CachedNetworkImageProvider(shop.primaryPhotoUrl!),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(color: Colors.white, width: 1),
+                                ),
+                              )
+                            : Container(
+                                width: 24,
+                                height: 24,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.store,
+                                  size: 14,
+                                  color: theme.colorScheme.primary,
+                                ),
+                              ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
-class _NearbyShopCard extends StatelessWidget {
+class _NearbyShopCard extends ConsumerWidget {
   final NearbyShop shop;
   final bool isDark;
   final VoidCallback onTap;
@@ -342,7 +474,7 @@ class _NearbyShopCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
 
     return Card(
@@ -458,7 +590,11 @@ class _NearbyShopCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              shop.formattedDistance,
+                              shop.distance != null 
+                                ? (shop.distance! < 1 
+                                    ? ref.tr('m_away').replaceFirst('{distance}', (shop.distance! * 1000).toStringAsFixed(0))
+                                    : ref.tr('km_away').replaceFirst('{distance}', shop.distance!.toStringAsFixed(1)))
+                                : '',
                               style: theme.textTheme.labelMedium?.copyWith(
                                 color: theme.colorScheme.secondary,
                                 fontWeight: FontWeight.w600,
@@ -490,7 +626,7 @@ class _NearbyShopCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              '${shop.productsCount} products',
+                              ref.tr('products_count').replaceFirst('{count}', shop.productsCount.toString()),
                               style: theme.textTheme.labelMedium?.copyWith(
                                 color: theme.colorScheme.tertiary,
                                 fontWeight: FontWeight.w600,

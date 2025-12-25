@@ -60,6 +60,8 @@ dependencies:
   shimmer: ^3.0.0
   flutter_localizations:
     sdk: flutter
+  flutter_map: ^4.0.0
+  latlong2: ^0.8.2
 
 
 dev_dependencies:

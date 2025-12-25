@@ -26,16 +26,8 @@ abstract class NearbyShop with _$NearbyShop {
     @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _NearbyShop;
 
-  const NearbyShop._();
 
-  /// Get formatted distance string
-  String get formattedDistance {
-    if (distance == null) return '';
-    if (distance! < 1) {
-      return '${(distance! * 1000).toStringAsFixed(0)}m away';
-    }
-    return '${distance!.toStringAsFixed(1)}km away';
-  }
+  const NearbyShop._();
 
   factory NearbyShop.fromJson(Map<String, dynamic> json) => _$NearbyShopFromJson(json);
 }
