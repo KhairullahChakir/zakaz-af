@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../data/order_repository.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 class OrderDetailsScreen extends ConsumerWidget {
   final int orderId;
@@ -15,8 +16,12 @@ class OrderDetailsScreen extends ConsumerWidget {
     final dateFormat = DateFormat.yMMMd().add_jm();
 
     return Scaffold(
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        title: Text(ref.tr('order_details')),
+        title: Text(ref.tr('order_details'), style: const TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
+        elevation: 0,
       ),
       body: orderAsync.when(
         data: (order) => SingleChildScrollView(
@@ -47,7 +52,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                       Text(
                         dateFormat.format(order.createdAt),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey,
+                              color: context.textSecondary,
                             ),
                       ),
                     ],

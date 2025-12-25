@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mobile_app/features/addresses/presentation/address_provider.dart';
 import 'package:mobile_app/features/addresses/domain/address.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
@@ -17,14 +18,14 @@ class AddressScreen extends ConsumerWidget {
     final addressesAsync = ref.watch(addressesProvider);
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(
           ref.tr('my_addresses'),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: kPrimaryOrange,
-        foregroundColor: Colors.white,
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         elevation: 0,
         actions: [
           Container(

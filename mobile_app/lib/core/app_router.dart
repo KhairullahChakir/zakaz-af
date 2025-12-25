@@ -22,6 +22,7 @@ import '../features/products/presentation/categories_screen.dart';
 import '../features/products/presentation/category_products_screen.dart';
 import '../features/notifications/presentation/notifications_screen.dart';
 import '../features/notifications/presentation/admin_send_notification_screen.dart';
+import '../features/profile/presentation/appearance_settings_screen.dart';
 import '../features/admin/presentation/admin_products_screen.dart';
 import '../features/admin/presentation/add_edit_product_screen.dart';
 import '../features/admin/presentation/admin_categories_screen.dart';
@@ -151,6 +152,10 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/notifications',
         builder: (context, state) => const NotificationsScreen(),
+      ),
+      GoRoute(
+        path: '/appearance',
+        builder: (context, state) => const AppearanceSettingsScreen(),
       ),
       // Chat routes
       GoRoute(

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../../../core/widgets/custom_cached_image.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
 import 'cart_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
@@ -32,14 +33,14 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     final itemCount = cartItemsAsync.value?.fold(0, (sum, item) => sum + item.quantity) ?? 0;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(
           ref.tr('cart_title'),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: kPrimaryOrange,
-        foregroundColor: Colors.white,
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         actions: [
@@ -348,10 +349,11 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: imageUrl != null
-                  ? CachedNetworkImage(
+                  ? CustomCachedImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
+                      borderRadius: 12,
+                      placeholder: Container(
                         color: kSoftOrange,
                         child: const Center(
                           child: CircularProgressIndicator(
@@ -360,14 +362,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                           ),
                         ),
                       ),
-                      errorWidget: (context, url, error) => Container(
-                        color: kSoftOrange,
-                        child: const Icon(
-                          Icons.image_outlined,
-                          color: kPrimaryOrange,
-                          size: 32,
-                        ),
-                      ),
+                      errorWidget: const Icon(Icons.broken_image, color: kPrimaryOrange),
                     )
                   : const Center(
                       child: Icon(

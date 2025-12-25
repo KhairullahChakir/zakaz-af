@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../../../core/widgets/custom_cached_image.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
 import '../data/shopkeeper_repository.dart';
 import '../../auth/presentation/auth_controller.dart';
@@ -98,10 +98,10 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(16),
                                         child: user?.profileImageUrl != null
-                                            ? CachedNetworkImage(
+                                            ? CustomCachedImage(
                                                 imageUrl: user!.profileImageUrl!,
                                                 fit: BoxFit.cover,
-                                                errorWidget: (_, __, ___) => const Icon(
+                                                errorWidget: const Icon(
                                                   Icons.store,
                                                   color: kPrimaryOrange,
                                                   size: 30,

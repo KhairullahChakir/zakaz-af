@@ -7,6 +7,7 @@ import 'core/storage/shared_prefs_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/services/notification_service.dart';
 import 'core/theme/theme_provider.dart';
+import 'core/theme/app_theme.dart';
 import 'core/localization/language_provider.dart';
 
 void main() async {
@@ -72,19 +73,8 @@ class _MyAppState extends ConsumerState<MyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFF57C00)),
-        useMaterial3: true,
-        fontFamily: 'Roboto',
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFF57C00),
-          brightness: Brightness.dark,
-        ),
-        useMaterial3: true,
-        fontFamily: 'Roboto',
-      ),
+      theme: premiumLightTheme(),
+      darkTheme: premiumDarkTheme(),
       themeMode: themeMode,
       routerConfig: router,
     );

@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import '../../../core/widgets/custom_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +8,7 @@ import '../../../core/utils/responsive.dart';
 import '../data/chat_repository.dart';
 import '../domain/conversation.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -23,10 +24,10 @@ class ConversationsScreen extends ConsumerWidget {
     final currentUser = ref.watch(authControllerProvider).value;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        backgroundColor: kPrimaryOrange,
-        foregroundColor: Colors.white,
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         title: Text(ref.tr('messages')),
         elevation: 0,
       ),
@@ -181,22 +182,20 @@ class _ConversationTile extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: displayImage != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: CachedNetworkImage(
-                            imageUrl: displayImage,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
-                              color: kSoftOrange,
-                              child: Icon(
-                                isShopImage ? Icons.store : Icons.person,
-                                color: kPrimaryOrange.withValues(alpha: 0.5),
-                              ),
-                            ),
-                            errorWidget: (context, url, error) => Icon(
+                      ? CustomCachedImage(
+                          imageUrl: displayImage,
+                          fit: BoxFit.cover,
+                          borderRadius: 16,
+                          placeholder: Container(
+                            color: kSoftOrange,
+                            child: Icon(
                               isShopImage ? Icons.store : Icons.person,
-                              color: kPrimaryOrange,
+                              color: kPrimaryOrange.withValues(alpha: 0.5),
                             ),
+                          ),
+                          errorWidget: Icon(
+                            isShopImage ? Icons.store : Icons.person,
+                            color: kPrimaryOrange,
                           ),
                         )
                       : Icon(

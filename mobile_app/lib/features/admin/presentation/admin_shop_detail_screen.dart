@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../../../core/widgets/custom_cached_image.dart';
 import '../data/admin_shop_repository.dart';
 import '../../shop/domain/shop.dart';
 
@@ -484,16 +484,16 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
+              child: CustomCachedImage(
                 imageUrl: photoUrls[index],
                 fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
+                placeholder: Container(
                   color: Colors.grey[200],
                   child: const Center(
                     child: CircularProgressIndicator(strokeWidth: 2),
                   ),
                 ),
-                errorWidget: (_, __, ___) => Container(
+                errorWidget: Container(
                   color: Colors.grey[200],
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -534,11 +534,11 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
             const SizedBox(height: 12),
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: CachedNetworkImage(
+              child: CustomCachedImage(
                 imageUrl: url,
                 fit: BoxFit.contain,
-                placeholder: (_, __) => const CircularProgressIndicator(color: Colors.white),
-                errorWidget: (_, __, ___) => Container(
+                placeholder: const CircularProgressIndicator(color: Colors.white),
+                errorWidget: Container(
                   padding: const EdgeInsets.all(32),
                   color: Colors.grey[800],
                   child: const Icon(Icons.broken_image, color: Colors.white, size: 64),

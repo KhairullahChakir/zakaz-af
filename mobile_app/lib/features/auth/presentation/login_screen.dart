@@ -4,10 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'auth_controller.dart';
 import '../../../core/localization/language_provider.dart';
 import '../../../core/services/biometric_service.dart';
+import '../../../core/theme/theme_context.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
-const Color kLightBg = Color(0xFFFBFBFD);
-const Color kCardWhite = Colors.white;
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -113,7 +112,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final isLoading = authState.isLoading;
 
     return Scaffold(
-      backgroundColor: kLightBg,
+      backgroundColor: context.backgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -176,7 +175,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: kCardWhite,
+                      color: context.cardColor,
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
@@ -405,7 +404,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         height: 60,
         width: 80,
         decoration: BoxDecoration(
-          color: kCardWhite,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.grey.shade200),
           boxShadow: [

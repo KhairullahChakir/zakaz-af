@@ -36,7 +36,8 @@
 - **Order Tracking**: Visual timeline for order status
 - **Reviews**: Read and post ratings/comments
 - **Address Management**: Full CRUD with default address
-- **Dark Mode**: Theme toggle in drawer
+- **Dark Mode**: Full dark mode support with system theme synchronization and Appearance settings
+- **Performance**: Smart API caching, optimized image loading with shimmering, and memory optimizations
 
 ### 4. Shopkeeper Features (NEW)
 - **Become a Shopkeeper**: Multi-step application form

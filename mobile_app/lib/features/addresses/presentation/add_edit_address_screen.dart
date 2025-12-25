@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'address_provider.dart';
 import '../domain/address.dart';
+import '../../../../core/theme/theme_context.dart';
 
 class AddEditAddressScreen extends ConsumerStatefulWidget {
   final Address? address;
@@ -49,8 +50,11 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
     final isLoading = ref.watch(addressesProvider).isLoading;
 
     return Scaffold(
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(widget.address == null ? 'Add Address' : 'Edit Address'),
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

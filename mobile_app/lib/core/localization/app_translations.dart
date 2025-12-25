@@ -605,6 +605,19 @@ class AppTranslations {
     'biometric_disabled_success': 'Biometric login disabled',
     'biometric_password_desc': 'Enter your password to enable biometric login',
     'biometric_not_available': 'Not available on this device. Register your fingerprint or face in device settings.',
+
+    // Theme & Appearance
+    'appearance': 'Appearance',
+    'theme': 'Theme',
+    'theme_system': 'System Default',
+    'theme_light': 'Light Mode',
+    'theme_dark': 'Dark Mode',
+    'theme_system_desc': 'Follow your device settings',
+    'theme_light_desc': 'Bright and clean look',
+    'theme_dark_desc': 'Easy on the eyes at night',
+    'theme_info': 'Changes apply immediately. Your preference is saved automatically.',
+    'preview': 'Preview',
+    'sample_product': 'Sample Product',
   };
 
   static const Map<String, String> _dari = {
@@ -1203,6 +1216,19 @@ class AppTranslations {
     'biometric_disabled_success': 'ورود بایومتریک غیرفعال شد',
     'biometric_password_desc': 'رمز عبور خود را وارد کنید تا ورود بایومتریک فعال شود',
     'biometric_not_available': 'در این دستگاه موجود نیست. اثر انگشت یا چهره را در تنظیمات دستگاه ثبت کنید.',
+
+    // Theme & Appearance
+    'appearance': 'ظاهر',
+    'theme': 'تم',
+    'theme_system': 'پیش‌فرض سیستم',
+    'theme_light': 'حالت روشن',
+    'theme_dark': 'حالت تاریک',
+    'theme_system_desc': 'از تنظیمات دستگاه پیروی کنید',
+    'theme_light_desc': 'ظاهر روشن و تمیز',
+    'theme_dark_desc': 'راحت برای چشم در شب',
+    'theme_info': 'تغییرات فوری اعمال می‌شوند. ترجیحات شما به‌صورت خودکار ذخیره می‌شود.',
+    'preview': 'پیش‌نمایش',
+    'sample_product': 'محصول نمونه',
   };
 
   static const Map<String, String> _pashto = {
@@ -1801,5 +1827,18 @@ class AppTranslations {
     'biometric_disabled_success': 'بایومتریک ننوتل غیرفعال شو',
     'biometric_password_desc': 'خپل پټنوم ولیکئ ترڅو بایومتریک ننوتل فعال شي',
     'biometric_not_available': 'پدې وسیله کې شتون نلري. خپل ګوتې نښه یا مخ د وسیلې تنظیماتو کې ثبت کړئ.',
+
+    // Theme & Appearance
+    'appearance': 'ظاهر',
+    'theme': 'تم',
+    'theme_system': 'د سیسټم ډیفالټ',
+    'theme_light': 'رڼا حالت',
+    'theme_dark': 'تیاره حالت',
+    'theme_system_desc': 'د وسیلې تنظیماتو تعقیب کړئ',
+    'theme_light_desc': 'روښانه او پاک ظاهر',
+    'theme_dark_desc': 'په شپه کې د سترګو لپاره آسانه',
+    'theme_info': 'بدلونونه سمدلاسه پلي کیږي. ستاسو ترجیح په اوتومات ډول خوندي کیږي.',
+    'preview': 'مخلید',
+    'sample_product': 'نمونه محصول',
   };
 }

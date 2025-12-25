@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../../../core/widgets/custom_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +9,7 @@ import '../data/chat_repository.dart';
 import '../domain/conversation.dart';
 import '../domain/message.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -111,24 +112,29 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final messagesAsync = ref.watch(conversationMessagesProvider(widget.conversationId));
     final currentUser = ref.watch(authControllerProvider).value;
     final conversation = widget.conversation;
+    final currentUserId = currentUser?.id;
 
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
+        backgroundColor: kPrimaryOrange,
         titleSpacing: 0,
         title: Row(
           children: [
-            // Shop/User avatar
+            // Avatar
             Container(
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: kSoftOrange,
-                borderRadius: BorderRadius.circular(12),
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.2),
+                border: Border.all(color: Colors.white.withOpacity(0.5), width: 1.5),
               ),
-              child: _buildAvatar(conversation, currentUser?.id),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: _buildAvatar(conversation, currentUserId),
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -136,7 +142,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    _getDisplayName(conversation, currentUser?.id),
+                    _getDisplayName(conversation, currentUserId),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -254,10 +260,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           Container(
             padding: EdgeInsets.all(Responsive.value(context, mobile: 12, tablet: 16)),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: context.cardColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                  color: context.shadowColor,
                   blurRadius: 10,
                   offset: const Offset(0, -5),
                 ),
@@ -270,15 +276,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: context.inputFillColor,
                         borderRadius: BorderRadius.circular(24),
                       ),
                       child: TextField(
                         controller: _messageController,
                         textCapitalization: TextCapitalization.sentences,
+                        style: TextStyle(color: context.textPrimary),
                         decoration: InputDecoration(
                           hintText: ref.tr('type_message'),
-                          hintStyle: TextStyle(color: Colors.grey[500]),
+                          hintStyle: TextStyle(color: context.textSecondary),
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 20,
@@ -361,22 +368,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     }
 
     if (displayImage != null) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: CachedNetworkImage(
-          imageUrl: displayImage,
-          fit: BoxFit.cover,
-          placeholder: (context, url) => Container(
-            color: kSoftOrange,
-            child: Icon(
-              isShopImage ? Icons.store : Icons.person,
-              color: kPrimaryOrange.withValues(alpha: 0.5),
-            ),
-          ),
-          errorWidget: (context, url, error) => Icon(
+      return CustomCachedImage(
+        imageUrl: displayImage,
+        fit: BoxFit.cover,
+        borderRadius: 12,
+        placeholder: Container(
+          color: kSoftOrange,
+          child: Icon(
             isShopImage ? Icons.store : Icons.person,
-            color: kPrimaryOrange,
+            color: kPrimaryOrange.withValues(alpha: 0.5),
           ),
+        ),
+        errorWidget: Icon(
+          isShopImage ? Icons.store : Icons.person,
+          color: kPrimaryOrange,
         ),
       );
     }
@@ -411,18 +416,18 @@ class _DateDivider extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
         children: [
-          Expanded(child: Divider(color: Colors.grey[300])),
+          Expanded(child: Divider(color: Theme.of(context).dividerColor)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               _formatDate(ref, date),
               style: TextStyle(
-                color: Colors.grey[500],
+                color: Theme.of(context).hintColor,
                 fontSize: 12,
               ),
             ),
           ),
-          Expanded(child: Divider(color: Colors.grey[300])),
+          Expanded(child: Divider(color: Theme.of(context).dividerColor)),
         ],
       ),
     );
@@ -479,7 +484,7 @@ class _MessageBubble extends StatelessWidget {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                color: isMe ? kPrimaryOrange : Colors.white,
+                color: isMe ? kPrimaryOrange : context.cardColor,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(16),
                   topRight: const Radius.circular(16),
@@ -488,7 +493,7 @@ class _MessageBubble extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
+                    color: context.shadowColor,
                     blurRadius: 5,
                     offset: const Offset(0, 2),
                   ),
@@ -500,7 +505,7 @@ class _MessageBubble extends StatelessWidget {
                   Text(
                     message.content,
                     style: TextStyle(
-                      color: isMe ? Colors.white : Colors.black87,
+                      color: isMe ? Colors.white : context.textPrimary,
                       fontSize: Responsive.value(context, mobile: 14, tablet: 16),
                     ),
                   ),
@@ -512,7 +517,7 @@ class _MessageBubble extends StatelessWidget {
                         Text(
                           DateFormat.jm().format(message.createdAt!),
                           style: TextStyle(
-                            color: isMe ? Colors.white.withValues(alpha: 0.7) : Colors.grey[500],
+                            color: isMe ? Colors.white.withValues(alpha: 0.7) : context.textSecondary,
                             fontSize: 10,
                           ),
                         ),

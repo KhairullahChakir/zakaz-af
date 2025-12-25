@@ -4,10 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'wishlist_provider.dart';
 import '../../../core/localization/language_provider.dart';
 import '../../../core/widgets/shimmer_loading.dart';
+import '../../../core/theme/theme_context.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
-const Color kLightBg = Color(0xFFFBFBFD);
-const Color kCardWhite = Colors.white;
 
 class WishlistScreen extends ConsumerWidget {
   const WishlistScreen({super.key});
@@ -17,11 +16,11 @@ class WishlistScreen extends ConsumerWidget {
     final wishlistAsync = ref.watch(wishlistProvider);
 
     return Scaffold(
-      backgroundColor: kLightBg,
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(
           ref.tr('wishlist'),
-          style: const TextStyle(color: Color(0xFF1D1D1F), fontWeight: FontWeight.bold),
+          style: TextStyle(color: context.textPrimary, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -124,7 +123,7 @@ class WishlistScreen extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: kCardWhite,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(

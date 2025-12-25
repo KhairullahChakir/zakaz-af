@@ -24,6 +24,8 @@ import '../../shop/presentation/shopkeeper_dashboard_screen.dart';
 import '../../admin/presentation/admin_dashboard_screen.dart';
 import '../../profile/presentation/language_selection_screen.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/services/biometric_service.dart';
+import '../../../core/widgets/custom_cached_image.dart';
 import '../../../core/widgets/shimmer_loading.dart';
 
 // Orange Theme Colors
@@ -677,15 +679,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ? category.image! 
           : 'http://172.20.10.2:8000/storage/${category.image}';
 
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: CachedNetworkImage(
-          imageUrl: imageUrl, 
-          width: size,
-          height: size,
-          fit: BoxFit.cover,
-          errorWidget: (_, __, ___) => Icon(Icons.error, size: size, color: Colors.white),
-        ),
+      return CustomCachedImage(
+        imageUrl: imageUrl, 
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        borderRadius: 8,
+        errorWidget: Icon(Icons.error, size: size, color: Colors.white),
       );
     }
 
@@ -1359,13 +1359,13 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                                 backgroundColor: kSoftOrange,
                                 child: ClipOval(
                                   child: user?.profileImageUrl != null
-                                      ? CachedNetworkImage(
+                                      ? CustomCachedImage(
                                           imageUrl: user!.profileImageUrl!,
                                           width: double.infinity,
                                           height: double.infinity,
                                           fit: BoxFit.cover,
-                                          placeholder: (context, url) => const CircularProgressIndicator(strokeWidth: 2),
-                                          errorWidget: (context, url, error) => const Icon(Icons.person, size: 50, color: kPrimaryOrange),
+                                          placeholder: const CircularProgressIndicator(strokeWidth: 2),
+                                          errorWidget: const Icon(Icons.person, size: 50, color: kPrimaryOrange),
                                         )
                                       : const Icon(Icons.person, size: 50, color: kPrimaryOrange),
                                 ),
@@ -1467,16 +1467,10 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                   _buildSectionHeader(ref.tr('preferences')),
                   _buildSectionCard([
                     _buildProfileOption(
-                      ref.watch(themeProvider) == ThemeMode.dark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
-                      ref.tr('dark_mode'),
-                      () {},
-                      trailing: Switch(
-                        value: ref.watch(themeProvider) == ThemeMode.dark,
-                        activeColor: kPrimaryOrange,
-                        onChanged: (value) {
-                          ref.read(themeProvider.notifier).setThemeMode(value ? ThemeMode.dark : ThemeMode.light);
-                        },
-                      ),
+                      Icons.palette_outlined, 
+                      ref.tr('appearance'), 
+                      () => context.push('/appearance'),
+                      subtitle: _getThemeModeName(ref),
                     ),
                     _buildProfileOption(Icons.notifications_none_outlined, ref.tr('notifications'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationSettingsScreen()))),
                     _buildProfileOption(Icons.language_outlined, ref.tr('language'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LanguageSelectionScreen())), subtitle: ref.watch(languageProvider).nativeName),
@@ -1540,6 +1534,17 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
         ],
       ),
     );
+  }
+
+  String _getThemeModeName(WidgetRef ref) {
+    final themeMode = ref.watch(themePreferenceProvider);
+    if (themeMode == AppThemeMode.system) {
+      return ref.tr('theme_system');
+    } else if (themeMode == AppThemeMode.light) {
+      return ref.tr('theme_light');
+    } else {
+      return ref.tr('theme_dark');
+    }
   }
 
   Widget _buildSectionHeader(String title) {

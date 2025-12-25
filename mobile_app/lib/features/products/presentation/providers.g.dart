@@ -26,7 +26,7 @@ final class CategoriesProvider
         argument: null,
         retry: null,
         name: r'categoriesProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -46,7 +46,7 @@ final class CategoriesProvider
   }
 }
 
-String _$categoriesHash() => r'a9dc7f203c0752b6ef049187e7be9d2f99eabef1';
+String _$categoriesHash() => r'2cd50edf0054f2b1c081d4eae5aa4ee2b71035a9';
 
 @ProviderFor(products)
 const productsProvider = ProductsFamily._();
@@ -122,7 +122,7 @@ final class ProductsProvider
   }
 }
 
-String _$productsHash() => r'b5ca6765b3f5dc910995ffd3acb59b1dd9d161fe';
+String _$productsHash() => r'799fccc4f96afe83be430643465edc5b609ae48e';
 
 final class ProductsFamily extends $Family
     with
@@ -207,7 +207,7 @@ final class ProductDetailsProvider
   }
 }
 
-String _$productDetailsHash() => r'c269fd27fa060b08bf9fe686d1cf1f2f6d122021';
+String _$productDetailsHash() => r'ecfd773efbb936932a5119c9449caab5498d202a';
 
 final class ProductDetailsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Product>, int> {

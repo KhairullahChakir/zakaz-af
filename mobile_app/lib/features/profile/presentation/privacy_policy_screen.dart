@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 
@@ -10,11 +11,11 @@ class PrivacyPolicyScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(ref.tr('privacy_policy'), style: const TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: kPrimaryOrange,
-        foregroundColor: Colors.white,
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         elevation: 0,
       ),
       body: SingleChildScrollView(

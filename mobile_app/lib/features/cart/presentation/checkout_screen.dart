@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../../../core/widgets/custom_cached_image.dart';
 import 'package:mobile_app/features/addresses/presentation/address_provider.dart';
 import 'package:mobile_app/features/addresses/domain/address.dart';
 import 'package:mobile_app/features/orders/data/order_repository.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
 import 'cart_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
@@ -135,7 +136,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15,
-                  color: Colors.grey.shade600,
+                  color: context.textSecondary,
                   height: 1.5,
                 ),
               ),
@@ -187,14 +188,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         0.0;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(
           ref.tr('checkout'),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: kPrimaryOrange,
-        foregroundColor: Colors.white,
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         elevation: 0,
       ),
       body: _isLoading
@@ -532,10 +533,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               height: 56,
               color: kSoftOrange,
               child: imageUrl != null
-                  ? CachedNetworkImage(
+                  ? CustomCachedImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => const Icon(Icons.image, color: kPrimaryOrange),
+                      errorWidget: const Icon(Icons.image, color: kPrimaryOrange),
                     )
                   : const Icon(Icons.image, color: kPrimaryOrange),
             ),

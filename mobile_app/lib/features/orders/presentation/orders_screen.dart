@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'orders_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 class OrdersScreen extends ConsumerWidget {
   const OrdersScreen({super.key});
@@ -13,8 +14,12 @@ class OrdersScreen extends ConsumerWidget {
     final ordersAsync = ref.watch(ordersProvider);
 
     return Scaffold(
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        title: Text(ref.tr('order_history')),
+        title: Text(ref.tr('order_history'), style: const TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
+        elevation: 0,
       ),
       body: RefreshIndicator(
         onRefresh: () async => ref.refresh(ordersProvider),

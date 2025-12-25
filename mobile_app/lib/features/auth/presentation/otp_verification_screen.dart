@@ -5,10 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'auth_controller.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
-const Color kLightBg = Color(0xFFFBFBFD);
-const Color kCardWhite = Colors.white;
 
 class OTPVerificationScreen extends ConsumerStatefulWidget {
   final String emailOrPhone;
@@ -98,17 +97,17 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
     final isLoading = authState.isLoading;
 
     return Scaffold(
-      backgroundColor: kLightBg,
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(
           ref.tr('verify_email'),
-          style: const TextStyle(color: Color(0xFF1D1D1F), fontWeight: FontWeight.bold),
+          style: TextStyle(color: context.textPrimary, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF1D1D1F), size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: context.textPrimary, size: 20),
           onPressed: () => context.pop(),
         ),
       ),
@@ -127,7 +126,7 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
                   height: 120,
                   width: 120,
                   decoration: BoxDecoration(
-                    color: kCardWhite,
+                    color: context.cardColor,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
@@ -172,7 +171,7 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                 decoration: BoxDecoration(
-                  color: kCardWhite,
+                  color: context.cardColor,
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(

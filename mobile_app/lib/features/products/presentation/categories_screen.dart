@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../../../core/widgets/custom_cached_image.dart';
 import '../../../core/localization/language_provider.dart';
 import '../../products/presentation/providers.dart';
 import '../../products/domain/category.dart';
 import '../../../core/utils/responsive.dart';
+import '../../../core/theme/theme_context.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -22,11 +23,12 @@ class CategoriesScreen extends ConsumerWidget {
     final gridColumns = Responsive.gridColumns(context);
 
     return Scaffold(
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(ref.tr('all_categories')),
         centerTitle: true,
-        backgroundColor: kPrimaryOrange,
-        foregroundColor: Colors.white,
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         elevation: 0,
       ),
       body: categoriesAsync.when(
@@ -58,11 +60,11 @@ class CategoriesScreen extends ConsumerWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: context.shadowColor,
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -75,9 +77,10 @@ class CategoriesScreen extends ConsumerWidget {
             const SizedBox(height: 12),
             Text(
               ref.tr(category.name.toLowerCase()),
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
+                color: context.textPrimary,
               ),
               textAlign: TextAlign.center,
               maxLines: 2,
@@ -96,28 +99,17 @@ class CategoriesScreen extends ConsumerWidget {
           ? category.image! 
           : 'http://172.20.10.2:8000/storage/${category.image}';
 
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: CachedNetworkImage(
-          imageUrl: imageUrl,
+      return CustomCachedImage(
+        imageUrl: imageUrl,
+        width: 60,
+        height: 60,
+        fit: BoxFit.cover,
+        borderRadius: 12,
+        placeholder: Container(
           width: 60,
           height: 60,
-          fit: BoxFit.cover,
-          placeholder: (_, __) => Container(
-            width: 60,
-            height: 60,
-            color: kSoftOrange,
-            child: const Icon(Icons.category, color: kPrimaryOrange),
-          ),
-          errorWidget: (_, __, ___) => Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: kSoftOrange,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(Icons.category, color: kPrimaryOrange, size: 32),
-          ),
+          color: kSoftOrange,
+          child: const Icon(Icons.category, color: kPrimaryOrange),
         ),
       );
     }

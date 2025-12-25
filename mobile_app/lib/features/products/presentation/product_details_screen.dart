@@ -13,6 +13,7 @@ import '../../chat/data/chat_repository.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -29,10 +30,10 @@ class ProductDetailsScreen extends ConsumerWidget {
     final productAsync = ref.watch(productDetailsProvider(productId));
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        backgroundColor: kPrimaryOrange,
-        foregroundColor: Colors.white,
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         title: Text(ref.tr('product_details')),
         actions: [
           productAsync.when(
