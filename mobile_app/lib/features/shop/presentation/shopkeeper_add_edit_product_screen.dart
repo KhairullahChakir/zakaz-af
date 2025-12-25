@@ -27,6 +27,8 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
   
   Category? _selectedCategory;
   File? _imageFile;
+  final List<File> _galleryImages = [];
+  final List<int> _deleteGalleryIds = [];
   bool _isLoading = false;
 
   bool get isEditing => widget.product != null;
@@ -57,6 +59,24 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
     }
   }
 
+  Future<void> _pickGalleryImages() async {
+    final imagesCount = (widget.product?.galleryUrls?.length ?? 0) - _deleteGalleryIds.length + _galleryImages.length;
+    if (imagesCount >= 5) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(ref.tr('max_images_reached'))),
+      );
+      return;
+    }
+
+    final picker = ImagePicker();
+    final picked = await picker.pickMultiImage(maxWidth: 800);
+    if (picked.isNotEmpty) {
+      setState(() {
+        _galleryImages.addAll(picked.take(5 - imagesCount).map((p) => File(p.path)));
+      });
+    }
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedCategory == null && widget.product?.categoryId == null) {
@@ -80,6 +100,8 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
           stock: int.parse(_stockController.text),
           categoryId: _selectedCategory?.id ?? widget.product!.categoryId,
           image: _imageFile,
+          gallery: _galleryImages,
+          deleteGalleryIds: _deleteGalleryIds,
         );
       } else {
         await repo.createProduct(
@@ -89,6 +111,7 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
           stock: int.parse(_stockController.text),
           categoryId: _selectedCategory!.id,
           image: _imageFile,
+          gallery: _galleryImages,
         );
       }
 
@@ -132,34 +155,150 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Image Picker
+                    // Main Image Label
+                    Text(
+                      ref.tr('main_image'),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    const SizedBox(height: 8),
+                    // Main Image Picker
                     GestureDetector(
                       onTap: _pickImage,
                       child: Container(
-                        height: 200,
+                        height: 180,
                         decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.grey[300]!),
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.grey[300]!, width: 2),
                         ),
                         child: _imageFile != null
                             ? ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(14),
                                 child: Image.file(_imageFile!, fit: BoxFit.cover),
                               )
                             : widget.product?.imageUrl != null
                                 ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(14),
                                     child: Image.network(widget.product!.imageUrl!, fit: BoxFit.cover),
                                   )
                                 : Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(Icons.add_photo_alternate, size: 50, color: Colors.grey[400]),
+                                      Icon(Icons.add_photo_alternate_outlined, size: 48, color: Colors.grey[400]),
                                       const SizedBox(height: 8),
                                       Text(ref.tr('tap_add_image'), style: TextStyle(color: Colors.grey[600])),
                                     ],
                                   ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Gallery Images Label
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          ref.tr('gallery_images'),
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        Text(
+                          '${(widget.product?.galleryUrls?.length ?? 0) - _deleteGalleryIds.length + _galleryImages.length}/5',
+                          style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    
+                    // Gallery Grid/List
+                    SizedBox(
+                      height: 100,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          // Add Button
+                          GestureDetector(
+                            onTap: _pickGalleryImages,
+                            child: Container(
+                              width: 100,
+                              margin: const EdgeInsets.only(right: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey[300]!, style: BorderStyle.solid),
+                              ),
+                              child: Icon(Icons.add_a_photo_outlined, color: Colors.grey[500]),
+                            ),
+                          ),
+                          
+                          // Existing Gallery Images (from URL)
+                          if (widget.product?.galleryUrls != null)
+                            ...widget.product!.galleryUrls!.asMap().entries.where((e) => !_deleteGalleryIds.contains(e.key)).map((entry) {
+                              return Stack(
+                                children: [
+                                  Container(
+                                    width: 100,
+                                    margin: const EdgeInsets.only(right: 12),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      image: DecorationImage(
+                                        image: NetworkImage(entry.value),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 4,
+                                    right: 16,
+                                    child: GestureDetector(
+                                      onTap: () => setState(() => _deleteGalleryIds.add(entry.key)),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(Icons.close, color: Colors.white, size: 14),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+
+                          // New Gallery Images (File)
+                          ..._galleryImages.asMap().entries.map((entry) {
+                            return Stack(
+                              children: [
+                                Container(
+                                  width: 100,
+                                  margin: const EdgeInsets.only(right: 12),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    image: DecorationImage(
+                                      image: FileImage(entry.value),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 4,
+                                  right: 16,
+                                  child: GestureDetector(
+                                    onTap: () => setState(() => _galleryImages.removeAt(entry.key)),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.red,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(Icons.close, color: Colors.white, size: 14),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 24),

@@ -71,68 +71,10 @@ class ProductDetailsScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Product Image - Tappable for full screen
-                      GestureDetector(
-                        onTap: () {
-                          final imageUrl = product.imageUrl ?? product.image;
-                          if (imageUrl != null) {
-                            openFullScreenImage(
-                              context, 
-                              imageUrl,
-                              heroTag: 'product_image_$productId',
-                            );
-                          }
-                        },
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: Responsive.value(context, mobile: 280, tablet: 350),
-                              decoration: BoxDecoration(
-                                color: kSoftOrange,
-                              ),
-                              width: double.infinity,
-                              child: (product.imageUrl ?? product.image) != null
-                                  ? Hero(
-                                      tag: 'product_image_$productId',
-                                      child: Image.network(
-                                        product.imageUrl ?? product.image!, 
-                                        fit: BoxFit.cover, 
-                                        width: double.infinity,
-                                        errorBuilder: (_, __, ___) => const Icon(
-                                          Icons.inventory_2_outlined, 
-                                          size: 100, 
-                                          color: kPrimaryOrange,
-                                        ),
-                                      ),
-                                    )
-                                  : const Icon(Icons.inventory_2_outlined, size: 100, color: kPrimaryOrange),
-                            ),
-                            // Tap to zoom hint
-                            if ((product.imageUrl ?? product.image) != null)
-                              Positioned(
-                                bottom: 12,
-                                right: 12,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withValues(alpha: 0.6),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(Icons.zoom_in, color: Colors.white, size: 16),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        ref.tr('tap_to_zoom'),
-                                        style: const TextStyle(color: Colors.white, fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
+                      // Product Image Carousel
+                      SizedBox(
+                        height: Responsive.value(context, mobile: 320, tablet: 400),
+                        child: _ProductImageCarousel(product: product),
                       ),
                       
                       Padding(
@@ -866,6 +808,126 @@ class ProductDetailsScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ProductImageCarousel extends StatefulWidget {
+  final dynamic product;
+
+  const _ProductImageCarousel({required this.product});
+
+  @override
+  State<_ProductImageCarousel> createState() => _ProductImageCarouselState();
+}
+
+class _ProductImageCarouselState extends State<_ProductImageCarousel> {
+  int _currentPage = 0;
+  final PageController _pageController = PageController();
+
+  List<String> get _allImages {
+    final List<String> images = [];
+    if (widget.product.imageUrl != null) images.add(widget.product.imageUrl);
+    if (widget.product.galleryUrls != null) {
+      images.addAll(widget.product.galleryUrls!);
+    }
+    return images.toSet().toList(); // Ensure unique
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final images = _allImages;
+
+    if (images.isEmpty) {
+      return Container(
+        color: kSoftOrange,
+        child: const Icon(Icons.inventory_2_outlined, size: 100, color: kPrimaryOrange),
+      );
+    }
+
+    return Stack(
+      children: [
+        PageView.builder(
+          controller: _pageController,
+          itemCount: images.length,
+          onPageChanged: (index) => setState(() => _currentPage = index),
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () => openFullScreenImage(
+                context, 
+                images[index],
+                heroTag: 'product_image_${widget.product.id}_$index',
+              ),
+              child: Hero(
+                tag: 'product_image_${widget.product.id}_$index',
+                child: Image.network(
+                  images[index],
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  errorBuilder: (_, __, ___) => const Icon(
+                    Icons.broken_image, 
+                    size: 100, 
+                    color: kPrimaryOrange,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+        
+        // Dots Indicator
+        if (images.length > 1)
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(images.length, (index) {
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  height: 8,
+                  width: _currentPage == index ? 24 : 8,
+                  decoration: BoxDecoration(
+                    color: _currentPage == index ? kPrimaryOrange : Colors.white.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(4),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.2),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ),
+          ),
+
+        // Zoom Hint (only if images)
+        Positioned(
+          bottom: 12,
+          right: 12,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.zoom_in, color: Colors.white, size: 14),
+                const SizedBox(width: 4),
+                Text(
+                  '${_currentPage + 1}/${images.length}',
+                  style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

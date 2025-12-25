@@ -27,7 +27,7 @@ class Product extends Model
         'shop_id' => 'integer',
     ];
 
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'gallery_urls'];
 
     public function getImageUrlAttribute()
     {
@@ -39,6 +39,18 @@ class Product extends Model
             return asset('storage/' . $this->image);
         }
         return null;
+    }
+
+    public function getGalleryUrlsAttribute()
+    {
+        return $this->images->map(function($img) {
+            return $img->image_url;
+        });
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
     }
 
     public function category()

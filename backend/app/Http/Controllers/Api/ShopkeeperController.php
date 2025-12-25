@@ -86,7 +86,7 @@ class ShopkeeperController extends Controller
         }
 
         $products = Product::where('shop_id', $shop->id)
-            ->with('category')
+            ->with(['category', 'images'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -112,6 +112,7 @@ class ShopkeeperController extends Controller
             'stock' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|max:2048',
+            'gallery.*' => 'nullable|image|max:2048',
         ]);
 
         $data = $request->only(['name', 'description', 'price', 'stock', 'category_id']);
@@ -123,9 +124,16 @@ class ShopkeeperController extends Controller
 
         $product = Product::create($data);
 
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $image) {
+                $path = $image->store('products/gallery', 'public');
+                $product->images()->create(['image_path' => $path]);
+            }
+        }
+
         return response()->json([
             'message' => 'Product created successfully',
-            'product' => $product->load('category'),
+            'product' => $product->load(['category', 'images']),
         ], 201);
     }
 
@@ -146,6 +154,9 @@ class ShopkeeperController extends Controller
             'stock' => 'sometimes|required|integer|min:0',
             'category_id' => 'sometimes|required|exists:categories,id',
             'image' => 'nullable|image|max:2048',
+            'gallery.*' => 'nullable|image|max:2048',
+            'delete_gallery_ids' => 'nullable|array',
+            'delete_gallery_ids.*' => 'integer|exists:product_images,id',
         ]);
 
         $data = $request->only(['name', 'description', 'price', 'stock', 'category_id']);
@@ -159,9 +170,26 @@ class ShopkeeperController extends Controller
 
         $product->update($data);
 
+        // Delete requested gallery images
+        if ($request->has('delete_gallery_ids')) {
+            $imagesToDelete = $product->images()->whereIn('id', $request->delete_gallery_ids)->get();
+            foreach ($imagesToDelete as $image) {
+                Storage::disk('public')->delete($image->image_path);
+                $image->delete();
+            }
+        }
+
+        // Add new gallery images
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $image) {
+                $path = $image->store('products/gallery', 'public');
+                $product->images()->create(['image_path' => $path]);
+            }
+        }
+
         return response()->json([
             'message' => 'Product updated successfully',
-            'product' => $product->load('category'),
+            'product' => $product->load(['category', 'images']),
         ]);
     }
 

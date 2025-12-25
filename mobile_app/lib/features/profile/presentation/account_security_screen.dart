@@ -320,6 +320,14 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
                             : Text(ref.tr('change_password'), style: const TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () => context.push('/forgot-password'),
+                      child: Text(
+                        ref.tr('forgot_password_question'),
+                        style: const TextStyle(color: kPrimaryOrange),
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -18,8 +18,11 @@ class WishlistScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: context.backgroundColor,
       appBar: AppBar(
+        leading: Navigator.canPop(context) 
+          ? BackButton(color: context.textPrimary)
+          : null,
         title: Text(
-          ref.tr('wishlist'),
+          ref.tr('wishlist_title'),
           style: TextStyle(color: context.textPrimary, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
@@ -43,7 +46,7 @@ class WishlistScreen extends ConsumerWidget {
           );
         },
         loading: () => const WishlistSkeleton(),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
       ),
     );
   }
@@ -79,10 +82,10 @@ class WishlistScreen extends ConsumerWidget {
             Text(
               ref.tr('wishlist_empty'),
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1D1D1F),
+                color: context.textPrimary,
               ),
             ),
             const SizedBox(height: 12),
@@ -169,10 +172,10 @@ class WishlistScreen extends ConsumerWidget {
                     children: [
                       Text(
                         product.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1D1D1F),
+                          color: context.textPrimary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -206,7 +209,7 @@ class WishlistScreen extends ConsumerWidget {
                       SnackBar(
                         content: Text('${product.name} ${ref.tr('removed_from_wishlist')}'),
                         behavior: SnackBarBehavior.floating,
-                        backgroundColor: const Color(0xFF1D1D1F),
+                        backgroundColor: context.isDark ? Colors.grey[900] : const Color(0xFF1D1D1F),
                         margin: const EdgeInsets.all(16),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),

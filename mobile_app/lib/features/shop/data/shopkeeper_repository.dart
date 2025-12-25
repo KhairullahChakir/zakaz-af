@@ -76,6 +76,7 @@ class ShopkeeperRepository {
     required int stock,
     required int categoryId,
     File? image,
+    List<File>? gallery,
   }) async {
     try {
       final formData = FormData.fromMap({
@@ -86,6 +87,10 @@ class ShopkeeperRepository {
         'category_id': categoryId,
         if (image != null)
           'image': await MultipartFile.fromFile(image.path, filename: 'product.jpg'),
+        if (gallery != null && gallery.isNotEmpty)
+          'gallery[]': await Future.wait(
+            gallery.map((file) => MultipartFile.fromFile(file.path)),
+          ),
       });
 
       final response = await _dio.post('/shopkeeper/products', data: formData);
@@ -103,6 +108,8 @@ class ShopkeeperRepository {
     int? stock,
     int? categoryId,
     File? image,
+    List<File>? gallery,
+    List<int>? deleteGalleryIds,
   }) async {
     try {
       final formData = FormData.fromMap({
@@ -113,6 +120,12 @@ class ShopkeeperRepository {
         if (categoryId != null) 'category_id': categoryId,
         if (image != null)
           'image': await MultipartFile.fromFile(image.path, filename: 'product.jpg'),
+        if (gallery != null && gallery.isNotEmpty)
+          'gallery[]': await Future.wait(
+            gallery.map((file) => MultipartFile.fromFile(file.path)),
+          ),
+        if (deleteGalleryIds != null && deleteGalleryIds.isNotEmpty)
+          'delete_gallery_ids[]': deleteGalleryIds,
       });
 
       final response = await _dio.post('/shopkeeper/products/$id', data: formData);

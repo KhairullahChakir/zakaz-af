@@ -78,6 +78,7 @@ class AppTranslations {
     'password': 'Password',
     'confirm_password': 'Confirm Password',
     'forgot_password': 'Forgot Password?',
+    'forgot_password_question': 'Forgot your password?',
     'dont_have_account': "Don't have an account?",
     'already_have_account': 'Already have an account?',
     'sign_up': 'Sign Up',
@@ -649,6 +650,10 @@ class AppTranslations {
     'contact_info_label': 'Contact Information',
     'phone_label': 'Phone Number',
     'email_label': 'Email Address',
+    'gallery_images': 'Gallery Images',
+    'add_gallery_image': 'Add Photo',
+    'main_image': 'Main Image',
+    'max_images_reached': 'Maximum 5 images allowed',
   };
 
   static const Map<String, String> _dari = {
@@ -720,6 +725,7 @@ class AppTranslations {
     'password': 'رمز عبور',
     'confirm_password': 'تایید رمز عبور',
     'forgot_password': 'رمز عبور را فراموش کردید؟',
+    'forgot_password_question': 'رمز عبور خود را فراموش کرده‌اید؟',
     'dont_have_account': 'حساب کاربری ندارید؟',
     'already_have_account': 'حساب کاربری دارید؟',
     'sign_up': 'ثبت نام',
@@ -1291,6 +1297,10 @@ class AppTranslations {
     'contact_info_label': 'اطلاعات تماس',
     'phone_label': 'شماره تماس',
     'email_label': 'آدرس ایمیل',
+    'gallery_images': 'گالری تصاویر',
+    'add_gallery_image': 'افزودن عکس',
+    'main_image': 'تصویر اصلی',
+    'max_images_reached': 'حداکثر ۵ عکس مجاز است',
   };
 
   static const Map<String, String> _pashto = {
@@ -1362,6 +1372,7 @@ class AppTranslations {
     'password': 'پټ نوم',
     'confirm_password': 'پټ نوم تایید',
     'forgot_password': 'پټ نوم مو هیر شو؟',
+    'forgot_password_question': 'آیا خپل رمز مو هیر شوی دی؟',
     'dont_have_account': 'حساب نلرئ؟',
     'already_have_account': 'حساب لرئ؟',
     'sign_up': 'راجستر',
@@ -1933,5 +1944,9 @@ class AppTranslations {
     'contact_info_label': 'د اړیکو معلومات',
     'phone_label': 'د تلیفون شمیره',
     'email_label': 'د بریښنالیک پته',
+    'gallery_images': 'د انځورونو ګالري',
+    'add_gallery_image': 'انځور اضافه کړئ',
+    'main_image': 'اصلي انځور',
+    'max_images_reached': 'حداکثر ۵ انځورونه اجازه لري',
   };
 }

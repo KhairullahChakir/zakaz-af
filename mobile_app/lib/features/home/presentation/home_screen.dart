@@ -191,7 +191,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final bannerHeight = Responsive.bannerHeight(context);
     final gridColumns = Responsive.gridColumns(context);
 
-    return CustomScrollView(
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.invalidate(categoriesProvider);
+        ref.invalidate(unreadNotificationCountProvider);
+        ref.invalidate(productsProvider);
+        
+        // Wait for essential data to reload to keep indicator visible
+        await Future.wait([
+          ref.read(categoriesProvider.future),
+          ref.read(productsProvider(
+            categoryId: _selectedCategoryId,
+            search: _searchController.text.isEmpty ? null : _searchController.text,
+            sortBy: _sortBy,
+            sortOrder: _sortOrder,
+          ).future),
+        ]);
+      },
+      color: kPrimaryOrange,
+      backgroundColor: Colors.white,
+      child: CustomScrollView(
       controller: _scrollController,
       slivers: [
         // Orange App Bar
@@ -690,6 +709,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
         SliverToBoxAdapter(child: SizedBox(height: Responsive.value(context, mobile: 80, tablet: 100))),
       ],
+      ),
     );
   }
 
@@ -1133,8 +1153,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Sort By',
+            Text(
+              ref.tr('sort_by'),
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,

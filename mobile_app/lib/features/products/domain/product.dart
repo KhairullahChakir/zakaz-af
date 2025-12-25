@@ -19,6 +19,7 @@ abstract class Product with _$Product {
     @JsonKey(name: 'shop_id') int? shopId,
     @JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) double? reviewsAvgRating,
     @JsonKey(name: 'order_count') int? orderCount,
+    @JsonKey(name: 'gallery_urls') List<String>? galleryUrls,
     Category? category,
     ProductShop? shop,
   }) = _Product;
