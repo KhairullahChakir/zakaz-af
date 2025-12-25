@@ -229,7 +229,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       _buildSocialButton(
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Facebook ${ref.tr('coming_soon')}')),
+                            SnackBar(content: Text('${ref.tr('facebook')} ${ref.tr('coming_soon')}')),
                           );
                         },
                         child: Icon(Icons.facebook_rounded, color: Colors.blue.shade800, size: 28),
@@ -237,7 +237,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       _buildSocialButton(
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Apple ID ${ref.tr('coming_soon')}')),
+                            SnackBar(content: Text('${ref.tr('apple_id')} ${ref.tr('coming_soon')}')),
                           );
                         },
                         child: const Icon(Icons.apple_rounded, color: Colors.black, size: 28),

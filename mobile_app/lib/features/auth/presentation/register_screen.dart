@@ -24,7 +24,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  String _selectedRole = 'user'; // Default to customer
 
   // Robust email validation
   bool _isValidEmail(String input) {
@@ -67,7 +66,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         password: _passwordController.text,
         email: isEmailInput ? contact : null,
         phone: isEmailInput ? null : contact,
-        role: _selectedRole,
+        role: 'user',
       );
     }
   }
@@ -155,29 +154,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     color: Colors.grey,
                   ),
                 ),
-                const SizedBox(height: 40),
-
-                // Role Selection
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildRoleCard(
-                        title: ref.tr('customer'),
-                        icon: Icons.shopping_cart_outlined,
-                        role: 'user',
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: _buildRoleCard(
-                        title: ref.tr('shopkeeper'),
-                        icon: Icons.storefront_outlined,
-                        role: 'shopkeeper',
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 20),
 
                 // Name field
                 _buildTextField(
@@ -193,14 +170,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 _buildTextField(
                   controller: _contactController,
                   label: ref.tr('email_or_phone'),
-                  hint: 'e.g. name@email.com or 070...',
+                  hint: ref.tr('email_phone_hint'),
                   icon: Icons.contact_mail_outlined,
                   validator: (v) {
                     if (v == null || v.isEmpty) return ref.tr('error_required_field');
                     if (_isEmail(v)) {
-                      if (!_isValidEmail(v)) return 'Enter a valid email address';
+                      if (!_isValidEmail(v)) return ref.tr('invalid_email');
                     } else {
-                      if (!_isValidPhone(v)) return 'Enter a valid phone number';
+                      if (!_isValidPhone(v)) return ref.tr('invalid_phone');
                     }
                     return null;
                   },
@@ -211,7 +188,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 _buildTextField(
                   controller: _passwordController,
                   label: ref.tr('password'),
-                  hint: 'Min. 8 chars, 1 number, 1 special',
+                  hint: ref.tr('password_hint'),
                   icon: Icons.lock_outline,
                   obscureText: _obscurePassword,
                   suffixIcon: IconButton(
@@ -219,9 +196,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                   ),
                   validator: (v) {
-                    if (v!.length < 8) return 'Minimum 8 characters';
-                    if (!RegExp(r'[0-9]').hasMatch(v)) return 'Need at least one number';
-                    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(v)) return 'Need one special character';
+                    if (v!.length < 8) return ref.tr('min_password_length');
+                    if (!RegExp(r'[0-9]').hasMatch(v)) return ref.tr('password_need_number');
+                    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(v)) return ref.tr('password_need_special');
                     return null;
                   },
                 ),
@@ -338,44 +315,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     );
   }
 
-  Widget _buildRoleCard({required String title, required IconData icon, required String role}) {
-    final isSelected = _selectedRole == role;
-    return GestureDetector(
-      onTap: () => setState(() => _selectedRole = role),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          color: isSelected ? kPrimaryOrange : Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected ? kPrimaryOrange : Colors.grey.shade300,
-            width: 2,
-          ),
-          boxShadow: isSelected
-              ? [BoxShadow(color: kPrimaryOrange.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))]
-              : [],
-        ),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? Colors.white : Colors.grey.shade600,
-              size: 32,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.grey.shade600,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildTextField({
     required TextEditingController controller,
