@@ -202,6 +202,10 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                 ),
                 actions: [
                   IconButton(
+                    icon: const Icon(Icons.settings, color: Colors.white),
+                    onPressed: () => context.push('/shopkeeper/settings', extra: dashboard.shop),
+                  ),
+                  IconButton(
                     icon: const Icon(Icons.refresh, color: Colors.white),
                     onPressed: () => ref.invalidate(shopkeeperDashboardProvider),
                   ),

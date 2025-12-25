@@ -86,6 +86,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('/products/{id}', [App\Http\Controllers\Api\ShopkeeperController::class, 'destroyProduct']);
         Route::get('/orders', [App\Http\Controllers\Api\ShopkeeperController::class, 'orders']);
         Route::patch('/orders/{id}/status', [App\Http\Controllers\Api\ShopkeeperController::class, 'updateOrderStatus']);
+        Route::put('/settings', [App\Http\Controllers\Api\ShopkeeperController::class, 'updateSettings']);
     });
     
     // Chat routes

@@ -40,6 +40,9 @@ import '../features/chat/presentation/conversations_screen.dart';
 import '../features/chat/presentation/chat_screen.dart';
 import '../features/chat/domain/conversation.dart';
 import '../features/nearby_shops/presentation/nearby_shops_screen.dart';
+import '../features/shop/presentation/map_picker_screen.dart';
+import '../features/shop/presentation/shop_settings_screen.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../core/widgets/splash_screen.dart';
 
@@ -220,10 +223,24 @@ GoRouter appRouter(Ref ref) {
         path: '/shop-status',
         builder: (context, state) => const ShopApplicationStatusScreen(),
       ),
+      GoRoute(
+        path: '/map-picker',
+        builder: (context, state) {
+          final initialLocation = state.extra as LatLng?;
+          return MapPickerScreen(initialLocation: initialLocation);
+        },
+      ),
       // Shopkeeper routes
       GoRoute(
         path: '/shopkeeper/dashboard',
         builder: (context, state) => const ShopkeeperDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/shopkeeper/settings',
+        builder: (context, state) {
+          final shop = state.extra as Shop;
+          return ShopSettingsScreen(shop: shop);
+        },
       ),
       GoRoute(
         path: '/shopkeeper/products',

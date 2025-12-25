@@ -256,4 +256,39 @@ class ShopkeeperController extends Controller
             'order' => $order->load(['items.product', 'user', 'address']),
         ]);
     }
+
+    /**
+     * Update shop settings
+     */
+    public function updateSettings(Request $request)
+    {
+        $user = $request->user();
+        $shop = $user->shop;
+
+        if (!$shop || !$shop->isApproved()) {
+            return response()->json(['message' => 'Shop not approved'], 403);
+        }
+
+        $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'description' => 'nullable|string',
+            'address' => 'sometimes|required|string',
+            'city' => 'sometimes|required|string',
+            'province' => 'sometimes|required|string',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
+            'phone' => 'sometimes|required|string',
+            'email' => 'nullable|email',
+        ]);
+
+        $shop->update($request->only([
+            'name', 'description', 'address', 'city', 'province', 
+            'latitude', 'longitude', 'phone', 'email'
+        ]));
+
+        return response()->json([
+            'message' => 'Shop settings updated successfully',
+            'shop' => $shop,
+        ]);
+    }
 }

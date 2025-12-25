@@ -150,6 +150,35 @@ class ShopkeeperRepository {
       throw Exception(e.response?.data['message'] ?? 'Failed to update order status');
     }
   }
+
+  Future<Shop> updateSettings({
+    String? name,
+    String? description,
+    String? address,
+    String? city,
+    String? province,
+    double? latitude,
+    double? longitude,
+    String? phone,
+    String? email,
+  }) async {
+    try {
+      final response = await _dio.put('/shopkeeper/settings', data: {
+        if (name != null) 'name': name,
+        if (description != null) 'description': description,
+        if (address != null) 'address': address,
+        if (city != null) 'city': city,
+        if (province != null) 'province': province,
+        if (latitude != null) 'latitude': latitude,
+        if (longitude != null) 'longitude': longitude,
+        if (phone != null) 'phone': phone,
+        if (email != null) 'email': email,
+      });
+      return Shop.fromJson(response.data['shop']);
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Failed to update shop settings');
+    }
+  }
 }
 
 @riverpod

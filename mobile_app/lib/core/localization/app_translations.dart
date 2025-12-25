@@ -634,6 +634,21 @@ class AppTranslations {
     'km_away': '{distance} km away',
     'm_away': '{distance}m away',
     'products_count': '{count} products',
+    
+    // Shop Map Picker
+    'select_on_map': 'Select on Map',
+    'confirm_location': 'Confirm Location',
+    'location_picked': 'Location Picked',
+    'pick_shop_location': 'Pick Shop Location',
+    'gps_coordinates': 'GPS Coordinates',
+    'coordinates_hint': 'Tap to select shop location on map',
+    'update_shop': 'Update Shop',
+    'shop_updated': 'Shop updated successfully',
+    'shop_info_label': 'Shop Information',
+    'location_label': 'Location Details',
+    'contact_info_label': 'Contact Information',
+    'phone_label': 'Phone Number',
+    'email_label': 'Email Address',
   };
 
   static const Map<String, String> _dari = {
@@ -1261,6 +1276,21 @@ class AppTranslations {
     'km_away': '{distance} کیلومتر دورتر',
     'm_away': '{distance} متر دورتر',
     'products_count': '{count} محصول',
+
+    // Shop Map Picker
+    'select_on_map': 'انتخاب روی نقشه',
+    'confirm_location': 'تایید موقعیت',
+    'location_picked': 'موقعیت انتخاب شد',
+    'pick_shop_location': 'انتخاب موقعیت فروشگاه',
+    'gps_coordinates': 'مختصات GPS',
+    'coordinates_hint': 'برای انتخاب موقعیت روی نقشه ضربه بزنید',
+    'update_shop': 'بروزرسانی فروشگاه',
+    'shop_updated': 'فروشگاه با موفقیت بروزرسانی شد',
+    'shop_info_label': 'اطلاعات فروشگاه',
+    'location_label': 'جزئیات موقعیت',
+    'contact_info_label': 'اطلاعات تماس',
+    'phone_label': 'شماره تماس',
+    'email_label': 'آدرس ایمیل',
   };
 
   static const Map<String, String> _pashto = {
@@ -1888,5 +1918,20 @@ class AppTranslations {
     'km_away': '{distance} کیلومتره لرې',
     'm_away': '{distance} متره لرې',
     'products_count': '{count} محصولات',
+
+    // Shop Map Picker
+    'select_on_map': 'په نقشه کې انتخاب کړئ',
+    'confirm_location': 'موقعیت تایید کړئ',
+    'location_picked': 'موقعیت وټاکل شو',
+    'pick_shop_location': 'د پلورنځي موقعیت وټاکئ',
+    'gps_coordinates': 'د GPS مختصات',
+    'coordinates_hint': 'په نقشه کې د موقعیت غوره کولو لپاره ټایپ کړئ',
+    'update_shop': 'پلورنځی تازه کړئ',
+    'shop_updated': 'پلورنځی په بریالیتوب سره تازه شو',
+    'shop_info_label': 'د پلورنځي معلومات',
+    'location_label': 'د موقعیت جزئیات',
+    'contact_info_label': 'د اړیکو معلومات',
+    'phone_label': 'د تلیفون شمیره',
+    'email_label': 'د بریښنالیک پته',
   };
 }

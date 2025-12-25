@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlong2/latlong.dart';
 import '../data/shop_repository.dart';
 import '../../../core/localization/language_provider.dart';
 
@@ -32,6 +33,8 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
   final List<File> _shopPhotos = [];
   File? _businessLicense;
   File? _ownerNid;
+  double? _latitude;
+  double? _longitude;
 
   final List<String> _shopTypes = [
     'grocery',
@@ -136,6 +139,8 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
         province: _provinceController.text,
         phone: _phoneController.text,
         email: _emailController.text.isNotEmpty ? _emailController.text : null,
+        latitude: _latitude,
+        longitude: _longitude,
         photos: _shopPhotos,
         businessLicense: _businessLicense!,
         ownerNid: _ownerNid,
@@ -425,6 +430,90 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
               prefixIcon: const Icon(Icons.email),
             ),
             keyboardType: TextInputType.emailAddress,
+          ),
+          const SizedBox(height: 24),
+
+          // Map Picker Section
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey[300]!),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.location_on, color: Colors.red),
+                    const SizedBox(width: 8),
+                    Text(
+                      ref.tr('gps_coordinates'),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                if (_latitude != null && _longitude != null)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.green[50],
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.green[200]!),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.check_circle, color: Colors.green, size: 20),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${_latitude!.toStringAsFixed(6)}, ${_longitude!.toStringAsFixed(6)}',
+                          style: const TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          ref.tr('location_picked'),
+                          style: const TextStyle(color: Colors.green, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  Text(
+                    ref.tr('coordinates_hint'),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                  ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      final LatLng? result = await context.push('/map-picker', 
+                        extra: (_latitude != null && _longitude != null) 
+                          ? LatLng(_latitude!, _longitude!) 
+                          : null
+                      );
+                      if (result != null) {
+                        setState(() {
+                          _latitude = result.latitude;
+                          _longitude = result.longitude;
+                        });
+                      }
+                    },
+                    icon: const Icon(Icons.map),
+                    label: Text(ref.tr('select_on_map')),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
