@@ -139,6 +139,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   height: 1.5,
                 ),
               ),
+              const SizedBox(height: 32),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
