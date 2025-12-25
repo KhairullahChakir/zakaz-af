@@ -45,7 +45,7 @@ class AddressScreen extends ConsumerWidget {
       body: addressesAsync.when(
         data: (addresses) {
           if (addresses.isEmpty) {
-            return _buildEmptyState(context);
+            return _buildEmptyState(context, ref);
           }
           return _buildAddressList(context, ref, addresses);
         },
@@ -81,7 +81,7 @@ class AddressScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
+  Widget _buildEmptyState(BuildContext context, WidgetRef ref) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(32),
@@ -117,7 +117,6 @@ class AddressScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Text(
           Text(
             ref.tr('add_addresses_desc'),
             textAlign: TextAlign.center,
@@ -226,13 +225,13 @@ class AddressScreen extends ConsumerWidget {
                                 ),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: const Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.star, size: 12, color: Colors.white),
-                                  SizedBox(width: 4),
-                                    Text(
-                                      ref.tr('default_label'),
+                                  const Icon(Icons.star, size: 12, color: Colors.white),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    ref.tr('default_label'),
                                     style: const TextStyle(
                                       fontSize: 10,
                                       color: Colors.white,

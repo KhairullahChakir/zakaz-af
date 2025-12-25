@@ -56,7 +56,7 @@ class OrdersScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    trailing: _getStatusChip(order.status),
+                    trailing: _getStatusChip(ref, order.status),
                     children: [
                       const Divider(),
                       ...order.items.map((item) => ListTile(
@@ -93,7 +93,7 @@ class OrdersScreen extends ConsumerWidget {
     );
   }
 
-  Widget _getStatusChip(String status) {
+  Widget _getStatusChip(WidgetRef ref, String status) {
     Color color;
     switch (status.toLowerCase()) {
       case 'pending':

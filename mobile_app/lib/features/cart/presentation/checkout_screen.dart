@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile_app/features/addresses/presentation/address_provider.dart';
 import 'package:mobile_app/features/addresses/domain/address.dart';
 import 'package:mobile_app/features/orders/data/order_repository.dart';
+import '../../../core/localization/language_provider.dart';
 import 'cart_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -42,7 +43,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     if (_selectedAddress == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Row(
+          content: Row(
             children: [
               Icon(Icons.warning_amber_rounded, color: Colors.white),
               SizedBox(width: 12),
@@ -138,7 +139,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   height: 1.5,
                 ),
               ),
-              const SizedBox(height: 32),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
@@ -327,7 +327,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         color: Colors.white,
                       ),
                     )
-                  : const Row(
+                  : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.shopping_cart_checkout),
