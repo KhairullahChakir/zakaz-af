@@ -187,6 +187,10 @@ class AppTranslations {
 
     // Wishlist
     'wishlist_title': 'My Wishlist',
+    'wishlist': 'Wishlist',
+    'wishlist_empty': 'Your Wishlist is Empty',
+    'wishlist_start_msg': 'Save your favorite items here to buy them later!',
+    'browse_products': 'Browse Products',
 
     // Checkout
     'checkout': 'Checkout',
@@ -589,6 +593,9 @@ class AppTranslations {
     'update_product_btn': 'Update Product',
     'create_product_btn': 'Create Product',
     'loading_categories_error': 'Error loading categories',
+
+    // Additional Notifications
+    'notification_empty_msg': 'You\'re all caught up! Check back later for updates.',
   };
 
   static const Map<String, String> _dari = {
@@ -769,6 +776,10 @@ class AppTranslations {
 
     // Wishlist
     'wishlist_title': 'علاقه‌مندی‌های من',
+    'wishlist': 'علاقه‌مندی‌ها',
+    'wishlist_empty': 'لیست علاقه‌مندی شما خالی است',
+    'wishlist_start_msg': 'محصولات مورد علاقه خود را اینجا ذخیره کنید تا بعداً بخرید!',
+    'browse_products': 'مشاهده محصولات',
 
     // Checkout
     'checkout': 'پرداخت',
@@ -1171,6 +1182,9 @@ class AppTranslations {
     'update_product_btn': 'بروزرسانی محصول',
     'create_product_btn': 'ساخت محصول',
     'loading_categories_error': 'خطا در بارگذاری کټګوری‌ها',
+
+    // Additional Notifications
+    'notification_empty_msg': 'همه چیز به‌روز است! بعداً دوباره سر بزنید.',
   };
 
   static const Map<String, String> _pashto = {
@@ -1349,6 +1363,10 @@ class AppTranslations {
 
     // Wishlist
     'wishlist_title': 'زما د خوښې لست',
+    'wishlist': 'د خوښې لست',
+    'wishlist_empty': 'ستاسو د خوښې لست خالي دی',
+    'wishlist_start_msg': 'خپل غوره محصولات دلته وساتئ ترڅو وروسته یې واخلئ!',
+    'browse_products': 'محصولات وګورئ',
 
     // Checkout
     'checkout': 'چک آوټ',
@@ -1753,5 +1771,8 @@ class AppTranslations {
     'loading_categories_error': 'د کټګوریو په لوډولو کې خطا',
     'whatsapp': 'واټساپ',
     'whatsapp_msg': 'سلام، زه په "{name}" کې علاقه لرم',
+
+    // Additional Notifications
+    'notification_empty_msg': 'ټول تازه دی! وروسته بیا وګورئ.',
   };
 }
