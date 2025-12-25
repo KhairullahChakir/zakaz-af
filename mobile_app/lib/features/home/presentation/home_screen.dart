@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
@@ -24,7 +23,6 @@ import '../../shop/presentation/shopkeeper_dashboard_screen.dart';
 import '../../admin/presentation/admin_dashboard_screen.dart';
 import '../../profile/presentation/language_selection_screen.dart';
 import '../../../core/localization/language_provider.dart';
-import '../../../core/services/biometric_service.dart';
 import '../../../core/widgets/custom_cached_image.dart';
 import '../../../core/widgets/shimmer_loading.dart';
 
@@ -385,6 +383,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                         ),
                       ),
+
                       Positioned.fill(
                         child: Padding(
                           padding: EdgeInsets.all(Responsive.value(context, mobile: 16, tablet: 24)),
@@ -466,7 +465,83 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
 
-        // Categories Section
+        // Quick Actions - Nearby Shops
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: padding, vertical: 8),
+            child: GestureDetector(
+              onTap: () => context.push('/nearby-shops'),
+              child: Container(
+                padding: EdgeInsets.all(Responsive.value(context, mobile: 16, tablet: 20)),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.teal.shade400,
+                      Colors.teal.shade600,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.teal.withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(Responsive.value(context, mobile: 12, tablet: 16)),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.location_on,
+                        color: Colors.white,
+                        size: Responsive.value(context, mobile: 28, tablet: 36),
+                      ),
+                    ),
+                    SizedBox(width: Responsive.value(context, mobile: 16, tablet: 20)),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ref.tr('nearby_shops'),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Responsive.value(context, mobile: 16, tablet: 20),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            ref.tr('find_shops_near_you'),
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.9),
+                              fontSize: Responsive.value(context, mobile: 12, tablet: 14),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                      size: Responsive.value(context, mobile: 18, tablet: 22),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.fromLTRB(padding, 8, padding, 8),
@@ -645,6 +720,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
                 border: isSelected ? null : Border.all(color: kPrimaryOrange.withValues(alpha: 0.3)),
               ),
+
               // Ensure photo fills the container if present
               width: hasPhoto ? cardSize : null,
               height: hasPhoto ? cardSize : null,
@@ -728,6 +804,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
+
           ],
         ),
         child: Column(
@@ -789,6 +866,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 blurRadius: 4,
                               ),
                             ],
+
                           ),
                           child: Icon(
                             isInWishlist ? Icons.favorite : Icons.favorite_border, 

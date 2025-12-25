@@ -128,8 +128,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               height: 40,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.2),
-                border: Border.all(color: Colors.white.withOpacity(0.5), width: 1.5),
+                color: Colors.white.withValues(alpha: 0.2),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.5), width: 1.5),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
@@ -262,12 +262,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             decoration: BoxDecoration(
               color: context.cardColor,
               boxShadow: [
-                BoxShadow(
-                  color: context.shadowColor,
-                  blurRadius: 10,
-                  offset: const Offset(0, -5),
-                ),
-              ],
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 20,
+                offset: const Offset(0, -5),
+              ),
+            ],
             ),
             child: SafeArea(
               child: Row(

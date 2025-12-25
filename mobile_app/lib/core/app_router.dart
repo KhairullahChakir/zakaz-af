@@ -39,6 +39,7 @@ import '../features/shop/presentation/shopkeeper_orders_screen.dart';
 import '../features/chat/presentation/conversations_screen.dart';
 import '../features/chat/presentation/chat_screen.dart';
 import '../features/chat/domain/conversation.dart';
+import '../features/nearby_shops/presentation/nearby_shops_screen.dart';
 
 import '../core/widgets/splash_screen.dart';
 
@@ -156,6 +157,11 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/appearance',
         builder: (context, state) => const AppearanceSettingsScreen(),
+      ),
+      // Nearby shops route
+      GoRoute(
+        path: '/nearby-shops',
+        builder: (context, state) => const NearbyShopsScreen(),
       ),
       // Chat routes
       GoRoute(

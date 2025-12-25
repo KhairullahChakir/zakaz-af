@@ -76,10 +76,20 @@
 - **Product Context**: Start chat from specific product page
 - **Sender Identification**: Correctly displays name/avatar for both parties
 
+### 8. Location Services (NEW)
+- **Nearby Shops**: GPS-based shop discovery using Haversine formula
+- **Distance Display**: Shows distance from user to each shop
+- **Radius Filter**: Adjustable search radius (5km, 10km, 25km, 50km)
+- **Location Permissions**: Full permission handling with settings redirect
+
 ## API Endpoints
 
 ### Public
 - `GET /categories`, `GET /products`, `GET /products/{id}`
+- `GET /shops/nearby` - Get nearby shops by GPS coordinates
+- `GET /shops` - List all approved shops with filters
+- `GET /shops/{id}` - Get shop details
+- `GET /shops/types` - Get available shop types
 
 ### Auth
 - `POST /register`, `POST /login`, `POST /logout`
@@ -113,9 +123,9 @@
 - `POST /admin/shops/{id}/approve`, `POST /admin/shops/{id}/reject`
 - `POST /admin/shops/{id}/suspend`
 
-1. **Location Services**: GPS-based shop discovery
-2. **Multi-language**: Complete Dari/Pashto/English support (Translations & Layout)
-3. **Advanced Features**: Live Order Tracking (Driver App) or Analytics
+## Remaining Features
+1. **Multi-language**: Complete Dari/Pashto/English support (Translations & Layout)
+2. **Advanced Features**: Live Order Tracking (Driver App) or Analytics
 
 ## Tech Stack
 - **Backend**: Laravel 11, MariaDB, Sanctum

@@ -28,8 +28,8 @@ class Shop extends Model
 
     protected $casts = [
         'photos' => 'array',
-        'latitude' => 'decimal:8',
-        'longitude' => 'decimal:8',
+        'latitude' => 'double',
+        'longitude' => 'double',
         'approved_at' => 'datetime',
     ];
 

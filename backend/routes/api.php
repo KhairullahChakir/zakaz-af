@@ -15,6 +15,12 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::get('/products/{id}/reviews', [App\Http\Controllers\Api\ReviewController::class, 'index']);
 
+// Shop discovery routes (public)
+Route::get('/shops/nearby', [App\Http\Controllers\Api\ShopController::class, 'nearby']);
+Route::get('/shops', [App\Http\Controllers\Api\ShopController::class, 'index']);
+Route::get('/shops/types', [App\Http\Controllers\Api\ShopController::class, 'types']);
+Route::get('/shops/{id}', [App\Http\Controllers\Api\ShopController::class, 'show']);
+
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:6,1');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/auth/google', [AuthController::class, 'googleLogin']);

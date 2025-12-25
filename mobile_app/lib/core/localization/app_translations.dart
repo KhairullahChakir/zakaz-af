@@ -618,6 +618,20 @@ class AppTranslations {
     'theme_info': 'Changes apply immediately. Your preference is saved automatically.',
     'preview': 'Preview',
     'sample_product': 'Sample Product',
+
+    // Nearby Shops
+    'nearby_shops': 'Nearby Shops',
+    'find_shops_near_you': 'Find shops near you',
+    'getting_location': 'Getting your location...',
+    'location_access_required': 'Location Access Required',
+    'enable_location_msg': 'Please enable location services to find shops near you.',
+    'open_settings': 'Open Settings',
+    'no_shops_nearby': 'No Shops Nearby',
+    'no_shops_in_radius': 'No shops found within {radius} km of your location.',
+    'search_radius': 'Search radius',
+    'km_away': '{distance} km away',
+    'm_away': '{distance}m away',
+    'products_count': '{count} products',
   };
 
   static const Map<String, String> _dari = {
@@ -1229,6 +1243,20 @@ class AppTranslations {
     'theme_info': 'تغییرات فوری اعمال می‌شوند. ترجیحات شما به‌صورت خودکار ذخیره می‌شود.',
     'preview': 'پیش‌نمایش',
     'sample_product': 'محصول نمونه',
+
+    // Nearby Shops
+    'nearby_shops': 'فروشگاه‌های نزدیک',
+    'find_shops_near_you': 'فروشگاه‌های نزدیک خود را پیدا کنید',
+    'getting_location': 'در حال دریافت موقعیت شما...',
+    'location_access_required': 'دسترسی به موقعیت لازم است',
+    'enable_location_msg': 'لطفاً خدمات موقعیت را فعال کنید تا فروشگاه‌های نزدیک را پیدا کنید.',
+    'open_settings': 'باز کردن تنظیمات',
+    'no_shops_nearby': 'فروشگاهی در نزدیکی نیست',
+    'no_shops_in_radius': 'هیچ فروشگاهی در شعاع {radius} کیلومتری شما یافت نشد.',
+    'search_radius': 'شعاع جستجو',
+    'km_away': '{distance} کیلومتر دورتر',
+    'm_away': '{distance} متر دورتر',
+    'products_count': '{count} محصول',
   };
 
   static const Map<String, String> _pashto = {
@@ -1840,5 +1868,19 @@ class AppTranslations {
     'theme_info': 'بدلونونه سمدلاسه پلي کیږي. ستاسو ترجیح په اوتومات ډول خوندي کیږي.',
     'preview': 'مخلید',
     'sample_product': 'نمونه محصول',
+
+    // Nearby Shops
+    'nearby_shops': 'نږدې پلورنځي',
+    'find_shops_near_you': 'خپل نږدې پلورنځي ومومئ',
+    'getting_location': 'ستاسو موقعیت ترلاسه کیږي...',
+    'location_access_required': 'موقعیت ته لاسرسی ته اړتیا ده',
+    'enable_location_msg': 'مهرباني وکړئ د موقعیت خدمات فعال کړئ ترڅو نږدې پلورنځي ومومئ.',
+    'open_settings': 'تنظیمات پرانیزئ',
+    'no_shops_nearby': 'نږدې پلورنځي نشته',
+    'no_shops_in_radius': 'ستاسو د {radius} کیلومتره شعاع کې هیڅ پلورنځی ونه موندل شو.',
+    'search_radius': 'د لټون شعاع',
+    'km_away': '{distance} کیلومتره لرې',
+    'm_away': '{distance} متره لرې',
+    'products_count': '{count} محصولات',
   };
 }
