@@ -235,6 +235,22 @@ class ShopkeeperController extends Controller
 
         $order->update(['status' => $request->status]);
 
+        // Send notification to customer
+        if ($order->user) {
+            try {
+                \App\Services\FCMService::sendToUser(
+                    $order->user,
+                    "Order Status Updated",
+                    "Your order #{$order->id} is now " . ucfirst($request->status),
+                    ['order_id' => $order->id, 'type' => 'order'],
+                    'order'
+                );
+            } catch (\Exception $e) {
+                // Log error but don't fail the request
+                \Illuminate\Support\Facades\Log::error("Failed to send notification: " . $e->getMessage());
+            }
+        }
+
         return response()->json([
             'message' => 'Order status updated',
             'order' => $order->load(['items.product', 'user', 'address']),

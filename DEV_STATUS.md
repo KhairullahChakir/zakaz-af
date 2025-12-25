@@ -63,7 +63,7 @@
 ### 6. Technical Features
 - **Auth Interceptor**: Auto-inject Bearer token in all requests
 - **Cart Persistence**: SharedPreferences for offline cart
-- **FCM Infrastructure**: Push notification ready
+- **Notifications**: Full FCM integration for Order Updates and Chat messages
 - **Image Upload**: Profile, products, shop photos, documents
 - **Riverpod**: State management with code generation
 - **GoRouter**: Declarative routing
@@ -113,10 +113,9 @@
 - `POST /admin/shops/{id}/suspend`
 
 ## Next Steps
-1. **Testing**: Unit tests for repositories and controllers
-2. **Payment Integration**: Payment gateway for checkout
-3. **Notifications**: Push notifications for order updates
-4. **Coupons/Discounts**: Promo codes at checkout
+1. **Payment Integration**: Payment gateway for checkout
+2. **Coupons/Discounts**: Promo codes at checkout
+3. **Testing**: Unit tests for repositories and controllers
 5. **Multi-language**: Dari/Pashto/English support
 6. **Location Services**: GPS-based shop discovery
 

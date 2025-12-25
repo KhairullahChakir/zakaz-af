@@ -77,19 +77,10 @@ class NotificationController extends Controller
         $sentCount = 0;
         foreach ($users as $user) {
             // Save to database
-            Notification::create([
-                'user_id' => $user->id,
-                'title' => $title,
-                'body' => $body,
-                'type' => $type,
-            ]);
-
-            // Send FCM push notification
-            if ($user->fcm_token) {
-                if ($this->sendFcmNotification($user->fcm_token, $title, $body)) {
-                    $sentCount++;
-                }
-            }
+            // Send using service
+            \App\Services\FCMService::sendToUser($user, $title, $body, ['type' => $type], $type);
+            
+            if ($user->fcm_token) $sentCount++;
         }
 
         return response()->json([
@@ -97,54 +88,5 @@ class NotificationController extends Controller
             'total_users' => $users->count(),
             'push_sent' => $sentCount,
         ]);
-    }
-
-    // Send FCM push notification using HTTP v1 API
-    private function sendFcmNotification($token, $title, $body)
-    {
-        $serviceAccountPath = storage_path('app/firebase-service-account.json');
-        
-        if (!file_exists($serviceAccountPath)) {
-            \Log::error('Firebase service account file not found');
-            return false;
-        }
-
-        try {
-            // Get access token using Google Auth library
-            $credentials = new ServiceAccountCredentials(
-                'https://www.googleapis.com/auth/firebase.messaging',
-                json_decode(file_get_contents($serviceAccountPath), true)
-            );
-            
-            $accessToken = $credentials->fetchAuthToken()['access_token'];
-            
-            // Get project ID from service account file
-            $serviceAccount = json_decode(file_get_contents($serviceAccountPath), true);
-            $projectId = $serviceAccount['project_id'];
-
-            // Send notification using FCM HTTP v1 API
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $accessToken,
-                'Content-Type' => 'application/json',
-            ])->post("https://fcm.googleapis.com/v1/projects/{$projectId}/messages:send", [
-                'message' => [
-                    'token' => $token,
-                    'notification' => [
-                        'title' => $title,
-                        'body' => $body,
-                    ],
-                ],
-            ]);
-
-            if ($response->successful()) {
-                return true;
-            } else {
-                \Log::error('FCM v1 API error: ' . $response->body());
-                return false;
-            }
-        } catch (\Exception $e) {
-            \Log::error('FCM notification error: ' . $e->getMessage());
-            return false;
-        }
     }
 }

@@ -219,6 +219,33 @@ class ChatController extends Controller
         
         // broadcast(new MessageSent($message))->toOthers();
 
+        // Send Push Notification
+        try {
+            $receiverId = ($conversation->customer_id == $user->id) 
+                ? $conversation->shop->owner_id 
+                : $conversation->customer_id;
+            
+            $receiver = \App\Models\User::find($receiverId);
+            
+            if ($receiver && $receiver->fcm_token) {
+                $body = $message->type == 'image' ? 'Sent an image' : 
+                        ($message->type == 'product' ? 'Sent a product' : \Illuminate\Support\Str::limit($request->content, 50));
+                
+                \App\Services\FCMService::send(
+                    $receiver->fcm_token,
+                    $user->name,
+                    $body,
+                    [
+                        'type' => 'chat',
+                        'conversation_id' => (string)$conversationId,
+                        'sender_id' => (string)$user->id
+                    ]
+                );
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Chat notification error: " . $e->getMessage());
+        }
+
     return response()->json([
         'id' => (int) $message->id,
         'conversation_id' => (int) $message->conversation_id,
