@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'auth_controller.dart';
 import '../../../core/localization/language_provider.dart';
 
-// Reuse constants from HomeScreen or define them here for consistency
 const Color kPrimaryOrange = Color(0xFFFF6B00);
-const Color kSoftOrange = Color(0xFFFFF3E6);
+const Color kLightBg = Color(0xFFFBFBFD);
+const Color kCardWhite = Colors.white;
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -18,20 +18,27 @@ class RegisterScreen extends ConsumerStatefulWidget {
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _contactController = TextEditingController(); // Uses for Email or Phone
+  final _contactController = TextEditingController(); 
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _acceptTerms = false;
 
-  // Robust email validation
-  bool _isValidEmail(String input) {
-    return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(input);
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _contactController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
 
-  // Basic phone validation (e.g., +93 or local 9-10 digits)
+  bool _isValidEmail(String input) {
+    return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(input);
+  }
+
   bool _isValidPhone(String input) {
     return RegExp(r'^\+?[0-9]{9,15}$').hasMatch(input);
   }
@@ -40,12 +47,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     return input.contains('@');
   }
 
-  bool _acceptTerms = false;
-
   Future<void> _submit() async {
     if (!_acceptTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(ref.tr('accept_terms_msg'))),
+        SnackBar(
+          content: Text(ref.tr('accept_terms_msg')),
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
       );
       return;
     }
@@ -53,7 +63,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (_formKey.currentState!.validate()) {
       if (_passwordController.text != _confirmPasswordController.text) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(ref.tr('error_passwords_dont_match'))),
+          SnackBar(
+            content: Text(ref.tr('error_passwords_dont_match')),
+            backgroundColor: Colors.redAccent,
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
         );
         return;
       }
@@ -72,26 +88,19 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   @override
-  void dispose() {
-    _nameController.dispose();
-    _contactController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     ref.listen(authControllerProvider, (previous, next) {
       if (next.hasError) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(next.error.toString()),
+            content: Text(next.error.toString().replaceAll('Exception: ', '')),
             backgroundColor: Colors.redAccent,
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
       } else if (next.value != null) {
-        // Registration successful but needs verification
         if (next.value!.isVerified == false) {
            context.push('/verify-otp', extra: _contactController.text.trim());
         } else {
@@ -104,209 +113,173 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final isLoading = authState.isLoading;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kLightBg,
       appBar: AppBar(
-        title: Text(ref.tr('create_account')),
-        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Colors.black87,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF1D1D1F), size: 20),
+          onPressed: () => context.pop(),
+        ),
       ),
+      extendBodyBehindAppBar: true,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Header/Logo section
+                const SizedBox(height: 10),
+                // Header section
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: kSoftOrange,
-                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
-                    child: const Icon(
-                      Icons.person_add_rounded,
-                      size: 60,
-                      color: kPrimaryOrange,
-                    ),
+                    child: const Icon(Icons.person_add_rounded, size: 48, color: kPrimaryOrange),
                   ),
                 ),
                 const SizedBox(height: 24),
+                
                 Text(
                   ref.tr('join_zakaz'),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF1D1D1F),
+                    letterSpacing: -0.5,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   ref.tr('register_subtitle'),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
 
-                // Name field
-                _buildTextField(
-                  controller: _nameController,
-                  label: ref.tr('full_name'),
-                  hint: ref.tr('enter_full_name'),
-                  icon: Icons.person_outline,
-                  validator: (v) => v!.isEmpty ? ref.tr('error_required_field') : null,
-                ),
-                const SizedBox(height: 20),
-
-                // Contact field
-                _buildTextField(
-                  controller: _contactController,
-                  label: ref.tr('email_or_phone'),
-                  hint: ref.tr('email_phone_hint'),
-                  icon: Icons.contact_mail_outlined,
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return ref.tr('error_required_field');
-                    if (_isEmail(v)) {
-                      if (!_isValidEmail(v)) return ref.tr('invalid_email');
-                    } else {
-                      if (!_isValidPhone(v)) return ref.tr('invalid_phone');
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-
-                // Password field
-                _buildTextField(
-                  controller: _passwordController,
-                  label: ref.tr('password'),
-                  hint: ref.tr('password_hint'),
-                  icon: Icons.lock_outline,
-                  obscureText: _obscurePassword,
-                  suffixIcon: IconButton(
-                    icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                  ),
-                  validator: (v) {
-                    if (v!.length < 8) return ref.tr('min_password_length');
-                    if (!RegExp(r'[0-9]').hasMatch(v)) return ref.tr('password_need_number');
-                    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(v)) return ref.tr('password_need_special');
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-
-                // Confirm Password field
-                _buildTextField(
-                  controller: _confirmPasswordController,
-                  label: ref.tr('confirm_password'),
-                  hint: ref.tr('repeat_password'),
-                  icon: Icons.lock_reset_outlined,
-                  obscureText: _obscureConfirmPassword,
-                  suffixIcon: IconButton(
-                    icon: Icon(_obscureConfirmPassword ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
-                  ),
-                  validator: (v) {
-                    if (v!.isEmpty) return ref.tr('error_required_field');
-                    if (v != _passwordController.text) return ref.tr('error_passwords_dont_match');
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-
-                // Terms of Service Checkbox
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _acceptTerms,
-                      activeColor: kPrimaryOrange,
-                      onChanged: (v) => setState(() => _acceptTerms = v ?? false),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => setState(() => _acceptTerms = !_acceptTerms),
-                        child: Text.rich(
-                          TextSpan(
-                            text: '${ref.tr('i_agree_to')} ',
-                            children: [
-                              TextSpan(
-                                text: ref.tr('terms_conditions'),
-                                style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: ' ${ref.tr('and')} '),
-                              TextSpan(
-                                text: ref.tr('privacy_policy'),
-                                style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          style: const TextStyle(fontSize: 13),
-                        ),
+                // Form Container
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: kCardWhite,
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 40,
+                        offset: const Offset(0, 20),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      _buildCleanField(
+                        controller: _nameController,
+                        label: ref.tr('full_name'),
+                        hint: ref.tr('enter_full_name'),
+                        icon: Icons.person_outline_rounded,
+                        validator: (v) => v!.isEmpty ? ref.tr('error_required_field') : null,
+                      ),
+                      const SizedBox(height: 24),
+                      _buildCleanField(
+                        controller: _contactController,
+                        label: ref.tr('email_or_phone'),
+                        hint: ref.tr('email_phone_hint'),
+                        icon: Icons.contact_mail_rounded,
+                        validator: (v) {
+                          if (v == null || v.isEmpty) return ref.tr('error_required_field');
+                          if (_isEmail(v)) {
+                            if (!_isValidEmail(v)) return ref.tr('invalid_email');
+                          } else {
+                            if (!_isValidPhone(v)) return ref.tr('invalid_phone');
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      _buildCleanField(
+                        controller: _passwordController,
+                        label: ref.tr('password'),
+                        hint: ref.tr('password_hint'),
+                        icon: Icons.lock_outline_rounded,
+                        obscureText: _obscurePassword,
+                        suffixIcon: IconButton(
+                          icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: Colors.grey),
+                          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                        ),
+                        validator: (v) {
+                          if (v!.length < 8) return ref.tr('min_password_length');
+                          if (!RegExp(r'[0-9]').hasMatch(v)) return ref.tr('password_need_number');
+                          if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(v)) return ref.tr('password_need_special');
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      _buildCleanField(
+                        controller: _confirmPasswordController,
+                        label: ref.tr('confirm_password'),
+                        hint: ref.tr('repeat_password'),
+                        icon: Icons.security_rounded,
+                        obscureText: _obscureConfirmPassword,
+                        suffixIcon: IconButton(
+                          icon: Icon(_obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: Colors.grey),
+                          onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                        ),
+                        validator: (v) {
+                          if (v!.isEmpty) return ref.tr('error_required_field');
+                          if (v != _passwordController.text) return ref.tr('error_passwords_dont_match');
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      _buildTermsCheckbox(),
+                    ],
+                  ),
                 ),
+                
                 const SizedBox(height: 32),
 
-                // Submit Button
                 ElevatedButton(
                   onPressed: isLoading ? null : _submit,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: kPrimaryOrange,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 4,
-                    shadowColor: kPrimaryOrange.withValues(alpha: 0.4),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    elevation: 8,
+                    shadowColor: kPrimaryOrange.withValues(alpha: 0.3),
                   ),
                   child: isLoading
                       ? const SizedBox(
                           height: 24,
                           width: 24,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
+                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                         )
                       : Text(
                           ref.tr('create_account'),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                 ),
-                const SizedBox(height: 24),
-
-                // Footer
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('${ref.tr('already_have_account')} '),
-                    TextButton(
-                      onPressed: () => context.pop(),
-                      child: Text(
-                        ref.tr('sign_in'),
-                        style: const TextStyle(
-                          color: kPrimaryOrange,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                
                 const SizedBox(height: 32),
+
+                _buildFooter(),
+                
+                const SizedBox(height: 40),
               ],
             ),
           ),
@@ -315,9 +288,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     );
   }
 
-
-
-  Widget _buildTextField({
+  Widget _buildCleanField({
     required TextEditingController controller,
     required String label,
     required String hint,
@@ -331,38 +302,32 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: Colors.black54,
-          ),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1D1D1F)),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
         TextFormField(
           controller: controller,
           obscureText: obscureText,
+          style: const TextStyle(fontSize: 16),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
-            prefixIcon: Icon(icon, color: kPrimaryOrange, size: 20),
+            prefixIcon: Icon(icon, color: kPrimaryOrange, size: 22),
             suffixIcon: suffixIcon,
             filled: true,
             fillColor: Colors.grey.shade50,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide.none,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.grey.shade200, width: 1.5),
+              borderRadius: BorderRadius.circular(16), 
+              borderSide: BorderSide(color: Colors.grey.shade100, width: 1.5),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16), 
               borderSide: const BorderSide(color: kPrimaryOrange, width: 1.5),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16), 
               borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
             ),
           ),
@@ -371,4 +336,58 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       ],
     );
   }
+
+  Widget _buildTermsCheckbox() {
+    return InkWell(
+      onTap: () => setState(() => _acceptTerms = !_acceptTerms),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Checkbox(
+              value: _acceptTerms,
+              onChanged: (v) => setState(() => _acceptTerms = v ?? false),
+              activeColor: kPrimaryOrange,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+              side: BorderSide(color: Colors.grey.shade300, width: 1.5),
+            ),
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  text: '${ref.tr('i_agree_to')} ',
+                  children: [
+                    TextSpan(
+                      text: ref.tr('terms_conditions'),
+                      style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: ' ${ref.tr('and')} '),
+                    TextSpan(
+                      text: ref.tr('privacy_policy'),
+                      style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFooter() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(ref.tr('already_have_account')),
+        TextButton(
+          onPressed: () => context.pop(),
+          child: Text(ref.tr('sign_in'), style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold)),
+        ),
+      ],
+    );
+  }
 }
+
+
