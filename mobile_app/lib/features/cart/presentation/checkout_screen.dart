@@ -487,7 +487,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            ref.tr('approved_label'),
+                            ref.tr('default_label'),
                             style: TextStyle(
                               fontSize: 10,
                               color: Colors.green.shade700,

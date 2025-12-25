@@ -231,7 +231,8 @@ class AddressScreen extends ConsumerWidget {
                                 children: [
                                   Icon(Icons.star, size: 12, color: Colors.white),
                                   SizedBox(width: 4),
-                                    ref.tr('approved_label'),
+                                    Text(
+                                      ref.tr('default_label'),
                                     style: const TextStyle(
                                       fontSize: 10,
                                       color: Colors.white,

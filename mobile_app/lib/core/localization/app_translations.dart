@@ -212,6 +212,7 @@ class AppTranslations {
     'cash_on_delivery': 'Cash on Delivery',
     'select_address': 'Select Address',
     'add_address': 'Add Address',
+    'default_label': 'Default',
 
     // Orders
     'my_orders': 'My Orders',
@@ -735,6 +736,7 @@ class AppTranslations {
     'cash_on_delivery': 'پرداخت در محل',
     'select_address': 'انتخاب آدرس',
     'add_address': 'افزودن آدرس',
+    'default_label': 'پیش‌فرض',
 
     // Orders
     'my_orders': 'سفارشات من',
@@ -1256,6 +1258,7 @@ class AppTranslations {
     'cash_on_delivery': 'پیسې په تحویلۍ وخت',
     'select_address': 'پته غوره کړئ',
     'add_address': 'پته اضافه کړئ',
+    'default_label': 'اصلي پته',
 
     // Orders
     'my_orders': 'زما امرونه',
