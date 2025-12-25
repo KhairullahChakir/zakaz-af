@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
 const Color kSoftOrange = Color(0xFFFFF3E6);
 
-class HelpCenterScreen extends StatelessWidget {
+class HelpCenterScreen extends ConsumerWidget {
   const HelpCenterScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('Help Center', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(ref.tr('help_center'), style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -38,7 +40,7 @@ class HelpCenterScreen extends StatelessWidget {
               ),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: 'Search for help...',
+                  hintText: ref.tr('search_help_hint'),
                   hintStyle: TextStyle(color: Colors.grey[400]),
                   prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
                   border: InputBorder.none,
@@ -49,22 +51,22 @@ class HelpCenterScreen extends StatelessWidget {
             const SizedBox(height: 24),
             
             // Quick Actions
-            _buildSectionTitle('Quick Help'),
+            _buildSectionTitle(ref.tr('quick_help')),
             const SizedBox(height: 12),
             Row(
               children: [
-                Expanded(child: _buildQuickAction(Icons.chat_bubble_outline, 'Live Chat', Colors.blue)),
+                Expanded(child: _buildQuickAction(Icons.chat_bubble_outline, ref.tr('live_chat'), Colors.blue)),
                 const SizedBox(width: 12),
-                Expanded(child: _buildQuickAction(Icons.email_outlined, 'Email Us', Colors.green)),
+                Expanded(child: _buildQuickAction(Icons.email_outlined, ref.tr('email_us'), Colors.green)),
                 const SizedBox(width: 12),
-                Expanded(child: _buildQuickAction(Icons.phone_outlined, 'Call Us', kPrimaryOrange)),
+                Expanded(child: _buildQuickAction(Icons.phone_outlined, ref.tr('call_us'), kPrimaryOrange)),
               ],
             ),
             
             const SizedBox(height: 32),
             
             // FAQ Categories
-            _buildSectionTitle('FAQ Categories'),
+            _buildSectionTitle(ref.tr('faq_categories')),
             const SizedBox(height: 12),
             _buildFAQCategory(
               Icons.shopping_bag_outlined,
@@ -110,7 +112,7 @@ class HelpCenterScreen extends StatelessWidget {
             const SizedBox(height: 32),
             
             // Contact Support
-            _buildSectionTitle('Still need help?'),
+            _buildSectionTitle(ref.tr('still_need_help')),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(20),
@@ -135,8 +137,8 @@ class HelpCenterScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Contact Support',
+                        Text(
+                          ref.tr('contact_support'),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -145,7 +147,7 @@ class HelpCenterScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Our team is available 24/7 to assist you',
+                          ref.tr('support_24_7_assist'),
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.9),
                             fontSize: 13,
@@ -161,7 +163,7 @@ class HelpCenterScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: const Text('Get Support', style: TextStyle(fontWeight: FontWeight.bold)),
+                          child: Text(ref.tr('get_support'), style: const TextStyle(fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),

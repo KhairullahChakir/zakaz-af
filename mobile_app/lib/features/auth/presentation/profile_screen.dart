@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'auth_controller.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -41,7 +42,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Profile'),
+        title: Text(ref.tr('edit_profile')),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -82,30 +83,30 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               const SizedBox(height: 32),
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  prefixIcon: Icon(Icons.person_outline),
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: ref.tr('full_name'),
+                  prefixIcon: const Icon(Icons.person_outline),
+                  border: const OutlineInputBorder(),
                 ),
-                validator: (value) => value == null || value.isEmpty ? 'Please enter your name' : null,
+                validator: (value) => value == null || value.isEmpty ? ref.tr('please_enter_name') : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email_outlined),
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: ref.tr('email'),
+                  prefixIcon: const Icon(Icons.email_outlined),
+                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _phoneController,
-                decoration: const InputDecoration(
-                  labelText: 'Phone',
-                  prefixIcon: Icon(Icons.phone_outlined),
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: ref.tr('phone'),
+                  prefixIcon: const Icon(Icons.phone_outlined),
+                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.phone,
               ),
@@ -117,7 +118,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
                 child: state.isLoading
                     ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                    : const Text('Save Changes'),
+                    : Text(ref.tr('save_changes')),
               ),
               if (state.hasError)
                 Padding(
@@ -147,7 +148,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     if (mounted && !ref.read(authControllerProvider).hasError) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile updated successfully')),
+        SnackBar(content: Text(ref.tr('profile_updated_success'))),
       );
       Navigator.pop(context);
     }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/localization/language_provider.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -54,9 +54,9 @@ class LanguageSelectionScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Choose Your Language',
-                    style: TextStyle(
+                  Text(
+                    ref.tr('choose_language'),
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -100,7 +100,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'The app will automatically adjust text direction for RTL languages (Dari & Pashto)',
+                      ref.tr('rtl_info_msg'),
                       style: TextStyle(
                         color: Colors.blue[700],
                         fontSize: 13,

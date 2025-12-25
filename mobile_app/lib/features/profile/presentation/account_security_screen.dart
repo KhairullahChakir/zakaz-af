@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../auth/presentation/auth_controller.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kSoftOrange = Color(0xFFFFF3E6);
@@ -48,8 +49,8 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
         _confirmPasswordController.clear();
         
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Password changed successfully!'),
+          SnackBar(
+            content: Text(ref.tr('password_changed_success')),
             backgroundColor: Colors.green,
           ),
         );
@@ -72,7 +73,7 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('Account Security', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(ref.tr('account_security'), style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -103,7 +104,7 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(user?.name ?? 'User', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        Text(user?.name ?? ref.tr('user'), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                         Text(user?.email ?? '', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
                       ],
                     ),
@@ -114,11 +115,11 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
                       color: Colors.green.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
-                        Icon(Icons.verified_user, color: Colors.green, size: 14),
-                        SizedBox(width: 4),
-                        Text('Verified', style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.w600)),
+                        const Icon(Icons.verified_user, color: Colors.green, size: 14),
+                        const SizedBox(width: 4),
+                        Text(ref.tr('verified'), style: const TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),
@@ -127,7 +128,7 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
             ),
             
             const SizedBox(height: 24),
-            _buildSectionTitle('Change Password'),
+            _buildSectionTitle(ref.tr('change_password')),
             
             Container(
               padding: const EdgeInsets.all(20),
@@ -142,34 +143,34 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
                   children: [
                     _buildPasswordField(
                       controller: _currentPasswordController,
-                      label: 'Current Password',
-                      hint: 'Enter your current password',
+                      label: ref.tr('current_password'),
+                      hint: ref.tr('enter_current_password'),
                       showPassword: _showCurrentPassword,
                       onToggle: () => setState(() => _showCurrentPassword = !_showCurrentPassword),
-                      validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                      validator: (v) => v == null || v.isEmpty ? ref.tr('required') : null,
                     ),
                     const SizedBox(height: 16),
                     _buildPasswordField(
                       controller: _newPasswordController,
-                      label: 'New Password',
-                      hint: 'Enter new password (min 8 characters)',
+                      label: ref.tr('new_password'),
+                      hint: ref.tr('enter_new_password_hint'),
                       showPassword: _showNewPassword,
                       onToggle: () => setState(() => _showNewPassword = !_showNewPassword),
                       validator: (v) {
-                        if (v == null || v.isEmpty) return 'Required';
-                        if (v.length < 8) return 'Password must be at least 8 characters';
+                        if (v == null || v.isEmpty) return ref.tr('required');
+                        if (v.length < 8) return ref.tr('password_min_length');
                         return null;
                       },
                     ),
                     const SizedBox(height: 16),
                     _buildPasswordField(
                       controller: _confirmPasswordController,
-                      label: 'Confirm New Password',
-                      hint: 'Re-enter new password',
+                      label: ref.tr('confirm_new_password'),
+                      hint: ref.tr('reenter_new_password'),
                       showPassword: _showConfirmPassword,
                       onToggle: () => setState(() => _showConfirmPassword = !_showConfirmPassword),
                       validator: (v) {
-                        if (v != _newPasswordController.text) return 'Passwords do not match';
+                        if (v != _newPasswordController.text) return ref.tr('passwords_dont_match');
                         return null;
                       },
                     ),
@@ -185,7 +186,7 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
                         ),
                         child: _isChangingPassword
                             ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                            : const Text('Change Password', style: TextStyle(fontWeight: FontWeight.bold)),
+                            : Text(ref.tr('change_password'), style: const TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ),
                   ],
@@ -194,7 +195,7 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
             ),
             
             const SizedBox(height: 24),
-            _buildSectionTitle('Security Tips'),
+            _buildSectionTitle(ref.tr('security_tips')),
             
             Container(
               padding: const EdgeInsets.all(16),
@@ -205,10 +206,10 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
               ),
               child: Column(
                 children: [
-                  _buildTip(Icons.key, 'Use a strong password with letters, numbers, and symbols'),
-                  _buildTip(Icons.lock_clock, 'Change your password regularly'),
-                  _buildTip(Icons.no_accounts, 'Never share your password with anyone'),
-                  _buildTip(Icons.phonelink_lock, 'Log out from devices you don\'t use'),
+                  _buildTip(Icons.key, ref.tr('tip_strong_password')),
+                  _buildTip(Icons.lock_clock, ref.tr('tip_change_regularly')),
+                  _buildTip(Icons.no_accounts, ref.tr('tip_never_share')),
+                  _buildTip(Icons.phonelink_lock, ref.tr('tip_logout_unused')),
                 ],
               ),
             ),

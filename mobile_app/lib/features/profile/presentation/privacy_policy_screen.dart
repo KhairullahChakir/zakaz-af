@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 
-class PrivacyPolicyScreen extends StatelessWidget {
+class PrivacyPolicyScreen extends ConsumerWidget {
   const PrivacyPolicyScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('Privacy Policy', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(ref.tr('privacy_policy'), style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -27,8 +29,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
                 color: kPrimaryOrange.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Text(
-                'Last updated: December 2024',
+              child: Text(
+                ref.tr('last_updated'),
                 style: TextStyle(
                   color: kPrimaryOrange,
                   fontSize: 12,
@@ -131,8 +133,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child: const Text(
-                  'I Understand',
+                child: Text(
+                  ref.tr('i_understand'),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),

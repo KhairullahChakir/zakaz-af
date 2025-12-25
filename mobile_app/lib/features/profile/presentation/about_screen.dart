@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
 const Color kSoftOrange = Color(0xFFFFF3E6);
 
-class AboutScreen extends StatefulWidget {
+class AboutScreen extends ConsumerStatefulWidget {
   const AboutScreen({super.key});
 
   @override
-  State<AboutScreen> createState() => _AboutScreenState();
+  ConsumerState<AboutScreen> createState() => _AboutScreenState();
 }
 
-class _AboutScreenState extends State<AboutScreen> {
+class _AboutScreenState extends ConsumerState<AboutScreen> {
   String _version = '';
   String _buildNumber = '';
 
@@ -42,7 +44,7 @@ class _AboutScreenState extends State<AboutScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('About', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(ref.tr('about_app'), style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -98,7 +100,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Version $_version (Build $_buildNumber)',
+                    '${ref.tr('version')} $_version (Build $_buildNumber)',
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.9),
                       fontSize: 14,
@@ -130,8 +132,8 @@ class _AboutScreenState extends State<AboutScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Our Mission',
+                        Text(
+                          ref.tr('our_mission'),
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -140,7 +142,7 @@ class _AboutScreenState extends State<AboutScreen> {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'Zakaz-AF is a leading e-commerce platform in Afghanistan, connecting local sellers with buyers across the country. We are committed to empowering local businesses and providing customers with access to quality products at competitive prices.',
+                          ref.tr('about_mission_desc'),
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[700],
@@ -149,7 +151,7 @@ class _AboutScreenState extends State<AboutScreen> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Our platform offers a seamless shopping experience with secure payments, reliable delivery, and excellent customer support.',
+                          ref.tr('about_experience_desc'),
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[700],
@@ -163,17 +165,17 @@ class _AboutScreenState extends State<AboutScreen> {
                   const SizedBox(height: 24),
 
                   // Features
-                  _buildSectionTitle('Why Choose Us'),
+                  _buildSectionTitle(ref.tr('why_choose_us')),
                   const SizedBox(height: 12),
-                  _buildFeatureCard(Icons.local_shipping_outlined, 'Fast Delivery', 'Reliable and quick shipping across Afghanistan'),
-                  _buildFeatureCard(Icons.verified_user_outlined, 'Verified Sellers', 'All sellers are verified for quality assurance'),
-                  _buildFeatureCard(Icons.security_outlined, 'Secure Payments', 'Your transactions are protected with advanced security'),
-                  _buildFeatureCard(Icons.support_agent_outlined, '24/7 Support', 'Our customer support team is always here to help'),
+                  _buildFeatureCard(Icons.local_shipping_outlined, ref.tr('fast_delivery'), ref.tr('fast_delivery_desc')),
+                  _buildFeatureCard(Icons.verified_user_outlined, ref.tr('verified_sellers'), ref.tr('verified_sellers_desc')),
+                  _buildFeatureCard(Icons.security_outlined, ref.tr('secure_payments'), ref.tr('secure_payments_desc')),
+                  _buildFeatureCard(Icons.support_agent_outlined, ref.tr('support_24_7'), ref.tr('support_24_7_desc')),
 
                   const SizedBox(height: 24),
 
                   // Contact Info
-                  _buildSectionTitle('Contact Us'),
+                  _buildSectionTitle(ref.tr('contact_us')),
                   const SizedBox(height: 12),
                   Container(
                     padding: const EdgeInsets.all(20),
@@ -194,7 +196,7 @@ class _AboutScreenState extends State<AboutScreen> {
                         const Divider(height: 24),
                         _buildContactRow(Icons.phone_outlined, '+93 70 123 4567'),
                         const Divider(height: 24),
-                        _buildContactRow(Icons.location_on_outlined, 'Kabul, Afghanistan'),
+                        _buildContactRow(Icons.location_on_outlined, ref.tr('kabul_afghanistan')),
                         const Divider(height: 24),
                         _buildContactRow(Icons.language_outlined, 'www.zakaz-af.com'),
                       ],
@@ -204,7 +206,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   const SizedBox(height: 24),
 
                   // Social Links
-                  _buildSectionTitle('Follow Us'),
+                  _buildSectionTitle(ref.tr('follow_us')),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -234,11 +236,11 @@ class _AboutScreenState extends State<AboutScreen> {
                     ),
                     child: Column(
                       children: [
-                        _buildLinkTile('Terms of Service', () {}),
+                        _buildLinkTile(ref.tr('terms_conditions'), () {}),
                         const Divider(height: 1),
-                        _buildLinkTile('Privacy Policy', () {}),
+                        _buildLinkTile(ref.tr('privacy_policy'), () {}),
                         const Divider(height: 1),
-                        _buildLinkTile('Licenses', () => _showLicenses(context)),
+                        _buildLinkTile(ref.tr('licenses'), () => _showLicenses(context)),
                       ],
                     ),
                   ),
@@ -248,7 +250,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   // Copyright
                   Center(
                     child: Text(
-                      '© 2024 Zakaz-AF. All rights reserved.',
+                      '© 2024 ${ref.tr('app_name')}. ${ref.tr('all_rights_reserved')}.',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[500],
