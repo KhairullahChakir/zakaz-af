@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../auth/presentation/auth_controller.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import '../../../core/services/biometric_service.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kSoftOrange = Color(0xFFFFF3E6);
@@ -23,6 +24,135 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
   bool _showNewPassword = false;
   bool _showConfirmPassword = false;
   bool _isChangingPassword = false;
+  
+  bool _isBiometricAvailable = false;
+  bool _isBiometricEnabled = false;
+  String _biometricTypeName = 'Biometric';
+  bool _isTogglingBiometric = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkBiometricStatus();
+  }
+
+  Future<void> _checkBiometricStatus() async {
+    final biometricService = ref.read(biometricServiceProvider);
+    final isSupported = await biometricService.isDeviceSupported();
+    final canCheck = await biometricService.canCheckBiometrics();
+    final isEnabled = await biometricService.isBiometricEnabled();
+    final typeName = await biometricService.getBiometricTypeName();
+    
+    if (mounted) {
+      setState(() {
+        _isBiometricAvailable = isSupported && canCheck;
+        _isBiometricEnabled = isEnabled;
+        _biometricTypeName = typeName;
+      });
+    }
+  }
+
+  Future<void> _toggleBiometric(bool enable) async {
+    if (_isTogglingBiometric) return;
+    
+    setState(() => _isTogglingBiometric = true);
+    
+    final biometricService = ref.read(biometricServiceProvider);
+    final user = ref.read(authControllerProvider).value;
+    
+    bool success = false;
+    
+    if (enable) {
+      // Show dialog to enter password for enabling biometric
+      final password = await _showPasswordDialog();
+      if (password != null && user != null && user.email != null) {
+        success = await biometricService.enableBiometric(
+          email: user.email!,
+          password: password,
+        );
+        
+        if (success && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(ref.tr('biometric_enabled_success')),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      }
+    } else {
+      success = await biometricService.disableBiometric();
+      
+      if (success && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(ref.tr('biometric_disabled_success')),
+            backgroundColor: Colors.grey[700],
+          ),
+        );
+      }
+    }
+    
+    if (mounted) {
+      setState(() {
+        _isBiometricEnabled = success ? enable : _isBiometricEnabled;
+        _isTogglingBiometric = false;
+      });
+    }
+  }
+
+  Future<String?> _showPasswordDialog() async {
+    final passwordController = TextEditingController();
+    bool showPassword = false;
+    
+    return showDialog<String>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(ref.tr('enter_password')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                ref.tr('biometric_password_desc'),
+                style: TextStyle(color: Colors.grey[600], fontSize: 14),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: passwordController,
+                obscureText: !showPassword,
+                decoration: InputDecoration(
+                  hintText: ref.tr('password'),
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(showPassword ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () => setDialogState(() => showPassword = !showPassword),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(ref.tr('cancel')),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, passwordController.text),
+              style: FilledButton.styleFrom(backgroundColor: kPrimaryOrange),
+              child: Text(ref.tr('confirm')),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -191,6 +321,69 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
                     ),
                   ],
                 ),
+              ),
+            ),
+            
+            // Biometric Authentication Section
+            const SizedBox(height: 24),
+            _buildSectionTitle(ref.tr('biometric_login')),
+            
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: _isBiometricAvailable ? kSoftOrange : Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      _biometricTypeName == 'Face ID' ? Icons.face : Icons.fingerprint_rounded,
+                      color: _isBiometricAvailable ? kPrimaryOrange : Colors.grey,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _isBiometricAvailable ? _biometricTypeName : ref.tr('biometric_login'),
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _isBiometricAvailable 
+                              ? ref.tr('biometric_login_desc')
+                              : ref.tr('biometric_not_available'),
+                          style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (_isBiometricAvailable) ...[
+                    if (_isTogglingBiometric)
+                      const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: kPrimaryOrange),
+                      )
+                    else
+                      Switch.adaptive(
+                        value: _isBiometricEnabled,
+                        onChanged: _toggleBiometric,
+                        activeColor: kPrimaryOrange,
+                      ),
+                  ] else
+                    Icon(Icons.info_outline_rounded, color: Colors.grey[400]),
+                ],
               ),
             ),
             

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'auth_controller.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/services/biometric_service.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kLightBg = Color(0xFFFBFBFD);
@@ -21,6 +22,47 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _rememberMe = false;
+  bool _isBiometricAvailable = false;
+  bool _isBiometricEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkBiometrics();
+  }
+
+  Future<void> _checkBiometrics() async {
+    final biometricService = ref.read(biometricServiceProvider);
+    final isSupported = await biometricService.isDeviceSupported();
+    final canCheck = await biometricService.canCheckBiometrics();
+    final isEnabled = await biometricService.isBiometricEnabled();
+    
+    if (mounted) {
+      setState(() {
+        _isBiometricAvailable = isSupported && canCheck;
+        _isBiometricEnabled = isEnabled;
+      });
+      
+      // Auto-trigger biometric if enabled
+      if (_isBiometricAvailable && _isBiometricEnabled) {
+        _biometricLogin();
+      }
+    }
+  }
+
+  Future<void> _biometricLogin() async {
+    final biometricService = ref.read(biometricServiceProvider);
+    final credentials = await biometricService.biometricLogin(
+      reason: ref.tr('biometric_login_reason'),
+    );
+    
+    if (credentials != null && mounted) {
+      await ref.read(authControllerProvider.notifier).login(
+        credentials['email']!,
+        credentials['password']!,
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -336,14 +378,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           },
           child: const Icon(Icons.facebook_rounded, color: Color(0xFF1877F2), size: 28),
         ),
-        _socialBtn(
-          onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('${ref.tr('apple_id')} ${ref.tr('coming_soon')}')),
-            );
-          },
-          child: const Icon(Icons.apple_rounded, color: Colors.black, size: 28),
-        ),
+        // Biometric login button (only show if available and enabled)
+        if (_isBiometricAvailable && _isBiometricEnabled)
+          _socialBtn(
+            onTap: _biometricLogin,
+            child: const Icon(Icons.fingerprint_rounded, color: kPrimaryOrange, size: 28),
+          )
+        else
+          _socialBtn(
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('${ref.tr('apple_id')} ${ref.tr('coming_soon')}')),
+              );
+            },
+            child: const Icon(Icons.apple_rounded, color: Colors.black, size: 28),
+          ),
       ],
     );
   }

@@ -596,6 +596,15 @@ class AppTranslations {
 
     // Additional Notifications
     'notification_empty_msg': 'You\'re all caught up! Check back later for updates.',
+
+    // Biometric Authentication
+    'biometric_login': 'Biometric Login',
+    'biometric_login_desc': 'Use your fingerprint or face to login quickly',
+    'biometric_login_reason': 'Authenticate to login',
+    'biometric_enabled_success': 'Biometric login enabled successfully!',
+    'biometric_disabled_success': 'Biometric login disabled',
+    'biometric_password_desc': 'Enter your password to enable biometric login',
+    'biometric_not_available': 'Not available on this device. Register your fingerprint or face in device settings.',
   };
 
   static const Map<String, String> _dari = {
@@ -1185,6 +1194,15 @@ class AppTranslations {
 
     // Additional Notifications
     'notification_empty_msg': 'همه چیز به‌روز است! بعداً دوباره سر بزنید.',
+
+    // Biometric Authentication
+    'biometric_login': 'ورود بایومتریک',
+    'biometric_login_desc': 'از اثر انگشت یا چهره برای ورود سریع استفاده کنید',
+    'biometric_login_reason': 'برای ورود احراز هویت کنید',
+    'biometric_enabled_success': 'ورود بایومتریک با موفقیت فعال شد!',
+    'biometric_disabled_success': 'ورود بایومتریک غیرفعال شد',
+    'biometric_password_desc': 'رمز عبور خود را وارد کنید تا ورود بایومتریک فعال شود',
+    'biometric_not_available': 'در این دستگاه موجود نیست. اثر انگشت یا چهره را در تنظیمات دستگاه ثبت کنید.',
   };
 
   static const Map<String, String> _pashto = {
@@ -1774,5 +1792,14 @@ class AppTranslations {
 
     // Additional Notifications
     'notification_empty_msg': 'ټول تازه دی! وروسته بیا وګورئ.',
+
+    // Biometric Authentication
+    'biometric_login': 'بایومتریک ننوتل',
+    'biometric_login_desc': 'د ګړنګشت یا مخ سره چټک ننوتل وکاروئ',
+    'biometric_login_reason': 'د ننوتلو لپاره تصدیق وکړئ',
+    'biometric_enabled_success': 'بایومتریک ننوتل په بریالیتوب سره فعال شو!',
+    'biometric_disabled_success': 'بایومتریک ننوتل غیرفعال شو',
+    'biometric_password_desc': 'خپل پټنوم ولیکئ ترڅو بایومتریک ننوتل فعال شي',
+    'biometric_not_available': 'پدې وسیله کې شتون نلري. خپل ګوتې نښه یا مخ د وسیلې تنظیماتو کې ثبت کړئ.',
   };
 }
