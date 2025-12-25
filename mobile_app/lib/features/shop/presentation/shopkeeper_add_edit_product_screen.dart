@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import '../data/shopkeeper_repository.dart';
+import '../../../core/localization/language_provider.dart';
 import '../../products/domain/product.dart';
 import '../../products/domain/category.dart';
 import '../../products/presentation/providers.dart';
@@ -60,7 +61,7 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
     if (!_formKey.currentState!.validate()) return;
     if (_selectedCategory == null && widget.product?.categoryId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a category')),
+        SnackBar(content: Text(ref.tr('select_category_error'))),
       );
       return;
     }
@@ -97,7 +98,7 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(isEditing ? 'Product updated' : 'Product created'),
+            content: Text(isEditing ? ref.tr('product_updated_msg') : ref.tr('product_created_msg')),
             backgroundColor: Colors.green,
           ),
         );
@@ -106,7 +107,7 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+          SnackBar(content: Text('${ref.tr('error')}: $e'), backgroundColor: Colors.red),
         );
       }
     } finally {
@@ -120,7 +121,7 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Product' : 'Add Product'),
+        title: Text(isEditing ? ref.tr('edit_product_title') : ref.tr('add_product_title')),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -156,7 +157,7 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
                                     children: [
                                       Icon(Icons.add_photo_alternate, size: 50, color: Colors.grey[400]),
                                       const SizedBox(height: 8),
-                                      Text('Tap to add image', style: TextStyle(color: Colors.grey[600])),
+                                      Text(ref.tr('tap_add_image'), style: TextStyle(color: Colors.grey[600])),
                                     ],
                                   ),
                       ),
@@ -166,20 +167,20 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
                     // Name
                     TextFormField(
                       controller: _nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Product Name',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: ref.tr('product_name_label'),
+                        border: const OutlineInputBorder(),
                       ),
-                      validator: (v) => v?.isEmpty == true ? 'Required' : null,
+                      validator: (v) => v?.isEmpty == true ? ref.tr('error_required_field') : null,
                     ),
                     const SizedBox(height: 16),
 
                     // Description
                     TextFormField(
                       controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Description',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: ref.tr('description_label'),
+                        border: const OutlineInputBorder(),
                       ),
                       maxLines: 3,
                     ),
@@ -191,14 +192,14 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
                         Expanded(
                           child: TextFormField(
                             controller: _priceController,
-                            decoration: const InputDecoration(
-                              labelText: 'Price (AFN)',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: ref.tr('price_afn_label'),
+                              border: const OutlineInputBorder(),
                             ),
                             keyboardType: TextInputType.number,
                             validator: (v) {
-                              if (v?.isEmpty == true) return 'Required';
-                              if (double.tryParse(v!) == null) return 'Invalid';
+                              if (v?.isEmpty == true) return ref.tr('error_required_field');
+                              if (double.tryParse(v!) == null) return ref.tr('error_unknown');
                               return null;
                             },
                           ),
@@ -207,14 +208,14 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
                         Expanded(
                           child: TextFormField(
                             controller: _stockController,
-                            decoration: const InputDecoration(
-                              labelText: 'Stock',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              labelText: ref.tr('stock_label'),
+                              border: const OutlineInputBorder(),
                             ),
                             keyboardType: TextInputType.number,
                             validator: (v) {
-                              if (v?.isEmpty == true) return 'Required';
-                              if (int.tryParse(v!) == null) return 'Invalid';
+                              if (v?.isEmpty == true) return ref.tr('error_required_field');
+                              if (int.tryParse(v!) == null) return ref.tr('error_unknown');
                               return null;
                             },
                           ),
@@ -234,22 +235,22 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
                         }
                         return DropdownButtonFormField<Category>(
                           value: _selectedCategory,
-                          decoration: const InputDecoration(
-                            labelText: 'Category',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            labelText: ref.tr('category_label'),
+                            border: const OutlineInputBorder(),
                           ),
                           items: categories.map((cat) {
                             return DropdownMenuItem(
                               value: cat,
-                              child: Text(cat.name),
+                              child: Text(ref.tr(cat.name.toLowerCase())),
                             );
                           }).toList(),
                           onChanged: (cat) => setState(() => _selectedCategory = cat),
-                          validator: (v) => v == null ? 'Required' : null,
+                          validator: (v) => v == null ? ref.tr('error_required_field') : null,
                         );
                       },
                       loading: () => const LinearProgressIndicator(),
-                      error: (e, _) => Text('Error loading categories: $e'),
+                      error: (e, _) => Text('${ref.tr('loading_categories_error')}: $e'),
                     ),
                     const SizedBox(height: 32),
 
@@ -260,7 +261,7 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       child: Text(
-                        isEditing ? 'Update Product' : 'Create Product',
+                        isEditing ? ref.tr('update_product_btn') : ref.tr('create_product_btn'),
                         style: const TextStyle(fontSize: 16),
                       ),
                     ),

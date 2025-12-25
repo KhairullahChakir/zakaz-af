@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../data/shop_repository.dart';
+import '../../../core/localization/language_provider.dart';
 
 class ShopApplicationStatusScreen extends ConsumerWidget {
   const ShopApplicationStatusScreen({super.key});
@@ -12,7 +13,7 @@ class ShopApplicationStatusScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Application Status'),
+        title: Text(ref.tr('application_status_title')),
       ),
       body: statusAsync.when(
         data: (shop) {
@@ -24,19 +25,19 @@ class ShopApplicationStatusScreen extends ConsumerWidget {
                   Icon(Icons.store_outlined, size: 80, color: Colors.grey[400]),
                   const SizedBox(height: 16),
                   Text(
-                    'No Application Found',
+                    ref.tr('no_application_found'),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'You haven\'t applied to become a shopkeeper yet.',
+                    ref.tr('no_application_desc'),
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 24),
                   FilledButton.icon(
                     onPressed: () => context.push('/become-shopkeeper'),
                     icon: const Icon(Icons.add_business),
-                    label: const Text('Apply Now'),
+                    label: Text(ref.tr('apply_now')),
                   ),
                 ],
               ),
@@ -57,14 +58,14 @@ class ShopApplicationStatusScreen extends ConsumerWidget {
                         _buildStatusIcon(shop.status),
                         const SizedBox(height: 16),
                         Text(
-                          _getStatusTitle(shop.status),
+                          _getStatusTitle(ref, shop.status),
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          _getStatusMessage(shop.status),
+                          _getStatusMessage(ref, shop.status),
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.grey[600]),
                         ),
@@ -85,7 +86,7 @@ class ShopApplicationStatusScreen extends ConsumerWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Reason:',
+                                        ref.tr('reason_label'),
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.red[700],
@@ -110,19 +111,19 @@ class ShopApplicationStatusScreen extends ConsumerWidget {
 
                 // Shop Details
                 Text(
-                  'Shop Details',
+                  ref.tr('step_shop_info'),
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 const SizedBox(height: 12),
                 
-                _buildDetailRow(Icons.store, 'Name', shop.name),
-                _buildDetailRow(Icons.category, 'Type', shop.type),
-                _buildDetailRow(Icons.location_on, 'Address', shop.address),
-                _buildDetailRow(Icons.location_city, 'City', '${shop.city}, ${shop.province}'),
-                _buildDetailRow(Icons.phone, 'Phone', shop.phone),
-                if (shop.email != null) _buildDetailRow(Icons.email, 'Email', shop.email!),
+                _buildDetailRow(ref, Icons.store, ref.tr('name'), shop.name),
+                _buildDetailRow(ref, Icons.category, ref.tr('shop_type_label').replaceAll(' *', ''), shop.type),
+                _buildDetailRow(ref, Icons.location_on, ref.tr('address'), shop.address),
+                _buildDetailRow(ref, Icons.location_city, ref.tr('city_label').replaceAll(' *', ''), '${shop.city}, ${shop.province}'),
+                _buildDetailRow(ref, Icons.phone, ref.tr('phone_contact_label').replaceAll(' *', ''), shop.phone),
+                if (shop.email != null) _buildDetailRow(ref, Icons.email, ref.tr('email'), shop.email!),
 
                 if (shop.isRejected) ...[
                   const SizedBox(height: 24),
@@ -131,7 +132,7 @@ class ShopApplicationStatusScreen extends ConsumerWidget {
                     child: FilledButton.icon(
                       onPressed: () => context.push('/become-shopkeeper'),
                       icon: const Icon(Icons.refresh),
-                      label: const Text('Apply Again'),
+                      label: Text(ref.tr('apply_again')),
                     ),
                   ),
                 ],
@@ -140,7 +141,7 @@ class ShopApplicationStatusScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
       ),
     );
   }
@@ -187,37 +188,37 @@ class ShopApplicationStatusScreen extends ConsumerWidget {
     );
   }
 
-  String _getStatusTitle(String status) {
+  String _getStatusTitle(WidgetRef ref, String status) {
     switch (status) {
       case 'pending':
-        return 'Under Review';
+        return ref.tr('under_review');
       case 'approved':
-        return 'Approved!';
+        return ref.tr('approved_status');
       case 'rejected':
-        return 'Rejected';
+        return ref.tr('rejected_status');
       case 'suspended':
-        return 'Suspended';
+        return ref.tr('suspended_status');
       default:
         return status;
     }
   }
 
-  String _getStatusMessage(String status) {
+  String _getStatusMessage(WidgetRef ref, String status) {
     switch (status) {
       case 'pending':
-        return 'Your application is being reviewed by our team. This usually takes 1-2 business days.';
+        return ref.tr('review_message');
       case 'approved':
-        return 'Congratulations! Your shop is now active. You can start adding products.';
+        return ref.tr('approved_message');
       case 'rejected':
-        return 'Unfortunately, your application was not approved. You can apply again with updated information.';
+        return ref.tr('rejected_message');
       case 'suspended':
-        return 'Your shop has been temporarily suspended. Please contact support for more information.';
+        return ref.tr('suspended_message');
       default:
         return '';
     }
   }
 
-  Widget _buildDetailRow(IconData icon, String label, String value) {
+  Widget _buildDetailRow(WidgetRef ref, IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(

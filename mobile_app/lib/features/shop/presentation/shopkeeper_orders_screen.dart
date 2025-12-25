@@ -181,10 +181,10 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
                                           )
                                         : const Icon(Icons.inventory_2, size: 20, color: Colors.grey),
                                   ),
-                                  title: Text(item.product?.name ?? 'Product'),
-                                  subtitle: Text('${item.price} AFN × ${item.quantity}'),
+                                  title: Text(item.product?.name ?? ref.tr('product')),
+                                  subtitle: Text('${item.price} ${ref.tr('afn')} × ${item.quantity}'),
                                   trailing: Text(
-                                    '${(item.price * item.quantity).toStringAsFixed(0)} AFN',
+                                    '${(item.price * item.quantity).toStringAsFixed(0)} ${ref.tr('afn')}',
                                     style: const TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 )),
@@ -201,7 +201,7 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
                                 children: [
                                   Text(ref.tr('cart_total'), style: const TextStyle(fontWeight: FontWeight.bold)),
                                   Text(
-                                    '${order.totalAmount} AFN',
+                                    '${order.totalAmount} ${ref.tr('afn')}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,

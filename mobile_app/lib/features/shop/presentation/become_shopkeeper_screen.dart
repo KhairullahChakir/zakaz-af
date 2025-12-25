@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import '../data/shop_repository.dart';
+import '../../../core/localization/language_provider.dart';
 
 class BecomeShopkeeperScreen extends ConsumerStatefulWidget {
   const BecomeShopkeeperScreen({super.key});
@@ -60,7 +61,7 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
   Future<void> _pickShopPhoto() async {
     if (_shopPhotos.length >= 3) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Maximum 3 photos allowed')),
+        SnackBar(content: Text(ref.tr('max_photos_allowed'))),
       );
       return;
     }
@@ -111,14 +112,14 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
 
     if (_shopPhotos.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please add at least one shop photo')),
+        SnackBar(content: Text(ref.tr('add_photo_error'))),
       );
       return;
     }
 
     if (_businessLicense == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please upload your business license')),
+        SnackBar(content: Text(ref.tr('upload_license_error'))),
       );
       return;
     }
@@ -142,8 +143,8 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Application submitted! Awaiting admin approval.'),
+          SnackBar(
+            content: Text(ref.tr('application_submitted')),
             backgroundColor: Colors.green,
           ),
         );
@@ -152,7 +153,7 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+          SnackBar(content: Text('${ref.tr('error')}: $e'), backgroundColor: Colors.red),
         );
       }
     } finally {
@@ -164,7 +165,7 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Become a Shopkeeper'),
+        title: Text(ref.tr('become_shopkeeper_title')),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -193,7 +194,7 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    ['Shop Information', 'Location & Contact', 'Documents'][_currentStep],
+                    [ref.tr('step_shop_info'), ref.tr('step_location'), ref.tr('step_documents')][_currentStep],
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -226,7 +227,7 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
                         Expanded(
                           child: OutlinedButton(
                             onPressed: _previousStep,
-                            child: const Text('Back'),
+                            child: Text(ref.tr('back')),
                           ),
                         ),
                       if (_currentStep > 0) const SizedBox(width: 16),
@@ -234,7 +235,7 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
                         flex: 2,
                         child: FilledButton(
                           onPressed: _currentStep < 2 ? _nextStep : _submitApplication,
-                          child: Text(_currentStep < 2 ? 'Next' : 'Submit Application'),
+                          child: Text(_currentStep < 2 ? ref.tr('next') : ref.tr('submit')),
                         ),
                       ),
                     ],
@@ -253,25 +254,25 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
         children: [
           TextFormField(
             controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Shop Name *',
-              border: OutlineInputBorder(),
-              hintText: 'e.g., Ahmad Electronics',
+            decoration: InputDecoration(
+              labelText: ref.tr('shop_name_label'),
+              border: const OutlineInputBorder(),
+              hintText: ref.tr('shop_name_hint'),
             ),
-            validator: (v) => v?.isEmpty == true ? 'Required' : null,
+            validator: (v) => v?.isEmpty == true ? ref.tr('error_required_field') : null,
           ),
           const SizedBox(height: 16),
           
           DropdownButtonFormField<String>(
             value: _selectedType,
-            decoration: const InputDecoration(
-              labelText: 'Shop Type *',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: ref.tr('shop_type_label'),
+              border: const OutlineInputBorder(),
             ),
             items: _shopTypes.map((type) {
               return DropdownMenuItem(
                 value: type,
-                child: Text(type[0].toUpperCase() + type.substring(1)),
+                child: Text(ref.tr(type)),
               );
             }).toList(),
             onChanged: (v) => setState(() => _selectedType = v!),
@@ -280,17 +281,17 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
           
           TextFormField(
             controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Description (Optional)',
-              border: OutlineInputBorder(),
-              hintText: 'Tell customers about your shop...',
+            decoration: InputDecoration(
+              labelText: ref.tr('description_optional'),
+              border: const OutlineInputBorder(),
+              hintText: ref.tr('shop_desc_hint'),
             ),
             maxLines: 3,
           ),
           const SizedBox(height: 24),
           
           Text(
-            'Shop Photos (1-3 photos) *',
+            ref.tr('shop_photos_title'),
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
@@ -344,7 +345,7 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.add_photo_alternate, color: Colors.grey[600]),
-                        Text('Add Photo', style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+                        Text(ref.tr('add_photo_label'), style: TextStyle(color: Colors.grey[600], fontSize: 12)),
                       ],
                     ),
                   ),
@@ -363,12 +364,12 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
         children: [
           TextFormField(
             controller: _addressController,
-            decoration: const InputDecoration(
-              labelText: 'Shop Address *',
-              border: OutlineInputBorder(),
-              hintText: 'Street, Area, Landmark',
+            decoration: InputDecoration(
+              labelText: ref.tr('shop_address_label'),
+              border: const OutlineInputBorder(),
+              hintText: ref.tr('street_area_hint'),
             ),
-            validator: (v) => v?.isEmpty == true ? 'Required' : null,
+            validator: (v) => v?.isEmpty == true ? ref.tr('error_required_field') : null,
             maxLines: 2,
           ),
           const SizedBox(height: 16),
@@ -378,24 +379,24 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
               Expanded(
                 child: TextFormField(
                   controller: _cityController,
-                  decoration: const InputDecoration(
-                    labelText: 'City *',
-                    border: OutlineInputBorder(),
-                    hintText: 'e.g., Kabul',
+                  decoration: InputDecoration(
+                    labelText: ref.tr('city_label'),
+                    border: const OutlineInputBorder(),
+                    hintText: ref.tr('city_hint'),
                   ),
-                  validator: (v) => v?.isEmpty == true ? 'Required' : null,
+                  validator: (v) => v?.isEmpty == true ? ref.tr('error_required_field') : null,
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: TextFormField(
                   controller: _provinceController,
-                  decoration: const InputDecoration(
-                    labelText: 'Province *',
-                    border: OutlineInputBorder(),
-                    hintText: 'e.g., Kabul',
+                  decoration: InputDecoration(
+                    labelText: ref.tr('province_label'),
+                    border: const OutlineInputBorder(),
+                    hintText: ref.tr('city_hint'),
                   ),
-                  validator: (v) => v?.isEmpty == true ? 'Required' : null,
+                  validator: (v) => v?.isEmpty == true ? ref.tr('error_required_field') : null,
                 ),
               ),
             ],
@@ -404,24 +405,24 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
           
           TextFormField(
             controller: _phoneController,
-            decoration: const InputDecoration(
-              labelText: 'Contact Phone *',
-              border: OutlineInputBorder(),
-              hintText: '+93 70 XXX XXXX',
-              prefixIcon: Icon(Icons.phone),
+            decoration: InputDecoration(
+              labelText: ref.tr('phone_contact_label'),
+              border: const OutlineInputBorder(),
+              hintText: ref.tr('phone_hint'),
+              prefixIcon: const Icon(Icons.phone),
             ),
             keyboardType: TextInputType.phone,
-            validator: (v) => v?.isEmpty == true ? 'Required' : null,
+            validator: (v) => v?.isEmpty == true ? ref.tr('error_required_field') : null,
           ),
           const SizedBox(height: 16),
           
           TextFormField(
             controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: 'Email (Optional)',
-              border: OutlineInputBorder(),
-              hintText: 'shop@example.com',
-              prefixIcon: Icon(Icons.email),
+            decoration: InputDecoration(
+              labelText: ref.tr('email_optional'),
+              border: const OutlineInputBorder(),
+              hintText: ref.tr('email_hint'),
+              prefixIcon: const Icon(Icons.email),
             ),
             keyboardType: TextInputType.emailAddress,
           ),
@@ -436,15 +437,15 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Please upload the following documents for verification:',
+          Text(
+            ref.tr('upload_docs_desc'),
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 24),
           
           // Business License
           Text(
-            'Business License *',
+            ref.tr('business_license_title'),
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
@@ -471,8 +472,8 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
                       children: [
                         Icon(Icons.upload_file, size: 40, color: Colors.grey[600]),
                         const SizedBox(height: 8),
-                        Text('Tap to upload', style: TextStyle(color: Colors.grey[600])),
-                        Text('Business/Trade License', style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+                        Text(ref.tr('tap_to_upload'), style: TextStyle(color: Colors.grey[600])),
+                        Text(ref.tr('license_subtitle'), style: TextStyle(color: Colors.grey[500], fontSize: 12)),
                       ],
                     ),
             ),
@@ -481,7 +482,7 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
           
           // Owner NID (Tazkira)
           Text(
-            'Owner ID (Tazkira) - Optional',
+            ref.tr('owner_id_title'),
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
@@ -508,8 +509,8 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
                       children: [
                         Icon(Icons.badge, size: 40, color: Colors.grey[600]),
                         const SizedBox(height: 8),
-                        Text('Tap to upload', style: TextStyle(color: Colors.grey[600])),
-                        Text('National ID Card (Tazkira)', style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+                        Text(ref.tr('tap_to_upload'), style: TextStyle(color: Colors.grey[600])),
+                        Text(ref.tr('tazkira_subtitle'), style: TextStyle(color: Colors.grey[500], fontSize: 12)),
                       ],
                     ),
             ),
@@ -529,7 +530,7 @@ class _BecomeShopkeeperScreenState extends ConsumerState<BecomeShopkeeperScreen>
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Your application will be reviewed by our team. This usually takes 1-2 business days.',
+                    ref.tr('application_review_notice'),
                     style: TextStyle(color: Colors.blue[700], fontSize: 13),
                   ),
                 ),

@@ -346,7 +346,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '${currencyFormat.format(dashboard.totalRevenue)} AFN',
+            '${currencyFormat.format(dashboard.totalRevenue)} ${ref.tr('afn')}',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 32,
@@ -678,7 +678,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  '${order.totalAmount} AFN',
+                  '${order.totalAmount} ${ref.tr('afn')}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
