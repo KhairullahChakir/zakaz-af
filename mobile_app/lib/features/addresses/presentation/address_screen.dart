@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'address_provider.dart';
-import '../domain/address.dart';
+import 'package:mobile_app/features/addresses/presentation/address_provider.dart';
+import 'package:mobile_app/features/addresses/domain/address.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);

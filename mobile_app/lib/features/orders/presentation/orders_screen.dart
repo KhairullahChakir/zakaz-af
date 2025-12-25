@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'orders_provider.dart';
 import 'package:intl/intl.dart';
-import '../../../core/localization/language_provider.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 
 class OrdersScreen extends ConsumerWidget {
   const OrdersScreen({super.key});

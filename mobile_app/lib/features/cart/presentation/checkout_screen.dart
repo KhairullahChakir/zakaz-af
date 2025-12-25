@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobile_app/features/addresses/presentation/address_provider.dart';
 import 'package:mobile_app/features/addresses/domain/address.dart';
 import 'package:mobile_app/features/orders/data/order_repository.dart';
-import '../../../core/localization/language_provider.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 import 'cart_provider.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -163,7 +163,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   Navigator.pop(context);
                   context.go('/orders');
                 },
-                child: const Text(
+                child: Text(
                   ref.tr('view_my_orders'),
                   style: TextStyle(color: kPrimaryOrange),
                 ),

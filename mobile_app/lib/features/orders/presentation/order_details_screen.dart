@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../data/order_repository.dart';
-import '../../../core/localization/language_provider.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 
 class OrderDetailsScreen extends ConsumerWidget {
   final int orderId;
