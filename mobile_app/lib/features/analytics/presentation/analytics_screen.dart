@@ -19,12 +19,12 @@ class AnalyticsScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.store),
-            tooltip: 'Shop Applications',
+            tooltip: ref.tr('shop_apps_tooltip'),
             onPressed: () => context.push('/admin/shops'),
           ),
           IconButton(
             icon: const Icon(Icons.inventory),
-            tooltip: 'Manage Products',
+            tooltip: ref.tr('manage_products_tooltip'),
             onPressed: () => context.push('/admin/products'),
           ),
           IconButton(

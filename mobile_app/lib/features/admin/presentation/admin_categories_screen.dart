@@ -49,7 +49,7 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
       } catch (e) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+            SnackBar(content: Text('${ref.tr('error')}: $e'), backgroundColor: Colors.red),
           );
         }
       } finally {
@@ -159,7 +159,7 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                 } catch (e) {
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+                    SnackBar(content: Text('${ref.tr('error')}: $e'), backgroundColor: Colors.red),
                   );
                 } finally {
                   if (mounted) setState(() => _isLoading = false);

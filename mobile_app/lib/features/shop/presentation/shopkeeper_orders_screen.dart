@@ -35,7 +35,7 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+          SnackBar(content: Text('${ref.tr('error')}: $e'), backgroundColor: Colors.red),
         );
       }
     } finally {
@@ -218,7 +218,7 @@ class _ShopkeeperOrdersScreenState extends ConsumerState<ShopkeeperOrdersScreen>
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Center(child: Text('Error: $e')),
+                error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
               ),
             ),
     );

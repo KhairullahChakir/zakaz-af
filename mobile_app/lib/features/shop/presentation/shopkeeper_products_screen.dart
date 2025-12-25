@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 import '../data/shopkeeper_repository.dart';
 
 class ShopkeeperProductsScreen extends ConsumerStatefulWidget {
@@ -17,17 +18,17 @@ class _ShopkeeperProductsScreenState extends ConsumerState<ShopkeeperProductsScr
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Product'),
-        content: Text('Are you sure you want to delete "$productName"?'),
+        title: Text(ref.tr('delete_product')),
+        content: Text(ref.tr('delete_product_confirm', args: {'name': productName})),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(ref.tr('cancel')),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(ref.tr('delete')),
           ),
         ],
       ),
@@ -40,13 +41,13 @@ class _ShopkeeperProductsScreenState extends ConsumerState<ShopkeeperProductsScr
         ref.invalidate(shopkeeperProductsProvider);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Product deleted'), backgroundColor: Colors.green),
+            SnackBar(content: Text(ref.tr('product_deleted')), backgroundColor: Colors.green),
           );
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+            SnackBar(content: Text('${ref.tr('error')}: $e'), backgroundColor: Colors.red),
           );
         }
       } finally {
@@ -61,12 +62,12 @@ class _ShopkeeperProductsScreenState extends ConsumerState<ShopkeeperProductsScr
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Products'),
+        title: Text(ref.tr('my_products')),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/shopkeeper/products/add'),
         icon: const Icon(Icons.add),
-        label: const Text('Add Product'),
+        label: Text(ref.tr('add_product')),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -82,12 +83,12 @@ class _ShopkeeperProductsScreenState extends ConsumerState<ShopkeeperProductsScr
                           Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey[400]),
                           const SizedBox(height: 16),
                           Text(
-                            'No products yet',
+                            ref.tr('no_products_yet'),
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Add your first product to start selling!',
+                            ref.tr('add_first_product_desc'),
                             style: TextStyle(color: Colors.grey[600]),
                           ),
                         ],
@@ -129,7 +130,7 @@ class _ShopkeeperProductsScreenState extends ConsumerState<ShopkeeperProductsScr
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${product.price} AFN'),
+                              Text('${product.price} ${ref.tr('afn')}'),
                               Row(
                                 children: [
                                   Icon(
@@ -139,7 +140,7 @@ class _ShopkeeperProductsScreenState extends ConsumerState<ShopkeeperProductsScr
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    'Stock: ${product.stock}',
+                                    ref.tr('stock_label', args: {'n': product.stock.toString()}),
                                     style: TextStyle(
                                       color: product.stock < 10 ? Colors.red : Colors.grey,
                                       fontSize: 12,
@@ -158,23 +159,23 @@ class _ShopkeeperProductsScreenState extends ConsumerState<ShopkeeperProductsScr
                               }
                             },
                             itemBuilder: (context) => [
-                              const PopupMenuItem(
+                              PopupMenuItem(
                                 value: 'edit',
                                 child: Row(
                                   children: [
-                                    Icon(Icons.edit, size: 20),
-                                    SizedBox(width: 8),
-                                    Text('Edit'),
+                                    const Icon(Icons.edit, size: 20),
+                                    const SizedBox(width: 8),
+                                    Text(ref.tr('edit')),
                                   ],
                                 ),
                               ),
-                              const PopupMenuItem(
+                              PopupMenuItem(
                                 value: 'delete',
                                 child: Row(
                                   children: [
-                                    Icon(Icons.delete, size: 20, color: Colors.red),
-                                    SizedBox(width: 8),
-                                    Text('Delete', style: TextStyle(color: Colors.red)),
+                                    const Icon(Icons.delete, size: 20, color: Colors.red),
+                                    const SizedBox(width: 8),
+                                    Text(ref.tr('delete'), style: const TextStyle(color: Colors.red)),
                                   ],
                                 ),
                               ),
@@ -186,7 +187,7 @@ class _ShopkeeperProductsScreenState extends ConsumerState<ShopkeeperProductsScr
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Center(child: Text('Error: $e')),
+                error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
               ),
             ),
     );

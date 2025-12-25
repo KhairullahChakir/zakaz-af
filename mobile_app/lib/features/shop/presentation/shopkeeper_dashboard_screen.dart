@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:mobile_app/core/localization/language_provider.dart';
 import '../data/shopkeeper_repository.dart';
 import '../../auth/presentation/auth_controller.dart';
 
@@ -135,8 +136,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                                                 const Icon(Icons.verified, color: Colors.white, size: 14),
                                                 const SizedBox(width: 4),
                                                 Text(
-                                                  dashboard.shop.type[0].toUpperCase() + 
-                                                  dashboard.shop.type.substring(1),
+                                                  ref.tr('type_${dashboard.shop.type.toLowerCase()}'),
                                                   style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 12,
@@ -156,13 +156,13 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                                         color: Colors.green,
                                         borderRadius: BorderRadius.circular(20),
                                       ),
-                                      child: const Row(
+                                      child: Row(
                                         children: [
                                           Icon(Icons.circle, color: Colors.white, size: 8),
                                           SizedBox(width: 6),
                                           Text(
-                                            'Active',
-                                            style: TextStyle(
+                                            ref.tr('active'),
+                                            style: const TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12,
@@ -176,7 +176,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                                 const Spacer(),
                                 // Today's Summary
                                 Text(
-                                  'Today\'s Summary',
+                                  ref.tr('today_summary'),
                                   style: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.8),
                                     fontSize: 13,
@@ -185,11 +185,11 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                                 const SizedBox(height: 8),
                                 Row(
                                   children: [
-                                    _buildMiniStat(Icons.shopping_bag, '${dashboard.pendingOrders}', 'Pending'),
+                                    _buildMiniStat(Icons.shopping_bag, '${dashboard.pendingOrders}', ref.tr('pending')),
                                     const SizedBox(width: 24),
-                                    _buildMiniStat(Icons.inventory_2, '${dashboard.totalProducts}', 'Products'),
+                                    _buildMiniStat(Icons.inventory_2, '${dashboard.totalProducts}', ref.tr('products')),
                                     const SizedBox(width: 24),
-                                    _buildMiniStat(Icons.star, '4.8', 'Rating'),
+                                    _buildMiniStat(Icons.star, '4.8', ref.tr('rating')),
                                   ],
                                 ),
                               ],
@@ -215,28 +215,28 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Revenue Card
-                      _buildRevenueCard(context, dashboard, currencyFormat),
+                      _buildRevenueCard(context, ref, dashboard, currencyFormat),
                       const SizedBox(height: 20),
 
                       // Stats Grid
-                      _buildStatsGrid(context, dashboard),
+                      _buildStatsGrid(context, ref, dashboard),
                       const SizedBox(height: 24),
 
                       // Quick Actions
-                      _buildSectionTitle('Quick Actions'),
+                      _buildSectionTitle(ref.tr('quick_actions')),
                       const SizedBox(height: 12),
-                      _buildQuickActions(context),
+                      _buildQuickActions(context, ref),
                       const SizedBox(height: 24),
 
                       // Recent Orders
-                      _buildSectionTitle('Recent Orders', 
+                      _buildSectionTitle(ref.tr('recent_orders'), 
                         trailing: TextButton(
                           onPressed: () => context.push('/shopkeeper/orders'),
-                          child: const Text('View All', style: TextStyle(color: kPrimaryOrange)),
+                          child: Text(ref.tr('view_all'), style: const TextStyle(color: kPrimaryOrange)),
                         ),
                       ),
                       const SizedBox(height: 12),
-                      _buildRecentOrders(context, dashboard),
+                      _buildRecentOrders(context, ref, dashboard),
                       const SizedBox(height: 24),
                     ],
                   ),
@@ -245,7 +245,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
             ],
           ),
         ),
-        loading: () => _buildLoadingState(),
+        loading: () => _buildLoadingState(ref),
         error: (e, _) => _buildErrorState(context, ref, e),
       ),
     );
@@ -280,7 +280,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRevenueCard(BuildContext context, dynamic dashboard, NumberFormat currencyFormat) {
+  Widget _buildRevenueCard(BuildContext context, WidgetRef ref, dynamic dashboard, NumberFormat currencyFormat) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -312,9 +312,9 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                 child: const Icon(Icons.account_balance_wallet, color: Colors.white),
               ),
               const SizedBox(width: 12),
-              const Text(
-                'Total Revenue',
-                style: TextStyle(
+              Text(
+                ref.tr('total_revenue'),
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -355,7 +355,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'From ${dashboard.totalOrders} orders',
+            ref.tr('from_orders', args: {'n': dashboard.totalOrders.toString()}),
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.8),
               fontSize: 13,
@@ -366,13 +366,13 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatsGrid(BuildContext context, dynamic dashboard) {
+  Widget _buildStatsGrid(BuildContext context, WidgetRef ref, dynamic dashboard) {
     return Row(
       children: [
         Expanded(
           child: _buildStatCard(
             context,
-            'Products',
+            ref.tr('products'),
             dashboard.totalProducts.toString(),
             Icons.inventory_2_outlined,
             Colors.blue,
@@ -383,7 +383,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
         Expanded(
           child: _buildStatCard(
             context,
-            'Orders',
+            ref.tr('orders'),
             dashboard.totalOrders.toString(),
             Icons.shopping_bag_outlined,
             kPrimaryOrange,
@@ -394,7 +394,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
         Expanded(
           child: _buildStatCard(
             context,
-            'Pending',
+            ref.tr('pending'),
             dashboard.pendingOrders.toString(),
             Icons.pending_actions_outlined,
             Colors.red,
@@ -478,7 +478,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildQuickActions(BuildContext context) {
+  Widget _buildQuickActions(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -498,28 +498,28 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
           _buildActionItem(
             context,
             Icons.add_circle_outline,
-            'Add\nProduct',
+            ref.tr('add_product_label'),
             kPrimaryOrange,
             () => context.push('/shopkeeper/products/add'),
           ),
           _buildActionItem(
             context,
             Icons.list_alt_outlined,
-            'View\nOrders',
+            ref.tr('view_orders_label'),
             Colors.blue,
             () => context.push('/shopkeeper/orders'),
           ),
           _buildActionItem(
             context,
             Icons.inventory_outlined,
-            'My\nProducts',
+            ref.tr('my_products_label'),
             Colors.purple,
             () => context.push('/shopkeeper/products'),
           ),
           _buildActionItem(
             context,
             Icons.analytics_outlined,
-            'View\nStats',
+            ref.tr('view_stats_label'),
             Colors.green,
             () {},
           ),
@@ -563,7 +563,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRecentOrders(BuildContext context, dynamic dashboard) {
+  Widget _buildRecentOrders(BuildContext context, WidgetRef ref, dynamic dashboard) {
     if (dashboard.recentOrders.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(32),
@@ -588,16 +588,16 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
               child: const Icon(Icons.shopping_bag_outlined, color: kPrimaryOrange, size: 32),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'No orders yet',
-              style: TextStyle(
+            Text(
+              ref.tr('no_orders_yet'),
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 4),
             Text(
-              'Your orders will appear here',
+              ref.tr('orders_will_appear'),
               style: TextStyle(color: Colors.grey[600], fontSize: 13),
             ),
           ],
@@ -623,13 +623,13 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
         separatorBuilder: (_, __) => Divider(height: 1, color: Colors.grey[200]),
         itemBuilder: (context, index) {
           final order = dashboard.recentOrders[index];
-          return _buildOrderItem(context, order);
+          return _buildOrderItem(context, ref, order);
         },
       ),
     );
   }
 
-  Widget _buildOrderItem(BuildContext context, dynamic order) {
+  Widget _buildOrderItem(BuildContext context, WidgetRef ref, dynamic order) {
     final statusColor = _getStatusColor(order.status);
     
     return InkWell(
@@ -657,7 +657,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Order #${order.id}',
+                    '${ref.tr('order_number')} ${order.id}',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
@@ -692,7 +692,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    order.status[0].toUpperCase() + order.status.substring(1),
+                    ref.tr('status_${order.status}'),
                     style: TextStyle(
                       color: statusColor,
                       fontSize: 11,
@@ -708,7 +708,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildLoadingState() {
+  Widget _buildLoadingState(WidgetRef ref) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -716,7 +716,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
           const CircularProgressIndicator(color: kPrimaryOrange),
           const SizedBox(height: 16),
           Text(
-            'Loading your shop...',
+            ref.tr('loading_shop'),
             style: TextStyle(color: Colors.grey[600]),
           ),
         ],
@@ -740,9 +740,9 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
               child: const Icon(Icons.error_outline, size: 48, color: Colors.red),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Something went wrong',
-              style: TextStyle(
+            Text(
+              ref.tr('something_went_wrong'),
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -757,7 +757,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
             FilledButton.icon(
               onPressed: () => ref.invalidate(shopkeeperDashboardProvider),
               icon: const Icon(Icons.refresh),
-              label: const Text('Try Again'),
+              label: Text(ref.tr('try_again')),
               style: FilledButton.styleFrom(
                 backgroundColor: kPrimaryOrange,
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),

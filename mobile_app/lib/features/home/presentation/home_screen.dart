@@ -61,8 +61,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'icon': Icons.local_grocery_store,
     },
     {
-      'title': 'Fashion & Style',
-      'subtitle': 'Traditional & Modern',
+      'title': ref.tr('fashion_style'),
+      'subtitle': ref.tr('traditional_modern'),
       'icon': Icons.checkroom,
     },
   ];
@@ -420,7 +420,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 child: Text(
-                                  'Shop Now',
+                                  ref.tr('shop_now'),
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: Responsive.value(context, mobile: 12, tablet: 14),
@@ -507,7 +507,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 },
               ),
               loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-              error: (e, _) => Center(child: Text('Error: $e')),
+              error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
             ),
           ),
         ),
@@ -564,7 +564,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 },
               ),
               loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-              error: (e, _) => Center(child: Text('Error: $e')),
+              error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
             ),
           ),
         ),
@@ -604,7 +604,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
           ),
           error: (e, _) => SliverToBoxAdapter(
-            child: Center(child: Text('Error: $e')),
+            child: Center(child: Text('${ref.tr('error')}: $e')),
           ),
         ),
 
@@ -652,7 +652,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             SizedBox(height: Responsive.value(context, mobile: 6, tablet: 8)),
             Text(
-              category.name,
+              ref.tr(category.name.toLowerCase()),
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -832,7 +832,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ],
                     ),
                     Text(
-                      '${product.price.toInt()} AFN',
+                      '${product.price.toInt()} ${ref.tr('afn')}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: Responsive.value(context, mobile: 14, tablet: 16),
@@ -908,7 +908,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ref.read(wishlistProvider.notifier).toggleWishlist(product);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(isInWishlist ? 'Removed from Wishlist' : 'Added to Wishlist!'),
+                                content: Text(isInWishlist ? ref.tr('removed_from_wishlist') : ref.tr('added_to_wishlist')),
                                 duration: const Duration(seconds: 1),
                               ),
                             );
@@ -943,7 +943,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          'Low Stock',
+                          ref.tr('low_stock'),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: Responsive.value(context, mobile: 10, tablet: 12),
@@ -978,7 +978,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       children: [
                         Flexible(
                           child: Text(
-                            '${product.price.toInt()} AFN',
+                            '${product.price.toInt()} ${ref.tr('afn')}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: Responsive.value(context, mobile: 13, tablet: 15),
@@ -991,10 +991,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ref.read(cartProvider.notifier).addToCart(product);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('${product.name} added to cart!'),
+                                content: Text(ref.tr('added_to_cart_full', args: {'name': product.name})),
                                 duration: const Duration(seconds: 1),
                                 action: SnackBarAction(
-                                  label: 'VIEW',
+                                  label: ref.tr('view_caps'),
                                   onPressed: () => context.push('/cart'),
                                 ),
                               ),
@@ -1060,10 +1060,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            _buildSortOption('Price: Low to High', 'price', 'asc'),
-            _buildSortOption('Price: High to Low', 'price', 'desc'),
-            _buildSortOption('Newest First', 'created_at', 'desc'),
-            _buildSortOption('Rating', 'rating', 'desc'),
+            _buildSortOption(ref.tr('sort_price_asc'), 'price', 'asc'),
+            _buildSortOption(ref.tr('sort_price_desc'), 'price', 'desc'),
+            _buildSortOption(ref.tr('sort_newest'), 'created_at', 'desc'),
+            _buildSortOption(ref.tr('sort_rating'), 'rating', 'desc'),
             const SizedBox(height: 8),
             if (_sortBy != null)
               TextButton(
@@ -1074,9 +1074,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   });
                   Navigator.pop(context);
                 },
-                child: const Text(
-                  'Clear Sort',
-                  style: TextStyle(color: Colors.grey),
+                child: Text(
+                  ref.tr('clear_sort'),
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ),
           ],
@@ -1148,7 +1148,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     cursorColor: kPrimaryOrange,
                     style: TextStyle(fontSize: Responsive.value(context, mobile: 16, tablet: 18)),
                     decoration: InputDecoration(
-                      hintText: 'Search products...',
+                      hintText: ref.tr('search_products'),
                       prefixIcon: const Icon(Icons.search, color: kPrimaryOrange),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.close),
@@ -1181,7 +1181,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     Icon(Icons.search_off, size: 64, color: Colors.grey[400]),
                                     const SizedBox(height: 16),
                                     Text(
-                                      searchQuery.isEmpty ? 'Start typing to search' : 'No products found',
+                                      searchQuery.isEmpty ? ref.tr('start_typing') : ref.tr('no_products_found'),
                                       style: TextStyle(color: Colors.grey[600], fontSize: 16),
                                     ),
                                   ],
@@ -1218,7 +1218,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       ),
                                     ),
                                     subtitle: Text(
-                                      '${product.price.toInt()} AFN',
+                                      '${product.price.toInt()} ${ref.tr('afn')}',
                                       style: TextStyle(
                                         color: kPrimaryOrange,
                                         fontWeight: FontWeight.bold,
@@ -1233,7 +1233,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 },
                               ),
                         loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-                        error: (e, _) => Center(child: Text('Error: $e')),
+                        error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
                       );
                     },
                   ),
@@ -1288,7 +1288,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
         );
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profile picture updated!')),
+            SnackBar(content: Text(ref.tr('profile_updated'))),
           );
         }
       }
@@ -1402,7 +1402,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            user?.name ?? 'Guest',
+                            user?.name ?? ref.tr('guest'),
                             style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(width: 8),
@@ -1418,7 +1418,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                                 const Icon(Icons.verified, color: Colors.white, size: 14),
                                 const SizedBox(width: 4),
                                 Text(
-                                  user?.isShopkeeper == true ? 'Merchant' : 'Gold',
+                                  ref.tr(user?.isShopkeeper == true ? 'merchant' : 'gold'),
                                   style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
                                 ),
                               ],
@@ -1596,13 +1596,13 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Reach Millions of Buyers',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                Text(
+                  ref.tr('reach_millions'),
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Start your shop on Zakaz-AF today and grow your business.',
+                  ref.tr('start_shop_promo'),
                   style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 12),
                 ),
                 const SizedBox(height: 12),
@@ -1614,7 +1614,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
-                  child: const Text('Become a Seller', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  child: Text(ref.tr('become_seller'), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                 ),
               ],
             ),

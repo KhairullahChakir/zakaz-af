@@ -8,6 +8,7 @@ import '../../../core/utils/responsive.dart';
 import '../data/chat_repository.dart';
 import '../domain/conversation.dart';
 import '../domain/message.dart';
+import '../../../core/localization/language_provider.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -93,7 +94,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to send: $e'),
+            content: Text('${ref.tr('failed_to_send')}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -171,12 +172,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Error: $error'),
+                    Text('${ref.tr('error')}: $error'),
                     ElevatedButton(
                       onPressed: () => ref.invalidate(
                         conversationMessagesProvider(widget.conversationId),
                       ),
-                      child: const Text('Retry'),
+                      child: Text(ref.tr('retry')),
                     ),
                   ],
                 ),
@@ -202,7 +203,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Start the conversation!',
+                          ref.tr('start_conversation'),
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 16,
@@ -276,7 +277,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         controller: _messageController,
                         textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
-                          hintText: 'Type a message...',
+                          hintText: ref.tr('type_message'),
                           hintStyle: TextStyle(color: Colors.grey[500]),
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.symmetric(
@@ -387,25 +388,25 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   String _getDisplayName(Conversation? conversation, int? currentUserId) {
-    if (conversation == null) return 'Chat';
+    if (conversation == null) return ref.tr('chat');
 
     final isMeCustomer = currentUserId == conversation.customerId;
 
     if (isMeCustomer) {
-      return conversation.shop?.name ?? conversation.otherParticipant?.name ?? 'Shop';
+      return conversation.shop?.name ?? conversation.otherParticipant?.name ?? ref.tr('merchant');
     } else {
-      return conversation.otherParticipant?.name ?? 'Customer';
+      return conversation.otherParticipant?.name ?? ref.tr('customer');
     }
   }
 }
 
-class _DateDivider extends StatelessWidget {
+class _DateDivider extends ConsumerWidget {
   final DateTime date;
 
   const _DateDivider({required this.date});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
@@ -414,7 +415,7 @@ class _DateDivider extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              _formatDate(date),
+              _formatDate(ref, date),
               style: TextStyle(
                 color: Colors.grey[500],
                 fontSize: 12,
@@ -427,14 +428,14 @@ class _DateDivider extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime date) {
+  String _formatDate(WidgetRef ref, DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date);
 
     if (difference.inDays == 0) {
-      return 'Today';
+      return ref.tr('today');
     } else if (difference.inDays == 1) {
-      return 'Yesterday';
+      return ref.tr('yesterday');
     } else {
       return DateFormat.yMMMd().format(date);
     }

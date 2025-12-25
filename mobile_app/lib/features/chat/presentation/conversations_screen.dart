@@ -7,6 +7,7 @@ import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
 import '../../../core/utils/responsive.dart';
 import '../data/chat_repository.dart';
 import '../domain/conversation.dart';
+import '../../../core/localization/language_provider.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -26,7 +27,7 @@ class ConversationsScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
-        title: const Text('Messages'),
+        title: Text(ref.tr('messages')),
         elevation: 0,
       ),
       body: conversationsAsync.when(
@@ -39,12 +40,12 @@ class ConversationsScreen extends ConsumerWidget {
             children: [
               const Icon(Icons.error_outline, size: 48, color: Colors.grey),
               const SizedBox(height: 16),
-              Text('Error: $error'),
+              Text('${ref.tr('error')}: $error'),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref.invalidate(conversationsProvider),
                 style: ElevatedButton.styleFrom(backgroundColor: kPrimaryOrange),
-                child: const Text('Retry', style: TextStyle(color: Colors.white)),
+                child: Text(ref.tr('retry'), style: const TextStyle(color: Colors.white)),
               ),
             ],
           ),
@@ -69,7 +70,7 @@ class ConversationsScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'No conversations yet',
+                    ref.tr('no_conversations_yet'),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -78,7 +79,7 @@ class ConversationsScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Start chatting with a seller\nfrom a product page',
+                    ref.tr('start_chat_with_seller'),
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.grey[600]),
                   ),
@@ -112,7 +113,7 @@ class ConversationsScreen extends ConsumerWidget {
   }
 }
 
-class _ConversationTile extends StatelessWidget {
+class _ConversationTile extends ConsumerWidget {
   final Conversation conversation;
   final int? currentUserId;
 
@@ -122,7 +123,7 @@ class _ConversationTile extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final participant = conversation.otherParticipant;
     final shop = conversation.shop;
     final latestMessage = conversation.latestMessage;
@@ -132,18 +133,18 @@ class _ConversationTile extends StatelessWidget {
     final isMeCustomer = currentUserId == conversation.customerId;
     
     // If I am customer, show Shop info. If I am shopkeeper, show Customer (participant) info.
-    String displayName = 'Unknown';
+    String displayName = ref.tr('unknown');
     String? displayImage;
     bool isShopImage = false;
 
     if (isMeCustomer) {
       // Show Shop Info
-      displayName = shop?.name ?? participant?.name ?? 'Shop';
+      displayName = shop?.name ?? participant?.name ?? ref.tr('merchant');
       displayImage = shop?.mainPhotoUrl;
       isShopImage = true;
     } else {
       // Show Customer Info
-      displayName = participant?.name ?? 'Customer';
+      displayName = participant?.name ?? ref.tr('customer');
       displayImage = participant?.profileImageUrl;
       isShopImage = false;
     }
@@ -224,7 +225,7 @@ class _ConversationTile extends StatelessWidget {
                           ),
                           if (latestMessage?.createdAt != null)
                             Text(
-                              _formatTime(latestMessage!.createdAt!),
+                              _formatTime(ref, latestMessage!.createdAt!),
                               style: TextStyle(
                                 color: hasUnread ? kPrimaryOrange : Colors.grey[500],
                                 fontSize: 12,
@@ -238,7 +239,7 @@ class _ConversationTile extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              latestMessage?.content ?? 'No messages yet',
+                              latestMessage?.content ?? ref.tr('no_messages'),
                               style: TextStyle(
                                 color: hasUnread ? Colors.grey[800] : Colors.grey[600],
                                 fontSize: Responsive.value(context, mobile: 13, tablet: 14),
@@ -308,14 +309,14 @@ class _ConversationTile extends StatelessWidget {
     );
   }
 
-  String _formatTime(DateTime dateTime) {
+  String _formatTime(WidgetRef ref, DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
     if (difference.inDays == 0) {
       return DateFormat.jm().format(dateTime);
     } else if (difference.inDays == 1) {
-      return 'Yesterday';
+      return ref.tr('yesterday');
     } else if (difference.inDays < 7) {
       return DateFormat.E().format(dateTime);
     } else {
