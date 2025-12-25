@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'notification_provider.dart';
 import '../domain/app_notification.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/widgets/shimmer_loading.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kLightBg = Color(0xFFFBFBFD);
@@ -70,7 +71,7 @@ class NotificationsScreen extends ConsumerWidget {
                   },
                 ),
               ),
-        loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
+        loading: () => const NotificationsSkeleton(),
         error: (e, _) => Center(child: Text('Error: $e')),
       ),
     );

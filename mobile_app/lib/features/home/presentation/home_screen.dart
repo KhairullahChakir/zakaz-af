@@ -24,6 +24,7 @@ import '../../shop/presentation/shopkeeper_dashboard_screen.dart';
 import '../../admin/presentation/admin_dashboard_screen.dart';
 import '../../profile/presentation/language_selection_screen.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/widgets/shimmer_loading.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -506,7 +507,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   return _buildCategoryCard(category, isSelected);
                 },
               ),
-              loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
+              loading: () => CategoriesSkeleton(height: Responsive.value(context, mobile: 100, tablet: 120)),
               error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
             ),
           ),
@@ -563,7 +564,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   return _buildFeaturedProductCard(product);
                 },
               ),
-              loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
+              loading: () => const FeaturedProductsSkeleton(),
               error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
             ),
           ),
@@ -600,8 +601,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           ),
-          loading: () => const SliverToBoxAdapter(
-            child: Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
+          loading: () => SliverProductGridSkeleton(
+            crossAxisCount: gridColumns,
+            childAspectRatio: Responsive.productCardRatio(context),
+            padding: EdgeInsets.all(padding),
           ),
           error: (e, _) => SliverToBoxAdapter(
             child: Center(child: Text('${ref.tr('error')}: $e')),

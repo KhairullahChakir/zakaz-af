@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'wishlist_provider.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/widgets/shimmer_loading.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kLightBg = Color(0xFFFBFBFD);
@@ -42,7 +43,7 @@ class WishlistScreen extends ConsumerWidget {
             },
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
+        loading: () => const WishlistSkeleton(),
         error: (e, _) => Center(child: Text('Error: $e')),
       ),
     );
