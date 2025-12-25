@@ -22,10 +22,10 @@ Route::get('/shops/types', [App\Http\Controllers\Api\ShopController::class, 'typ
 Route::get('/shops/{id}', [App\Http\Controllers\Api\ShopController::class, 'show']);
 
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:6,1');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/auth/google', [AuthController::class, 'googleLogin']);
-Route::post('/password/forgot', [AuthController::class, 'forgotPassword']);
-Route::post('/password/reset', [AuthController::class, 'resetPassword']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
+Route::post('/auth/google', [AuthController::class, 'googleLogin'])->middleware('throttle:10,1');
+Route::post('/password/forgot', [AuthController::class, 'forgotPassword'])->middleware('throttle:5,1');
+Route::post('/password/reset', [AuthController::class, 'resetPassword'])->middleware('throttle:5,1');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -55,7 +55,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/wishlist/check/{productId}', [App\Http\Controllers\Api\WishlistController::class, 'check']);
     
     // Admin routes
-    Route::prefix('admin')->group(function () {
+    Route::middleware(['role:admin'])->prefix('admin')->group(function () {
         Route::get('/products', [App\Http\Controllers\Api\AdminProductController::class, 'index']);
         Route::post('/products', [App\Http\Controllers\Api\AdminProductController::class, 'store']);
         Route::post('/products/{id}', [App\Http\Controllers\Api\AdminProductController::class, 'update']);
@@ -78,7 +78,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/shop/status', [App\Http\Controllers\Api\ShopApplicationController::class, 'status']);
     
     // Shopkeeper routes
-    Route::prefix('shopkeeper')->group(function () {
+    Route::middleware(['role:shopkeeper'])->prefix('shopkeeper')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Api\ShopkeeperController::class, 'dashboard']);
         Route::get('/products', [App\Http\Controllers\Api\ShopkeeperController::class, 'products']);
         Route::post('/products', [App\Http\Controllers\Api\ShopkeeperController::class, 'storeProduct']);

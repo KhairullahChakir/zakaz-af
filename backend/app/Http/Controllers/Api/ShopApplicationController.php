@@ -102,9 +102,6 @@ class ShopApplicationController extends Controller
      */
     public function pending(Request $request)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
 
         $shops = Shop::where('status', 'pending')
             ->with('owner')
@@ -119,9 +116,6 @@ class ShopApplicationController extends Controller
      */
     public function index(Request $request)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
 
         $query = Shop::with('owner');
 
@@ -137,9 +131,6 @@ class ShopApplicationController extends Controller
      */
     public function approve(Request $request, $id)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
 
         $shop = Shop::findOrFail($id);
         
@@ -166,9 +157,6 @@ class ShopApplicationController extends Controller
      */
     public function reject(Request $request, $id)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
 
         $request->validate([
             'reason' => 'required|string|max:500',
@@ -192,9 +180,6 @@ class ShopApplicationController extends Controller
      */
     public function suspend(Request $request, $id)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
 
         $request->validate([
             'reason' => 'required|string|max:500',

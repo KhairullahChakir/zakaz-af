@@ -16,10 +16,6 @@ class AdminProductController extends Controller
 
     public function index(Request $request)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         $query = Product::query()->with('category');
 
         if ($request->has('search')) {
@@ -31,9 +27,6 @@ class AdminProductController extends Controller
 
     public function store(Request $request)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -60,9 +53,6 @@ class AdminProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
 
         $product = Product::findOrFail($id);
 
@@ -95,10 +85,6 @@ class AdminProductController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         $product = Product::findOrFail($id);
 
         if ($product->image) {

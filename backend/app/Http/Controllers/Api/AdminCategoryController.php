@@ -11,9 +11,6 @@ class AdminCategoryController extends Controller
 {
     public function store(Request $request)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
 
         $request->validate([
             'name' => 'required|string|max:255|unique:categories',
@@ -37,9 +34,6 @@ class AdminCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
 
         $category = Category::findOrFail($id);
 
@@ -68,9 +62,6 @@ class AdminCategoryController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        if (!$request->user()->isAdmin()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
 
         $category = Category::findOrFail($id);
 

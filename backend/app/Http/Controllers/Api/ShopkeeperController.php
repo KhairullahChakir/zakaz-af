@@ -19,10 +19,6 @@ class ShopkeeperController extends Controller
     {
         $user = $request->user();
         
-        if (!$user->isShopkeeper()) {
-            return response()->json(['message' => 'Not a shopkeeper'], 403);
-        }
-
         $shop = $user->shop;
         
         if (!$shop || !$shop->isApproved()) {

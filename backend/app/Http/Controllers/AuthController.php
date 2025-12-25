@@ -170,9 +170,20 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make(Str::random(16)),
-                'is_verified' => true, // Google accounts are pre-verified
+                'is_verified' => false, // Don't automatically verify, but email_verified_at is set
                 'email_verified_at' => now(),
             ]);
+
+            // Generate OTP for phone/further verification if needed
+            $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+            $user->update([
+                'otp' => $otp,
+                'otp_expires_at' => Carbon::now()->addMinutes(10),
+            ]);
+            
+            // Since email is verified, we only send OTP if they want to verify phone
+            // For now, we'll send it via email anyway as a verification of intent
+            Mail::to($user->email)->send(new VerifyEmail($otp));
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
