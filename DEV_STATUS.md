@@ -67,6 +67,7 @@
 - **Image Upload**: Profile, products, shop photos, documents
 - **Riverpod**: State management with code generation
 - **GoRouter**: Declarative routing
+- **Testing**: Backend Feature tests for critical paths (Notifications, Orders)
 
 ### 7. Chat (NEW)
 - **Real-time Messaging**: Chat between customers and shopkeepers
@@ -115,9 +116,8 @@
 ## Next Steps
 1. **Payment Integration**: Payment gateway for checkout
 2. **Coupons/Discounts**: Promo codes at checkout
-3. **Testing**: Unit tests for repositories and controllers
-5. **Multi-language**: Dari/Pashto/English support
-6. **Location Services**: GPS-based shop discovery
+3. **Location Services**: GPS-based shop discovery
+4. **Multi-language**: Dari/Pashto/English support
 
 ## Tech Stack
 - **Backend**: Laravel 11, MariaDB, Sanctum
