@@ -41,16 +41,16 @@ class CategoriesScreen extends ConsumerWidget {
           itemCount: categories.length,
           itemBuilder: (context, index) {
             final category = categories[index];
-            return _buildCategoryCard(context, category);
+            return _buildCategoryCard(context, ref, category);
           },
         ),
         loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
       ),
     );
   }
 
-  Widget _buildCategoryCard(BuildContext context, Category category) {
+  Widget _buildCategoryCard(BuildContext context, WidgetRef ref, Category category) {
     return GestureDetector(
       onTap: () {
         // Navigate to products filtered by this category
@@ -74,7 +74,7 @@ class CategoriesScreen extends ConsumerWidget {
             _buildCategoryIcon(category),
             const SizedBox(height: 12),
             Text(
-              category.name,
+              ref.tr(category.name.toLowerCase()),
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 14,

@@ -46,7 +46,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             children: [
               Icon(Icons.warning_amber_rounded, color: Colors.white),
               SizedBox(width: 12),
-              Text('Please select a delivery address'),
+              Text(ref.tr('please_select_address')),
             ],
           ),
           backgroundColor: Colors.orange.shade700,
@@ -64,7 +64,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
       if (items == null || items.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Cart is empty')),
+          SnackBar(content: Text(ref.tr('cart_empty'))),
         );
         return;
       }
@@ -84,7 +84,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e'),
+            content: Text('${ref.tr('error')}: $e'),
             backgroundColor: Colors.red,
             behavior: SnackBarBehavior.floating,
           ),
@@ -121,16 +121,16 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
-                'Order Placed!',
-                style: TextStyle(
+              Text(
+                ref.tr('order_placed_title'),
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 12),
               Text(
-                'Your order has been placed successfully.\nYou can track it in My Orders.',
+                ref.tr('order_success_msg'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15,
@@ -153,7 +153,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('Continue Shopping'),
+                  child: Text(ref.tr('continue_shopping')),
                 ),
               ),
               const SizedBox(height: 12),
@@ -163,7 +163,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   context.go('/orders');
                 },
                 child: const Text(
-                  'View My Orders',
+                  ref.tr('view_my_orders'),
                   style: TextStyle(color: kPrimaryOrange),
                 ),
               ),
@@ -188,9 +188,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text(
-          'Checkout',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          ref.tr('checkout'),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
@@ -204,7 +204,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   const CircularProgressIndicator(color: kPrimaryOrange),
                   const SizedBox(height: 24),
                   Text(
-                    'Placing your order...',
+                    ref.tr('placing_order'),
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey.shade600,
@@ -221,11 +221,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   // Delivery Address Section
                   _buildSectionCard(
                     icon: Icons.location_on_outlined,
-                    title: 'Delivery Address',
+                    title: ref.tr('delivery_address'),
                     trailing: TextButton.icon(
                       onPressed: () => context.push('/addresses'),
                       icon: const Icon(Icons.edit_outlined, size: 18),
-                      label: const Text('Manage'),
+                      label: Text(ref.tr('manage')),
                       style: TextButton.styleFrom(foregroundColor: kPrimaryOrange),
                     ),
                     child: addressesAsync.when(
@@ -245,7 +245,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       ),
                       error: (e, _) => Padding(
                         padding: const EdgeInsets.all(16),
-                        child: Text('Error: $e', style: const TextStyle(color: Colors.red)),
+                        child: Text('${ref.tr('error')}: $e', style: const TextStyle(color: Colors.red)),
                       ),
                     ),
                   ),
@@ -254,13 +254,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   // Order Items Section
                   _buildSectionCard(
                     icon: Icons.shopping_bag_outlined,
-                    title: 'Order Items',
+                    title: ref.tr('order_summary'),
                     child: cartItemsAsync.when(
                       data: (items) => Column(
                         children: items.map((item) => _buildOrderItem(item)).toList(),
                       ),
                       loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-                      error: (e, _) => Text('Error: $e'),
+                      error: (e, _) => Text('${ref.tr('error')}: $e'),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -268,19 +268,19 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   // Payment Summary Section
                   _buildSectionCard(
                     icon: Icons.receipt_long_outlined,
-                    title: 'Payment Summary',
+                    title: ref.tr('order_summary'),
                     child: Column(
                       children: [
-                        _buildSummaryRow('Subtotal', '${total.toInt()} AFN'),
+                        _buildSummaryRow(ref.tr('subtotal'), '${total.toInt()} ${ref.tr('afn')}'),
                         const SizedBox(height: 8),
-                        _buildSummaryRow('Delivery', 'Free', valueColor: Colors.green),
+                        _buildSummaryRow(ref.tr('delivery_fee'), ref.tr('free'), valueColor: Colors.green),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 12),
                           child: Divider(),
                         ),
                         _buildSummaryRow(
-                          'Total',
-                          '${total.toInt()} AFN',
+                          ref.tr('cart_total'),
+                          '${total.toInt()} ${ref.tr('afn')}',
                           isBold: true,
                           valueColor: kPrimaryOrange,
                         ),
@@ -333,8 +333,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         Icon(Icons.shopping_cart_checkout),
                         SizedBox(width: 12),
                         Text(
-                          'Place Order',
-                          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                          ref.tr('place_order'),
+                          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -412,15 +412,15 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         children: [
           Icon(Icons.location_off_outlined, size: 40, color: Colors.orange.shade400),
           const SizedBox(height: 12),
-          const Text(
-            'No addresses saved',
-            style: TextStyle(fontWeight: FontWeight.w600),
+          Text(
+            ref.tr('no_addresses_saved'),
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 16),
           FilledButton.icon(
             onPressed: () => context.push('/addresses/add'),
             icon: const Icon(Icons.add, size: 18),
-            label: const Text('Add New Address'),
+            label: Text(ref.tr('add_new_address')),
             style: FilledButton.styleFrom(
               backgroundColor: kPrimaryOrange,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -487,7 +487,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            'Default',
+                            ref.tr('approved_label'),
                             style: TextStyle(
                               fontSize: 10,
                               color: Colors.green.shade700,
@@ -552,14 +552,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Qty: ${item.quantity}',
+                  '${ref.tr('qty')}: ${item.quantity}',
                   style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
                 ),
               ],
             ),
           ),
           Text(
-            '${(item.product.price * item.quantity).toInt()} AFN',
+            '${(item.product.price * item.quantity).toInt()} ${ref.tr('afn')}',
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               color: kPrimaryOrange,

@@ -30,7 +30,7 @@ class CategoryProductsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(categoryName),
+        title: Text(ref.tr(categoryName.toLowerCase())),
         centerTitle: true,
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
@@ -66,7 +66,7 @@ class CategoryProductsScreen extends ConsumerWidget {
                 },
               ),
         loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
       ),
     );
   }

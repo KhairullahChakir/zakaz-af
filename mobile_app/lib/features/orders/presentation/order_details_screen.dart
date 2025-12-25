@@ -119,7 +119,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        item.product?.name ?? 'Product',
+                                        item.product?.name ?? ref.tr('product'),
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w500),
                                       ),
@@ -134,7 +134,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                   ),
                                 ),
                                 Text(
-                                  '${item.price * item.quantity} AFN',
+                                  '${item.price * item.quantity} ${ref.tr('afn')}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -171,7 +171,7 @@ class OrderDetailsScreen extends ConsumerWidget {
           ),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
       ),
     );
   }

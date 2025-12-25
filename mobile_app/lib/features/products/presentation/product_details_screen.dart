@@ -143,7 +143,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                             if (product.category != null)
                               Chip(
                                 label: Text(
-                                  product.category!.name,
+                                  ref.tr(product.category!.name.toLowerCase()),
                                   style: const TextStyle(color: Colors.white, fontSize: 12),
                                 ),
                                 backgroundColor: kPrimaryOrange,
@@ -165,7 +165,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                             
                             // Price
                             Text(
-                              '${product.price.toInt()} AFN',
+                              '${product.price.toInt()} ${ref.tr('afn')}',
                               style: TextStyle(
                                 color: kPrimaryOrange,
                                 fontWeight: FontWeight.bold,
@@ -431,7 +431,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                     borderRadius: BorderRadius.circular(8),
                                                   ),
                                                   child: Text(
-                                                    product.shop!.shopType!,
+                                                    ref.tr('type_${product.shop!.shopType!.toLowerCase()}'),
                                                     style: TextStyle(
                                                       color: kPrimaryOrange,
                                                       fontSize: Responsive.value(context, mobile: 12, tablet: 14),
@@ -549,7 +549,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                   } catch (e) {
                                                     if (context.mounted) {
                                                       ScaffoldMessenger.of(context).showSnackBar(
-                                                        SnackBar(content: Text('Error: $e')),
+                                                        SnackBar(content: Text('${ref.tr('error')}: $e')),
                                                       );
                                                     }
                                                   }
@@ -588,7 +588,8 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                   onTap: () async {
                                                     try {
                                                       final phone = product.shop!.phone!.replaceAll(RegExp(r'[^0-9]'), '');
-                                                      final whatsappUrl = Uri.parse('https://wa.me/$phone?text=Hi, I\'m interested in ${product.name}');
+                                                      final message = ref.tr('whatsapp_msg', args: {'name': product.name});
+                                                      final whatsappUrl = Uri.parse('https://wa.me/$phone?text=${Uri.encodeComponent(message)}');
                                                       await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
                                                     } catch (e) {
                                                       if (context.mounted) {
@@ -615,7 +616,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                         ),
                                                         const SizedBox(width: 8),
                                                         Text(
-                                                          'WhatsApp',
+                                                          ref.tr('whatsapp'),
                                                           style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -666,7 +667,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                     if (context.mounted) {
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         SnackBar(
-                                                          content: Text('Error: $e'),
+                                                          content: Text('${ref.tr('error')}: $e'),
                                                           backgroundColor: Colors.red,
                                                         ),
                                                       );

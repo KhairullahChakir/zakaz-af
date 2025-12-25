@@ -77,7 +77,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             children: [
               Icon(Icons.error_outline, size: 64, color: Colors.red.shade300),
               const SizedBox(height: 16),
-              Text('Error: $err', style: TextStyle(color: Colors.grey[600])),
+              Text('${ref.tr('error')}: $err', style: TextStyle(color: Colors.grey[600])),
             ],
           ),
         ),

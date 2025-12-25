@@ -18,9 +18,9 @@ class AddressScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text(
-          'My Addresses',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          ref.tr('my_addresses'),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: kPrimaryOrange,
         foregroundColor: Colors.white,
@@ -58,12 +58,12 @@ class AddressScreen extends ConsumerWidget {
             children: [
               Icon(Icons.error_outline, size: 64, color: Colors.red.shade300),
               const SizedBox(height: 16),
-              Text('Error: $e', style: TextStyle(color: Colors.grey[600])),
+              Text('${ref.tr('error')}: $e', style: TextStyle(color: Colors.grey[600])),
               const SizedBox(height: 24),
               FilledButton.icon(
                 onPressed: () => ref.invalidate(addressesProvider),
                 icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
+                label: Text(ref.tr('retry')),
                 style: FilledButton.styleFrom(backgroundColor: kPrimaryOrange),
               ),
             ],
@@ -76,7 +76,7 @@ class AddressScreen extends ConsumerWidget {
         foregroundColor: Colors.white,
         elevation: 4,
         icon: const Icon(Icons.add_location_alt),
-        label: const Text('Add New', style: TextStyle(fontWeight: FontWeight.bold)),
+        label: Text(ref.tr('add_new'), style: const TextStyle(fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -108,9 +108,9 @@ class AddressScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 40),
-          const Text(
-            'No Addresses Yet',
-            style: TextStyle(
+          Text(
+            ref.tr('no_addresses_yet'),
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
@@ -118,7 +118,8 @@ class AddressScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Add your delivery addresses to make\ncheckout faster and easier.',
+          Text(
+            ref.tr('add_addresses_desc'),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
@@ -133,9 +134,9 @@ class AddressScreen extends ConsumerWidget {
             child: FilledButton.icon(
               onPressed: () => context.push('/addresses/add'),
               icon: const Icon(Icons.add_location_alt),
-              label: const Text(
-                'Add First Address',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              label: Text(
+                ref.tr('add_first_address'),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               style: FilledButton.styleFrom(
                 backgroundColor: kPrimaryOrange,
@@ -230,9 +231,8 @@ class AddressScreen extends ConsumerWidget {
                                 children: [
                                   Icon(Icons.star, size: 12, color: Colors.white),
                                   SizedBox(width: 4),
-                                  Text(
-                                    'DEFAULT',
-                                    style: TextStyle(
+                                    ref.tr('approved_label'),
+                                    style: const TextStyle(
                                       fontSize: 10,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -292,7 +292,7 @@ class AddressScreen extends ConsumerWidget {
                   child: TextButton.icon(
                     onPressed: () => context.push('/addresses/edit', extra: address),
                     icon: const Icon(Icons.edit_outlined, size: 18),
-                    label: const Text('Edit'),
+                    label: Text(ref.tr('edit')),
                     style: TextButton.styleFrom(foregroundColor: kPrimaryOrange),
                   ),
                 ),
@@ -300,7 +300,7 @@ class AddressScreen extends ConsumerWidget {
                   child: TextButton.icon(
                     onPressed: () => _confirmDelete(context, ref, address),
                     icon: const Icon(Icons.delete_outline, size: 18),
-                    label: const Text('Delete'),
+                    label: Text(ref.tr('delete')),
                     style: TextButton.styleFrom(foregroundColor: Colors.red.shade400),
                   ),
                 ),
@@ -336,17 +336,17 @@ class AddressScreen extends ConsumerWidget {
               child: Icon(Icons.delete_forever, color: Colors.red.shade400),
             ),
             const SizedBox(width: 12),
-            const Text('Delete Address?'),
+            Text(ref.tr('delete_address_title')),
           ],
         ),
         content: Text(
-          'Are you sure you want to delete "${address.label}"? This action cannot be undone.',
+          ref.tr('delete_address_confirm', args: {'name': address.label}),
           style: TextStyle(color: Colors.grey.shade700),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: TextStyle(color: Colors.grey.shade600)),
+            child: Text(ref.tr('cancel'), style: TextStyle(color: Colors.grey.shade600)),
           ),
           FilledButton(
             onPressed: () {
@@ -358,7 +358,7 @@ class AddressScreen extends ConsumerWidget {
                     children: [
                       const Icon(Icons.check_circle, color: Colors.white),
                       const SizedBox(width: 12),
-                      Text('${address.label} deleted'),
+                      Text(ref.tr('address_deleted_msg', args: {'name': address.label})),
                     ],
                   ),
                   backgroundColor: Colors.green.shade600,
@@ -368,7 +368,7 @@ class AddressScreen extends ConsumerWidget {
               );
             },
             style: FilledButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(ref.tr('delete')),
           ),
         ],
       ),

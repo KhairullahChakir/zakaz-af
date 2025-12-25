@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'orders_provider.dart';
 import 'package:intl/intl.dart';
+import '../../../core/localization/language_provider.dart';
 
 class OrdersScreen extends ConsumerWidget {
   const OrdersScreen({super.key});
@@ -13,7 +14,7 @@ class OrdersScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order History'),
+        title: Text(ref.tr('order_history')),
       ),
       body: RefreshIndicator(
         onRefresh: () async => ref.refresh(ordersProvider),
@@ -24,7 +25,7 @@ class OrdersScreen extends ConsumerWidget {
                 children: [
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.7,
-                    child: const Center(child: Text('You haven\'t placed any orders yet.')),
+                    child: Center(child: Text(ref.tr('no_orders_placed'))),
                   ),
                 ],
               );
@@ -41,13 +42,13 @@ class OrdersScreen extends ConsumerWidget {
                   child: InkWell(
                     onTap: () => context.push('/orders/${order.id}'),
                     child: ExpansionTile(
-                    title: Text('Order #${order.id}'),
+                    title: Text('${ref.tr('order_number')}${order.id}'),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Date: $dateStr'),
+                        Text('${ref.tr('date')}: $dateStr'),
                         Text(
-                          'Total: ${order.totalAmount} AFN',
+                          '${ref.tr('cart_total')}: ${order.totalAmount} ${ref.tr('afn')}',
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontWeight: FontWeight.bold,
@@ -67,9 +68,9 @@ class OrdersScreen extends ConsumerWidget {
                                   ? Image.network(item.product!.image!)
                                   : const Icon(Icons.inventory_2_outlined),
                             ),
-                            title: Text(item.product?.name ?? 'Unknown Product'),
-                            subtitle: Text('Qty: ${item.quantity} x ${item.price} AFN'),
-                            trailing: Text('${item.quantity * item.price} AFN'),
+                            title: Text(item.product?.name ?? ref.tr('unknown_product')),
+                            subtitle: Text('${ref.tr('qty')}: ${item.quantity} x ${item.price} ${ref.tr('afn')}'),
+                            trailing: Text('${item.quantity * item.price} ${ref.tr('afn')}'),
                           )),
                     ],
                   ),
@@ -83,7 +84,7 @@ class OrdersScreen extends ConsumerWidget {
             children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.7,
-                child: Center(child: Text('Error: $err')),
+                child: Center(child: Text('${ref.tr('error')}: $err')),
               ),
             ],
           ),
@@ -112,10 +113,28 @@ class OrdersScreen extends ConsumerWidget {
     }
     return Chip(
       label: Text(
-        status.toUpperCase(),
+        _getStatusLabel(ref, status).toUpperCase(),
         style: const TextStyle(color: Colors.white, fontSize: 10),
       ),
       backgroundColor: color,
     );
+  }
+
+  String _getStatusLabel(WidgetRef ref, String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return ref.tr('status_pending');
+      case 'processing':
+        return ref.tr('status_processing');
+      case 'shipped':
+        return ref.tr('status_shipped');
+      case 'delivered':
+      case 'completed':
+        return ref.tr('status_delivered');
+      case 'cancelled':
+        return ref.tr('status_cancelled');
+      default:
+        return status;
+    }
   }
 }
