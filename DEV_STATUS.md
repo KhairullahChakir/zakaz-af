@@ -113,11 +113,9 @@
 - `POST /admin/shops/{id}/approve`, `POST /admin/shops/{id}/reject`
 - `POST /admin/shops/{id}/suspend`
 
-## Next Steps
-1. **Payment Integration**: Payment gateway for checkout
-2. **Coupons/Discounts**: Promo codes at checkout
-3. **Location Services**: GPS-based shop discovery
-4. **Multi-language**: Dari/Pashto/English support
+1. **Location Services**: GPS-based shop discovery
+2. **Multi-language**: Complete Dari/Pashto/English support (Translations & Layout)
+3. **Advanced Features**: Live Order Tracking (Driver App) or Analytics
 
 ## Tech Stack
 - **Backend**: Laravel 11, MariaDB, Sanctum
