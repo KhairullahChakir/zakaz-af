@@ -4,6 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'auth_controller.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import 'package:mobile_app/core/theme/theme_context.dart';
+
+const Color kPrimaryOrange = Color(0xFFFF6B00);
+const Color kSoftOrange = Color(0xFFFFF3E6);
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -41,8 +45,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final state = ref.watch(authControllerProvider);
 
     return Scaffold(
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        title: Text(ref.tr('edit_profile')),
+        title: Text(ref.tr('edit_profile'), style: TextStyle(color: context.textPrimary)),
+        backgroundColor: context.backgroundColor,
+        elevation: 0,
+        iconTheme: IconThemeData(color: context.textPrimary),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -61,15 +69,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           : (ref.watch(authControllerProvider).value?.profileImageUrl != null
                               ? NetworkImage(ref.watch(authControllerProvider).value!.profileImageUrl!)
                               : null) as ImageProvider?,
-                      child: _imageFile == null && ref.watch(authControllerProvider).value?.profileImageUrl == null
-                          ? const Icon(Icons.person, size: 60)
+                      child: _imageFile == null && ref.read(authControllerProvider).value?.profileImageUrl == null
+                          ? Container(
+                              decoration: BoxDecoration(
+                                color: context.softOrange,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Icon(Icons.person, size: 60, color: kPrimaryOrange.withValues(alpha: 0.5)),
+                              ),
+                            )
                           : null,
                     ),
                     Positioned(
                       bottom: 0,
                       right: 0,
                       child: CircleAvatar(
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: kPrimaryOrange,
                         radius: 18,
                         child: IconButton(
                           icon: const Icon(Icons.camera_alt, size: 18, color: Colors.white),
@@ -85,9 +101,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 controller: _nameController,
                 decoration: InputDecoration(
                   labelText: ref.tr('full_name'),
-                  prefixIcon: const Icon(Icons.person_outline),
-                  border: const OutlineInputBorder(),
+                  labelStyle: TextStyle(color: context.textSecondary),
+                  prefixIcon: Icon(Icons.person_outline, color: context.textSecondary),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.dividerColor),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.dividerColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
+                  ),
+                  filled: true,
+                  fillColor: context.inputFillColor,
                 ),
+                style: TextStyle(color: context.textPrimary),
                 validator: (value) => value == null || value.isEmpty ? ref.tr('please_enter_name') : null,
               ),
               const SizedBox(height: 16),
@@ -95,9 +126,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 controller: _emailController,
                 decoration: InputDecoration(
                   labelText: ref.tr('email'),
-                  prefixIcon: const Icon(Icons.email_outlined),
-                  border: const OutlineInputBorder(),
+                  labelStyle: TextStyle(color: context.textSecondary),
+                  prefixIcon: Icon(Icons.email_outlined, color: context.textSecondary),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.dividerColor),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.dividerColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
+                  ),
+                  filled: true,
+                  fillColor: context.inputFillColor,
                 ),
+                style: TextStyle(color: context.textPrimary),
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 16),
@@ -105,16 +151,33 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 controller: _phoneController,
                 decoration: InputDecoration(
                   labelText: ref.tr('phone'),
-                  prefixIcon: const Icon(Icons.phone_outlined),
-                  border: const OutlineInputBorder(),
+                  labelStyle: TextStyle(color: context.textSecondary),
+                  prefixIcon: Icon(Icons.phone_outlined, color: context.textSecondary),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.dividerColor),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.dividerColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
+                  ),
+                  filled: true,
+                  fillColor: context.inputFillColor,
                 ),
+                style: TextStyle(color: context.textPrimary),
                 keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 32),
               FilledButton(
                 onPressed: state.isLoading ? null : _submit,
                 style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
+                  backgroundColor: kPrimaryOrange,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 child: state.isLoading
                     ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))

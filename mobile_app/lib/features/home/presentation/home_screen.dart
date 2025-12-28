@@ -1404,7 +1404,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
     final padding = Responsive.value<double>(context, mobile: 16, tablet: 24, desktop: 32);
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: context.backgroundColor,
       body: CustomScrollView(
         slivers: [
           // Premium Header with Glassmorphism feel
@@ -1654,7 +1654,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.bold,
-          color: Colors.grey.shade500,
+          color: context.textSecondary,
           letterSpacing: 1.2,
         ),
       ),
@@ -1664,11 +1664,11 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
   Widget _buildSectionCard(List<Widget> children) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: context.shadowColor,
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -1759,11 +1759,11 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
         style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w500,
-          color: color ?? Colors.black87,
+          color: color ?? context.textPrimary,
         ),
       ),
-      subtitle: subtitle != null ? Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey.shade500)) : null,
-      trailing: trailing ?? Icon(Icons.chevron_right, size: 20, color: Colors.grey.shade400),
+      subtitle: subtitle != null ? Text(subtitle, style: TextStyle(fontSize: 12, color: context.textSecondary)) : null,
+      trailing: trailing ?? Icon(Icons.chevron_right, size: 20, color: context.textSecondary),
     );
   }
 }
