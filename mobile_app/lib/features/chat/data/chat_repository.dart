@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/network/dio_provider.dart';
@@ -42,17 +43,31 @@ class ChatRepository {
   /// Send a message
   Future<Message> sendMessage({
     required int conversationId,
-    required String content,
+    String? content,
     String type = 'text',
+    File? image, // Add image argument
     Map<String, dynamic>? metadata,
   }) async {
-    final response = await _dio.post(
-      '/chat/conversations/$conversationId/messages',
-      data: {
+    dynamic data;
+
+    if (image != null) {
+      data = FormData.fromMap({
+        if (content != null) 'content': content,
+        'type': 'image', // Force type to image if file is present
+        if (metadata != null) 'metadata': metadata,
+        'image': await MultipartFile.fromFile(image.path, filename: 'chat_image.jpg'),
+      });
+    } else {
+      data = {
         'content': content,
         'type': type,
         if (metadata != null) 'metadata': metadata,
-      },
+      };
+    }
+
+    final response = await _dio.post(
+      '/chat/conversations/$conversationId/messages',
+      data: data,
     );
     return Message.fromJson(response.data);
   }

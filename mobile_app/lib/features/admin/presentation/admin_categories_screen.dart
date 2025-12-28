@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import 'package:mobile_app/core/widgets/custom_cached_image.dart';
 import '../data/admin_repository.dart';
 import '../../products/domain/category.dart';
 import '../../products/presentation/providers.dart';
@@ -74,10 +75,41 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
               children: [
                 GestureDetector(
                   onTap: () async {
-                    final picker = ImagePicker();
-                    final picked = await picker.pickImage(source: ImageSource.gallery, maxWidth: 400);
-                    if (picked != null) {
-                      setDialogState(() => imageFile = File(picked.path));
+                    try {
+                      final picker = ImagePicker();
+                      final picked = await picker.pickImage(
+                        source: ImageSource.gallery,
+                        maxWidth: 800, // Increased quality slightly
+                        imageQuality: 85,
+                      );
+                      
+                      if (picked != null) {
+                        final file = File(picked.path);
+                        final sizeInBytes = await file.length();
+                        final sizeInMb = sizeInBytes / (1024 * 1024);
+                        
+                        if (sizeInMb > 5) {
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Image is too large (Max 5MB)'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+                        
+                        setDialogState(() => imageFile = file);
+                      }
+                    } catch (e) {
+                      debugPrint('Error picking image: $e');
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Failed to pick image: $e'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
                     }
                   },
                   child: Container(
@@ -92,7 +124,13 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                             borderRadius: BorderRadius.circular(8),
                             child: Image.file(imageFile!, fit: BoxFit.cover),
                           )
-                        : Icon(Icons.add_photo_alternate, color: Colors.grey[400]),
+                        : (category?.image != null && imageFile == null)
+                            ? CustomCachedImage(
+                                imageUrl: category!.image!,
+                                borderRadius: 8,
+                                fit: BoxFit.cover,
+                              )
+                            : Icon(Icons.add_photo_alternate, color: Colors.grey[400]),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -210,7 +248,15 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: const Icon(Icons.category, color: Colors.grey),
+                            child: category.image != null
+                                ? CustomCachedImage(
+                                    imageUrl: category.image!,
+                                    fit: BoxFit.cover,
+                                    borderRadius: 8,
+                                    placeholder: const Icon(Icons.category, color: Colors.grey),
+                                    errorWidget: const Icon(Icons.category, color: Colors.grey),
+                                  )
+                                : const Icon(Icons.category, color: Colors.grey),
                           ),
                           title: Text(
                             category.name,

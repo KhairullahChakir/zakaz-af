@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import '../../../core/widgets/custom_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -74,16 +76,30 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     }
   }
 
-  Future<void> _sendMessage() async {
+  Future<void> _pickAndSendImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 800,
+      imageQuality: 85,
+    );
+
+    if (picked != null) {
+      await _sendMessage(imageFile: File(picked.path));
+    }
+  }
+
+  Future<void> _sendMessage({File? imageFile}) async {
     final content = _messageController.text.trim();
-    if (content.isEmpty || _isSending) return;
+    if ((content.isEmpty && imageFile == null) || _isSending) return;
 
     setState(() => _isSending = true);
 
     try {
       final message = await ref.read(chatRepositoryProvider).sendMessage(
             conversationId: widget.conversationId,
-            content: content,
+            content: imageFile != null ? null : content,
+            image: imageFile,
           );
 
       _messageController.clear();
@@ -262,16 +278,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             decoration: BoxDecoration(
               color: context.cardColor,
               boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 20,
-                offset: const Offset(0, -5),
-              ),
-            ],
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, -5),
+                ),
+              ],
             ),
             child: SafeArea(
               child: Row(
                 children: [
+                  // Attachment Button
+                  IconButton(
+                    onPressed: _isSending ? null : _pickAndSendImage,
+                    icon: Icon(Icons.add_photo_alternate, color: context.textSecondary),
+                    tooltip: 'Send Image',
+                  ),
+                  const SizedBox(width: 8),
                   // Text field
                   Expanded(
                     child: Container(
@@ -317,7 +340,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: _isSending ? null : _sendMessage,
+                        onTap: _isSending ? null : () => _sendMessage(),
                         borderRadius: BorderRadius.circular(24),
                         child: Padding(
                           padding: const EdgeInsets.all(12),
@@ -482,7 +505,7 @@ class _MessageBubble extends StatelessWidget {
               constraints: BoxConstraints(
                 maxWidth: MediaQuery.of(context).size.width * 0.7,
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: EdgeInsets.all(message.type == 'image' ? 4 : 12),
               decoration: BoxDecoration(
                 color: isMe ? kPrimaryOrange : context.cardColor,
                 borderRadius: BorderRadius.only(
@@ -502,13 +525,29 @@ class _MessageBubble extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    message.content,
-                    style: TextStyle(
-                      color: isMe ? Colors.white : context.textPrimary,
-                      fontSize: Responsive.value(context, mobile: 14, tablet: 16),
+                  if (message.type == 'image')
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: CustomCachedImage(
+                        imageUrl: message.content, // Content is URL for images
+                        width: 200,
+                        height: 200,
+                        fit: BoxFit.cover,
+                        placeholder: Container(
+                           width: 200, height: 200, 
+                           color: Colors.black12, 
+                           child: const Center(child: CircularProgressIndicator())
+                        ),
+                      ),
+                    )
+                  else
+                    Text(
+                      message.content,
+                      style: TextStyle(
+                        color: isMe ? Colors.white : context.textPrimary,
+                        fontSize: Responsive.value(context, mobile: 14, tablet: 16),
+                      ),
                     ),
-                  ),
                   const SizedBox(height: 4),
                   Row(
                     mainAxisSize: MainAxisSize.min,

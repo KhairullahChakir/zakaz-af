@@ -187,10 +187,15 @@ class ChatController extends Controller
     public function sendMessage(Request $request, $conversationId)
     {
         $request->validate([
-            'content' => 'required|string|max:2000',
+            'content' => 'nullable|string|max:2000',
+            'image' => 'nullable|image|max:5120', // Max 5MB
             'type' => 'nullable|in:text,image,product',
             'metadata' => 'nullable|array',
         ]);
+
+        if (!$request->content && !$request->hasFile('image')) {
+            return response()->json(['error' => ' content or image is required'], 422);
+        }
 
         $user = $request->user();
         
@@ -204,11 +209,21 @@ class ChatController extends Controller
             })
             ->findOrFail($conversationId);
 
+        $content = $request->content;
+        $type = $request->type ?? 'text';
+
+        // Handle Image Upload
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('chat_images', 'public');
+            $content = asset('storage/' . $path);
+            $type = 'image';
+        }
+
         $message = Message::create([
             'conversation_id' => $conversationId,
             'sender_id' => $user->id,
-            'content' => $request->content,
-            'type' => $request->type ?? 'text',
+            'content' => $content,
+            'type' => $type,
             'metadata' => $request->metadata,
         ]);
 
@@ -229,7 +244,7 @@ class ChatController extends Controller
             
             if ($receiver && $receiver->fcm_token) {
                 $body = $message->type == 'image' ? 'Sent an image' : 
-                        ($message->type == 'product' ? 'Sent a product' : \Illuminate\Support\Str::limit($request->content, 50));
+                        ($message->type == 'product' ? 'Sent a product' : \Illuminate\Support\Str::limit($content, 50));
                 
                 \App\Services\FCMService::send(
                     $receiver->fcm_token,
@@ -246,21 +261,21 @@ class ChatController extends Controller
             \Illuminate\Support\Facades\Log::error("Chat notification error: " . $e->getMessage());
         }
 
-    return response()->json([
-        'id' => (int) $message->id,
-        'conversation_id' => (int) $message->conversation_id,
-        'sender_id' => (int) $message->sender_id,
-        'content' => $message->content,
-        'type' => $message->type,
-        'metadata' => $message->metadata,
-        'is_read' => (bool) $message->is_read,
-        'created_at' => $message->created_at,
-        'sender' => $message->sender ? [
-            'id' => (int) $message->sender->id,
-            'name' => $message->sender->name,
-            'profile_image_url' => $message->sender->profile_image_url,
-        ] : null,
-    ], 201);
+        return response()->json([
+            'id' => (int) $message->id,
+            'conversation_id' => (int) $message->conversation_id,
+            'sender_id' => (int) $message->sender_id,
+            'content' => $message->content,
+            'type' => $message->type,
+            'metadata' => $message->metadata,
+            'is_read' => (bool) $message->is_read,
+            'created_at' => $message->created_at,
+            'sender' => $message->sender ? [
+                'id' => (int) $message->sender->id,
+                'name' => $message->sender->name,
+                'profile_image_url' => $message->sender->profile_image_url,
+            ] : null,
+        ], 201);
     }
 
     /**
