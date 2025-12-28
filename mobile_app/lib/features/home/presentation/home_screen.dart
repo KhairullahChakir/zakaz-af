@@ -592,7 +592,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
         SliverToBoxAdapter(
           child: SizedBox(
-            height: Responsive.value(context, mobile: 100, tablet: 120),
+            height: Responsive.value(context, mobile: 120, tablet: 140),
             child: categoriesAsync.when(
               data: (categories) => ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -604,7 +604,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   return _buildCategoryCard(category, isSelected);
                 },
               ),
-              loading: () => CategoriesSkeleton(height: Responsive.value(context, mobile: 100, tablet: 120)),
+              loading: () => CategoriesSkeleton(height: Responsive.value(context, mobile: 120, tablet: 140)),
               error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
             ),
           ),
