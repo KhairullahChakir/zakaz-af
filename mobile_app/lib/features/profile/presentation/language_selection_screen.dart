@@ -102,9 +102,6 @@ class LanguageSelectionScreen extends ConsumerWidget {
                   Expanded(
                     child: Text(
                       ref.tr('rtl_info_msg'),
-                  Expanded(
-                    child: Text(
-                      ref.tr('rtl_info_msg'),
                       style: TextStyle(
                         color: Colors.blue[700],
                         fontSize: 13,

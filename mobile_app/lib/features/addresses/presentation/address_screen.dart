@@ -112,9 +112,7 @@ class AddressScreen extends ConsumerWidget {
           const SizedBox(height: 40),
           Text(
             ref.tr('no_addresses_yet'),
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+            style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: context.textPrimary,

@@ -111,21 +111,21 @@ class NotificationSettingsScreen extends ConsumerWidget {
         children: [
           _buildMasterToggle(settings, notifier, ref),
           const SizedBox(height: 24),
-          _buildSectionTitle(ref.tr('shopping_alerts')),
-          _buildCard([
-            _buildToggle(ref.tr('order_updates'), ref.tr('order_updates_desc'), Icons.local_shipping_outlined, 
+          _buildSectionTitle(context, ref.tr('shopping_alerts')),
+          _buildCard(context, [
+            _buildToggle(context, ref.tr('order_updates'), ref.tr('order_updates_desc'), Icons.local_shipping_outlined, 
               settings.orderUpdates, settings.pushEnabled ? (v) => notifier.toggle('orders', v) : null),
-            _buildToggle(ref.tr('type_promotion'), ref.tr('promotions_desc'), Icons.discount_outlined,
+            _buildToggle(context, ref.tr('type_promotion'), ref.tr('promotions_desc'), Icons.discount_outlined,
               settings.promotions, settings.pushEnabled ? (v) => notifier.toggle('promos', v) : null),
-            _buildToggle(ref.tr('price_drops'), ref.tr('price_drops_desc'), Icons.trending_down,
+            _buildToggle(context, ref.tr('price_drops'), ref.tr('price_drops_desc'), Icons.trending_down,
               settings.priceDrops, settings.pushEnabled ? (v) => notifier.toggle('price', v) : null),
-            _buildToggle(ref.tr('seller_messages'), ref.tr('seller_messages_desc'), Icons.chat_bubble_outline,
+            _buildToggle(context, ref.tr('seller_messages'), ref.tr('seller_messages_desc'), Icons.chat_bubble_outline,
               settings.sellerMessages, settings.pushEnabled ? (v) => notifier.toggle('seller', v) : null),
           ]),
           const SizedBox(height: 24),
-          _buildSectionTitle(ref.tr('other_channels')),
-          _buildCard([
-            _buildToggle(ref.tr('email_notifications'), ref.tr('email_notifications_desc'), Icons.email_outlined,
+          _buildSectionTitle(context, ref.tr('other_channels')),
+          _buildCard(context, [
+            _buildToggle(context, ref.tr('email_notifications'), ref.tr('email_notifications_desc'), Icons.email_outlined,
               settings.emailNotifications, (v) => notifier.toggle('email', v)),
           ]),
         ],
@@ -159,17 +159,17 @@ class NotificationSettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) => Padding(
+  Widget _buildSectionTitle(BuildContext context, String title) => Padding(
     padding: const EdgeInsets.only(left: 4, bottom: 12),
     child: Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: context.textPrimary)),
   );
 
-  Widget _buildCard(List<Widget> children) => Container(
+  Widget _buildCard(BuildContext context, List<Widget> children) => Container(
     decoration: BoxDecoration(color: context.cardColor, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: context.shadowColor, blurRadius: 10)]),
     child: Column(children: children),
   );
 
-  Widget _buildToggle(String title, String subtitle, IconData icon, bool value, void Function(bool)? onChanged) {
+  Widget _buildToggle(BuildContext context, String title, String subtitle, IconData icon, bool value, void Function(bool)? onChanged) {
     final disabled = onChanged == null;
     return ListTile(
       leading: Container(
