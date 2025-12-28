@@ -112,10 +112,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             children: [
               Container(
                 padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.green.shade50,
-                  shape: BoxShape.circle,
-                ),
+                  decoration: BoxDecoration(
+                    color: context.isDark ? Colors.green.withValues(alpha: 0.2) : Colors.green.shade50,
+                    shape: BoxShape.circle,
+                  ),
                 child: Icon(
                   Icons.check_circle,
                   size: 64,
@@ -296,13 +296,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.cardColor,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: context.shadowColor,
               offset: const Offset(0, -4),
               blurRadius: 20,
+              spreadRadius: 2,
             ),
           ],
         ),
@@ -355,11 +356,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: context.shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -375,7 +376,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: kSoftOrange,
+                    color: context.isDark ? kPrimaryOrange.withValues(alpha: 0.1) : context.softOrange,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(icon, color: kPrimaryOrange, size: 20),
@@ -383,9 +384,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 const SizedBox(width: 12),
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
+                    color: context.textPrimary,
                   ),
                 ),
                 const Spacer(),
@@ -406,9 +408,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.orange.shade50,
+        color: context.isDark ? Colors.orange.withValues(alpha: 0.1) : context.softOrange,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.orange.shade200),
+        border: Border.all(color: context.isDark ? Colors.orange.withValues(alpha: 0.3) : Colors.orange.shade200),
       ),
       child: Column(
         children: [
@@ -416,7 +418,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           const SizedBox(height: 12),
           Text(
             ref.tr('no_addresses_saved'),
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            style: TextStyle(fontWeight: FontWeight.w600, color: context.textPrimary),
           ),
           const SizedBox(height: 16),
           FilledButton.icon(
@@ -442,10 +444,12 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? kSoftOrange : Colors.grey.shade50,
+          color: isSelected 
+              ? (context.isDark ? kPrimaryOrange.withValues(alpha: 0.15) : context.softOrange) 
+              : context.inputFillColor,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isSelected ? kPrimaryOrange : Colors.grey.shade200,
+            color: isSelected ? kPrimaryOrange : (context.isDark ? Colors.grey.shade800 : Colors.grey.shade200),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -475,9 +479,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     children: [
                       Text(
                         addr.label,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
+                          color: context.textPrimary,
                         ),
                       ),
                       if (addr.isDefault) ...[
@@ -505,7 +510,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     '${addr.addressLine1}${addr.addressLine2 != null ? ", ${addr.addressLine2}" : ""}, ${addr.city}',
                     style: TextStyle(
                       fontSize: 13,
-                      color: Colors.grey.shade600,
+                      color: context.textSecondary,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -531,7 +536,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             child: Container(
               width: 56,
               height: 56,
-              color: kSoftOrange,
+              color: context.isDark ? kPrimaryOrange.withValues(alpha: 0.1) : context.softOrange,
               child: imageUrl != null
                   ? CustomCachedImage(
                       imageUrl: imageUrl,
@@ -548,14 +553,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               children: [
                 Text(
                   item.product.name,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontWeight: FontWeight.w600, color: context.textPrimary),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '${ref.tr('qty')}: ${item.quantity}',
-                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                  style: TextStyle(fontSize: 13, color: context.textSecondary),
                 ),
               ],
             ),
@@ -581,7 +586,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           style: TextStyle(
             fontSize: isBold ? 17 : 15,
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-            color: isBold ? Colors.black : Colors.grey.shade700,
+            color: isBold ? (context.isDark ? Colors.white : Colors.black) : context.textSecondary,
           ),
         ),
         Text(
@@ -589,7 +594,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           style: TextStyle(
             fontSize: isBold ? 20 : 15,
             fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
-            color: valueColor ?? (isBold ? kPrimaryOrange : Colors.black),
+            color: valueColor ?? (isBold ? kPrimaryOrange : (context.isDark ? Colors.white : Colors.black)),
           ),
         ),
       ],
