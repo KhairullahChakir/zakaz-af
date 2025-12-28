@@ -188,7 +188,7 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                     );
                   }
                   ref.invalidate(categoriesProvider);
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(category == null ? ref.tr('category_created') : ref.tr('category_updated')),
@@ -196,7 +196,7 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                     ),
                   );
                 } catch (e) {
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('${ref.tr('error')}: $e'), backgroundColor: Colors.red),
                   );
