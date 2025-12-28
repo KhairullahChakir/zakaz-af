@@ -32,7 +32,7 @@ class PrivacyPolicyScreen extends ConsumerWidget {
               ),
               child: Text(
                 ref.tr('last_updated'),
-                style: TextStyle(
+                style: const TextStyle(
                   color: kPrimaryOrange,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -43,11 +43,13 @@ class PrivacyPolicyScreen extends ConsumerWidget {
             const SizedBox(height: 24),
             
             _buildSection(
+              context,
               'Introduction',
               'Welcome to Zakaz-AF. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and services.',
             ),
             
             _buildSection(
+              context,
               'Information We Collect',
               'We collect information that you provide directly to us, including:\n\n'
               '• Personal Information: Name, email address, phone number, and delivery address when you create an account or place an order.\n\n'
@@ -57,6 +59,7 @@ class PrivacyPolicyScreen extends ConsumerWidget {
             ),
             
             _buildSection(
+              context,
               'How We Use Your Information',
               'We use the information we collect to:\n\n'
               '• Process and fulfill your orders\n'
@@ -69,6 +72,7 @@ class PrivacyPolicyScreen extends ConsumerWidget {
             ),
             
             _buildSection(
+              context,
               'Information Sharing',
               'We may share your information with:\n\n'
               '• Sellers: To fulfill your orders, we share necessary details with the sellers whose products you purchase.\n\n'
@@ -78,6 +82,7 @@ class PrivacyPolicyScreen extends ConsumerWidget {
             ),
             
             _buildSection(
+              context,
               'Data Security',
               'We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. This includes:\n\n'
               '• Encryption of data in transit and at rest\n'
@@ -87,6 +92,7 @@ class PrivacyPolicyScreen extends ConsumerWidget {
             ),
             
             _buildSection(
+              context,
               'Your Rights',
               'You have the right to:\n\n'
               '• Access your personal data\n'
@@ -98,21 +104,25 @@ class PrivacyPolicyScreen extends ConsumerWidget {
             ),
             
             _buildSection(
+              context,
               'Cookies and Tracking',
               'We use cookies and similar tracking technologies to enhance your experience. You can manage your cookie preferences through your device settings.',
             ),
             
             _buildSection(
+              context,
               'Children\'s Privacy',
               'Our services are not intended for users under the age of 18. We do not knowingly collect personal information from children.',
             ),
             
             _buildSection(
+              context,
               'Changes to This Policy',
               'We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the "Last Updated" date.',
             ),
             
             _buildSection(
+              context,
               'Contact Us',
               'If you have any questions about this Privacy Policy, please contact us:\n\n'
               'Email: privacy@zakaz-af.com\n'
@@ -136,7 +146,7 @@ class PrivacyPolicyScreen extends ConsumerWidget {
                 ),
                 child: Text(
                   ref.tr('i_understand'),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
             ),
@@ -148,16 +158,16 @@ class PrivacyPolicyScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSection(String title, String content) {
+  Widget _buildSection(BuildContext context, String title, String content) {
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: context.shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -168,10 +178,10 @@ class PrivacyPolicyScreen extends ConsumerWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: context.textPrimary,
             ),
           ),
           const SizedBox(height: 12),
@@ -179,7 +189,7 @@ class PrivacyPolicyScreen extends ConsumerWidget {
             content,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey[700],
+              color: context.textSecondary,
               height: 1.6,
             ),
           ),

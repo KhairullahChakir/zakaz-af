@@ -120,11 +120,11 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: context.cardColor,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
+                          color: context.shadowColor,
                           blurRadius: 15,
                           offset: const Offset(0, 5),
                         ),
@@ -138,7 +138,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: context.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -146,7 +146,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                           ref.tr('about_mission_desc'),
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey[700],
+                            color: context.textSecondary,
                             height: 1.6,
                           ),
                         ),
@@ -155,7 +155,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                           ref.tr('about_experience_desc'),
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey[700],
+                            color: context.textSecondary,
                             height: 1.6,
                           ),
                         ),
@@ -166,26 +166,26 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                   const SizedBox(height: 24),
 
                   // Features
-                  _buildSectionTitle(ref.tr('why_choose_us')),
+                  _buildSectionTitle(context, ref.tr('why_choose_us')),
                   const SizedBox(height: 12),
-                  _buildFeatureCard(Icons.local_shipping_outlined, ref.tr('fast_delivery'), ref.tr('fast_delivery_desc')),
-                  _buildFeatureCard(Icons.verified_user_outlined, ref.tr('verified_sellers'), ref.tr('verified_sellers_desc')),
-                  _buildFeatureCard(Icons.security_outlined, ref.tr('secure_payments'), ref.tr('secure_payments_desc')),
-                  _buildFeatureCard(Icons.support_agent_outlined, ref.tr('support_24_7'), ref.tr('support_24_7_desc')),
+                  _buildFeatureCard(context, Icons.local_shipping_outlined, ref.tr('fast_delivery'), ref.tr('fast_delivery_desc')),
+                  _buildFeatureCard(context, Icons.verified_user_outlined, ref.tr('verified_sellers'), ref.tr('verified_sellers_desc')),
+                  _buildFeatureCard(context, Icons.security_outlined, ref.tr('secure_payments'), ref.tr('secure_payments_desc')),
+                  _buildFeatureCard(context, Icons.support_agent_outlined, ref.tr('support_24_7'), ref.tr('support_24_7_desc')),
 
                   const SizedBox(height: 24),
 
                   // Contact Info
-                  _buildSectionTitle(ref.tr('contact_us')),
+                  _buildSectionTitle(context, ref.tr('contact_us')),
                   const SizedBox(height: 12),
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: context.cardColor,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
+                          color: context.shadowColor,
                           blurRadius: 15,
                           offset: const Offset(0, 5),
                         ),
@@ -193,13 +193,13 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                     ),
                     child: Column(
                       children: [
-                        _buildContactRow(Icons.email_outlined, 'support@zakaz-af.com'),
+                        _buildContactRow(context, Icons.email_outlined, 'support@zakaz-af.com'),
                         const Divider(height: 24),
-                        _buildContactRow(Icons.phone_outlined, '+93 70 123 4567'),
+                        _buildContactRow(context, Icons.phone_outlined, '+93 70 123 4567'),
                         const Divider(height: 24),
-                        _buildContactRow(Icons.location_on_outlined, ref.tr('kabul_afghanistan')),
+                        _buildContactRow(context, Icons.location_on_outlined, ref.tr('kabul_afghanistan')),
                         const Divider(height: 24),
-                        _buildContactRow(Icons.language_outlined, 'www.zakaz-af.com'),
+                        _buildContactRow(context, Icons.language_outlined, 'www.zakaz-af.com'),
                       ],
                     ),
                   ),
@@ -207,7 +207,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                   const SizedBox(height: 24),
 
                   // Social Links
-                  _buildSectionTitle(ref.tr('follow_us')),
+                  _buildSectionTitle(context, ref.tr('follow_us')),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -225,11 +225,11 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: context.cardColor,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
+                          color: context.shadowColor,
                           blurRadius: 15,
                           offset: const Offset(0, 5),
                         ),
@@ -237,11 +237,11 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                     ),
                     child: Column(
                       children: [
-                        _buildLinkTile(ref.tr('terms_conditions'), () {}),
+                        _buildLinkTile(context, ref.tr('terms_conditions'), () {}),
                         const Divider(height: 1),
-                        _buildLinkTile(ref.tr('privacy_policy'), () {}),
+                        _buildLinkTile(context, ref.tr('privacy_policy'), () {}),
                         const Divider(height: 1),
-                        _buildLinkTile(ref.tr('licenses'), () => _showLicenses(context)),
+                        _buildLinkTile(context, ref.tr('licenses'), () => _showLicenses(context)),
                       ],
                     ),
                   ),
@@ -254,7 +254,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                       '© 2024 ${ref.tr('app_name')}. ${ref.tr('all_rights_reserved')}.',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[500],
+                        color: context.textSecondary,
                       ),
                     ),
                   ),
@@ -268,27 +268,27 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.bold,
-        color: Colors.black87,
+        color: context.textPrimary,
       ),
     );
   }
 
-  Widget _buildFeatureCard(IconData icon, String title, String description) {
+  Widget _buildFeatureCard(BuildContext context, IconData icon, String title, String description) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: context.shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -311,9 +311,10 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
+                    color: context.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -321,7 +322,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                   description,
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.grey[600],
+                    color: context.textSecondary,
                   ),
                 ),
               ],
@@ -332,14 +333,14 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
     );
   }
 
-  Widget _buildContactRow(IconData icon, String text) {
+  Widget _buildContactRow(BuildContext context, IconData icon, String text) {
     return Row(
       children: [
         Icon(icon, color: kPrimaryOrange, size: 22),
         const SizedBox(width: 16),
         Text(
           text,
-          style: const TextStyle(fontSize: 14, color: Colors.black87),
+          style: TextStyle(fontSize: 14, color: context.textPrimary),
         ),
       ],
     );
@@ -356,11 +357,11 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
     );
   }
 
-  Widget _buildLinkTile(String title, VoidCallback onTap) {
+  Widget _buildLinkTile(BuildContext context, String title, VoidCallback onTap) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-      title: Text(title, style: const TextStyle(fontSize: 14)),
-      trailing: Icon(Icons.chevron_right, color: Colors.grey[400]),
+      title: Text(title, style: TextStyle(fontSize: 14, color: context.textPrimary)),
+      trailing: Icon(Icons.chevron_right, color: context.textSecondary),
       onTap: onTap,
     );
   }
