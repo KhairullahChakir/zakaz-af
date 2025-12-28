@@ -33,21 +33,15 @@ class AuthController extends Controller
             'role' => 'nullable|string|in:user,shopkeeper',
         ]);
 
-        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'role' => $request->role ?? 'user',
-            'otp' => $otp,
-            'otp_expires_at' => Carbon::now()->addMinutes(10),
+            'is_verified' => true, // Auto-verify for now
+            'email_verified_at' => now(),
         ]);
-
-        if ($user->email) {
-            Mail::to($user->email)->send(new VerifyEmail($otp));
-        }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -55,7 +49,7 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
             'user' => $user,
-            'message' => 'Registration successful. Please verify your email.',
+            'message' => 'Registration successful.',
         ]);
     }
 
@@ -123,25 +117,11 @@ class AuthController extends Controller
             ], 401);
         }
 
+        // Auto-verify if not verified (for testing without email)
         if (!$user->is_verified) {
-            $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
             $user->update([
-                'otp' => $otp,
-                'otp_expires_at' => Carbon::now()->addMinutes(10),
-            ]);
-
-            if ($user->email) {
-                Mail::to($user->email)->send(new VerifyEmail($otp));
-            }
-
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            return response()->json([
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-                'user' => $user,
-                'message' => 'Please verify your email to continue.',
-                'requires_verification' => true,
+                'is_verified' => true,
+                'email_verified_at' => now(),
             ]);
         }
 
@@ -150,7 +130,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'user' => $user,
+            'user' => $user->fresh(),
         ]);
     }
 
