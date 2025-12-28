@@ -78,7 +78,7 @@ dev_dependencies:
   riverpod_generator: ^3.0.3
   json_serializable: ^6.11.2
   freezed: ^3.2.3
-
+  flutter_launcher_icons: ^0.14.3
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -119,3 +119,13 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# App Icon Configuration
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
+  adaptive_icon_background: "#FF6B00"
+  adaptive_icon_foreground: "assets/images/logo.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
