@@ -30,7 +30,7 @@ class OrdersScreen extends ConsumerWidget {
                 children: [
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.7,
-                    child: Center(child: Text(ref.tr('no_orders_placed'))),
+                    child: Center(child: Text(ref.tr('no_orders_placed'), style: TextStyle(color: context.textPrimary))),
                   ),
                 ],
               );
@@ -44,18 +44,23 @@ class OrdersScreen extends ConsumerWidget {
                 
                 return Card(
                   margin: const EdgeInsets.only(bottom: 16),
+                  color: context.cardColor,
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   child: InkWell(
                     onTap: () => context.push('/orders/${order.id}'),
                     child: ExpansionTile(
-                    title: Text('${ref.tr('order_number')}${order.id}'),
+                    shape: const Border(),
+                    collapsedShape: const Border(),
+                    title: Text('${ref.tr('order_number')}${order.id}', style: TextStyle(fontWeight: FontWeight.bold, color: context.textPrimary)),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${ref.tr('date')}: $dateStr'),
+                        Text('${ref.tr('date')}: $dateStr', style: TextStyle(color: context.textSecondary)),
                         Text(
                           '${ref.tr('cart_total')}: ${order.totalAmount} ${ref.tr('afn')}',
                           style: TextStyle(
-                            color: Theme.of(context).primaryColor,
+                            color: context.primaryOrange,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -63,19 +68,25 @@ class OrdersScreen extends ConsumerWidget {
                     ),
                     trailing: _getStatusChip(ref, order.status),
                     children: [
-                      const Divider(),
+                      Divider(color: context.dividerColor),
                       ...order.items.map((item) => ListTile(
                             leading: Container(
                               width: 40,
                               height: 40,
-                              color: Colors.grey[200],
+                              decoration: BoxDecoration(
+                                color: context.isDark ? Colors.grey[800] : Colors.grey[200],
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                               child: item.product?.image != null
-                                  ? Image.network(item.product!.image!)
-                                  : const Icon(Icons.inventory_2_outlined),
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.network(item.product!.image!, fit: BoxFit.cover),
+                                    )
+                                  : Icon(Icons.inventory_2_outlined, color: context.textSecondary),
                             ),
-                            title: Text(item.product?.name ?? ref.tr('unknown_product')),
-                            subtitle: Text('${ref.tr('qty')}: ${item.quantity} x ${item.price} ${ref.tr('afn')}'),
-                            trailing: Text('${item.quantity * item.price} ${ref.tr('afn')}'),
+                            title: Text(item.product?.name ?? ref.tr('unknown_product'), style: TextStyle(color: context.textPrimary)),
+                            subtitle: Text('${ref.tr('qty')}: ${item.quantity} x ${item.price} ${ref.tr('afn')}', style: TextStyle(color: context.textSecondary)),
+                            trailing: Text('${item.quantity * item.price} ${ref.tr('afn')}', style: TextStyle(fontWeight: FontWeight.bold, color: context.textPrimary)),
                           )),
                     ],
                   ),
