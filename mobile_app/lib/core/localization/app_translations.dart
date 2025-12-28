@@ -658,7 +658,7 @@ class AppTranslations {
 
   static const Map<String, String> _dari = {
     // Common
-    'app_name': 'زاکاز-ای‌اف',
+    'app_name': 'Zakaz AF',
     'loading': 'در حال بارگذاری...',
     'error': 'خطا',
     'success': 'موفق',
@@ -1305,7 +1305,7 @@ class AppTranslations {
 
   static const Map<String, String> _pashto = {
     // Common
-    'app_name': 'زاکاز-اې‌اف',
+    'app_name': 'Zakaz AF',
     'loading': 'لوډیږي...',
     'error': 'خطا',
     'success': 'بریالی',
