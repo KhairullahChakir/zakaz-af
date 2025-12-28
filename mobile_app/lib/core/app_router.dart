@@ -42,7 +42,10 @@ import '../features/chat/domain/conversation.dart';
 import '../features/nearby_shops/presentation/nearby_shops_screen.dart';
 import '../features/shop/presentation/map_picker_screen.dart';
 import '../features/shop/presentation/shop_settings_screen.dart';
+
 import 'package:latlong2/latlong.dart';
+import '../features/onboarding/presentation/onboarding_screen.dart';
+import '../features/onboarding/data/onboarding_provider.dart';
 
 import '../core/widgets/splash_screen.dart';
 
@@ -56,6 +59,7 @@ GoRouter appRouter(Ref ref) {
   final isVerified = ref.watch(authControllerProvider.select((s) => s.value?.isVerified ?? false));
   final isInitialLoading = ref.watch(authControllerProvider.select((s) => s.isLoading && !s.hasValue));
   final hasError = ref.watch(authControllerProvider.select((s) => s.hasError));
+  final onboardingState = ref.watch(onboardingControllerProvider);
 
   return GoRouter(
     initialLocation: '/',
@@ -67,18 +71,31 @@ GoRouter appRouter(Ref ref) {
       final isVerifying = state.uri.path == '/verify-otp';
       final isForgot = state.uri.path == '/forgot-password';
       final isSplash = state.uri.path == '/splash';
+      final isOnboarding = state.uri.path == '/onboarding';
 
+      // 1. Check Onboarding First
+      if (onboardingState.isLoading) return '/splash';
+      final hasSeenOnboarding = onboardingState.value ?? false;
+      
+      if (!hasSeenOnboarding) {
+        if (isOnboarding) return null;
+        return '/onboarding';
+      }
+
+      // 2. Check Auth
       if (!isAuthenticated) {
-        if (isLoggingIn || isVerifying || isForgot || isSplash) return null;
+        if (isLoggingIn || isVerifying || isForgot || isSplash || isOnboarding) return null;
         return '/login';
       }
 
+      // 3. Check Verification
       if (isAuthenticated && !isVerified) {
         if (isVerifying || isSplash) return null;
         return '/verify-otp';
       }
 
-      if (isAuthenticated && isVerified && (isLoggingIn || isVerifying || isSplash)) {
+      // 4. Check Logged In flow
+      if (isAuthenticated && isVerified && (isLoggingIn || isVerifying || isSplash || isOnboarding)) {
         return '/';
       }
 
@@ -88,6 +105,10 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/splash',
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(
         path: '/login',
