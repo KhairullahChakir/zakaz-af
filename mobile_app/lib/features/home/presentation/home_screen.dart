@@ -225,15 +225,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           title: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(Responsive.value(context, mobile: 8, tablet: 10)),
+                padding: EdgeInsets.all(Responsive.value(context, mobile: 4, tablet: 6)),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Image.asset(
                   'assets/images/logo.png',
-                  width: Responsive.value(context, mobile: 24, tablet: 28),
-                  height: Responsive.value(context, mobile: 24, tablet: 28),
+                  width: Responsive.value(context, mobile: 32, tablet: 38),
+                  height: Responsive.value(context, mobile: 32, tablet: 38),
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) => Icon(
                     Icons.store, 
