@@ -279,7 +279,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               color: context.cardColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
+                  color: context.shadowColor,
                   blurRadius: 20,
                   offset: const Offset(0, -5),
                 ),
@@ -396,7 +396,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         fit: BoxFit.cover,
         borderRadius: 12,
         placeholder: Container(
-          color: kSoftOrange,
+          color: context.softOrange,
           child: Icon(
             isShopImage ? Icons.store : Icons.person,
             color: kPrimaryOrange.withValues(alpha: 0.5),
@@ -490,7 +490,7 @@ class _MessageBubble extends StatelessWidget {
             // Sender avatar
             CircleAvatar(
               radius: 16,
-              backgroundColor: kSoftOrange,
+              backgroundColor: context.softOrange,
               backgroundImage: message.sender?.profileImageUrl != null
                   ? NetworkImage(message.sender!.profileImageUrl!)
                   : null,
@@ -535,7 +535,7 @@ class _MessageBubble extends StatelessWidget {
                         fit: BoxFit.cover,
                         placeholder: Container(
                            width: 200, height: 200, 
-                           color: Colors.black12, 
+                            color: context.inputFillColor, 
                            child: const Center(child: CircularProgressIndicator())
                         ),
                       ),

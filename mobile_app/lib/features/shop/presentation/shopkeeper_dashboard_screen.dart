@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile_app/core/theme/theme_context.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../core/widgets/custom_cached_image.dart';
@@ -21,7 +22,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
     final currencyFormat = NumberFormat('#,###');
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: context.backgroundColor,
       body: dashboardAsync.when(
         data: (dashboard) => RefreshIndicator(
           color: kPrimaryOrange,
@@ -143,34 +144,26 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                                 ),
+                                                const SizedBox(width: 8),
+                                                Container(width: 1, height: 12, color: Colors.white.withValues(alpha: 0.4)),
+                                                const SizedBox(width: 8),
+                                                const Icon(Icons.circle, color: Colors.greenAccent, size: 8),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  ref.tr('active'),
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    // Status Badge
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                      decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Icon(Icons.circle, color: Colors.white, size: 8),
-                                          SizedBox(width: 6),
-                                          Text(
-                                            ref.tr('active'),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    // Status Badge removed from here to be integrated below
                                   ],
                                 ),
                                 const Spacer(),
@@ -227,13 +220,13 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                       const SizedBox(height: 24),
 
                       // Quick Actions
-                      _buildSectionTitle(ref.tr('quick_actions')),
+                      _buildSectionTitle(context, ref.tr('quick_actions')),
                       const SizedBox(height: 12),
                       _buildQuickActions(context, ref),
                       const SizedBox(height: 24),
 
                       // Recent Orders
-                      _buildSectionTitle(ref.tr('recent_orders'), 
+                      _buildSectionTitle(context, ref.tr('recent_orders'), 
                         trailing: TextButton(
                           onPressed: () => context.push('/shopkeeper/orders'),
                           child: Text(ref.tr('view_all'), style: const TextStyle(color: kPrimaryOrange)),
@@ -422,11 +415,11 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: context.shadowColor,
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -456,7 +449,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
               title,
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey[600],
+                color: context.textSecondary,
               ),
             ),
           ],
@@ -465,16 +458,16 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title, {Widget? trailing}) {
+  Widget _buildSectionTitle(BuildContext context, String title, {Widget? trailing}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: context.textPrimary,
           ),
         ),
         if (trailing != null) trailing,
@@ -486,11 +479,11 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -558,7 +551,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: Colors.grey[700],
+              color: context.textSecondary,
               height: 1.3,
             ),
           ),
@@ -572,11 +565,11 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
       return Container(
         padding: const EdgeInsets.all(32),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: context.shadowColor,
               blurRadius: 10,
             ),
           ],
@@ -594,15 +587,16 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             Text(
               ref.tr('no_orders_yet'),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
+                color: context.textPrimary,
               ),
             ),
             const SizedBox(height: 4),
             Text(
               ref.tr('orders_will_appear'),
-              style: TextStyle(color: Colors.grey[600], fontSize: 13),
+              style: TextStyle(color: context.textSecondary, fontSize: 13),
             ),
           ],
         ),
@@ -611,11 +605,11 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.shadowColor,
             blurRadius: 10,
           ),
         ],
@@ -624,7 +618,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: dashboard.recentOrders.length > 5 ? 5 : dashboard.recentOrders.length,
-        separatorBuilder: (_, __) => Divider(height: 1, color: Colors.grey[200]),
+        separatorBuilder: (_, __) => Divider(height: 1, color: context.dividerColor),
         itemBuilder: (context, index) {
           final order = dashboard.recentOrders[index];
           return _buildOrderItem(context, ref, order);
@@ -662,9 +656,10 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                 children: [
                   Text(
                     '${ref.tr('order_number')} ${order.id}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
+                      color: context.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -672,7 +667,7 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
                     DateFormat.yMMMd().format(order.createdAt),
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.grey[500],
+                      color: context.textSecondary,
                     ),
                   ),
                 ],
@@ -683,9 +678,10 @@ class ShopkeeperDashboardScreen extends ConsumerWidget {
               children: [
                 Text(
                   '${order.totalAmount} ${ref.tr('afn')}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
+                    color: context.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),

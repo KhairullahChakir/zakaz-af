@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import 'package:mobile_app/core/theme/theme_context.dart';
 import 'package:mobile_app/core/widgets/custom_cached_image.dart';
 import '../data/admin_repository.dart';
 import '../../products/domain/category.dart';
@@ -116,7 +117,7 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: context.inputFillColor,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: imageFile != null
@@ -130,7 +131,7 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                                 borderRadius: 8,
                                 fit: BoxFit.cover,
                               )
-                            : Icon(Icons.add_photo_alternate, color: Colors.grey[400]),
+                            : Icon(Icons.add_photo_alternate, color: context.textSecondary),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -245,7 +246,7 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: Colors.grey[200],
+                              color: context.inputFillColor,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: category.image != null
@@ -253,10 +254,10 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                                     imageUrl: category.image!,
                                     fit: BoxFit.cover,
                                     borderRadius: 8,
-                                    placeholder: const Icon(Icons.category, color: Colors.grey),
-                                    errorWidget: const Icon(Icons.category, color: Colors.grey),
+                                    placeholder: Icon(Icons.category, color: context.textSecondary),
+                                    errorWidget: Icon(Icons.category, color: context.textSecondary),
                                   )
-                                : const Icon(Icons.category, color: Colors.grey),
+                                : Icon(Icons.category, color: context.textSecondary),
                           ),
                           title: Text(
                             category.name,

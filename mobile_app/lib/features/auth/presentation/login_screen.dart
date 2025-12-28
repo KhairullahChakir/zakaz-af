@@ -130,11 +130,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       height: 100,
                       width: 100,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: context.cardColor,
                         borderRadius: BorderRadius.circular(28),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
+                            color: context.shadowColor,
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -152,10 +152,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Text(
                     ref.tr('welcome_back'),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF1D1D1F),
+                      color: context.textPrimary,
                       letterSpacing: -0.5,
                     ),
                   ),
@@ -165,7 +165,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16, 
-                      color: Colors.grey.shade600,
+                      color: context.textSecondary,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -179,7 +179,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.03),
+                          color: context.shadowColor,
                           blurRadius: 40,
                           offset: const Offset(0, 20),
                         ),
@@ -204,7 +204,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           suffixIcon: IconButton(
                             icon: Icon(
                               _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                              color: Colors.grey,
+                              color: context.textSecondary,
                             ),
                             onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                           ),
@@ -246,20 +246,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   // Divided social section
                   Row(
                     children: [
-                      const Expanded(child: Divider()),
+                      Expanded(child: Divider(color: context.dividerColor)),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
                           ref.tr('or_continue_with').toUpperCase(),
                           style: TextStyle(
-                            color: Colors.grey.shade400,
+                            color: context.textSecondary,
                             letterSpacing: 1.2,
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
-                      const Expanded(child: Divider()),
+                      Expanded(child: Divider(color: context.dividerColor)),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -292,29 +292,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF1D1D1F),
+            color: context.textPrimary,
           ),
         ),
         const SizedBox(height: 10),
         TextFormField(
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16, color: context.textPrimary),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+            hintStyle: TextStyle(color: context.textSecondary.withValues(alpha: 0.7), fontSize: 14),
             prefixIcon: Icon(icon, color: kPrimaryOrange, size: 22),
             suffixIcon: suffixIcon,
             filled: true,
-            fillColor: Colors.grey.shade50,
+            fillColor: context.inputFillColor,
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16), 
-              borderSide: BorderSide(color: Colors.grey.shade100, width: 1.5),
+              borderSide: BorderSide(color: context.inputBorderColor, width: 1.5),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16), 
@@ -342,9 +342,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               onChanged: (v) => setState(() => _rememberMe = v ?? false),
               activeColor: kPrimaryOrange,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              side: BorderSide(color: Colors.grey.shade300, width: 1.5),
+              side: BorderSide(color: context.inputBorderColor, width: 1.5),
             ),
-            Text(ref.tr('remember_me'), style: const TextStyle(color: Color(0xFF1D1D1F), fontSize: 14)),
+            Text(ref.tr('remember_me'), style: TextStyle(color: context.textPrimary, fontSize: 14)),
           ],
         ),
         TextButton(
@@ -390,11 +390,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 SnackBar(content: Text('${ref.tr('apple_id')} ${ref.tr('coming_soon')}')),
               );
             },
-            child: const Icon(Icons.apple_rounded, color: Colors.black, size: 28),
+            child: Icon(Icons.apple_rounded, color: context.textPrimary, size: 28),
           ),
       ],
     );
   }
+
+
 
   Widget _socialBtn({required Widget child, required VoidCallback onTap}) {
     return InkWell(
@@ -406,10 +408,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         decoration: BoxDecoration(
           color: context.cardColor,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: context.dividerColor),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.02),
+              color: context.shadowColor,
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -424,7 +426,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(ref.tr('dont_have_account')),
+        Text(ref.tr('dont_have_account'), style: TextStyle(color: context.textPrimary)),
         TextButton(
           onPressed: () => context.push('/register'),
           child: Text(ref.tr('sign_up'), style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold)),

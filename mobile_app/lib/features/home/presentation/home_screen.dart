@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile_app/core/theme/theme_context.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
 import 'package:mobile_app/core/widgets/cart_icon_badge.dart';
@@ -121,10 +122,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildBottomNav({required bool isShopkeeper, required bool isAdmin}) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: context.shadowColor,
             blurRadius: 20,
             offset: const Offset(0, -5),
           ),
@@ -132,8 +133,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       child: SafeArea(
         child: NavigationBar(
-          backgroundColor: Colors.white,
-          indicatorColor: kSoftOrange,
+          backgroundColor: context.cardColor,
+          indicatorColor: context.softOrange,
           height: Responsive.value(context, mobile: 65, tablet: 75),
           selectedIndex: _currentNavIndex,
           onDestinationSelected: (index) {
@@ -141,24 +142,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           },
           destinations: [
             NavigationDestination(
-              icon: Icon(Icons.home_outlined, color: Colors.grey[600]),
+              icon: Icon(Icons.home_outlined, color: context.textSecondary),
               selectedIcon: const Icon(Icons.home, color: kPrimaryOrange),
               label: ref.tr('nav_home'),
             ),
             NavigationDestination(
-              icon: Icon(Icons.chat_bubble_outline, color: Colors.grey[600]),
+              icon: Icon(Icons.chat_bubble_outline, color: context.textSecondary),
               selectedIcon: const Icon(Icons.chat_bubble, color: kPrimaryOrange),
               label: ref.tr('nav_messages'),
             ),
             if (isShopkeeper)
               NavigationDestination(
-                icon: Icon(Icons.store_outlined, color: Colors.grey[600]),
+                icon: Icon(Icons.store_outlined, color: context.textSecondary),
                 selectedIcon: const Icon(Icons.store, color: kPrimaryOrange),
                 label: ref.tr('nav_my_shop'),
               ),
             if (isAdmin)
               NavigationDestination(
-                icon: Icon(Icons.admin_panel_settings_outlined, color: Colors.grey[600]),
+                icon: Icon(Icons.admin_panel_settings_outlined, color: context.textSecondary),
                 selectedIcon: const Icon(Icons.admin_panel_settings, color: Color(0xFF6366F1)),
                 label: ref.tr('nav_admin'),
               ),
@@ -168,7 +169,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               label: ref.tr('nav_cart'),
             ),
             NavigationDestination(
-              icon: Icon(Icons.person_outline, color: Colors.grey[600]),
+              icon: Icon(Icons.person_outline, color: context.textSecondary),
               selectedIcon: const Icon(Icons.person, color: kPrimaryOrange),
               label: ref.tr('nav_profile'),
             ),
@@ -209,7 +210,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ]);
       },
       color: kPrimaryOrange,
-      backgroundColor: Colors.white,
+      backgroundColor: context.cardColor,
       child: CustomScrollView(
       controller: _scrollController,
       slivers: [
@@ -284,11 +285,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Container(
               margin: EdgeInsets.all(padding),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardColor,
                 borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
+                    color: context.shadowColor,
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -303,13 +304,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.search, color: Colors.grey[500], 
+                      Icon(Icons.search, color: context.textSecondary, 
                         size: Responsive.value(context, mobile: 24, tablet: 28)),
                       SizedBox(width: Responsive.value(context, mobile: 12, tablet: 16)),
                       Text(
                         ref.tr('search_products'),
                         style: TextStyle(
-                          color: Colors.grey[500],
+                          color: context.textSecondary,
                           fontSize: Responsive.value(context, mobile: 14, tablet: 16),
                         ),
                       ),
@@ -319,7 +320,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: Container(
                           padding: EdgeInsets.all(Responsive.value(context, mobile: 8, tablet: 10)),
                           decoration: BoxDecoration(
-                            color: kSoftOrange,
+                            color: context.softOrange,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(Icons.tune, 
@@ -736,7 +737,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               duration: const Duration(milliseconds: 200),
               padding: hasPhoto ? EdgeInsets.zero : EdgeInsets.all(Responsive.value(context, mobile: 14, tablet: 18)),
               decoration: BoxDecoration(
-                color: hasPhoto ? Colors.transparent : (isSelected ? kPrimaryOrange : kSoftOrange),
+                color: hasPhoto ? Colors.transparent : (isSelected ? kPrimaryOrange : context.softOrange),
                 borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
                 border: isSelected ? null : Border.all(color: kPrimaryOrange.withValues(alpha: 0.3)),
               ),

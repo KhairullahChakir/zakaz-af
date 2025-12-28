@@ -296,12 +296,12 @@ ThemeData premiumDarkTheme() {
     ),
     
     // Bottom Navigation
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: AppColors.darkSurface,
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: AppColors.darkCard,
       selectedItemColor: AppColors.primaryOrange,
-      unselectedItemColor: AppColors.darkTextSecondary,
+      unselectedItemColor: Colors.grey.shade400,
       type: BottomNavigationBarType.fixed,
-      elevation: 0,
+      elevation: 8,
     ),
     
     // Snackbar

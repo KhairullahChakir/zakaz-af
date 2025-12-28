@@ -152,11 +152,11 @@ class _ConversationTile extends ConsumerWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: hasUnread ? kSoftOrange : Colors.white,
+        color: hasUnread ? context.softOrange.withValues(alpha: 0.1) : context.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.shadowColor,
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -178,7 +178,7 @@ class _ConversationTile extends ConsumerWidget {
                   width: Responsive.value(context, mobile: 56, tablet: 64),
                   height: Responsive.value(context, mobile: 56, tablet: 64),
                   decoration: BoxDecoration(
-                    color: kSoftOrange,
+                    color: context.softOrange,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: displayImage != null
@@ -187,7 +187,7 @@ class _ConversationTile extends ConsumerWidget {
                           fit: BoxFit.cover,
                           borderRadius: 16,
                           placeholder: Container(
-                            color: kSoftOrange,
+                            color: context.softOrange,
                             child: Icon(
                               isShopImage ? Icons.store : Icons.person,
                               color: kPrimaryOrange.withValues(alpha: 0.5),
@@ -217,6 +217,7 @@ class _ConversationTile extends ConsumerWidget {
                               style: TextStyle(
                                 fontWeight: hasUnread ? FontWeight.bold : FontWeight.w600,
                                 fontSize: Responsive.value(context, mobile: 15, tablet: 17),
+                                color: context.textPrimary,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -226,7 +227,7 @@ class _ConversationTile extends ConsumerWidget {
                             Text(
                               _formatTime(ref, latestMessage!.createdAt!),
                               style: TextStyle(
-                                color: hasUnread ? kPrimaryOrange : Colors.grey[500],
+                                color: hasUnread ? kPrimaryOrange : context.textSecondary,
                                 fontSize: 12,
                                 fontWeight: hasUnread ? FontWeight.bold : FontWeight.normal,
                               ),
@@ -238,9 +239,11 @@ class _ConversationTile extends ConsumerWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              latestMessage?.content ?? ref.tr('no_messages'),
+                              latestMessage?.type == 'image' 
+                                  ? '📷 ${ref.tr('photo')}' 
+                                  : (latestMessage?.content ?? ref.tr('no_messages')),
                               style: TextStyle(
-                                color: hasUnread ? Colors.grey[800] : Colors.grey[600],
+                                color: hasUnread ? context.textPrimary : context.textSecondary,
                                 fontSize: Responsive.value(context, mobile: 13, tablet: 14),
                                 fontWeight: hasUnread ? FontWeight.w500 : FontWeight.normal,
                               ),
@@ -274,20 +277,20 @@ class _ConversationTile extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: Colors.grey[100],
+                            color: context.inputFillColor,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.shopping_bag, size: 14, color: Colors.grey),
+                              Icon(Icons.shopping_bag, size: 14, color: context.textSecondary),
                               const SizedBox(width: 4),
                               Flexible(
                                 child: Text(
                                   conversation.product!.name,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey[600],
+                                    color: context.textSecondary,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,

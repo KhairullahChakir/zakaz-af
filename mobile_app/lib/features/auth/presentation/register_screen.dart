@@ -117,7 +117,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF1D1D1F), size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: context.textPrimary, size: 20),
           onPressed: () => context.pop(),
         ),
       ),
@@ -137,11 +137,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: context.cardColor,
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
+                          color: context.shadowColor,
                           blurRadius: 20,
                           offset: const Offset(0, 10),
                         ),
@@ -155,10 +155,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 Text(
                   ref.tr('join_zakaz'),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF1D1D1F),
+                    color: context.textPrimary,
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -166,7 +166,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 Text(
                   ref.tr('register_subtitle'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                  style: TextStyle(fontSize: 16, color: context.textSecondary),
                 ),
                 const SizedBox(height: 40),
 
@@ -178,7 +178,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.03),
+                        color: context.shadowColor,
                         blurRadius: 40,
                         offset: const Offset(0, 20),
                       ),
@@ -217,7 +217,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         icon: Icons.lock_outline_rounded,
                         obscureText: _obscurePassword,
                         suffixIcon: IconButton(
-                          icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: Colors.grey),
+                          icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: context.textSecondary),
                           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                         ),
                         validator: (v) {
@@ -235,7 +235,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         icon: Icons.security_rounded,
                         obscureText: _obscureConfirmPassword,
                         suffixIcon: IconButton(
-                          icon: Icon(_obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: Colors.grey),
+                          icon: Icon(_obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: context.textSecondary),
                           onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
                         ),
                         validator: (v) {
@@ -301,25 +301,25 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1D1D1F)),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: context.textPrimary),
         ),
         const SizedBox(height: 10),
         TextFormField(
           controller: controller,
           obscureText: obscureText,
-          style: const TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16, color: context.textPrimary),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+            hintStyle: TextStyle(color: context.textSecondary.withValues(alpha: 0.7), fontSize: 14),
             prefixIcon: Icon(icon, color: kPrimaryOrange, size: 22),
             suffixIcon: suffixIcon,
             filled: true,
-            fillColor: Colors.grey.shade50,
+            fillColor: context.inputFillColor,
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16), 
-              borderSide: BorderSide(color: Colors.grey.shade100, width: 1.5),
+              borderSide: BorderSide(color: context.inputBorderColor, width: 1.5),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16), 
@@ -348,7 +348,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               onChanged: (v) => setState(() => _acceptTerms = v ?? false),
               activeColor: kPrimaryOrange,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              side: BorderSide(color: Colors.grey.shade300, width: 1.5),
+              side: BorderSide(color: context.inputBorderColor, width: 1.5),
             ),
             Expanded(
               child: Text.rich(
@@ -366,7 +366,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                   ],
                 ),
-                style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                style: TextStyle(fontSize: 13, color: context.textSecondary),
               ),
             ),
           ],
@@ -379,7 +379,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(ref.tr('already_have_account')),
+        Text(ref.tr('already_have_account'), style: TextStyle(color: context.textPrimary)),
         TextButton(
           onPressed: () => context.pop(),
           child: Text(ref.tr('sign_in'), style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold)),
