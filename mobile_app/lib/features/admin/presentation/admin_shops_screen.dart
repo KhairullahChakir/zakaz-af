@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 import '../data/admin_shop_repository.dart';
 import '../../shop/domain/shop.dart';
 
@@ -31,11 +32,17 @@ class _AdminShopsScreenState extends ConsumerState<AdminShopsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        title: Text(ref.tr('shop_applications')),
+        title: Text(ref.tr('shop_applications'), style: const TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
+          labelColor: context.primaryOrange,
+          unselectedLabelColor: context.textSecondary,
+          indicatorColor: context.primaryOrange,
           tabs: [
             Tab(text: ref.tr('status_pending')),
             Tab(text: ref.tr('status_approved')),
@@ -79,7 +86,7 @@ class _ShopList extends ConsumerWidget {
                   const SizedBox(height: 16),
                   Text(
                     ref.tr('no_status_applications', args: {'status': ref.tr('status_$status')}),
-                    style: TextStyle(color: Colors.grey[600]),
+                    style: TextStyle(color: context.textSecondary),
                   ),
                 ],
               ),
@@ -111,6 +118,9 @@ class _ShopCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
+      color: context.cardColor,
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: () => context.push('/admin/shops/${shop.id}', extra: shop),
         borderRadius: BorderRadius.circular(12),
@@ -123,7 +133,7 @@ class _ShopCard extends ConsumerWidget {
                 width: 70,
                 height: 70,
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: context.isDark ? Colors.grey[800] : Colors.grey[200],
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: shop.primaryPhotoUrl != null
@@ -133,10 +143,10 @@ class _ShopCard extends ConsumerWidget {
                           shop.primaryPhotoUrl!,
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) =>
-                              const Icon(Icons.store, color: Colors.grey),
+                              Icon(Icons.store, color: context.textSecondary),
                         ),
                       )
-                    : const Icon(Icons.store, color: Colors.grey),
+                    : Icon(Icons.store, color: context.textSecondary),
               ),
               const SizedBox(width: 16),
               
@@ -147,25 +157,26 @@ class _ShopCard extends ConsumerWidget {
                   children: [
                     Text(
                       shop.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
+                        color: context.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       ref.tr('type_${shop.type.toLowerCase()}'),
-                      style: TextStyle(color: Colors.grey[600]),
+                      style: TextStyle(color: context.textSecondary),
                     ),
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(Icons.location_on, size: 14, color: Colors.grey[500]),
+                        Icon(Icons.location_on, size: 14, color: context.textSecondary),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             '${shop.city}, ${shop.province}',
-                            style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                            style: TextStyle(color: context.textSecondary, fontSize: 12),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
