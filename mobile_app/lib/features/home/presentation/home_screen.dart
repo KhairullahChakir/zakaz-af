@@ -18,6 +18,7 @@ import '../../cart/presentation/cart_screen.dart';
 import '../../profile/presentation/help_center_screen.dart';
 import '../../profile/presentation/about_screen.dart';
 import '../../profile/presentation/privacy_policy_screen.dart';
+import 'product_search_modal.dart';
 import '../../profile/presentation/notification_settings_screen.dart';
 import '../../profile/presentation/account_security_screen.dart';
 import '../../shop/presentation/shopkeeper_dashboard_screen.dart';
@@ -1219,140 +1220,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _showSearchModal() {
-    final padding = Responsive.value<double>(context, mobile: 16, tablet: 24);
-    String searchQuery = '';
-    
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (modalContext) => StatefulBuilder(
-        builder: (context, setModalState) => DraggableScrollableSheet(
-          initialChildSize: 0.9,
-          minChildSize: 0.5,
-          maxChildSize: 0.95,
-          builder: (context, scrollController) => Container(
-            decoration: BoxDecoration(
-              color: context.backgroundColor,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(Responsive.value(context, mobile: 20, tablet: 28)),
-              ),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(padding),
-                  child: TextField(
-                    autofocus: true,
-                    cursorColor: kPrimaryOrange,
-                    style: TextStyle(fontSize: Responsive.value(context, mobile: 16, tablet: 18), color: context.textPrimary),
-                    decoration: InputDecoration(
-                      hintText: ref.tr('search_products'),
-                      hintStyle: TextStyle(color: context.textSecondary),
-                      prefixIcon: const Icon(Icons.search, color: kPrimaryOrange),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 12, tablet: 16)),
-                        borderSide: const BorderSide(color: kPrimaryOrange),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 12, tablet: 16)),
-                        borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
-                      ),
-                    ),
-                    onChanged: (value) => setModalState(() => searchQuery = value),
-                  ),
-                ),
-                Expanded(
-                  child: Consumer(
-                    builder: (context, ref, _) {
-                      final productsAsync = ref.watch(productsProvider(
-                        search: searchQuery.isEmpty ? null : searchQuery,
-                      ));
-                      return productsAsync.when(
-                        data: (products) => products.isEmpty
-                            ? Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.search_off, size: 64, color: Colors.grey[400]),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      searchQuery.isEmpty ? ref.tr('start_typing') : ref.tr('no_products_found'),
-                                      style: TextStyle(color: Colors.grey[600], fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : ListView.builder(
-                                controller: scrollController,
-                                padding: EdgeInsets.symmetric(horizontal: padding),
-                                itemCount: products.length,
-                                itemBuilder: (context, index) {
-                                  final product = products[index];
-                                  return ListTile(
-                                    contentPadding: EdgeInsets.symmetric(
-                                      vertical: Responsive.value(context, mobile: 4, tablet: 8),
-                                    ),
-                                    leading: Container(
-                                      width: Responsive.value(context, mobile: 50, tablet: 60),
-                                      height: Responsive.value(context, mobile: 50, tablet: 60),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: context.softOrange,
-                                      ),
-                                      child: product.imageUrl != null
-                                          ? ClipRRect(
-                                              borderRadius: BorderRadius.circular(8),
-                                              child: Image.network(product.imageUrl!, fit: BoxFit.cover),
-                                            )
-                                          : const Icon(Icons.image, color: kPrimaryOrange),
-                                    ),
-                                    title: Text(
-                                      product.name,
-                                      style: TextStyle(
-                                        fontSize: Responsive.value(context, mobile: 15, tablet: 17),
-                                        color: context.textPrimary,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      '${product.price.toInt()} ${ref.tr('afn')}',
-                                      style: TextStyle(
-                                        color: kPrimaryOrange,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Responsive.value(context, mobile: 14, tablet: 16),
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      this.context.push('/products/${product.id}');
-                                    },
-                                  );
-                                },
-                              ),
-                        loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-                        error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      builder: (_) => const ProductSearchModal(),
     );
   }
 }
