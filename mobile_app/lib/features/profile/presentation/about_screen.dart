@@ -213,9 +213,10 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       _buildSocialButton(Icons.facebook, Colors.blue),
-                      _buildSocialButton(Icons.telegram, Colors.lightBlue),
-                      _buildSocialButton(Icons.camera_alt_outlined, Colors.pink),
-                      _buildSocialButton(Icons.video_library_outlined, Colors.red),
+                      _buildSocialButton(Icons.camera_alt, Colors.purple),
+                      _buildSocialButton(Icons.music_note, context.isDark ? Colors.white : Colors.black),
+                      _buildSocialButton(Icons.send, Colors.lightBlue),
+                      _buildSocialButton(Icons.phone, Colors.green),
                     ],
                   ),
 

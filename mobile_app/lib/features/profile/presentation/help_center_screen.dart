@@ -53,34 +53,7 @@ class HelpCenterScreen extends ConsumerWidget {
             const SizedBox(height: 24),
             
             // Quick Actions
-            // Social Media Support
-            _buildSectionTitle(context, ref.tr('connect_with_us')),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              decoration: BoxDecoration(
-                color: context.cardColor,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: context.shadowColor,
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildSocialIcon(context, 'assets/icons/facebook.png', 'Facebook', Colors.blue),
-                  _buildSocialIcon(context, 'assets/icons/instagram.png', 'Instagram', Colors.purple),
-                  _buildSocialIcon(context, 'assets/icons/tiktok.png', 'TikTok', Colors.black),
-                  _buildSocialIcon(context, 'assets/icons/telegram.png', 'Telegram', Colors.blueAccent),
-                  _buildSocialIcon(context, 'assets/icons/whatsapp.png', 'WhatsApp', Colors.green),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
+
 
             // Quick Actions (Email & Call only)
             _buildSectionTitle(context, ref.tr('contact_directly')),
