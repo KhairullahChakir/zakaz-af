@@ -31,6 +31,9 @@ class OrderDetailsScreen extends ConsumerWidget {
             children: [
               // Order Header
               Card(
+                elevation: 2,
+                color: context.cardColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -43,6 +46,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                             '${ref.tr('order_number')}${order.id}',
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                   fontWeight: FontWeight.bold,
+                                  color: context.textPrimary,
                                 ),
                           ),
                           _buildStatusChip(context, ref, order.status),
@@ -63,6 +67,9 @@ class OrderDetailsScreen extends ConsumerWidget {
 
               // Order Timeline
               Card(
+                elevation: 2,
+                color: context.cardColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -72,6 +79,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                         ref.tr('order_status'),
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
+                              color: context.textPrimary,
                             ),
                       ),
                       const SizedBox(height: 16),
@@ -84,6 +92,9 @@ class OrderDetailsScreen extends ConsumerWidget {
 
               // Order Items
               Card(
+                elevation: 2,
+                color: context.cardColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -93,6 +104,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                         ref.tr('items'),
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
+                              color: context.textPrimary,
                             ),
                       ),
                       const SizedBox(height: 12),
@@ -104,7 +116,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                                   width: 50,
                                   height: 50,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[200],
+                                    color: context.isDark ? Colors.grey[800] : Colors.grey[200],
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: item.product?.imageUrl != null
@@ -115,8 +127,8 @@ class OrderDetailsScreen extends ConsumerWidget {
                                             fit: BoxFit.cover,
                                           ),
                                         )
-                                      : const Icon(Icons.inventory_2_outlined,
-                                          color: Colors.grey),
+                                      : Icon(Icons.inventory_2_outlined,
+                                          color: context.textSecondary),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
@@ -125,13 +137,13 @@ class OrderDetailsScreen extends ConsumerWidget {
                                     children: [
                                       Text(
                                         item.product?.name ?? ref.tr('product'),
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w500),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500, color: context.textPrimary),
                                       ),
                                       Text(
                                         '${item.price} ${ref.tr('afn')} x ${item.quantity}',
                                         style: TextStyle(
-                                          color: Colors.grey[600],
+                                          color: context.textSecondary,
                                           fontSize: 13,
                                         ),
                                       ),
@@ -140,8 +152,9 @@ class OrderDetailsScreen extends ConsumerWidget {
                                 ),
                                 Text(
                                   '${item.price * item.quantity} ${ref.tr('afn')}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
+                                    color: context.textPrimary,
                                   ),
                                 ),
                               ],
@@ -153,9 +166,10 @@ class OrderDetailsScreen extends ConsumerWidget {
                         children: [
                           Text(
                             ref.tr('total'),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
+                              color: context.textPrimary,
                             ),
                           ),
                           Text(
@@ -163,7 +177,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
+                              color: context.primaryOrange,
                             ),
                           ),
                         ],
@@ -269,7 +283,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                   height: 24,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isCompleted ? Colors.green : Colors.grey[300],
+                    color: isCompleted ? Colors.green : (context.isDark ? Colors.grey[800] : Colors.grey[300]),
                     border: isCurrent
                         ? Border.all(color: Colors.green, width: 3)
                         : null,
@@ -282,7 +296,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                   Container(
                     width: 2,
                     height: 30,
-                    color: isCompleted ? Colors.green : Colors.grey[300],
+                    color: isCompleted ? Colors.green : (context.isDark ? Colors.grey[700] : Colors.grey[300]),
                   ),
               ],
             ),
@@ -294,7 +308,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                   statusLabels[status] ?? status,
                   style: TextStyle(
                     fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
-                    color: isCompleted ? Colors.black : Colors.grey,
+                    color: isCompleted ? (context.isDark ? Colors.white : Colors.black) : context.textSecondary,
                   ),
                 ),
               ),
