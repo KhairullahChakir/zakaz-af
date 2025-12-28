@@ -96,7 +96,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
           Container(
             padding: const EdgeInsets.all(40),
             decoration: BoxDecoration(
-              color: kSoftOrange,
+              color: context.isDark ? kPrimaryOrange.withValues(alpha: 0.1) : kSoftOrange,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
@@ -115,10 +115,10 @@ class _CartScreenState extends ConsumerState<CartScreen> {
           const SizedBox(height: 40),
           Text(
             ref.tr('cart_empty'),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: context.textPrimary,
             ),
           ),
           const SizedBox(height: 12),
@@ -127,7 +127,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
-              color: Colors.grey.shade600,
+              color: context.textSecondary,
               height: 1.6,
             ),
           ),
@@ -189,11 +189,11 @@ class _CartScreenState extends ConsumerState<CartScreen> {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: context.cardColor,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
+                color: context.shadowColor,
                 offset: const Offset(0, -4),
                 blurRadius: 20,
               ),
@@ -206,7 +206,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: kSoftOrange,
+                    color: context.isDark ? kPrimaryOrange.withValues(alpha: 0.1) : kSoftOrange,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -218,7 +218,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                             ref.tr('subtotal'),
                             style: TextStyle(
                               fontSize: 15,
-                              color: Colors.grey.shade700,
+                              color: context.textSecondary,
                             ),
                           ),
                           Text(
@@ -238,7 +238,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                             ref.tr('delivery_fee'),
                             style: TextStyle(
                               fontSize: 15,
-                              color: Colors.grey.shade700,
+                              color: context.textSecondary,
                             ),
                           ),
                           Text(
@@ -260,9 +260,10 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                         children: [
                           Text(
                             ref.tr('cart_total'),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
+                              color: context.textPrimary,
                             ),
                           ),
                           Text(
@@ -325,11 +326,11 @@ class _CartScreenState extends ConsumerState<CartScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: context.shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -345,7 +346,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               width: 90,
               height: 90,
               decoration: BoxDecoration(
-                color: kSoftOrange,
+                color: context.isDark ? kPrimaryOrange.withValues(alpha: 0.1) : kSoftOrange,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: imageUrl != null
@@ -381,9 +382,10 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               children: [
                 Text(
                   item.product.name,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
+                    color: context.textPrimary,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -473,7 +475,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
       width: 36,
       height: 36,
       decoration: BoxDecoration(
-        color: kSoftOrange,
+        color: context.isDark ? kPrimaryOrange.withValues(alpha: 0.1) : kSoftOrange,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: kPrimaryOrange.withValues(alpha: 0.2)),
       ),
