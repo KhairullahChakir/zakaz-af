@@ -573,6 +573,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: Responsive.value(context, mobile: 18, tablet: 22),
+                    color: context.textPrimary,
                   ),
                 ),
                 TextButton(
@@ -622,6 +623,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: Responsive.value(context, mobile: 18, tablet: 22),
+                    color: context.textPrimary,
                   ),
                 ),
                 TextButton(
@@ -677,6 +679,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: Responsive.value(context, mobile: 18, tablet: 22),
+                color: context.textPrimary,
               ),
             ),
           ),
@@ -761,7 +764,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               style: TextStyle(
                 fontSize: Responsive.value(context, mobile: 11, tablet: 13),
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? kPrimaryOrange : null,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected ? kPrimaryOrange : context.textPrimary,
               ),
             ),
           ],
@@ -817,7 +821,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         width: cardWidth,
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
           boxShadow: [
             BoxShadow(
@@ -837,7 +841,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Container(
                   height: imageHeight,
                   decoration: BoxDecoration(
-                    color: kSoftOrange,
+                    color: context.softOrange,
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
                     ),
@@ -879,11 +883,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: Container(
                           padding: EdgeInsets.all(Responsive.value(context, mobile: 5, tablet: 7)),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: context.cardColor,
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
+                                color: context.shadowColor,
                                 blurRadius: 4,
                               ),
                             ],
@@ -916,6 +920,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: Responsive.value(context, mobile: 13, tablet: 15),
+                        color: context.textPrimary,
                       ),
                     ),
                     Row(
@@ -928,7 +933,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           product.reviewsAvgRating?.toStringAsFixed(1) ?? 'New',
                           style: TextStyle(
                             fontSize: Responsive.value(context, mobile: 11, tablet: 13),
-                            color: Colors.grey[600],
+                            color: context.textSecondary,
                           ),
                         ),
                       ],
@@ -956,11 +961,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       onTap: () => context.push('/products/${product.id}'),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: context.shadowColor,
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -976,7 +981,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: kSoftOrange,
+                      color: context.softOrange,
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(Responsive.value(context, mobile: 16, tablet: 20)),
                       ),
@@ -1018,7 +1023,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           child: Container(
                             padding: EdgeInsets.all(Responsive.value(context, mobile: 6, tablet: 8)),
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.9),
+                              color: context.cardColor.withValues(alpha: 0.9),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -1072,6 +1077,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: Responsive.value(context, mobile: 12, tablet: 14),
+                        color: context.textPrimary,
                       ),
                     ),
                     const Spacer(),
@@ -1133,7 +1139,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void _showSortModal() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: context.cardColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -1159,6 +1165,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                color: context.textPrimary,
               ),
             ),
             const SizedBox(height: 16),
@@ -1227,7 +1234,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           maxChildSize: 0.95,
           builder: (context, scrollController) => Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: context.backgroundColor,
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(Responsive.value(context, mobile: 20, tablet: 28)),
               ),
@@ -1248,9 +1255,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: TextField(
                     autofocus: true,
                     cursorColor: kPrimaryOrange,
-                    style: TextStyle(fontSize: Responsive.value(context, mobile: 16, tablet: 18)),
+                    style: TextStyle(fontSize: Responsive.value(context, mobile: 16, tablet: 18), color: context.textPrimary),
                     decoration: InputDecoration(
                       hintText: ref.tr('search_products'),
+                      hintStyle: TextStyle(color: context.textSecondary),
                       prefixIcon: const Icon(Icons.search, color: kPrimaryOrange),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.close),
@@ -1304,7 +1312,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       height: Responsive.value(context, mobile: 50, tablet: 60),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(8),
-                                        color: kSoftOrange,
+                                        color: context.softOrange,
                                       ),
                                       child: product.imageUrl != null
                                           ? ClipRRect(
@@ -1317,6 +1325,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       product.name,
                                       style: TextStyle(
                                         fontSize: Responsive.value(context, mobile: 15, tablet: 17),
+                                        color: context.textPrimary,
                                       ),
                                     ),
                                     subtitle: Text(
