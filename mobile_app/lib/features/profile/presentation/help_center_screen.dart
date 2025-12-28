@@ -198,33 +198,7 @@ class HelpCenterScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSocialIcon(BuildContext context, String assetPath, String label, Color color) {
-    // Note: Since we don't have actual assets yet, we'll use Icons as placeholders
-    IconData iconData;
-    switch (label) {
-      case 'Facebook': iconData = Icons.facebook; break;
-      case 'TikTok': iconData = Icons.tiktok; break; // Flutter doesn't have native tiktok icon usually, will mock
-      case 'Telegram': iconData = Icons.send; break;
-      case 'WhatsApp': iconData = Icons.phone_android; break; // Mock
-      case 'Instagram': iconData = Icons.camera_alt; break; // Mock
-      default: iconData = Icons.link;
-    }
-    
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(iconData, color: color, size: 28),
-        ),
-        const SizedBox(height: 8),
-        Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: context.textSecondary)),
-      ],
-    );
-  }
+
 
   Widget _buildQuickAction(BuildContext context, IconData icon, String label, Color color) {
     return Container(
