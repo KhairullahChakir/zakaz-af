@@ -115,7 +115,9 @@ class AddressScreen extends ConsumerWidget {
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: context.textPrimary,
             ),
           ),
           const SizedBox(height: 12),
@@ -124,7 +126,7 @@ class AddressScreen extends ConsumerWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
-              color: Colors.grey.shade600,
+              color: context.textSecondary,
               height: 1.5,
             ),
           ),
@@ -172,11 +174,11 @@ class AddressScreen extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: context.shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -193,12 +195,12 @@ class AddressScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: address.isDefault ? kSoftOrange : Colors.grey.shade100,
+                    color: address.isDefault ? context.softOrange : context.inputFillColor,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(
                     _getAddressIcon(address.label),
-                    color: address.isDefault ? kPrimaryOrange : Colors.grey.shade600,
+                    color: address.isDefault ? kPrimaryOrange : context.textSecondary,
                     size: 24,
                   ),
                 ),
@@ -212,9 +214,10 @@ class AddressScreen extends ConsumerWidget {
                         children: [
                           Text(
                             address.label,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
+                              color: context.textPrimary,
                             ),
                           ),
                           if (address.isDefault) ...[
@@ -252,7 +255,7 @@ class AddressScreen extends ConsumerWidget {
                         address.addressLine1,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey.shade700,
+                          color: context.textSecondary,
                         ),
                       ),
                       if (address.addressLine2 != null && address.addressLine2!.isNotEmpty)
@@ -262,7 +265,7 @@ class AddressScreen extends ConsumerWidget {
                             address.addressLine2!,
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey.shade700,
+                              color: context.textSecondary,
                             ),
                           ),
                         ),
@@ -271,7 +274,7 @@ class AddressScreen extends ConsumerWidget {
                         '${address.city}${address.zipCode != null ? ", ${address.zipCode}" : ""}',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey.shade600,
+                          color: context.textSecondary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -284,7 +287,7 @@ class AddressScreen extends ConsumerWidget {
           // Action Buttons
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
+              color: context.backgroundColor.withValues(alpha: 0.5),
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),

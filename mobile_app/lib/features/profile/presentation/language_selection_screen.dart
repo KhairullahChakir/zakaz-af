@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import 'package:mobile_app/core/theme/theme_context.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -14,11 +15,11 @@ class LanguageSelectionScreen extends ConsumerWidget {
     final currentLanguage = ref.watch(languageProvider);
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(ref.tr('select_language')),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         elevation: 0,
         centerTitle: true,
       ),
@@ -101,6 +102,9 @@ class LanguageSelectionScreen extends ConsumerWidget {
                   Expanded(
                     child: Text(
                       ref.tr('rtl_info_msg'),
+                  Expanded(
+                    child: Text(
+                      ref.tr('rtl_info_msg'),
                       style: TextStyle(
                         color: Colors.blue[700],
                         fontSize: 13,
@@ -152,15 +156,15 @@ class LanguageSelectionScreen extends ConsumerWidget {
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: context.cardColor,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isSelected ? kPrimaryOrange : Colors.grey[200]!,
+                color: isSelected ? kPrimaryOrange : context.dividerColor,
                 width: isSelected ? 2 : 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                  color: context.shadowColor,
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -195,7 +199,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: isSelected ? kPrimaryOrange : Colors.black87,
+                          color: isSelected ? kPrimaryOrange : context.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -203,7 +207,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
                         language.englishName,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey[600],
+                          color: context.textSecondary,
                         ),
                       ),
                     ],
@@ -250,7 +254,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
                     height: 24,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.grey[300]!, width: 2),
+                      border: Border.all(color: context.dividerColor, width: 2),
                     ),
                   ),
               ],

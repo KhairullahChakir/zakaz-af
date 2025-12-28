@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import 'package:mobile_app/core/theme/theme_context.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
@@ -98,11 +99,11 @@ class NotificationSettingsScreen extends ConsumerWidget {
     final notifier = ref.read(notificationSettingsProvider.notifier);
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(ref.tr('notifications'), style: const TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: kPrimaryOrange,
-        foregroundColor: Colors.white,
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         elevation: 0,
       ),
       body: ListView(
@@ -160,11 +161,11 @@ class NotificationSettingsScreen extends ConsumerWidget {
 
   Widget _buildSectionTitle(String title) => Padding(
     padding: const EdgeInsets.only(left: 4, bottom: 12),
-    child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+    child: Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: context.textPrimary)),
   );
 
   Widget _buildCard(List<Widget> children) => Container(
-    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+    decoration: BoxDecoration(color: context.cardColor, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: context.shadowColor, blurRadius: 10)]),
     child: Column(children: children),
   );
 
@@ -176,8 +177,8 @@ class NotificationSettingsScreen extends ConsumerWidget {
         decoration: BoxDecoration(color: (disabled ? Colors.grey : kPrimaryOrange).withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
         child: Icon(icon, color: disabled ? Colors.grey : kPrimaryOrange),
       ),
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: disabled ? Colors.grey : Colors.black87)),
-      subtitle: Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: disabled ? Colors.grey : context.textPrimary)),
+      subtitle: Text(subtitle, style: TextStyle(fontSize: 12, color: context.textSecondary)),
       trailing: Switch(value: value, activeColor: kPrimaryOrange, onChanged: onChanged),
     );
   }

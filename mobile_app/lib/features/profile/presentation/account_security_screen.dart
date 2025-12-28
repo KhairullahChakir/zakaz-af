@@ -219,15 +219,15 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardColor,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)],
+                boxShadow: [BoxShadow(color: context.shadowColor, blurRadius: 10)],
               ),
               child: Row(
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundColor: kSoftOrange,
+                    backgroundColor: context.softOrange,
                     backgroundImage: user?.profileImageUrl != null ? NetworkImage(user!.profileImageUrl!) : null,
                     child: user?.profileImageUrl == null ? const Icon(Icons.person, color: kPrimaryOrange, size: 30) : null,
                   ),
@@ -236,8 +236,8 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(user?.name ?? ref.tr('user'), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        Text(user?.email ?? '', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+                        Text(user?.name ?? ref.tr('user'), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: context.textPrimary)),
+                        Text(user?.email ?? '', style: TextStyle(color: context.textSecondary, fontSize: 13)),
                       ],
                     ),
                   ),
@@ -265,9 +265,9 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardColor,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)],
+                boxShadow: [BoxShadow(color: context.shadowColor, blurRadius: 10)],
               ),
               child: Form(
                 key: _formKey,
@@ -341,21 +341,21 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardColor,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)],
+                boxShadow: [BoxShadow(color: context.shadowColor, blurRadius: 10)],
               ),
               child: Row(
                 children: [
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: _isBiometricAvailable ? kSoftOrange : Colors.grey[100],
+                      color: _isBiometricAvailable ? context.softOrange : context.inputFillColor,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
                       _biometricTypeName == 'Face ID' ? Icons.face : Icons.fingerprint_rounded,
-                      color: _isBiometricAvailable ? kPrimaryOrange : Colors.grey,
+                      color: _isBiometricAvailable ? kPrimaryOrange : context.textSecondary,
                       size: 28,
                     ),
                   ),
@@ -366,14 +366,14 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
                       children: [
                         Text(
                           _isBiometricAvailable ? _biometricTypeName : ref.tr('biometric_login'),
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: context.textPrimary),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           _isBiometricAvailable 
                               ? ref.tr('biometric_login_desc')
                               : ref.tr('biometric_not_available'),
-                          style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                          style: TextStyle(color: context.textSecondary, fontSize: 13),
                         ),
                       ],
                     ),
@@ -403,7 +403,7 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: kSoftOrange,
+                color: context.softOrange,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: kPrimaryOrange.withValues(alpha: 0.3)),
               ),
@@ -426,7 +426,7 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
 
   Widget _buildSectionTitle(String title) => Padding(
     padding: const EdgeInsets.only(left: 4, bottom: 12),
-    child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+    child: Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: context.textPrimary)),
   );
 
   Widget _buildPasswordField({
@@ -443,15 +443,18 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
       validator: validator,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: TextStyle(color: context.textSecondary),
         hintText: hint,
+        hintStyle: TextStyle(color: context.textSecondary.withValues(alpha: 0.7)),
         filled: true,
-        fillColor: Colors.grey[50],
+        fillColor: context.inputFillColor,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
         suffixIcon: IconButton(
-          icon: Icon(showPassword ? Icons.visibility_off : Icons.visibility, color: Colors.grey),
+          icon: Icon(showPassword ? Icons.visibility_off : Icons.visibility, color: context.textSecondary),
           onPressed: onToggle,
         ),
       ),
+      style: TextStyle(color: context.textPrimary),
     );
   }
 
@@ -461,7 +464,7 @@ class _AccountSecurityScreenState extends ConsumerState<AccountSecurityScreen> {
       children: [
         Icon(icon, color: kPrimaryOrange, size: 20),
         const SizedBox(width: 12),
-        Expanded(child: Text(text, style: TextStyle(fontSize: 13, color: Colors.grey[700]))),
+        Expanded(child: Text(text, style: TextStyle(fontSize: 13, color: context.textPrimary))),
       ],
     ),
   );
