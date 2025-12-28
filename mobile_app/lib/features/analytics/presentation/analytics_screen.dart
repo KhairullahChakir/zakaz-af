@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'analytics_provider.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 class AnalyticsScreen extends ConsumerWidget {
   const AnalyticsScreen({super.key});
@@ -14,8 +15,11 @@ class AnalyticsScreen extends ConsumerWidget {
     final currencyFormat = NumberFormat.currency(symbol: '${ref.tr('afn')} ', decimalDigits: 0);
 
     return Scaffold(
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        title: Text(ref.tr('sales_analytics')),
+        title: Text(ref.tr('sales_analytics'), style: const TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.store),
@@ -101,14 +105,17 @@ class AnalyticsScreen extends ConsumerWidget {
                 // Top Products
                 Text(
                   ref.tr('top_selling_products'),
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: context.textPrimary),
                 ),
                 const SizedBox(height: 16),
                 ...topProducts.map((p) => Card(
                   margin: const EdgeInsets.only(bottom: 8),
+                  color: context.cardColor,
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   child: ListTile(
-                    title: Text(p['name']),
-                    subtitle: Text(ref.tr('sold_units', args: {'n': p['total_sold'].toString()})),
+                    title: Text(p['name'], style: TextStyle(color: context.textPrimary, fontWeight: FontWeight.w500)),
+                    subtitle: Text(ref.tr('sold_units', args: {'n': p['total_sold'].toString()}), style: TextStyle(color: context.textSecondary)),
                     trailing: Text(
                       currencyFormat.format(double.parse(p['revenue'].toString())),
                       style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
@@ -120,18 +127,21 @@ class AnalyticsScreen extends ConsumerWidget {
                 // Recent Sales
                 Text(
                   ref.tr('recent_sales'),
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: context.textPrimary),
                 ),
                 const SizedBox(height: 16),
                 ...recentSales.map((s) => Card(
                   margin: const EdgeInsets.only(bottom: 8),
+                  color: context.cardColor,
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   child: ListTile(
-                    leading: const CircleAvatar(child: Icon(Icons.person)),
-                    title: Text(s['user']['name']),
-                    subtitle: Text(DateFormat.yMMMd().add_jm().format(DateTime.parse(s['created_at']))),
+                    leading: CircleAvatar(backgroundColor: context.isDark ? Colors.grey[800] : Colors.grey[200], child: Icon(Icons.person, color: context.primaryOrange)),
+                    title: Text(s['user']['name'], style: TextStyle(color: context.textPrimary, fontWeight: FontWeight.w500)),
+                    subtitle: Text(DateFormat.yMMMd().add_jm().format(DateTime.parse(s['created_at'])), style: TextStyle(color: context.textSecondary)),
                     trailing: Text(
                       currencyFormat.format(double.tryParse(s['total_amount'].toString()) ?? 0),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: context.textPrimary),
                     ),
                   ),
                 )),
