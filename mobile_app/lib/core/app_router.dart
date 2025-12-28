@@ -45,7 +45,7 @@ import '../features/shop/presentation/shop_settings_screen.dart';
 
 import 'package:latlong2/latlong.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
-import '../features/onboarding/data/onboarding_provider.dart';
+import 'package:mobile_app/features/onboarding/data/onboarding_provider.dart';
 
 import '../core/widgets/splash_screen.dart';
 
