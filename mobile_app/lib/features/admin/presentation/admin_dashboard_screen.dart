@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../data/admin_shop_repository.dart';
 import '../../products/presentation/providers.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -58,14 +59,14 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        backgroundColor: Colors.grey[50],
+        backgroundColor: context.backgroundColor,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const CircularProgressIndicator(color: kPrimaryOrange),
               const SizedBox(height: 16),
-              Text(ref.tr('loading_admin_data'), style: const TextStyle(color: Colors.grey)),
+              Text(ref.tr('loading_admin_data'), style: TextStyle(color: context.textSecondary)),
             ],
           ),
         ),
@@ -73,7 +74,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: context.backgroundColor,
       body: RefreshIndicator(
         onRefresh: _loadStats,
         color: kPrimaryOrange,
@@ -102,7 +103,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: context.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -116,7 +117,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: context.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -448,11 +449,11 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: context.shadowColor,
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -491,7 +492,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                   title,
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.grey[600],
+                    color: context.textSecondary,
                   ),
                 ),
               ],
@@ -506,11 +507,11 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -577,15 +578,16 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
+                      color: context.textPrimary,
                     ),
                   ),
                   Text(
                     subtitle,
                     style: TextStyle(
-                      color: Colors.grey[500],
+                      color: context.textSecondary,
                       fontSize: 13,
                     ),
                   ),
@@ -617,7 +619,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: context.textPrimary,
               ),
             ),
             TextButton(
@@ -630,16 +632,16 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.orange[50],
+            color: context.isDark ? Colors.orange.withValues(alpha: 0.1) : Colors.orange[50],
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.orange[200]!),
+            border: Border.all(color: context.isDark ? Colors.orange.withValues(alpha: 0.3) : Colors.orange[200]!),
           ),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.orange[100],
+                  color: context.isDark ? Colors.orange.withValues(alpha: 0.2) : Colors.orange[100],
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(Icons.pending_actions, color: Colors.orange[700], size: 28),
