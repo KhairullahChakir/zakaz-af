@@ -230,8 +230,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(Icons.store, color: kPrimaryOrange, 
-                  size: Responsive.value(context, mobile: 24, tablet: 28)),
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: Responsive.value(context, mobile: 24, tablet: 28),
+                  height: Responsive.value(context, mobile: 24, tablet: 28),
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) => Icon(
+                    Icons.store, 
+                    color: kPrimaryOrange, 
+                    size: Responsive.value(context, mobile: 24, tablet: 28),
+                  ),
+                ),
               ),
               SizedBox(width: Responsive.value(context, mobile: 12, tablet: 16)),
               Column(
