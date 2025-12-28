@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 import '../../../core/widgets/custom_cached_image.dart';
 import '../data/admin_shop_repository.dart';
 import '../../shop/domain/shop.dart';
@@ -225,12 +226,15 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
         }
       },
       child: Scaffold(
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        title: Text(_shop.name),
+        title: Text(_shop.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         actions: [
           if (_shop.isApproved)
             IconButton(
-              icon: const Icon(Icons.block, color: Colors.grey),
+              icon: Icon(Icons.block, color: context.textSecondary),
               tooltip: 'Suspend',
               onPressed: _suspendShop,
             ),
@@ -449,15 +453,16 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
         width: 140,
         height: 140,
         decoration: BoxDecoration(
-          color: Colors.grey[200],
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: context.textSecondary.withValues(alpha: 0.1)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.store, size: 48, color: Colors.grey[400]),
+            Icon(Icons.store, size: 48, color: context.textSecondary.withValues(alpha: 0.3)),
             const SizedBox(height: 8),
-            Text(ref.tr('no_photos'), style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+            Text(ref.tr('no_photos'), style: TextStyle(color: context.textSecondary, fontSize: 12)),
           ],
         ),
       );
@@ -569,14 +574,14 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: Colors.grey),
+          Icon(icon, size: 20, color: context.textSecondary),
           const SizedBox(width: 12),
           SizedBox(
             width: 80,
-            child: Text(label, style: const TextStyle(color: Colors.grey)),
+            child: Text(label, style: TextStyle(color: context.textSecondary)),
           ),
           Expanded(
-            child: Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
+            child: Text(value, style: TextStyle(fontWeight: FontWeight.w500, color: context.textPrimary)),
           ),
         ],
       ),
@@ -589,9 +594,9 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
       child: Container(
         height: 100,
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey[300]!),
+          border: Border.all(color: context.textSecondary.withValues(alpha: 0.1)),
         ),
         child: url != null
             ? ClipRRect(
@@ -603,7 +608,7 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
                     Container(
                       alignment: Alignment.bottomCenter,
                       padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
@@ -621,10 +626,10 @@ class _AdminShopDetailScreenState extends ConsumerState<AdminShopDetailScreen> {
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(icon, color: Colors.grey),
+                  Icon(icon, color: context.textSecondary.withValues(alpha: 0.5)),
                   const SizedBox(height: 4),
-                  Text(title, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-                  Text(ref.tr('not_provided'), style: TextStyle(color: Colors.grey[400], fontSize: 10)),
+                  Text(title, style: TextStyle(color: context.textSecondary, fontSize: 12)),
+                  Text(ref.tr('not_provided'), style: TextStyle(color: context.textSecondary.withValues(alpha: 0.5), fontSize: 10)),
                 ],
               ),
       ),
