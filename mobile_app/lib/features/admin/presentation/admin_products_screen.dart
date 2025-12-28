@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import '../../../core/theme/theme_context.dart';
 import '../data/admin_repository.dart';
 import '../../products/presentation/providers.dart';
 
@@ -69,8 +70,11 @@ class _AdminProductsScreenState extends ConsumerState<AdminProductsScreen> {
     final productsAsync = ref.watch(productsProvider());
 
     return Scaffold(
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        title: Text(ref.tr('manage_products')),
+        title: Text(ref.tr('manage_products'), style: const TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.category),
@@ -100,12 +104,15 @@ class _AdminProductsScreenState extends ConsumerState<AdminProductsScreen> {
                       final product = products[index];
                       return Card(
                         margin: const EdgeInsets.only(bottom: 12),
+                        color: context.cardColor,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         child: ListTile(
                           leading: Container(
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: Colors.grey[200],
+                              color: context.isDark ? Colors.grey[800] : Colors.grey[200],
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: product.imageUrl != null
@@ -116,19 +123,19 @@ class _AdminProductsScreenState extends ConsumerState<AdminProductsScreen> {
                                       fit: BoxFit.cover,
                                     ),
                                   )
-                                : const Icon(Icons.inventory_2, color: Colors.grey),
+                                : Icon(Icons.inventory_2, color: context.textSecondary),
                           ),
                           title: Text(
                             product.name,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(fontWeight: FontWeight.bold, color: context.textPrimary),
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${product.price} ${ref.tr('afn')}'),
+                              Text('${product.price} ${ref.tr('afn')}', style: TextStyle(color: context.textSecondary)),
                               Text(ref.tr('stock_label', args: {'n': product.stock.toString()}),
                                 style: TextStyle(
-                                  color: product.stock < 10 ? Colors.red : Colors.grey,
+                                  color: product.stock < 10 ? Colors.red : context.textSecondary,
                                   fontSize: 12,
                                 ),
                               ),
