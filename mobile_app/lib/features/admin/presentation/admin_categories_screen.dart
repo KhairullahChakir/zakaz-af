@@ -217,8 +217,11 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
     final categoriesAsync = ref.watch(categoriesProvider);
 
     return Scaffold(
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        title: Text(ref.tr('manage_categories')),
+        title: Text(ref.tr('manage_categories'), style: const TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: context.appBarColor,
+        foregroundColor: context.appBarTextColor,
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showCategoryDialog(),
@@ -241,6 +244,9 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                       final category = categories[index];
                       return Card(
                         margin: const EdgeInsets.only(bottom: 12),
+                        color: context.cardColor,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         child: ListTile(
                           leading: Container(
                             width: 50,
@@ -261,9 +267,9 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                           ),
                           title: Text(
                             category.name,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(fontWeight: FontWeight.bold, color: context.textPrimary),
                           ),
-                          subtitle: category.type != null ? Text(category.type!) : null,
+                          subtitle: category.type != null ? Text(category.type!, style: TextStyle(color: context.textSecondary)) : null,
                           trailing: PopupMenuButton<String>(
                             onSelected: (value) {
                               if (value == 'edit') {
