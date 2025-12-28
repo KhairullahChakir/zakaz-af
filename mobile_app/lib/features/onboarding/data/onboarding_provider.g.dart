@@ -9,34 +9,35 @@ part of 'onboarding_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(OnboardingController)
-const onboardingControllerProvider = OnboardingControllerProvider._();
+@ProviderFor(OnboardingStatusController)
+const onboardingStatusControllerProvider =
+    OnboardingStatusControllerProvider._();
 
-final class OnboardingControllerProvider
-    extends $AsyncNotifierProvider<OnboardingController, bool> {
-  const OnboardingControllerProvider._()
+final class OnboardingStatusControllerProvider
+    extends $AsyncNotifierProvider<OnboardingStatusController, bool> {
+  const OnboardingStatusControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'onboardingControllerProvider',
+        name: r'onboardingStatusControllerProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$onboardingControllerHash();
+  String debugGetCreateSourceHash() => _$onboardingStatusControllerHash();
 
   @$internal
   @override
-  OnboardingController create() => OnboardingController();
+  OnboardingStatusController create() => OnboardingStatusController();
 }
 
-String _$onboardingControllerHash() =>
-    r'1c36e3eb9da83bd92c8b7699c513bdd4ba851364';
+String _$onboardingStatusControllerHash() =>
+    r'f96f909ed5dc3b91e0ba542f5bab6e84dde1b709';
 
-abstract class _$OnboardingController extends $AsyncNotifier<bool> {
+abstract class _$OnboardingStatusController extends $AsyncNotifier<bool> {
   FutureOr<bool> build();
   @$mustCallSuper
   @override

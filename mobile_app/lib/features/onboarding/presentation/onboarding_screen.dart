@@ -263,7 +263,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   void _finishOnboarding() {
-    ref.read(onboardingControllerProvider.notifier).completeOnboarding();
+    ref.read(onboardingStatusControllerProvider.notifier).completeOnboarding();
     context.go('/login');
   }
 }

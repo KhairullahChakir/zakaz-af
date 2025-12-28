@@ -45,7 +45,7 @@ import '../features/shop/presentation/shop_settings_screen.dart';
 
 import 'package:latlong2/latlong.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
-import 'package:mobile_app/features/onboarding/data/onboarding_provider.dart';
+import '../features/onboarding/data/onboarding_provider.dart';
 
 import '../core/widgets/splash_screen.dart';
 
@@ -59,7 +59,7 @@ GoRouter appRouter(Ref ref) {
   final isVerified = ref.watch(authControllerProvider.select((s) => s.value?.isVerified ?? false));
   final isInitialLoading = ref.watch(authControllerProvider.select((s) => s.isLoading && !s.hasValue));
   final hasError = ref.watch(authControllerProvider.select((s) => s.hasError));
-  final onboardingState = ref.watch(onboardingControllerProvider);
+  final onboardingState = ref.watch(onboardingStatusControllerProvider);
 
   return GoRouter(
     initialLocation: '/',

@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'onboarding_provider.g.dart';
 
 @riverpod
-class OnboardingController extends _$OnboardingController {
+class OnboardingStatusController extends _$OnboardingStatusController {
   static const String _key = 'has_seen_onboarding';
 
   @override
