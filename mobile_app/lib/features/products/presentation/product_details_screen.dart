@@ -101,6 +101,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: Responsive.value(context, mobile: 24, tablet: 28),
+                                color: context.textPrimary,
                               ),
                             ),
                             
@@ -145,13 +146,14 @@ class ProductDetailsScreen extends ConsumerWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: Responsive.value(context, mobile: 16, tablet: 18),
+                                color: context.textPrimary,
                               ),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               product.description ?? ref.tr('no_description'),
                               style: TextStyle(
-                                color: Colors.grey[700],
+                                color: context.textSecondary,
                                 fontSize: Responsive.value(context, mobile: 14, tablet: 16),
                                 height: 1.5,
                               ),
@@ -168,6 +170,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: Responsive.value(context, mobile: 16, tablet: 18),
+                                    color: context.textPrimary,
                                   ),
                                 ),
                                 TextButton.icon(
@@ -184,7 +187,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                   return Container(
                                     padding: const EdgeInsets.all(24),
                                     decoration: BoxDecoration(
-                                      color: kSoftOrange,
+                                      color: context.softOrange,
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Column(
@@ -224,19 +227,19 @@ class ProductDetailsScreen extends ConsumerWidget {
                                             const SizedBox(width: 8),
                                             Text(
                                               review.user?.name ?? ref.tr('nav_account'),
-                                              style: const TextStyle(fontWeight: FontWeight.bold),
+                                              style: TextStyle(fontWeight: FontWeight.bold, color: context.textPrimary),
                                             ),
                                             const Spacer(),
                                             Text(
                                               DateFormat('MMM dd, yyyy').format(review.createdAt),
-                                              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                                              style: TextStyle(color: context.textSecondary, fontSize: 12),
                                             ),
                                           ],
                                         ),
                                         if (review.comment != null && review.comment!.isNotEmpty)
                                           Padding(
                                             padding: const EdgeInsets.only(top: 4),
-                                            child: Text(review.comment!),
+                                            child: Text(review.comment!, style: TextStyle(color: context.textPrimary)),
                                           ),
                                       ],
                                     );
@@ -254,7 +257,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
-                                    colors: [kSoftOrange, Colors.white],
+                                    colors: [context.softOrange, context.cardColor],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                   ),
@@ -320,7 +323,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                           width: Responsive.value(context, mobile: 80, tablet: 100),
                                           height: Responsive.value(context, mobile: 80, tablet: 100),
                                           decoration: BoxDecoration(
-                                            color: Colors.white,
+                                            color: context.cardColor,
                                             borderRadius: BorderRadius.circular(16),
                                             border: Border.all(color: kPrimaryOrange.withValues(alpha: 0.3), width: 2),
                                             boxShadow: [
@@ -359,6 +362,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: Responsive.value(context, mobile: 18, tablet: 20),
+                                                  color: context.textPrimary,
                                                 ),
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
@@ -397,7 +401,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                             .where((e) => e != null)
                                                             .join(', '),
                                                         style: TextStyle(
-                                                          color: Colors.grey[700],
+                                                          color: context.textSecondary,
                                                           fontSize: Responsive.value(context, mobile: 13, tablet: 15),
                                                         ),
                                                         maxLines: 1,
@@ -417,7 +421,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                     Text(
                                                       product.shop!.phone!,
                                                       style: TextStyle(
-                                                        color: Colors.grey[700],
+                                                        color: context.textSecondary,
                                                         fontSize: Responsive.value(context, mobile: 13, tablet: 15),
                                                       ),
                                                     ),
@@ -436,14 +440,14 @@ class ProductDetailsScreen extends ConsumerWidget {
                                       Container(
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
-                                          color: Colors.white,
+                                          color: context.cardColor,
                                           borderRadius: BorderRadius.circular(12),
                                         ),
                                         child: Row(
                                           children: [
                                             CircleAvatar(
                                               radius: 20,
-                                              backgroundColor: kSoftOrange,
+                                              backgroundColor: context.softOrange,
                                               backgroundImage: product.shop!.owner!.profileImageUrl != null
                                                   ? NetworkImage(product.shop!.owner!.profileImageUrl!)
                                                   : null,
@@ -466,8 +470,8 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                   Text(
                                                     product.shop!.owner!.name,
                                                     style: const TextStyle(
-                                                      fontWeight: FontWeight.bold,
                                                       fontSize: 15,
+                                                      color: context.textPrimary,
                                                     ),
                                                   ),
                                                 ],
@@ -689,10 +693,10 @@ class ProductDetailsScreen extends ConsumerWidget {
               Container(
                 padding: EdgeInsets.all(Responsive.value(context, mobile: 16, tablet: 24)),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: context.cardColor,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
+                      color: context.shadowColor,
                       blurRadius: 10,
                       offset: const Offset(0, -5),
                     ),
