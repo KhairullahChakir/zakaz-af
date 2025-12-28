@@ -107,7 +107,7 @@ class NotificationsScreen extends ConsumerWidget {
             Text(
               ref.tr('no_notifications'),
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: context.textPrimary,

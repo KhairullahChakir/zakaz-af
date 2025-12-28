@@ -83,7 +83,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                             ),
                       ),
                       const SizedBox(height: 16),
-                      _buildTimeline(ref, order.status),
+                      _buildTimeline(context, ref, order.status),
                     ],
                   ),
                 ),
@@ -257,7 +257,7 @@ class OrderDetailsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTimeline(WidgetRef ref, String currentStatus) {
+  Widget _buildTimeline(BuildContext context, WidgetRef ref, String currentStatus) {
     final statuses = ['pending', 'processing', 'shipped', 'delivered'];
     final statusLabels = {
       'pending': ref.tr('status_pending'),

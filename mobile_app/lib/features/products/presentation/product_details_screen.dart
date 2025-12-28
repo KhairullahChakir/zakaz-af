@@ -469,7 +469,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                   ),
                                                   Text(
                                                     product.shop!.owner!.name,
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                       fontSize: 15,
                                                       color: context.textPrimary,
                                                     ),

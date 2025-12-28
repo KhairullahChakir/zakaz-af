@@ -764,7 +764,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               style: TextStyle(
                 fontSize: Responsive.value(context, mobile: 11, tablet: 13),
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 color: isSelected ? kPrimaryOrange : context.textPrimary,
               ),
             ),
