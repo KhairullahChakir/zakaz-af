@@ -87,11 +87,11 @@ class NotificationsScreen extends ConsumerWidget {
               height: 120,
               width: 120,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardColor,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
+                    color: context.shadowColor,
                     blurRadius: 30,
                     offset: const Offset(0, 10),
                   ),
@@ -110,7 +110,7 @@ class NotificationsScreen extends ConsumerWidget {
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1D1D1F),
+                color: context.textPrimary,
               ),
             ),
             const SizedBox(height: 12),
@@ -119,7 +119,7 @@ class NotificationsScreen extends ConsumerWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 15,
-                color: Colors.grey.shade500,
+                color: context.textSecondary,
                 height: 1.5,
               ),
             ),
@@ -148,7 +148,7 @@ class _NotificationCard extends ConsumerWidget {
           BoxShadow(
             color: isUnread 
                 ? kPrimaryOrange.withValues(alpha: 0.05) 
-                : Colors.black.withValues(alpha: 0.02),
+                : context.shadowColor,
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -195,7 +195,7 @@ class _NotificationCard extends ConsumerWidget {
                               style: TextStyle(
                                 fontWeight: isUnread ? FontWeight.w800 : FontWeight.w600,
                                 fontSize: 16,
-                                color: const Color(0xFF1D1D1F),
+                                color: context.textPrimary,
                               ),
                             ),
                           ),
@@ -214,7 +214,7 @@ class _NotificationCard extends ConsumerWidget {
                       Text(
                         notification.body,
                         style: TextStyle(
-                          color: Colors.grey.shade600,
+                          color: context.textSecondary,
                           fontSize: 14,
                           height: 1.4,
                         ),
@@ -228,7 +228,7 @@ class _NotificationCard extends ConsumerWidget {
                           Text(
                             _formatDate(ref, notification.createdAt),
                             style: TextStyle(
-                              color: Colors.grey.shade400,
+                              color: context.textSecondary,
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
