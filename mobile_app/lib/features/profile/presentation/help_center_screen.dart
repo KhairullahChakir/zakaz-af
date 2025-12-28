@@ -29,11 +29,11 @@ class HelpCenterScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.cardColor,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
+                    color: context.shadowColor,
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -42,34 +42,63 @@ class HelpCenterScreen extends ConsumerWidget {
               child: TextField(
                 decoration: InputDecoration(
                   hintText: ref.tr('search_help_hint'),
-                  hintStyle: TextStyle(color: Colors.grey[400]),
-                  prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
+                  hintStyle: TextStyle(color: context.textSecondary),
+                  prefixIcon: Icon(Icons.search, color: context.textSecondary),
                   border: InputBorder.none,
                 ),
+                style: TextStyle(color: context.textPrimary),
               ),
             ),
             
             const SizedBox(height: 24),
             
             // Quick Actions
-            _buildSectionTitle(ref.tr('quick_help')),
+            // Social Media Support
+            _buildSectionTitle(context, ref.tr('connect_with_us')),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+              decoration: BoxDecoration(
+                color: context.cardColor,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: context.shadowColor,
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildSocialIcon(context, 'assets/icons/facebook.png', 'Facebook', Colors.blue),
+                  _buildSocialIcon(context, 'assets/icons/instagram.png', 'Instagram', Colors.purple),
+                  _buildSocialIcon(context, 'assets/icons/tiktok.png', 'TikTok', Colors.black),
+                  _buildSocialIcon(context, 'assets/icons/telegram.png', 'Telegram', Colors.blueAccent),
+                  _buildSocialIcon(context, 'assets/icons/whatsapp.png', 'WhatsApp', Colors.green),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Quick Actions (Email & Call only)
+            _buildSectionTitle(context, ref.tr('contact_directly')),
             const SizedBox(height: 12),
             Row(
               children: [
-                Expanded(child: _buildQuickAction(Icons.chat_bubble_outline, ref.tr('live_chat'), Colors.blue)),
+                Expanded(child: _buildQuickAction(context, Icons.email_outlined, ref.tr('email_us'), Colors.green)),
                 const SizedBox(width: 12),
-                Expanded(child: _buildQuickAction(Icons.email_outlined, ref.tr('email_us'), Colors.green)),
-                const SizedBox(width: 12),
-                Expanded(child: _buildQuickAction(Icons.phone_outlined, ref.tr('call_us'), kPrimaryOrange)),
+                Expanded(child: _buildQuickAction(context, Icons.phone_outlined, ref.tr('call_us'), kPrimaryOrange)),
               ],
             ),
             
             const SizedBox(height: 32),
             
             // FAQ Categories
-            _buildSectionTitle(ref.tr('faq_categories')),
+            _buildSectionTitle(context, ref.tr('faq_categories')),
             const SizedBox(height: 12),
-            _buildFAQCategory(
+            _buildFAQCategory(context,
               Icons.shopping_bag_outlined,
               'Orders & Shipping',
               'Track orders, shipping info, delivery issues',
@@ -79,7 +108,7 @@ class HelpCenterScreen extends ConsumerWidget {
                 _FAQItem('What if my order is delayed?', 'If your order is delayed beyond the expected delivery date, please contact our support team. We will investigate and provide updates.'),
               ],
             ),
-            _buildFAQCategory(
+            _buildFAQCategory(context,
               Icons.credit_card_outlined,
               'Payments & Refunds',
               'Payment methods, refund process, billing',
@@ -89,7 +118,7 @@ class HelpCenterScreen extends ConsumerWidget {
                 _FAQItem('Is my payment information secure?', 'Yes, we use industry-standard SSL encryption to protect your payment information.'),
               ],
             ),
-            _buildFAQCategory(
+            _buildFAQCategory(context,
               Icons.account_circle_outlined,
               'Account & Profile',
               'Profile settings, password, account security',
@@ -99,7 +128,7 @@ class HelpCenterScreen extends ConsumerWidget {
                 _FAQItem('How do I delete my account?', 'Contact our support team to request account deletion. Please note that this action is irreversible.'),
               ],
             ),
-            _buildFAQCategory(
+            _buildFAQCategory(context,
               Icons.store_outlined,
               'Selling on Zakaz-AF',
               'Become a seller, shop management',
@@ -113,7 +142,7 @@ class HelpCenterScreen extends ConsumerWidget {
             const SizedBox(height: 32),
             
             // Contact Support
-            _buildSectionTitle(ref.tr('still_need_help')),
+            _buildSectionTitle(context, ref.tr('still_need_help')),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(20),
@@ -185,26 +214,54 @@ class HelpCenterScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.bold,
-        color: Colors.black87,
+        color: context.textPrimary,
       ),
     );
   }
 
-  Widget _buildQuickAction(IconData icon, String label, Color color) {
+  Widget _buildSocialIcon(BuildContext context, String assetPath, String label, Color color) {
+    // Note: Since we don't have actual assets yet, we'll use Icons as placeholders
+    IconData iconData;
+    switch (label) {
+      case 'Facebook': iconData = Icons.facebook; break;
+      case 'TikTok': iconData = Icons.tiktok; break; // Flutter doesn't have native tiktok icon usually, will mock
+      case 'Telegram': iconData = Icons.send; break;
+      case 'WhatsApp': iconData = Icons.phone_android; break; // Mock
+      case 'Instagram': iconData = Icons.camera_alt; break; // Mock
+      default: iconData = Icons.link;
+    }
+    
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(iconData, color: color, size: 28),
+        ),
+        const SizedBox(height: 8),
+        Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: context.textSecondary)),
+      ],
+    );
+  }
+
+  Widget _buildQuickAction(BuildContext context, IconData icon, String label, Color color) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -223,10 +280,10 @@ class HelpCenterScreen extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: Colors.black87,
+              color: context.textPrimary,
             ),
           ),
         ],
@@ -234,15 +291,15 @@ class HelpCenterScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildFAQCategory(IconData icon, String title, String subtitle, List<_FAQItem> items) {
+  Widget _buildFAQCategory(BuildContext context, IconData icon, String title, String subtitle, List<_FAQItem> items) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: context.shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -257,26 +314,26 @@ class HelpCenterScreen extends ConsumerWidget {
           ),
           child: Icon(icon, color: kPrimaryOrange),
         ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-        subtitle: Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+        title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: context.textPrimary)),
+        subtitle: Text(subtitle, style: TextStyle(fontSize: 12, color: context.textSecondary)),
         shape: const RoundedRectangleBorder(side: BorderSide.none),
-        children: items.map((item) => _buildFAQItem(item)).toList(),
+        children: items.map((item) => _buildFAQItem(context, item)).toList(),
       ),
     );
   }
 
-  Widget _buildFAQItem(_FAQItem item) {
+  Widget _buildFAQItem(BuildContext context, _FAQItem item) {
     return ExpansionTile(
       title: Text(
         item.question,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: context.textPrimary),
       ),
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           child: Text(
             item.answer,
-            style: TextStyle(fontSize: 13, color: Colors.grey[700], height: 1.5),
+            style: TextStyle(fontSize: 13, color: context.textSecondary, height: 1.5),
           ),
         ),
       ],
