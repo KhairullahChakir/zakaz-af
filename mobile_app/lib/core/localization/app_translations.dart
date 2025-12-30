@@ -256,7 +256,6 @@ class AppTranslations {
     'order_details': 'Order Details',
 
     // Marketplace
-    'nav_marketplace': 'Marketplace',
     'marketplace_title': 'Marketplace',
     'second_hand_deals': 'Second Hand Deals',
     'post_an_ad': 'Post an Ad',
@@ -989,7 +988,6 @@ class AppTranslations {
     'order_details': 'جزئیات سفارش',
 
     // Marketplace (fa)
-    'nav_marketplace': 'بازارچه',
     'marketplace_title': 'بازارچه',
     'second_hand_deals': 'محصولات دست دوم',
     'post_an_ad': 'ثبت آگهی',
@@ -1729,7 +1727,6 @@ class AppTranslations {
     'cancel_order': 'امر لغوه کړئ',
 
     // Marketplace (ps)
-    'nav_marketplace': 'بازارچه',
     'marketplace_title': 'بازارچه',
     'second_hand_deals': 'دوهم لاس توکي',
     'post_an_ad': 'خبرتیا خپره کړئ',

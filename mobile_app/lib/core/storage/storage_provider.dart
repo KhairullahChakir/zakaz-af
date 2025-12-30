@@ -5,9 +5,6 @@ part 'storage_provider.g.dart';
 
 @riverpod
 FlutterSecureStorage secureStorage(Ref ref) {
-  // Use encrypted shared preferences for Android to ensure persistence
-  const AndroidOptions androidOptions = AndroidOptions(
-    encryptedSharedPreferences: true,
-  );
-  return const FlutterSecureStorage(aOptions: androidOptions);
+  // Default constructor - uses secure ciphers automatically
+  return const FlutterSecureStorage();
 }
