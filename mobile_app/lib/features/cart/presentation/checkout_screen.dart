@@ -22,6 +22,12 @@ enum PaymentMethod {
   card,
 }
 
+enum DeliveryMethod {
+  zakazAFCargo,
+  otherProvinces,
+  express,
+}
+
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
@@ -33,6 +39,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   bool _isLoading = false;
   Address? _selectedAddress;
   PaymentMethod _selectedPayment = PaymentMethod.cashOnDelivery;
+  DeliveryMethod _selectedDelivery = DeliveryMethod.zakazAFCargo;
 
   @override
   void initState() {
@@ -101,6 +108,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       items,
       addressId: _selectedAddress!.id,
       paymentMethod: 'cash_on_delivery',
+      deliveryMethod: _getDeliveryMethodKey(),
     );
     ref.read(cartProvider.notifier).clearCart();
     if (mounted) _showOrderSuccessDialog();
@@ -125,6 +133,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           items,
           addressId: _selectedAddress!.id,
           paymentMethod: 'card',
+          deliveryMethod: _getDeliveryMethodKey(),
         );
         ref.read(cartProvider.notifier).clearCart();
         if (mounted) _showOrderSuccessDialog();
@@ -348,6 +357,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           child: Text('${ref.tr('error')}: $e', style: const TextStyle(color: Colors.red)),
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Delivery Method Section
+                    _buildSectionCard(
+                      icon: Icons.local_shipping_outlined,
+                      title: ref.tr('delivery_method'),
+                      child: _buildDeliveryMethods(),
                     ),
                     const SizedBox(height: 16),
 
@@ -676,6 +693,122 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         ),
       ),
     );
+  }
+
+  // ============== DELIVERY METHODS UI ==============
+
+  Widget _buildDeliveryMethods() {
+    return Column(
+      children: [
+        _buildDeliveryOption(
+          method: DeliveryMethod.zakazAFCargo,
+          icon: Icons.local_shipping_outlined,
+          title: ref.tr('zakaz_af_cargo'),
+          subtitle: ref.tr('zakaz_af_cargo_desc'),
+          trailing: Text(ref.tr('free'), style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+        ),
+        const SizedBox(height: 12),
+        _buildDeliveryOption(
+          method: DeliveryMethod.otherProvinces,
+          icon: Icons.map_outlined,
+          title: ref.tr('shipping_other_provinces'),
+          subtitle: '5-7 Business days',
+        ),
+        const SizedBox(height: 12),
+        _buildDeliveryOption(
+          method: DeliveryMethod.express,
+          icon: Icons.bolt_outlined,
+          title: ref.tr('express_shipping'),
+          subtitle: 'Next working day',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDeliveryOption({
+    required DeliveryMethod method,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    Widget? trailing,
+  }) {
+    final isSelected = _selectedDelivery == method;
+
+    return InkWell(
+      onTap: () => setState(() => _selectedDelivery = method),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? (context.isDark ? kPrimaryOrange.withOpacity(0.15) : kSoftOrange)
+              : context.inputFillColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected ? kPrimaryOrange : context.dividerColor,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            // Radio
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isSelected ? kPrimaryOrange : context.textSecondary,
+                  width: 2,
+                ),
+                color: isSelected ? kPrimaryOrange : Colors.transparent,
+              ),
+              child: isSelected
+                  ? const Icon(Icons.check, size: 14, color: Colors.white)
+                  : null,
+            ),
+            const SizedBox(width: 16),
+            Icon(icon, color: isSelected ? kPrimaryOrange : context.textSecondary, size: 24),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: context.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: context.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (trailing != null) trailing,
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getDeliveryMethodKey() {
+    switch (_selectedDelivery) {
+      case DeliveryMethod.zakazAFCargo:
+        return 'zakaz_af_cargo';
+      case DeliveryMethod.otherProvinces:
+        return 'other_provinces';
+      case DeliveryMethod.express:
+        return 'express';
+    }
   }
 
   // ============== OTHER WIDGETS ==============

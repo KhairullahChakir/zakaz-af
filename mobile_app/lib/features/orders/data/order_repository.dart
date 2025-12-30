@@ -20,6 +20,7 @@ class OrderRepository {
     List<CartItem> items, {
     int? addressId,
     String paymentMethod = 'cash_on_delivery',
+    String deliveryMethod = 'zakaz_af_cargo',
   }) async {
     try {
       final itemsData = items.map((item) => {
@@ -31,6 +32,7 @@ class OrderRepository {
         'items': itemsData,
         if (addressId != null) 'address_id': addressId,
         'payment_method': paymentMethod,
+        'delivery_method': deliveryMethod,
       });
     } on DioException catch (e) {
       throw Exception(e.response?.data['message'] ?? 'Failed to place order');

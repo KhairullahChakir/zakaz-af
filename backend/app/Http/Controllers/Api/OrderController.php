@@ -17,7 +17,9 @@ class OrderController extends Controller
             'items' => 'required|array',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
-            'address_id' => 'nullable|exists:addresses,id',
+            'address_id' => 'required|exists:addresses,id',
+            'payment_method' => 'required|string',
+            'delivery_method' => 'required|string',
         ]);
 
         try {
@@ -48,6 +50,8 @@ class OrderController extends Controller
                 'address_id' => $request->address_id,
                 'total_amount' => $total,
                 'status' => 'pending',
+                'payment_method' => $request->payment_method,
+                'delivery_method' => $request->delivery_method,
             ]);
 
             foreach ($itemsToCreate as $item) {

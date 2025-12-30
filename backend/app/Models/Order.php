@@ -14,6 +14,8 @@ class Order extends Model
         'address_id',
         'total_amount',
         'status',
+        'payment_method',
+        'delivery_method',
     ];
 
     protected $casts = [
