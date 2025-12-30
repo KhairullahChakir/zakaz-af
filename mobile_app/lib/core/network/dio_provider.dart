@@ -6,8 +6,13 @@ part 'dio_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Dio dio(Ref ref) {
+  // Use local backend for testing (switch back to Railway for production)
+  // Production: 'https://zakaz-af-production.up.railway.app/api'
+  // Local: 'http://172.20.10.2:8000/api'
+  const baseUrl = 'http://172.20.10.2:8000/api';
+  
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://zakaz-af-production.up.railway.app/api',
+    baseUrl: baseUrl,
     connectTimeout: const Duration(seconds: 15),
     receiveTimeout: const Duration(seconds: 15),
     headers: {
@@ -46,5 +51,28 @@ class AuthInterceptor extends Interceptor {
       // AuthInterceptor error
     }
     handler.next(options);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    // Extract validation errors or message from response
+    if (err.response?.data != null) {
+      final data = err.response!.data;
+      if (data is Map) {
+        // Check for validation errors
+        if (data['errors'] != null) {
+          final errors = data['errors'] as Map;
+          final firstError = errors.values.first;
+          if (firstError is List && firstError.isNotEmpty) {
+            err = err.copyWith(
+              message: firstError.first.toString(),
+            );
+          }
+        } else if (data['message'] != null) {
+          err = err.copyWith(message: data['message'].toString());
+        }
+      }
+    }
+    handler.next(err);
   }
 }

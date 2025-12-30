@@ -30,7 +30,28 @@ class AddressRepository {
       final response = await _dio.post('/addresses', data: data);
       return Address.fromJson(response.data);
     } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? 'Failed to add address');
+      // Get the most specific error message available
+      String message = 'Failed to add address';
+      
+      if (e.response?.data != null) {
+        final responseData = e.response!.data;
+        if (responseData is Map) {
+          // Check for validation errors
+          if (responseData['errors'] != null) {
+            final errors = responseData['errors'] as Map;
+            final firstError = errors.values.first;
+            if (firstError is List && firstError.isNotEmpty) {
+              message = firstError.first.toString();
+            }
+          } else if (responseData['message'] != null) {
+            message = responseData['message'].toString();
+          }
+        }
+      } else if (e.message != null) {
+        message = e.message!;
+      }
+      
+      throw Exception(message);
     }
   }
 

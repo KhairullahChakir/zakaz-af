@@ -1,85 +1,92 @@
-# Zakaz-AF Application Report
+# Zakaz-AF: The Cross-Border Marketplace for Afghanistan
+**Project Report & Feature Analysis**
+
 **Date:** 2025-12-25
-**Version:** Development Phase
+**Concept:** "Remittance-via-Goods" Marketplace
 
 ---
 
-## 1. Executive Summary
-**Zakaz-AF** is a multi-vendor e-commerce marketplace tailored for Afghanistan, designed to bridge the gap between local shopkeepers and customers. The platform aims to digitize the local shopping experience, offering a robust mobile application for customers to browse and buy products, and dedicated tools for shopkeepers and administrators to manage the marketplace.
+## 1. Core Concept
+**Zakaz-AF** operates as a multi-vendor marketplace, but its primary strategic focus is serving the **Afghan Diaspora**. It allows Afghans living abroad (USA, Europe, UAE, etc.) to purchase goods—groceries, appliances, gifts—directly from local Afghan shopkeepers and have them delivered to their families in Afghanistan.
 
-The project is currently in an advanced development stage with core commerce loops, user roles (Customer, Shopkeeper, Admin), and essential features like real-time chat and push notifications fully implemented.
-
----
-
-## 2. Architecture & Technology Stack
-
-The application follows a standard Client-Server architecture with a RESTful API.
-
-### **Backend (API & Database)**
-*   **Framework:** Laravel 11 (PHP)
-*   **Database:** MariaDB
-*   **Authentication:** Laravel Sanctum (Token-based)
-*   **External Services:** Firebase Cloud Messaging (FCM) for push notifications.
-*   **Location:** `/backend`
-
-### **Mobile Application (Client)**
-*   **Framework:** Flutter 3.x (Cross-platform)
-*   **State Management:** Riverpod (with code generation)
-*   **Routing:** GoRouter
-*   **Networking:** Dio
-*   **Storage:** SharedPreferences (Local persistence)
-*   **Location:** `/mobile_app`
+This model shifts the paradigm from **sending cash** (which can be misused or difficult to collect) to **sending care** (actual products/necessities).
 
 ---
 
-## 3. Application Structure
+## 2. User Roles & Workflows
 
-The repository is organized into two main dedicated directories:
+### 🌍 A. The Sender (Global Start Point)
+*Profile: Afghan expatriate living abroad with disposable income.*
 
-| Directory | Description |
-| :--- | :--- |
-| **`/backend`** | Contains the Laravel application. Handles API requests, database interactions, authentication logic, and admin/shopkeeper business rules. |
-| **`/mobile_app`** | Contains the Flutter code. A single codebase likely serving both Customer and Shopkeeper interfaces via role-based navigation. |
-| **`DEV_STATUS.md`** | The central source of truth for project status, feature tracking, and roadmap. |
+*   **Global Access:** The app is accessible globally, allowing registration with international phone numbers or email.
+*   **Curated Marketplace:** Users browse products listed by local Afghan shopkeepers.
+    *   *Usage:* Buying a monthly sack of rice/flour (Rashan) for parents in Kabul.
+    *   *Usage:* Buying a new phone or clothes for a sibling's wedding.
+*   **"Recipient" Management:** Unlike a normal e-commerce app where you buy for yourself, this app features a robust **Recipient Address Book**.
+    *   The Sender saves "Mom's House" or "Brother's Office" as contacts with local Afghan phone numbers.
+*   **The Trust Layer (Payment):**
+    *   **Integration:** **HesabPay**. This is the critical bridge. It allows the Sender to pay securely using funds linked to the Afghan banking ecosystem or international cards supported by the gateway.
+    *   **Currency View:** Prices are fixed in AFN by sellers but can be displayed in approx USD/EUR for the Sender's convenience.
 
----
+### 🏠 B. The Recipient (Local End Point)
+*Profile: Family members living in Afghanistan.*
 
-## 4. Current Development Status
+*   **Passive Interaction:** They do not necessarily need the smartphone app. They primarily interact via **SMS** and **Phone Calls**.
+*   **Verification:** Upon delivery, they may provide a secure **OTP (One-Time Password)** sent to their mobile number to confirm they are the intended recipient.
+*   **Feedback Loop:** They receive the goods, and the "Digital Proof" (photo/signature) is sent back to the Sender.
 
-The application has successfully implemented the three primary user personas and their critical workflows.
+### 🏪 C. The Shopkeeper (Vendor)
+*Profile: Local business owner in Kabul/Herat/etc.*
 
-### **✅ Completed Modules**
-*   **Authentication:** Secure registration and login for all roles using phone/email.
-*   **Customer Experience:**
-    *   Product discovery (Search, Sort, Filter).
-    *   Cart & Checkout with address management.
-    *   Order history and visual status tracking.
-    *   Wishlist and Reviews system.
-*   **Shopkeeper Ecosystem:**
-    *   **Digital Onboarding:** Multi-step application process (Location, Documents, ID) for new sellers.
-    *   **Dashboard:** Real-time stats on revenue and orders.
-    *   **Inventory:** CRUD operations for products.
-*   **Admin Tools:**
-    *   Marketplace analytics (Revenue, Top Products).
-    *   Shop approval/rejection workflow.
-    *   Global catalog management (Categories).
-*   **Communication:** Real-time chat between Shopkeepers and Customers with "unread" indicators.
-*   **Technical Polish:** 
-    *   Dark Mode support.
-    *   Offline cart persistence.
-    *   Backend Feature Tests for critical paths (Notifications, Orders).
+*   **Inventory Management:** Lists products available in their physical store.
+*   **Order Fulfillment:** Receives an order stating "Package ordered by Ahmad (in London) for recipient Wali (in Kabul)."
+*   **Settlement:** Receives payouts from Zakaz-AF (after the platform takes a commission) for the confirmed deliveries.
 
 ---
 
-## 5. Recommendations & Immediate Next Steps
+## 3. Key Feature Analysis
 
-Based on the current status and feature set, the following steps are recommended to move towards a production release:
+### 💳 Payment & Finance (HesabPay)
+*   **Direct & Secure:** Uses HesabPay to process transactions. This builds immediate trust as HesabPay is a recognized financial entity in the region.
+*   **Settlement Flow:**
+    1.  Sender pays via HesabPay (Money -> Zakaz Escrow).
+    2.  Product Delivered.
+    3.  Zakaz releases funds to Shopkeeper wallet.
 
+### 🎁 Gifting & Occasions
+Since the primary driver is "Care/connection":
+*   **Gift Wrapping Options:** The user can check "Gift Wrap" during checkout.
+*   **Personal Notes:** Sender types a message ("Happy Birthday Mom"), which is printed or written on a card included with the delivery.
+*   **Event Bundles:** Special "Eid Packages" or "Wedding Season" bundles pre-curated to make selection easy for someone disconnected from local daily trends.
 
-2.  **Location Services:** Integrate GPS-based shop discovery to allow customers to find stores near them.
-3.  **Testing Strategy:**
-    *   Continue expanding Backend Feature Tests.
-    *   Consider adding Integration Tests for the Mobile App to ensure the "Happy Path" (Login -> Add to Cart -> Checkout) remains unbroken.
-4.  **Deployment Prep:**
-    *   Set up a staging environment for the backend.
-    *   Configure production-ready assets (icons, splash screens) for the mobile app.
+---
+
+## 4. Logistics & Delivery Models
+*The "Shopkeeper vs. Agent" Strategy*
+
+To support the "High Trust" requirement of diaspora users, the platform supports a Hybrid Logistics Model:
+
+### Model A: "Fulfilled by Shopkeeper" (Standard)
+*   **Usage:** For low-value or non-fragile items (e.g., bulk rice, flour).
+*   **Process:** The shopkeeper uses their own delivery boy/runner.
+*   **Pros:** Lower cost, faster for neighborhood deliveries.
+*   **Cons:** Variable service quality.
+*   **Feature:** User pays a standard delivery fee. Status updates rely on the Shopkeeper clicking "Delivered."
+
+### Model B: "Zakaz Trusted Delivery" (Agent)
+*   **Usage:** For high-value items (Electronics, Jewelry) or "Experience" gifts (Flowers, Cakes).
+*   **Process:** A uniformed Zakaz-AF Agent picks up the item from the shop, verifies its quality/packaging, and delivers it to the family.
+*   **Pros:**
+    *   **Quality Check:** Agent ensures the iPhone is sealed or the cake isn't smashed *before* delivery.
+    *   **Premium Experience:** Agent handles the "Gift Note" reading or professional photo proof.
+*   **Feature:** This functions as a "Premium Shipping" option in checkout.
+
+---
+
+## 5. Summary of "Research Features"
+*For your deep research, focus on these unique selling points:*
+
+1.  **Cross-Border Address Book:** Decoupling the "Billing User" from the "Shipping User."
+2.  **HesabPay Trust Chain:** How using a known payment gateway legitimizes the platform for wary overseas buyers.
+3.  **Digital Verification for Physical Goods:** Using OTPs and Photo-Proof to close the loop between a sender in London and a recipient in Kabul.
+4.  **Hybrid Logistics:** Offering tiered delivery (Standard vs. Trusted Agent) to balance operational scale with quality assurance.
