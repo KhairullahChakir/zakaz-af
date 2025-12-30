@@ -8,7 +8,7 @@ import '../../../core/widgets/custom_cached_image.dart';
 import '../data/admin_shop_repository.dart';
 import '../../shop/domain/shop.dart';
 
-const String _baseStorageUrl = 'http://172.20.10.13:8000/storage/';
+const String _baseStorageUrl = 'http://172.20.10.2:8000/storage/';
 
 class AdminShopDetailScreen extends ConsumerStatefulWidget {
   final Shop shop;

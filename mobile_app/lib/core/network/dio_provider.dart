@@ -8,8 +8,8 @@ part 'dio_provider.g.dart';
 Dio dio(Ref ref) {
   // Use local backend for testing (switch back to Railway for production)
   // Production: 'https://zakaz-af-production.up.railway.app/api'
-  // Local: 'http://172.20.10.13:8000/api'
-  const baseUrl = 'http://172.20.10.13:8000/api';
+  // Local: 'http://172.20.10.2:8000/api'
+  const baseUrl = 'http://172.20.10.2:8000/api';
   
   final dio = Dio(BaseOptions(
     baseUrl: baseUrl,

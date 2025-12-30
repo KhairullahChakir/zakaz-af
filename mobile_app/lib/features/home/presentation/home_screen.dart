@@ -794,7 +794,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (category.image != null) {
       final imageUrl = category.image!.startsWith('http') 
           ? category.image! 
-          : 'http://172.20.10.13:8000/storage/${category.image}';
+          : 'http://172.20.10.2:8000/storage/${category.image}';
 
       return CustomCachedImage(
         imageUrl: imageUrl, 

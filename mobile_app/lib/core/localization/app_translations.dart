@@ -513,6 +513,8 @@ class AppTranslations {
     'error_password_short': 'Password must be at least 6 characters',
     'error_passwords_dont_match': 'Passwords do not match',
     'error_required_field': 'This field is required',
+    'error_chat_self': 'You cannot chat with yourself',
+    'this_is_your_item': 'This is your item',
 
     // Language Selection
     'select_language': 'Select Language',
@@ -1456,6 +1458,8 @@ class AppTranslations {
     'enter_phone_number': 'شماره را وارد کنید',
     'select_province_error': 'ولایت را انتخاب کنید',
     'enter_address': 'آدرس را وارد کنید',
+    'error_chat_self': 'شما نمی‌توانید با خودتان چت کنید',
+    'this_is_your_item': 'این محصول شماست',
   };
 
   static const Map<String, String> _pashto = {
@@ -2181,5 +2185,7 @@ class AppTranslations {
     'enter_phone_number': 'شمیره ولیکئ',
     'select_province_error': 'ولایت وټاکئ',
     'enter_address': 'پته ولیکئ',
+    'error_chat_self': 'تاسو نشئ کولی له خپل ځان سره چټ وکړئ',
+    'this_is_your_item': 'دا ستاسو توکی دی',
   };
 }

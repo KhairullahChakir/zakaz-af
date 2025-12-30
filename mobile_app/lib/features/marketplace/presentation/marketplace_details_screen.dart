@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/theme_context.dart';
 import '../../../core/localization/language_provider.dart';
 import '../../../core/widgets/custom_cached_image.dart';
+import '../../auth/presentation/auth_controller.dart';
 import '../../chat/data/chat_repository.dart';
 import '../data/marketplace_repository.dart';
 import '../domain/marketplace_item.dart';
@@ -38,6 +39,7 @@ class MarketplaceDetailsScreen extends ConsumerWidget {
   }
 
   Widget _buildContent(BuildContext context, WidgetRef ref, MarketplaceItem item) {
+    final currentUser = ref.watch(authControllerProvider).value;
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -83,6 +85,28 @@ class MarketplaceDetailsScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
+                if (currentUser?.id == item.userId) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.info_outline, size: 16, color: Colors.blue),
+                        const SizedBox(width: 8),
+                        Text(
+                          ref.tr('this_is_your_item'),
+                          style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 8),
                 Text(
                   '${item.price.toInt()} ${ref.tr('afn')}',
@@ -149,6 +173,9 @@ class MarketplaceDetailsScreen extends ConsumerWidget {
   }
 
   Widget _buildBottomAction(BuildContext context, WidgetRef ref, MarketplaceItem item) {
+    final currentUser = ref.watch(authControllerProvider).value;
+    final isOwner = currentUser?.id == item.userId;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -174,37 +201,43 @@ class MarketplaceDetailsScreen extends ConsumerWidget {
           const SizedBox(width: 16),
           Expanded(
             child: ElevatedButton.icon(
-              onPressed: () async {
-                try {
-                  // Show loading
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => const Center(child: CircularProgressIndicator()),
-                  );
-
-                  final conversation = await ref.read(chatRepositoryProvider).startConversation(
-                        sellerId: item.userId,
-                        marketplaceItemId: item.id,
+              onPressed: isOwner
+                  ? () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(ref.tr('error_chat_self'))),
                       );
+                    }
+                  : () async {
+                      try {
+                        // Show loading
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => const Center(child: CircularProgressIndicator()),
+                        );
 
-                  if (context.mounted) {
-                    Navigator.pop(context); // Pop loading
-                    context.push('/chat/${conversation.id}', extra: conversation);
-                  }
-                } catch (e) {
-                  if (context.mounted) {
-                    Navigator.pop(context); // Pop loading
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error starting conversation: $e')),
-                    );
-                  }
-                }
-              },
+                        final conversation = await ref.read(chatRepositoryProvider).startConversation(
+                              sellerId: item.userId,
+                              marketplaceItemId: item.id,
+                            );
+
+                        if (context.mounted) {
+                          Navigator.pop(context); // Pop loading
+                          context.push('/chat/${conversation.id}', extra: conversation);
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          Navigator.pop(context); // Pop loading
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error starting conversation: $e')),
+                          );
+                        }
+                      }
+                    },
               icon: const Icon(Icons.chat),
               label: Text(ref.tr('chat')),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF6B00),
+                backgroundColor: isOwner ? Colors.grey : const Color(0xFFFF6B00),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
