@@ -42,6 +42,10 @@ import '../features/chat/domain/conversation.dart';
 import '../features/nearby_shops/presentation/nearby_shops_screen.dart';
 import '../features/shop/presentation/map_picker_screen.dart';
 import '../features/shop/presentation/shop_settings_screen.dart';
+import '../features/marketplace/presentation/marketplace_screen.dart';
+import '../features/marketplace/presentation/add_listing_screen.dart';
+import '../features/marketplace/presentation/marketplace_details_screen.dart';
+import '../features/marketplace/presentation/my_listings_screen.dart';
 
 import 'package:latlong2/latlong.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
@@ -313,6 +317,28 @@ GoRouter appRouter(Ref ref) {
             },
           ),
         ]
+      ),
+      // Marketplace routes
+      GoRoute(
+        path: '/marketplace',
+        builder: (context, state) => const MarketplaceScreen(),
+        routes: [
+          GoRoute(
+            path: 'add',
+            builder: (context, state) => const AddListingScreen(),
+          ),
+          GoRoute(
+            path: 'details/:id',
+            builder: (context, state) {
+              final id = int.parse(state.pathParameters['id']!);
+              return MarketplaceDetailsScreen(itemId: id);
+            },
+          ),
+          GoRoute(
+            path: 'my-listings',
+            builder: (context, state) => const MyListingsScreen(),
+          ),
+        ],
       ),
       // Products route (plural)
       GoRoute(

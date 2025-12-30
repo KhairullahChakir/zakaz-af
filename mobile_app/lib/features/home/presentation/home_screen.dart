@@ -24,6 +24,7 @@ import '../../profile/presentation/account_security_screen.dart';
 import '../../shop/presentation/shopkeeper_dashboard_screen.dart';
 import '../../admin/presentation/admin_dashboard_screen.dart';
 import '../../profile/presentation/language_selection_screen.dart';
+import '../../marketplace/presentation/marketplace_screen.dart';
 import '../../../core/localization/language_provider.dart';
 import '../../../core/widgets/custom_cached_image.dart';
 import '../../../core/widgets/shimmer_loading.dart';
@@ -109,6 +110,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         index: _currentNavIndex,
         children: [
           _buildHomeTab(),
+          const MarketplaceScreen(),
           const ConversationsScreen(),
           if (isShopkeeper) const ShopkeeperDashboardScreen(),
           if (isAdmin) const AdminDashboardScreen(),
@@ -146,6 +148,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               icon: Icon(Icons.home_outlined, color: context.textSecondary),
               selectedIcon: const Icon(Icons.home, color: kPrimaryOrange),
               label: ref.tr('nav_home'),
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.storefront_outlined, color: context.textSecondary),
+              selectedIcon: const Icon(Icons.storefront, color: kPrimaryOrange),
+              label: ref.tr('nav_marketplace'),
             ),
             NavigationDestination(
               icon: Icon(Icons.chat_bubble_outline, color: context.textSecondary),

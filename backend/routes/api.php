@@ -109,4 +109,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead']);
         Route::post('/send', [App\Http\Controllers\NotificationController::class, 'send']); // Admin only
     });
+
+    // Marketplace routes
+    Route::get('/marketplace', [App\Http\Controllers\Api\MarketplaceController::class, 'index']);
+    Route::get('/marketplace/my-items', [App\Http\Controllers\Api\MarketplaceController::class, 'myItems']);
+    Route::get('/marketplace/{id}', [App\Http\Controllers\Api\MarketplaceController::class, 'show']);
+    Route::post('/marketplace', [App\Http\Controllers\Api\MarketplaceController::class, 'store']);
+    Route::post('/marketplace/{id}', [App\Http\Controllers\Api\MarketplaceController::class, 'update']);
+    Route::delete('/marketplace/{id}', [App\Http\Controllers\Api\MarketplaceController::class, 'destroy']);
 });
