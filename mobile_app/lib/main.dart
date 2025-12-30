@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'core/app_router.dart';
+import 'core/services/notification_service.dart';
 import 'core/storage/shared_prefs_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'core/services/notification_service.dart';
 import 'core/theme/theme_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/localization/language_provider.dart';
@@ -22,6 +23,7 @@ void main() async {
   // Initialize Firebase (Try-catch in case config files are missing)
   try {
     await Firebase.initializeApp();
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   } catch (e) {
     debugPrint('Firebase initialization failed: $e');
   }

@@ -3,6 +3,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
+import 'package:mobile_app/core/app_router.dart';
+
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // Clearer handling for background messages
+  debugPrint("Handling a background message: ${message.messageId}");
+}
 
 class NotificationService {
   final Ref _ref;
@@ -18,7 +25,13 @@ class NotificationService {
     const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
-    await _localNotifications.initialize(initializationSettings);
+    
+    await _localNotifications.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        _handleNotificationClick(response.payload);
+      },
+    );
 
     // 2. Create Notification Channel
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -53,11 +66,17 @@ class NotificationService {
       // Listen for token refresh
       _fcm.onTokenRefresh.listen(_updateToken);
 
-      // Handle foreground messages
+      // Listen for auth changes to update token when user logs in
+      _ref.listen(authControllerProvider, (previous, next) {
+        if (next.hasValue && next.value != null && token != null) {
+          _updateToken(token);
+        }
+      });
+
+      // 4. Handle foreground messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         debugPrint('Got a message whilst in the foreground!');
-        debugPrint('Message data: ${message.data}');
-
+        
         RemoteNotification? notification = message.notification;
         AndroidNotification? android = message.notification?.android;
 
@@ -72,22 +91,43 @@ class NotificationService {
                 channel.id,
                 channel.name,
                 channelDescription: channel.description,
-                icon: '@mipmap/ic_launcher', // Force default icon
-                // or use android.smallIcon if you have multiple
+                icon: '@mipmap/ic_launcher',
               ),
             ),
+            payload: message.data['conversation_id'],
           );
         }
       });
+
+      // 5. Handle background clicks (App was in background)
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        _handleNotificationClick(message.data['conversation_id']);
+      });
+
+      // 6. Handle cold start clicks (App was terminated)
+      _fcm.getInitialMessage().then((RemoteMessage? message) {
+        if (message != null) {
+          _handleNotificationClick(message.data['conversation_id']);
+        }
+      });
+
     } else {
       debugPrint('User declined or has not accepted permission');
     }
   }
 
+  void _handleNotificationClick(String? conversationId) {
+    if (conversationId != null) {
+      final router = _ref.read(appRouterProvider);
+      router.push('/chat/$conversationId');
+    }
+  }
+
   void _updateToken(String token) {
-    final user = _ref.read(authControllerProvider).value;
-    if (user == null) return; // Removed null check for name as it's required
+    final authState = _ref.read(authControllerProvider);
+    if (!authState.hasValue || authState.value == null) return;
     
+    final user = authState.value!;
     _ref.read(authControllerProvider.notifier).updateProfile(
       name: user.name,
       fcmToken: token,
