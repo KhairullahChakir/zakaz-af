@@ -13,6 +13,13 @@ const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
 const Color kSoftOrange = Color(0xFFFFF3E6);
 
+// Payment method enum
+enum PaymentMethod {
+  cashOnDelivery,
+  hesabPay,
+  card,
+}
+
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
@@ -23,6 +30,7 @@ class CheckoutScreen extends ConsumerStatefulWidget {
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   bool _isLoading = false;
   Address? _selectedAddress;
+  PaymentMethod _selectedPayment = PaymentMethod.cashOnDelivery;
 
   @override
   void initState() {
@@ -42,45 +50,32 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   Future<void> _placeOrder() async {
     if (_selectedAddress == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Icon(Icons.warning_amber_rounded, color: Colors.white),
-              SizedBox(width: 12),
-              Text(ref.tr('please_select_address')),
-            ],
-          ),
-          backgroundColor: Colors.orange.shade700,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      );
+      _showWarning(ref.tr('please_select_address'));
       return;
     }
 
     setState(() => _isLoading = true);
+    
     try {
       final cartState = ref.read(cartProvider);
       final items = cartState.value;
 
       if (items == null || items.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(ref.tr('cart_empty'))),
-        );
+        _showWarning(ref.tr('cart_empty'));
         return;
       }
 
-      await ref.read(orderRepositoryProvider).placeOrder(
-        items,
-        addressId: _selectedAddress!.id,
-      );
-
-      ref.read(cartProvider.notifier).clearCart();
-
-      if (mounted) {
-        // Show success dialog
-        _showOrderSuccessDialog();
+      // Handle different payment methods
+      switch (_selectedPayment) {
+        case PaymentMethod.cashOnDelivery:
+          await _processWithCashOnDelivery(items);
+          break;
+        case PaymentMethod.hesabPay:
+          await _processWithHesabPay(items);
+          break;
+        case PaymentMethod.card:
+          await _processWithCard(items);
+          break;
       }
     } catch (e) {
       if (mounted) {
@@ -99,6 +94,79 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     }
   }
 
+  Future<void> _processWithCashOnDelivery(List<dynamic> items) async {
+    await ref.read(orderRepositoryProvider).placeOrder(
+      items,
+      addressId: _selectedAddress!.id,
+      paymentMethod: 'cash_on_delivery',
+    );
+    ref.read(cartProvider.notifier).clearCart();
+    if (mounted) _showOrderSuccessDialog();
+  }
+
+  Future<void> _processWithHesabPay(List<dynamic> items) async {
+    // TODO: Integrate HesabPay API
+    // For now, show coming soon message
+    _showPaymentComingSoon('HesabPay');
+  }
+
+  Future<void> _processWithCard(List<dynamic> items) async {
+    // TODO: Integrate Card Payment Gateway (Stripe, etc.)
+    // For now, show coming soon message
+    _showPaymentComingSoon(ref.tr('card_payment'));
+  }
+
+  void _showPaymentComingSoon(String method) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: kSoftOrange,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(Icons.schedule, color: kPrimaryOrange, size: 28),
+            ),
+            const SizedBox(width: 14),
+            Expanded(child: Text(ref.tr('coming_soon'))),
+          ],
+        ),
+        content: Text(
+          ref.tr('payment_coming_soon_msg', args: {'method': method}),
+          style: TextStyle(fontSize: 16, color: context.textSecondary),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.pop(context),
+            style: FilledButton.styleFrom(backgroundColor: kPrimaryOrange),
+            child: Text(ref.tr('ok')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showWarning(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Colors.white),
+            const SizedBox(width: 12),
+            Text(message),
+          ],
+        ),
+        backgroundColor: Colors.orange.shade700,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
+  }
+
   void _showOrderSuccessDialog() {
     showDialog(
       context: context,
@@ -112,10 +180,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             children: [
               Container(
                 padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: context.isDark ? Colors.green.withValues(alpha: 0.2) : Colors.green.shade50,
-                    shape: BoxShape.circle,
-                  ),
+                decoration: BoxDecoration(
+                  color: context.isDark ? Colors.green.withOpacity(0.2) : Colors.green.shade50,
+                  shape: BoxShape.circle,
+                ),
                 child: Icon(
                   Icons.check_circle,
                   size: 64,
@@ -166,7 +234,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 },
                 child: Text(
                   ref.tr('view_my_orders'),
-                  style: TextStyle(color: kPrimaryOrange),
+                  style: const TextStyle(color: kPrimaryOrange),
                 ),
               ),
             ],
@@ -180,6 +248,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Widget build(BuildContext context) {
     final cartItemsAsync = ref.watch(cartProvider);
     final addressesAsync = ref.watch(addressesProvider);
+    final language = ref.watch(languageProvider);
+    final isRTL = language.isRTL;
 
     final total = cartItemsAsync.value?.fold(
           0.0,
@@ -187,166 +257,402 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         ) ??
         0.0;
 
-    return Scaffold(
-      backgroundColor: context.backgroundColor,
-      appBar: AppBar(
-        title: Text(
-          ref.tr('checkout'),
-          style: const TextStyle(fontWeight: FontWeight.bold),
+    return Directionality(
+      textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
+      child: Scaffold(
+        backgroundColor: context.backgroundColor,
+        appBar: AppBar(
+          title: Text(
+            ref.tr('checkout'),
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: context.appBarColor,
+          foregroundColor: context.appBarTextColor,
+          elevation: 0,
         ),
-        backgroundColor: context.appBarColor,
-        foregroundColor: context.appBarTextColor,
-        elevation: 0,
-      ),
-      body: _isLoading
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const CircularProgressIndicator(color: kPrimaryOrange),
-                  const SizedBox(height: 24),
-                  Text(
-                    ref.tr('placing_order'),
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Delivery Address Section
-                  _buildSectionCard(
-                    icon: Icons.location_on_outlined,
-                    title: ref.tr('delivery_address'),
-                    trailing: TextButton.icon(
-                      onPressed: () => context.push('/addresses'),
-                      icon: const Icon(Icons.edit_outlined, size: 18),
-                      label: Text(ref.tr('manage')),
-                      style: TextButton.styleFrom(foregroundColor: kPrimaryOrange),
-                    ),
-                    child: addressesAsync.when(
-                      data: (addresses) {
-                        if (addresses.isEmpty) {
-                          return _buildEmptyAddresses();
-                        }
-                        return Column(
-                          children: addresses.map((addr) {
-                            return _buildAddressOption(addr);
-                          }).toList(),
-                        );
-                      },
-                      loading: () => const Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-                      ),
-                      error: (e, _) => Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text('${ref.tr('error')}: $e', style: const TextStyle(color: Colors.red)),
+        body: _isLoading
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CircularProgressIndicator(color: kPrimaryOrange),
+                    const SizedBox(height: 24),
+                    Text(
+                      ref.tr('placing_order'),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey.shade600,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Order Items Section
-                  _buildSectionCard(
-                    icon: Icons.shopping_bag_outlined,
-                    title: ref.tr('order_summary'),
-                    child: cartItemsAsync.when(
-                      data: (items) => Column(
-                        children: items.map((item) => _buildOrderItem(item)).toList(),
-                      ),
-                      loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
-                      error: (e, _) => Text('${ref.tr('error')}: $e'),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Payment Summary Section
-                  _buildSectionCard(
-                    icon: Icons.receipt_long_outlined,
-                    title: ref.tr('order_summary'),
-                    child: Column(
-                      children: [
-                        _buildSummaryRow(ref.tr('subtotal'), '${total.toInt()} ${ref.tr('afn')}'),
-                        const SizedBox(height: 8),
-                        _buildSummaryRow(ref.tr('delivery_fee'), ref.tr('free'), valueColor: Colors.green),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: Divider(),
-                        ),
-                        _buildSummaryRow(
-                          ref.tr('cart_total'),
-                          '${total.toInt()} ${ref.tr('afn')}',
-                          isBold: true,
-                          valueColor: kPrimaryOrange,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 100), // Space for bottom button
-                ],
-              ),
-            ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: context.cardColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          boxShadow: [
-            BoxShadow(
-              color: context.shadowColor,
-              offset: const Offset(0, -4),
-              blurRadius: 20,
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: SizedBox(
-            height: 56,
-            child: FilledButton(
-              onPressed: _isLoading ? null : _placeOrder,
-              style: FilledButton.styleFrom(
-                backgroundColor: kPrimaryOrange,
-                disabledBackgroundColor: Colors.grey.shade300,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  ],
                 ),
-                elevation: 4,
-                shadowColor: kPrimaryOrange.withValues(alpha: 0.3),
-              ),
-              child: _isLoading
-                  ? const SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        color: Colors.white,
+              )
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Delivery Address Section
+                    _buildSectionCard(
+                      icon: Icons.location_on_outlined,
+                      title: ref.tr('delivery_address'),
+                      trailing: TextButton.icon(
+                        onPressed: () => context.push('/addresses'),
+                        icon: const Icon(Icons.edit_outlined, size: 18),
+                        label: Text(ref.tr('manage')),
+                        style: TextButton.styleFrom(foregroundColor: kPrimaryOrange),
                       ),
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.shopping_cart_checkout),
-                        SizedBox(width: 12),
-                        Text(
-                          ref.tr('place_order'),
-                          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                      child: addressesAsync.when(
+                        data: (addresses) {
+                          if (addresses.isEmpty) {
+                            return _buildEmptyAddresses();
+                          }
+                          return Column(
+                            children: addresses.map((addr) {
+                              return _buildAddressOption(addr);
+                            }).toList(),
+                          );
+                        },
+                        loading: () => const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
                         ),
-                      ],
+                        error: (e, _) => Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text('${ref.tr('error')}: $e', style: const TextStyle(color: Colors.red)),
+                        ),
+                      ),
                     ),
+                    const SizedBox(height: 16),
+
+                    // Payment Method Section - NEW!
+                    _buildSectionCard(
+                      icon: Icons.payment_outlined,
+                      title: ref.tr('payment_method'),
+                      child: _buildPaymentMethods(),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Order Items Section
+                    _buildSectionCard(
+                      icon: Icons.shopping_bag_outlined,
+                      title: ref.tr('order_summary'),
+                      child: cartItemsAsync.when(
+                        data: (items) => Column(
+                          children: items.map((item) => _buildOrderItem(item)).toList(),
+                        ),
+                        loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
+                        error: (e, _) => Text('${ref.tr('error')}: $e'),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Payment Summary Section
+                    _buildSectionCard(
+                      icon: Icons.receipt_long_outlined,
+                      title: ref.tr('cart_total'),
+                      child: Column(
+                        children: [
+                          _buildSummaryRow(ref.tr('subtotal'), '${total.toInt()} ${ref.tr('afn')}'),
+                          const SizedBox(height: 8),
+                          _buildSummaryRow(ref.tr('delivery_fee'), ref.tr('free'), valueColor: Colors.green),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            child: Divider(),
+                          ),
+                          _buildSummaryRow(
+                            ref.tr('cart_total'),
+                            '${total.toInt()} ${ref.tr('afn')}',
+                            isBold: true,
+                            valueColor: kPrimaryOrange,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 100), // Space for bottom button
+                  ],
+                ),
+              ),
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: context.cardColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            boxShadow: [
+              BoxShadow(
+                color: context.shadowColor,
+                offset: const Offset(0, -4),
+                blurRadius: 20,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: SafeArea(
+            child: SizedBox(
+              height: 56,
+              child: FilledButton(
+                onPressed: _isLoading ? null : _placeOrder,
+                style: FilledButton.styleFrom(
+                  backgroundColor: kPrimaryOrange,
+                  disabledBackgroundColor: Colors.grey.shade300,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 4,
+                  shadowColor: kPrimaryOrange.withOpacity(0.3),
+                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(_getPaymentIcon()),
+                          const SizedBox(width: 12),
+                          Text(
+                            _getPaymentButtonText(),
+                            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+              ),
             ),
           ),
         ),
       ),
     );
   }
+
+  IconData _getPaymentIcon() {
+    switch (_selectedPayment) {
+      case PaymentMethod.cashOnDelivery:
+        return Icons.local_shipping_outlined;
+      case PaymentMethod.hesabPay:
+        return Icons.account_balance_wallet_outlined;
+      case PaymentMethod.card:
+        return Icons.credit_card_outlined;
+    }
+  }
+
+  String _getPaymentButtonText() {
+    switch (_selectedPayment) {
+      case PaymentMethod.cashOnDelivery:
+        return ref.tr('place_order');
+      case PaymentMethod.hesabPay:
+        return ref.tr('pay_with_hesabpay');
+      case PaymentMethod.card:
+        return ref.tr('pay_with_card');
+    }
+  }
+
+  // ============== PAYMENT METHODS UI ==============
+
+  Widget _buildPaymentMethods() {
+    return Column(
+      children: [
+        // Cash on Delivery
+        _buildPaymentOption(
+          method: PaymentMethod.cashOnDelivery,
+          icon: Icons.local_shipping_outlined,
+          iconColor: Colors.green,
+          title: ref.tr('cash_on_delivery'),
+          subtitle: ref.tr('cash_on_delivery_desc'),
+        ),
+        const SizedBox(height: 12),
+        
+        // HesabPay
+        _buildPaymentOption(
+          method: PaymentMethod.hesabPay,
+          icon: Icons.account_balance_wallet_outlined,
+          iconColor: const Color(0xFF1976D2), // HesabPay blue
+          title: 'HesabPay',
+          subtitle: ref.tr('hesabpay_desc'),
+          badge: ref.tr('recommended'),
+        ),
+        const SizedBox(height: 12),
+        
+        // Visa/Mastercard
+        _buildPaymentOption(
+          method: PaymentMethod.card,
+          customIcon: _buildCardLogos(),
+          title: ref.tr('visa_mastercard'),
+          subtitle: ref.tr('card_payment_desc'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCardLogos() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Visa logo
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1A1F71),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: const Text(
+            'VISA',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+        const SizedBox(width: 6),
+        // Mastercard logo
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 14,
+              height: 14,
+              decoration: const BoxDecoration(
+                color: Color(0xFFEB001B),
+                shape: BoxShape.circle,
+              ),
+            ),
+            Transform.translate(
+              offset: const Offset(-6, 0),
+              child: Container(
+                width: 14,
+                height: 14,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF79E1B),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 0.5),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPaymentOption({
+    required PaymentMethod method,
+    IconData? icon,
+    Color? iconColor,
+    Widget? customIcon,
+    required String title,
+    required String subtitle,
+    String? badge,
+  }) {
+    final isSelected = _selectedPayment == method;
+
+    return InkWell(
+      onTap: () => setState(() => _selectedPayment = method),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? (context.isDark ? kPrimaryOrange.withOpacity(0.15) : kSoftOrange)
+              : context.inputFillColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected ? kPrimaryOrange : context.dividerColor,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            // Radio button
+            Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isSelected ? kPrimaryOrange : context.textSecondary,
+                  width: 2,
+                ),
+                color: isSelected ? kPrimaryOrange : Colors.transparent,
+              ),
+              child: isSelected
+                  ? const Icon(Icons.check, size: 16, color: Colors.white)
+                  : null,
+            ),
+            const SizedBox(width: 16),
+            
+            // Icon
+            if (customIcon != null)
+              customIcon
+            else
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: iconColor?.withOpacity(0.1) ?? context.inputFillColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, color: iconColor ?? context.textSecondary, size: 24),
+              ),
+            const SizedBox(width: 14),
+            
+            // Text
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: context.textPrimary,
+                        ),
+                      ),
+                      if (badge != null) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade100,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            badge,
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.green.shade700,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: context.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ============== OTHER WIDGETS ==============
 
   Widget _buildSectionCard({
     required IconData icon,
@@ -376,7 +682,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: context.isDark ? kPrimaryOrange.withValues(alpha: 0.1) : context.softOrange,
+                    color: context.isDark ? kPrimaryOrange.withOpacity(0.1) : kSoftOrange,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(icon, color: kPrimaryOrange, size: 20),
@@ -408,9 +714,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: context.isDark ? Colors.orange.withValues(alpha: 0.1) : context.softOrange,
+        color: context.isDark ? Colors.orange.withOpacity(0.1) : kSoftOrange,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.isDark ? Colors.orange.withValues(alpha: 0.3) : Colors.orange.shade200),
+        border: Border.all(color: context.isDark ? Colors.orange.withOpacity(0.3) : Colors.orange.shade200),
       ),
       child: Column(
         children: [
@@ -437,6 +743,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   Widget _buildAddressOption(Address addr) {
     final isSelected = _selectedAddress?.id == addr.id;
+    final name = addr.recipientName ?? addr.label;
+    final phone = addr.phonePrimary ?? '';
 
     return GestureDetector(
       onTap: () => setState(() => _selectedAddress = addr),
@@ -445,7 +753,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected 
-              ? (context.isDark ? kPrimaryOrange.withValues(alpha: 0.15) : context.softOrange) 
+              ? (context.isDark ? kPrimaryOrange.withOpacity(0.15) : kSoftOrange) 
               : context.inputFillColor,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
@@ -477,16 +785,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        addr.label,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: context.textPrimary,
+                      Expanded(
+                        child: Text(
+                          name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: context.textPrimary,
+                          ),
                         ),
                       ),
-                      if (addr.isDefault) ...[
-                        const SizedBox(width: 8),
+                      if (addr.isDefault)
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
@@ -502,12 +811,18 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                             ),
                           ),
                         ),
-                      ],
                     ],
                   ),
+                  if (phone.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      phone,
+                      style: TextStyle(fontSize: 13, color: context.textSecondary),
+                    ),
+                  ],
                   const SizedBox(height: 4),
                   Text(
-                    '${addr.addressLine1}${addr.addressLine2 != null ? ", ${addr.addressLine2}" : ""}, ${addr.city}',
+                    '${addr.province ?? addr.city}${addr.street != null ? " - ${addr.street}" : ""}',
                     style: TextStyle(
                       fontSize: 13,
                       color: context.textSecondary,
@@ -536,7 +851,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             child: Container(
               width: 56,
               height: 56,
-              color: context.isDark ? kPrimaryOrange.withValues(alpha: 0.1) : context.softOrange,
+              color: context.isDark ? kPrimaryOrange.withOpacity(0.1) : kSoftOrange,
               child: imageUrl != null
                   ? CustomCachedImage(
                       imageUrl: imageUrl,
