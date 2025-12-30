@@ -129,38 +129,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       child: SafeArea(
-        child: NavigationBar(
+        child: BottomNavigationBar(
           backgroundColor: context.cardColor,
-          indicatorColor: context.softOrange,
-          height: Responsive.value(context, mobile: 65, tablet: 75),
-          selectedIndex: _currentNavIndex,
-          onDestinationSelected: (index) {
-            setState(() => _currentNavIndex = index);
-          },
-          destinations: [
-            NavigationDestination(
-              icon: Icon(Icons.home_outlined, color: context.textSecondary),
-              selectedIcon: const Icon(Icons.home, color: kPrimaryOrange),
+          currentIndex: _currentNavIndex,
+          onTap: (index) => setState(() => _currentNavIndex = index),
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: kPrimaryOrange,
+          unselectedItemColor: context.textSecondary,
+          selectedFontSize: 11,
+          unselectedFontSize: 10,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home, color: kPrimaryOrange),
               label: ref.tr('nav_home'),
             ),
-            NavigationDestination(
-              icon: Icon(Icons.storefront_outlined, color: context.textSecondary),
-              selectedIcon: const Icon(Icons.storefront, color: kPrimaryOrange),
-              label: ref.tr('nav_marketplace'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.storefront_outlined),
+              activeIcon: Icon(Icons.storefront, color: kPrimaryOrange),
+              label: ref.tr('nav_market'),
             ),
-            NavigationDestination(
-              icon: Icon(Icons.chat_bubble_outline, color: context.textSecondary),
-              selectedIcon: const Icon(Icons.chat_bubble, color: kPrimaryOrange),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble_outline),
+              activeIcon: Icon(Icons.chat_bubble, color: kPrimaryOrange),
               label: ref.tr('nav_messages'),
             ),
-            NavigationDestination(
+            BottomNavigationBarItem(
               icon: const CartIconBadge(showBackground: false),
-              selectedIcon: const CartIconBadge(showBackground: false, isSelected: true),
+              activeIcon: const CartIconBadge(showBackground: false, isSelected: true),
               label: ref.tr('nav_cart'),
             ),
-            NavigationDestination(
-              icon: Icon(Icons.person_outline, color: context.textSecondary),
-              selectedIcon: const Icon(Icons.person, color: kPrimaryOrange),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person, color: kPrimaryOrange),
               label: ref.tr('nav_profile'),
             ),
           ],
