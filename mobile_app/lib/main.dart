@@ -10,8 +10,14 @@ import 'core/theme/theme_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/localization/language_provider.dart';
 
+import 'package:flutter_stripe/flutter_stripe.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Set Stripe Publishable Key
+  Stripe.publishableKey = "pk_test_51O7v5kSD3p6D5j5zXkYz8x3R2W1v0U9t8s7r6q5p4n3m2l1k0j9i8h7g6f5e4d3c2b1a";
+  Stripe.instance.applySettings();
   
   // Initialize Firebase (Try-catch in case config files are missing)
   try {

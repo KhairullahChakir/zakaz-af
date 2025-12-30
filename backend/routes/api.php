@@ -98,6 +98,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/unread-count', [App\Http\Controllers\Api\ChatController::class, 'unreadCount']);
     });
 
+    // Stripe Payments
+    Route::post('/payments/create-intent', [\App\Http\Controllers\Api\PaymentController::class, 'createPaymentIntent']);
+
     // Notification routes
     Route::prefix('notifications')->group(function () {
         Route::get('/', [App\Http\Controllers\NotificationController::class, 'index']);

@@ -62,6 +62,12 @@ dependencies:
     sdk: flutter
   flutter_map: ^4.0.0
   latlong2: ^0.8.2
+  flutter_stripe: ^10.1.1
+  meta: ^1.16.0
+
+dependency_overrides:
+  freezed_annotation: ^3.1.0
+  meta: 1.16.0
 
 
 dev_dependencies:

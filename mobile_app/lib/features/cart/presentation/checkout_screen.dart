@@ -6,8 +6,10 @@ import 'package:mobile_app/features/addresses/presentation/address_provider.dart
 import 'package:mobile_app/features/addresses/domain/address.dart';
 import 'package:mobile_app/features/orders/data/order_repository.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import '../domain/cart_item.dart';
 import 'cart_provider.dart';
 import '../../../core/theme/theme_context.dart';
+import '../../../core/services/stripe_service.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
@@ -58,7 +60,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     
     try {
       final cartState = ref.read(cartProvider);
-      final items = cartState.value;
+      final List<CartItem>? items = cartState.value;
 
       if (items == null || items.isEmpty) {
         _showWarning(ref.tr('cart_empty'));
@@ -94,7 +96,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     }
   }
 
-  Future<void> _processWithCashOnDelivery(List<dynamic> items) async {
+  Future<void> _processWithCashOnDelivery(List<CartItem> items) async {
     await ref.read(orderRepositoryProvider).placeOrder(
       items,
       addressId: _selectedAddress!.id,
@@ -104,16 +106,40 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     if (mounted) _showOrderSuccessDialog();
   }
 
-  Future<void> _processWithHesabPay(List<dynamic> items) async {
+  Future<void> _processWithHesabPay(List<CartItem> items) async {
     // TODO: Integrate HesabPay API
     // For now, show coming soon message
     _showPaymentComingSoon('HesabPay');
   }
 
-  Future<void> _processWithCard(List<dynamic> items) async {
-    // TODO: Integrate Card Payment Gateway (Stripe, etc.)
-    // For now, show coming soon message
-    _showPaymentComingSoon(ref.tr('card_payment'));
+
+  Future<void> _processWithCard(List<CartItem> items) async {
+    try {
+      final success = await ref.read(stripeServiceProvider).processPayment(
+        items,
+        'USD',
+      );
+
+      if (success && mounted) {
+        await ref.read(orderRepositoryProvider).placeOrder(
+          items,
+          addressId: _selectedAddress!.id,
+          paymentMethod: 'card',
+        );
+        ref.read(cartProvider.notifier).clearCart();
+        if (mounted) _showOrderSuccessDialog();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
   }
 
   void _showPaymentComingSoon(String method) {
