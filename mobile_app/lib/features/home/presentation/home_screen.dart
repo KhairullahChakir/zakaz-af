@@ -101,10 +101,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(authControllerProvider).value;
-    final isShopkeeper = user?.isShopkeeper == true;
-    final isAdmin = user?.isAdmin == true;
-    
     return Scaffold(
       body: IndexedStack(
         index: _currentNavIndex,
@@ -112,17 +108,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           _buildHomeTab(),
           const MarketplaceScreen(),
           const ConversationsScreen(),
-          if (isShopkeeper) const ShopkeeperDashboardScreen(),
-          if (isAdmin) const AdminDashboardScreen(),
           _CartTab(onNavigateToHome: () => setState(() => _currentNavIndex = 0)),
           const _ProfileTab(),
         ],
       ),
-      bottomNavigationBar: _buildBottomNav(isShopkeeper: isShopkeeper, isAdmin: isAdmin),
+      bottomNavigationBar: _buildBottomNav(),
     );
   }
 
-  Widget _buildBottomNav({required bool isShopkeeper, required bool isAdmin}) {
+  Widget _buildBottomNav() {
     return Container(
       decoration: BoxDecoration(
         color: context.cardColor,
@@ -159,18 +153,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               selectedIcon: const Icon(Icons.chat_bubble, color: kPrimaryOrange),
               label: ref.tr('nav_messages'),
             ),
-            if (isShopkeeper)
-              NavigationDestination(
-                icon: Icon(Icons.store_outlined, color: context.textSecondary),
-                selectedIcon: const Icon(Icons.store, color: kPrimaryOrange),
-                label: ref.tr('nav_my_shop'),
-              ),
-            if (isAdmin)
-              NavigationDestination(
-                icon: Icon(Icons.admin_panel_settings_outlined, color: context.textSecondary),
-                selectedIcon: const Icon(Icons.admin_panel_settings, color: Color(0xFF6366F1)),
-                label: ref.tr('nav_admin'),
-              ),
             NavigationDestination(
               icon: const CartIconBadge(showBackground: false),
               selectedIcon: const CartIconBadge(showBackground: false, isSelected: true),
@@ -1447,6 +1429,30 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
 
                   const SizedBox(height: 16),
                   
+                  // Business Section (for Shopkeepers and Admins)
+                  if (user?.isShopkeeper == true || user?.isAdmin == true) ...[
+                    _buildSectionHeader(ref.tr('my_business')),
+                    _buildSectionCard([
+                      if (user?.isShopkeeper == true)
+                        _buildProfileOption(
+                          Icons.store, 
+                          ref.tr('nav_my_shop'), 
+                          () => context.push('/shopkeeper/dashboard'),
+                          color: kPrimaryOrange,
+                          subtitle: ref.tr('manage_your_shop'),
+                        ),
+                      if (user?.isAdmin == true)
+                        _buildProfileOption(
+                          Icons.admin_panel_settings, 
+                          ref.tr('nav_admin'), 
+                          () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminDashboardScreen())),
+                          color: const Color(0xFF6366F1),
+                          subtitle: ref.tr('admin_panel'),
+                        ),
+                    ]),
+                    const SizedBox(height: 24),
+                  ],
+
                   // Account Section
                   _buildSectionHeader(ref.tr('my_account')),
                   _buildSectionCard([

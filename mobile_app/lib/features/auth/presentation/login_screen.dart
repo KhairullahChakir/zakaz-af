@@ -335,20 +335,37 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          children: [
-            Checkbox(
-              value: _rememberMe,
-              onChanged: (v) => setState(() => _rememberMe = v ?? false),
-              activeColor: kPrimaryOrange,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              side: BorderSide(color: context.inputBorderColor, width: 1.5),
-            ),
-            Text(ref.tr('remember_me'), style: TextStyle(color: context.textPrimary, fontSize: 14)),
-          ],
+        Flexible(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 24,
+                height: 24,
+                child: Checkbox(
+                  value: _rememberMe,
+                  onChanged: (v) => setState(() => _rememberMe = v ?? false),
+                  activeColor: kPrimaryOrange,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                  side: BorderSide(color: context.inputBorderColor, width: 1.5),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  ref.tr('remember_me'),
+                  style: TextStyle(color: context.textPrimary, fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
         TextButton(
           onPressed: () => context.push('/forgot-password'),
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+          ),
           child: Text(
             ref.tr('forgot_password'),
             style: const TextStyle(color: kPrimaryOrange, fontWeight: FontWeight.bold, fontSize: 14),

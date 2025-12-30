@@ -69,6 +69,9 @@ class AppTranslations {
     'nav_profile': 'Profile',
     'nav_my_shop': 'My Shop',
     'nav_admin': 'Admin',
+    'my_business': 'My Business',
+    'manage_your_shop': 'Manage your shop & products',
+    'admin_panel': 'Manage app settings',
 
     // Auth
     'login': 'Login',
@@ -107,6 +110,7 @@ class AppTranslations {
     'enter_6_digit_code': 'Enter the 6-digit code sent to your email and your new password.',
     'enter_email_to_reset': 'Enter your email address and we will send you a 6-digit code to reset your password.',
     'enter_verification_code': 'Enter Verification Code',
+    'verify_email': 'Verify Email',
     'otp_sent_msg': 'We have sent a 6-digit code to',
     'verify_continue': 'Verify and Continue',
     'didnt_receive_code': "Didn't receive the code?",
@@ -796,6 +800,9 @@ class AppTranslations {
     'nav_profile': 'پروفایل',
     'nav_my_shop': 'فروشگاه من',
     'nav_admin': 'مدیریت',
+    'my_business': 'کسب و کار من',
+    'manage_your_shop': 'مدیریت فروشگاه و محصولات',
+    'admin_panel': 'تنظیمات برنامه',
 
     // Auth
     'login': 'ورود',
@@ -834,6 +841,7 @@ class AppTranslations {
     'enter_6_digit_code': 'کد ۶ رقمی ارسال شده به ایمیل و رمز عبور جدید خود را وارد کنید.',
     'enter_email_to_reset': 'ایمیل خود را وارد کنید تا کد ۶ رقمی برای بازنشانی رمز عبور ارسال شود.',
     'enter_verification_code': 'کد تأیید را وارد کنید',
+    'verify_email': 'تأیید ایمیل',
     'otp_sent_msg': 'ما یک کد ۶ رقمی به این آدرس ارسال کردیم',
     'verify_continue': 'تأیید و ادامه',
     'didnt_receive_code': 'کد را دریافت نکردید؟',
@@ -1522,6 +1530,9 @@ class AppTranslations {
     'nav_profile': 'پروفایل',
     'nav_my_shop': 'زما دوکان',
     'nav_admin': 'اډمین',
+    'my_business': 'زما سوداګري',
+    'manage_your_shop': 'خپل دوکان او محصولات اداره کړئ',
+    'admin_panel': 'د اپلیکیشن تنظیمات',
 
     // Auth
     'login': 'ننوتل',
@@ -1560,6 +1571,7 @@ class AppTranslations {
     'enter_6_digit_code': 'خپل ایمیل ته راغلی ۶ رقمی کوډ او نوی پاسورډ ولیکئ.',
     'enter_email_to_reset': 'خپل برېښنالیک ولیکئ ترڅو د پاسورډ بدلولو ۶ رقمی کوډ در واستول شي.',
     'enter_verification_code': 'د تایید کوډ ولیکئ',
+    'verify_email': 'بریښنالیک تایید کړئ',
     'otp_sent_msg': 'موږ تاسو ته ۶ رقمی کوډ درلیږلی دی',
     'verify_continue': 'تایید او دوام',
     'didnt_receive_code': 'کوډ مو ترلاسه نه کړ؟',

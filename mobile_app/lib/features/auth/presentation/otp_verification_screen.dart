@@ -108,7 +108,13 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded, color: context.textPrimary, size: 20),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              context.go('/login');
+            }
+          },
         ),
       ),
       body: SafeArea(
@@ -148,10 +154,10 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
               Text(
                 ref.tr('enter_verification_code'),
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1D1D1F),
+                  color: context.textPrimary,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -161,15 +167,15 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15,
-                  color: Colors.grey.shade600,
+                  color: context.textSecondary,
                   height: 1.5,
                 ),
               ),
               const SizedBox(height: 48),
               
-              // Premium OTP Input Boxes
+              // Premium OTP Input Boxes - Responsive
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
                 decoration: BoxDecoration(
                   color: context.cardColor,
                   borderRadius: BorderRadius.circular(24),
@@ -181,47 +187,55 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
                     ),
                   ],
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.generate(6, (index) {
-                    return SizedBox(
-                      width: 48,
-                      height: 60,
-                      child: TextField(
-                        controller: _controllers[index],
-                        focusNode: _focusNodes[index],
-                        onChanged: (value) => _onChanged(value, index),
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(1),
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey.shade50,
-                          contentPadding: EdgeInsets.zero,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Calculate box size based on available width
+                    final boxWidth = (constraints.maxWidth - 60) / 6; // 60 = padding between boxes
+                    final clampedWidth = boxWidth.clamp(36.0, 48.0);
+                    
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: List.generate(6, (index) {
+                        return SizedBox(
+                          width: clampedWidth,
+                          height: 56,
+                          child: TextField(
+                            controller: _controllers[index],
+                            focusNode: _focusNodes[index],
+                            onChanged: (value) => _onChanged(value, index),
+                            textAlign: TextAlign.center,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(1),
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: context.inputFillColor,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(color: context.inputBorderColor, width: 1.5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
+                              ),
+                            ),
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: context.textPrimary,
+                            ),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(color: Colors.grey.shade100, width: 1.5),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: const BorderSide(color: kPrimaryOrange, width: 2),
-                          ),
-                        ),
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF1D1D1F),
-                        ),
-                      ),
+                        );
+                      }),
                     );
-                  }),
+                  },
                 ),
               ),
               
@@ -259,9 +273,11 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    ref.tr('didnt_receive_code'),
-                    style: TextStyle(color: Colors.grey.shade600),
+                  Flexible(
+                    child: Text(
+                      ref.tr('didnt_receive_code'),
+                      style: TextStyle(color: context.textSecondary),
+                    ),
                   ),
                   const SizedBox(width: 4),
                   _canResend
@@ -273,7 +289,7 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
                               SnackBar(
                                 content: Text(ref.tr('otp_resent')),
                                 behavior: SnackBarBehavior.floating,
-                                backgroundColor: const Color(0xFF1D1D1F),
+                                backgroundColor: kPrimaryOrange,
                                 margin: const EdgeInsets.all(16),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                               ),
@@ -290,13 +306,13 @@ class _OTPVerificationScreenState extends ConsumerState<OTPVerificationScreen> {
                       : Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
+                            color: context.inputFillColor,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
                             '0:${_resendTimer.toString().padLeft(2, '0')}',
                             style: TextStyle(
-                              color: Colors.grey.shade600,
+                              color: context.textSecondary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
