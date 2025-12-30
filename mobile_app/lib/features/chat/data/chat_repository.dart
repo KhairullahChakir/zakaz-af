@@ -20,14 +20,18 @@ class ChatRepository {
         .toList();
   }
 
-  /// Start or get existing conversation with a shop
+  /// Start or get existing conversation
   Future<Conversation> startConversation({
-    required int shopId,
+    int? shopId,
     int? productId,
+    int? sellerId,
+    int? marketplaceItemId,
   }) async {
     final response = await _dio.post('/chat/conversations', data: {
-      'shop_id': shopId,
+      if (shopId != null) 'shop_id': shopId,
       if (productId != null) 'product_id': productId,
+      if (sellerId != null) 'seller_id': sellerId,
+      if (marketplaceItemId != null) 'marketplace_item_id': marketplaceItemId,
     });
     return Conversation.fromJson(response.data);
   }

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Conversation {
 
- int get id;@JsonKey(name: 'customer_id') int get customerId;@JsonKey(name: 'shop_id') int get shopId;@JsonKey(name: 'product_id') int? get productId;@JsonKey(name: 'last_message_at') DateTime? get lastMessageAt;@JsonKey(name: 'unread_count') int get unreadCount;@JsonKey(name: 'other_participant') ConversationParticipant? get otherParticipant; ConversationShop? get shop; ConversationProduct? get product;@JsonKey(name: 'latest_message') LatestMessage? get latestMessage;@JsonKey(name: 'created_at') DateTime? get createdAt;
+ int get id;@JsonKey(name: 'customer_id') int get customerId;@JsonKey(name: 'shop_id') int? get shopId;@JsonKey(name: 'seller_id') int? get sellerId;@JsonKey(name: 'product_id') int? get productId;@JsonKey(name: 'marketplace_item_id') int? get marketplaceItemId;@JsonKey(name: 'last_message_at') DateTime? get lastMessageAt;@JsonKey(name: 'unread_count') int get unreadCount;@JsonKey(name: 'other_participant') ConversationParticipant? get otherParticipant; ConversationShop? get shop; ConversationProduct? get product;@JsonKey(name: 'marketplace_item') ConversationMarketplaceItem? get marketplaceItem;@JsonKey(name: 'latest_message') LatestMessage? get latestMessage;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of Conversation
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ConversationCopyWith<Conversation> get copyWith => _$ConversationCopyWithImpl<C
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Conversation&&(identical(other.id, id) || other.id == id)&&(identical(other.customerId, customerId) || other.customerId == customerId)&&(identical(other.shopId, shopId) || other.shopId == shopId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.otherParticipant, otherParticipant) || other.otherParticipant == otherParticipant)&&(identical(other.shop, shop) || other.shop == shop)&&(identical(other.product, product) || other.product == product)&&(identical(other.latestMessage, latestMessage) || other.latestMessage == latestMessage)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Conversation&&(identical(other.id, id) || other.id == id)&&(identical(other.customerId, customerId) || other.customerId == customerId)&&(identical(other.shopId, shopId) || other.shopId == shopId)&&(identical(other.sellerId, sellerId) || other.sellerId == sellerId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.marketplaceItemId, marketplaceItemId) || other.marketplaceItemId == marketplaceItemId)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.otherParticipant, otherParticipant) || other.otherParticipant == otherParticipant)&&(identical(other.shop, shop) || other.shop == shop)&&(identical(other.product, product) || other.product == product)&&(identical(other.marketplaceItem, marketplaceItem) || other.marketplaceItem == marketplaceItem)&&(identical(other.latestMessage, latestMessage) || other.latestMessage == latestMessage)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,customerId,shopId,productId,lastMessageAt,unreadCount,otherParticipant,shop,product,latestMessage,createdAt);
+int get hashCode => Object.hash(runtimeType,id,customerId,shopId,sellerId,productId,marketplaceItemId,lastMessageAt,unreadCount,otherParticipant,shop,product,marketplaceItem,latestMessage,createdAt);
 
 @override
 String toString() {
-  return 'Conversation(id: $id, customerId: $customerId, shopId: $shopId, productId: $productId, lastMessageAt: $lastMessageAt, unreadCount: $unreadCount, otherParticipant: $otherParticipant, shop: $shop, product: $product, latestMessage: $latestMessage, createdAt: $createdAt)';
+  return 'Conversation(id: $id, customerId: $customerId, shopId: $shopId, sellerId: $sellerId, productId: $productId, marketplaceItemId: $marketplaceItemId, lastMessageAt: $lastMessageAt, unreadCount: $unreadCount, otherParticipant: $otherParticipant, shop: $shop, product: $product, marketplaceItem: $marketplaceItem, latestMessage: $latestMessage, createdAt: $createdAt)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $ConversationCopyWith<$Res>  {
   factory $ConversationCopyWith(Conversation value, $Res Function(Conversation) _then) = _$ConversationCopyWithImpl;
 @useResult
 $Res call({
- int id,@JsonKey(name: 'customer_id') int customerId,@JsonKey(name: 'shop_id') int shopId,@JsonKey(name: 'product_id') int? productId,@JsonKey(name: 'last_message_at') DateTime? lastMessageAt,@JsonKey(name: 'unread_count') int unreadCount,@JsonKey(name: 'other_participant') ConversationParticipant? otherParticipant, ConversationShop? shop, ConversationProduct? product,@JsonKey(name: 'latest_message') LatestMessage? latestMessage,@JsonKey(name: 'created_at') DateTime? createdAt
+ int id,@JsonKey(name: 'customer_id') int customerId,@JsonKey(name: 'shop_id') int? shopId,@JsonKey(name: 'seller_id') int? sellerId,@JsonKey(name: 'product_id') int? productId,@JsonKey(name: 'marketplace_item_id') int? marketplaceItemId,@JsonKey(name: 'last_message_at') DateTime? lastMessageAt,@JsonKey(name: 'unread_count') int unreadCount,@JsonKey(name: 'other_participant') ConversationParticipant? otherParticipant, ConversationShop? shop, ConversationProduct? product,@JsonKey(name: 'marketplace_item') ConversationMarketplaceItem? marketplaceItem,@JsonKey(name: 'latest_message') LatestMessage? latestMessage,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
-$ConversationParticipantCopyWith<$Res>? get otherParticipant;$ConversationShopCopyWith<$Res>? get shop;$ConversationProductCopyWith<$Res>? get product;$LatestMessageCopyWith<$Res>? get latestMessage;
+$ConversationParticipantCopyWith<$Res>? get otherParticipant;$ConversationShopCopyWith<$Res>? get shop;$ConversationProductCopyWith<$Res>? get product;$ConversationMarketplaceItemCopyWith<$Res>? get marketplaceItem;$LatestMessageCopyWith<$Res>? get latestMessage;
 
 }
 /// @nodoc
@@ -65,18 +65,21 @@ class _$ConversationCopyWithImpl<$Res>
 
 /// Create a copy of Conversation
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? customerId = null,Object? shopId = null,Object? productId = freezed,Object? lastMessageAt = freezed,Object? unreadCount = null,Object? otherParticipant = freezed,Object? shop = freezed,Object? product = freezed,Object? latestMessage = freezed,Object? createdAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? customerId = null,Object? shopId = freezed,Object? sellerId = freezed,Object? productId = freezed,Object? marketplaceItemId = freezed,Object? lastMessageAt = freezed,Object? unreadCount = null,Object? otherParticipant = freezed,Object? shop = freezed,Object? product = freezed,Object? marketplaceItem = freezed,Object? latestMessage = freezed,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,customerId: null == customerId ? _self.customerId : customerId // ignore: cast_nullable_to_non_nullable
-as int,shopId: null == shopId ? _self.shopId : shopId // ignore: cast_nullable_to_non_nullable
-as int,productId: freezed == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
+as int,shopId: freezed == shopId ? _self.shopId : shopId // ignore: cast_nullable_to_non_nullable
+as int?,sellerId: freezed == sellerId ? _self.sellerId : sellerId // ignore: cast_nullable_to_non_nullable
+as int?,productId: freezed == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
+as int?,marketplaceItemId: freezed == marketplaceItemId ? _self.marketplaceItemId : marketplaceItemId // ignore: cast_nullable_to_non_nullable
 as int?,lastMessageAt: freezed == lastMessageAt ? _self.lastMessageAt : lastMessageAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,unreadCount: null == unreadCount ? _self.unreadCount : unreadCount // ignore: cast_nullable_to_non_nullable
 as int,otherParticipant: freezed == otherParticipant ? _self.otherParticipant : otherParticipant // ignore: cast_nullable_to_non_nullable
 as ConversationParticipant?,shop: freezed == shop ? _self.shop : shop // ignore: cast_nullable_to_non_nullable
 as ConversationShop?,product: freezed == product ? _self.product : product // ignore: cast_nullable_to_non_nullable
-as ConversationProduct?,latestMessage: freezed == latestMessage ? _self.latestMessage : latestMessage // ignore: cast_nullable_to_non_nullable
+as ConversationProduct?,marketplaceItem: freezed == marketplaceItem ? _self.marketplaceItem : marketplaceItem // ignore: cast_nullable_to_non_nullable
+as ConversationMarketplaceItem?,latestMessage: freezed == latestMessage ? _self.latestMessage : latestMessage // ignore: cast_nullable_to_non_nullable
 as LatestMessage?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
@@ -116,6 +119,18 @@ $ConversationProductCopyWith<$Res>? get product {
 
   return $ConversationProductCopyWith<$Res>(_self.product!, (value) {
     return _then(_self.copyWith(product: value));
+  });
+}/// Create a copy of Conversation
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ConversationMarketplaceItemCopyWith<$Res>? get marketplaceItem {
+    if (_self.marketplaceItem == null) {
+    return null;
+  }
+
+  return $ConversationMarketplaceItemCopyWith<$Res>(_self.marketplaceItem!, (value) {
+    return _then(_self.copyWith(marketplaceItem: value));
   });
 }/// Create a copy of Conversation
 /// with the given fields replaced by the non-null parameter values.
@@ -211,10 +226,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'customer_id')  int customerId, @JsonKey(name: 'shop_id')  int shopId, @JsonKey(name: 'product_id')  int? productId, @JsonKey(name: 'last_message_at')  DateTime? lastMessageAt, @JsonKey(name: 'unread_count')  int unreadCount, @JsonKey(name: 'other_participant')  ConversationParticipant? otherParticipant,  ConversationShop? shop,  ConversationProduct? product, @JsonKey(name: 'latest_message')  LatestMessage? latestMessage, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'customer_id')  int customerId, @JsonKey(name: 'shop_id')  int? shopId, @JsonKey(name: 'seller_id')  int? sellerId, @JsonKey(name: 'product_id')  int? productId, @JsonKey(name: 'marketplace_item_id')  int? marketplaceItemId, @JsonKey(name: 'last_message_at')  DateTime? lastMessageAt, @JsonKey(name: 'unread_count')  int unreadCount, @JsonKey(name: 'other_participant')  ConversationParticipant? otherParticipant,  ConversationShop? shop,  ConversationProduct? product, @JsonKey(name: 'marketplace_item')  ConversationMarketplaceItem? marketplaceItem, @JsonKey(name: 'latest_message')  LatestMessage? latestMessage, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Conversation() when $default != null:
-return $default(_that.id,_that.customerId,_that.shopId,_that.productId,_that.lastMessageAt,_that.unreadCount,_that.otherParticipant,_that.shop,_that.product,_that.latestMessage,_that.createdAt);case _:
+return $default(_that.id,_that.customerId,_that.shopId,_that.sellerId,_that.productId,_that.marketplaceItemId,_that.lastMessageAt,_that.unreadCount,_that.otherParticipant,_that.shop,_that.product,_that.marketplaceItem,_that.latestMessage,_that.createdAt);case _:
   return orElse();
 
 }
@@ -232,10 +247,10 @@ return $default(_that.id,_that.customerId,_that.shopId,_that.productId,_that.las
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'customer_id')  int customerId, @JsonKey(name: 'shop_id')  int shopId, @JsonKey(name: 'product_id')  int? productId, @JsonKey(name: 'last_message_at')  DateTime? lastMessageAt, @JsonKey(name: 'unread_count')  int unreadCount, @JsonKey(name: 'other_participant')  ConversationParticipant? otherParticipant,  ConversationShop? shop,  ConversationProduct? product, @JsonKey(name: 'latest_message')  LatestMessage? latestMessage, @JsonKey(name: 'created_at')  DateTime? createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'customer_id')  int customerId, @JsonKey(name: 'shop_id')  int? shopId, @JsonKey(name: 'seller_id')  int? sellerId, @JsonKey(name: 'product_id')  int? productId, @JsonKey(name: 'marketplace_item_id')  int? marketplaceItemId, @JsonKey(name: 'last_message_at')  DateTime? lastMessageAt, @JsonKey(name: 'unread_count')  int unreadCount, @JsonKey(name: 'other_participant')  ConversationParticipant? otherParticipant,  ConversationShop? shop,  ConversationProduct? product, @JsonKey(name: 'marketplace_item')  ConversationMarketplaceItem? marketplaceItem, @JsonKey(name: 'latest_message')  LatestMessage? latestMessage, @JsonKey(name: 'created_at')  DateTime? createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Conversation():
-return $default(_that.id,_that.customerId,_that.shopId,_that.productId,_that.lastMessageAt,_that.unreadCount,_that.otherParticipant,_that.shop,_that.product,_that.latestMessage,_that.createdAt);case _:
+return $default(_that.id,_that.customerId,_that.shopId,_that.sellerId,_that.productId,_that.marketplaceItemId,_that.lastMessageAt,_that.unreadCount,_that.otherParticipant,_that.shop,_that.product,_that.marketplaceItem,_that.latestMessage,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -252,10 +267,10 @@ return $default(_that.id,_that.customerId,_that.shopId,_that.productId,_that.las
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'customer_id')  int customerId, @JsonKey(name: 'shop_id')  int shopId, @JsonKey(name: 'product_id')  int? productId, @JsonKey(name: 'last_message_at')  DateTime? lastMessageAt, @JsonKey(name: 'unread_count')  int unreadCount, @JsonKey(name: 'other_participant')  ConversationParticipant? otherParticipant,  ConversationShop? shop,  ConversationProduct? product, @JsonKey(name: 'latest_message')  LatestMessage? latestMessage, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'customer_id')  int customerId, @JsonKey(name: 'shop_id')  int? shopId, @JsonKey(name: 'seller_id')  int? sellerId, @JsonKey(name: 'product_id')  int? productId, @JsonKey(name: 'marketplace_item_id')  int? marketplaceItemId, @JsonKey(name: 'last_message_at')  DateTime? lastMessageAt, @JsonKey(name: 'unread_count')  int unreadCount, @JsonKey(name: 'other_participant')  ConversationParticipant? otherParticipant,  ConversationShop? shop,  ConversationProduct? product, @JsonKey(name: 'marketplace_item')  ConversationMarketplaceItem? marketplaceItem, @JsonKey(name: 'latest_message')  LatestMessage? latestMessage, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Conversation() when $default != null:
-return $default(_that.id,_that.customerId,_that.shopId,_that.productId,_that.lastMessageAt,_that.unreadCount,_that.otherParticipant,_that.shop,_that.product,_that.latestMessage,_that.createdAt);case _:
+return $default(_that.id,_that.customerId,_that.shopId,_that.sellerId,_that.productId,_that.marketplaceItemId,_that.lastMessageAt,_that.unreadCount,_that.otherParticipant,_that.shop,_that.product,_that.marketplaceItem,_that.latestMessage,_that.createdAt);case _:
   return null;
 
 }
@@ -267,18 +282,21 @@ return $default(_that.id,_that.customerId,_that.shopId,_that.productId,_that.las
 @JsonSerializable()
 
 class _Conversation implements Conversation {
-  const _Conversation({required this.id, @JsonKey(name: 'customer_id') required this.customerId, @JsonKey(name: 'shop_id') required this.shopId, @JsonKey(name: 'product_id') this.productId, @JsonKey(name: 'last_message_at') this.lastMessageAt, @JsonKey(name: 'unread_count') this.unreadCount = 0, @JsonKey(name: 'other_participant') this.otherParticipant, this.shop, this.product, @JsonKey(name: 'latest_message') this.latestMessage, @JsonKey(name: 'created_at') this.createdAt});
+  const _Conversation({required this.id, @JsonKey(name: 'customer_id') required this.customerId, @JsonKey(name: 'shop_id') this.shopId, @JsonKey(name: 'seller_id') this.sellerId, @JsonKey(name: 'product_id') this.productId, @JsonKey(name: 'marketplace_item_id') this.marketplaceItemId, @JsonKey(name: 'last_message_at') this.lastMessageAt, @JsonKey(name: 'unread_count') this.unreadCount = 0, @JsonKey(name: 'other_participant') this.otherParticipant, this.shop, this.product, @JsonKey(name: 'marketplace_item') this.marketplaceItem, @JsonKey(name: 'latest_message') this.latestMessage, @JsonKey(name: 'created_at') this.createdAt});
   factory _Conversation.fromJson(Map<String, dynamic> json) => _$ConversationFromJson(json);
 
 @override final  int id;
 @override@JsonKey(name: 'customer_id') final  int customerId;
-@override@JsonKey(name: 'shop_id') final  int shopId;
+@override@JsonKey(name: 'shop_id') final  int? shopId;
+@override@JsonKey(name: 'seller_id') final  int? sellerId;
 @override@JsonKey(name: 'product_id') final  int? productId;
+@override@JsonKey(name: 'marketplace_item_id') final  int? marketplaceItemId;
 @override@JsonKey(name: 'last_message_at') final  DateTime? lastMessageAt;
 @override@JsonKey(name: 'unread_count') final  int unreadCount;
 @override@JsonKey(name: 'other_participant') final  ConversationParticipant? otherParticipant;
 @override final  ConversationShop? shop;
 @override final  ConversationProduct? product;
+@override@JsonKey(name: 'marketplace_item') final  ConversationMarketplaceItem? marketplaceItem;
 @override@JsonKey(name: 'latest_message') final  LatestMessage? latestMessage;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 
@@ -295,16 +313,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Conversation&&(identical(other.id, id) || other.id == id)&&(identical(other.customerId, customerId) || other.customerId == customerId)&&(identical(other.shopId, shopId) || other.shopId == shopId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.otherParticipant, otherParticipant) || other.otherParticipant == otherParticipant)&&(identical(other.shop, shop) || other.shop == shop)&&(identical(other.product, product) || other.product == product)&&(identical(other.latestMessage, latestMessage) || other.latestMessage == latestMessage)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Conversation&&(identical(other.id, id) || other.id == id)&&(identical(other.customerId, customerId) || other.customerId == customerId)&&(identical(other.shopId, shopId) || other.shopId == shopId)&&(identical(other.sellerId, sellerId) || other.sellerId == sellerId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.marketplaceItemId, marketplaceItemId) || other.marketplaceItemId == marketplaceItemId)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.otherParticipant, otherParticipant) || other.otherParticipant == otherParticipant)&&(identical(other.shop, shop) || other.shop == shop)&&(identical(other.product, product) || other.product == product)&&(identical(other.marketplaceItem, marketplaceItem) || other.marketplaceItem == marketplaceItem)&&(identical(other.latestMessage, latestMessage) || other.latestMessage == latestMessage)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,customerId,shopId,productId,lastMessageAt,unreadCount,otherParticipant,shop,product,latestMessage,createdAt);
+int get hashCode => Object.hash(runtimeType,id,customerId,shopId,sellerId,productId,marketplaceItemId,lastMessageAt,unreadCount,otherParticipant,shop,product,marketplaceItem,latestMessage,createdAt);
 
 @override
 String toString() {
-  return 'Conversation(id: $id, customerId: $customerId, shopId: $shopId, productId: $productId, lastMessageAt: $lastMessageAt, unreadCount: $unreadCount, otherParticipant: $otherParticipant, shop: $shop, product: $product, latestMessage: $latestMessage, createdAt: $createdAt)';
+  return 'Conversation(id: $id, customerId: $customerId, shopId: $shopId, sellerId: $sellerId, productId: $productId, marketplaceItemId: $marketplaceItemId, lastMessageAt: $lastMessageAt, unreadCount: $unreadCount, otherParticipant: $otherParticipant, shop: $shop, product: $product, marketplaceItem: $marketplaceItem, latestMessage: $latestMessage, createdAt: $createdAt)';
 }
 
 
@@ -315,11 +333,11 @@ abstract mixin class _$ConversationCopyWith<$Res> implements $ConversationCopyWi
   factory _$ConversationCopyWith(_Conversation value, $Res Function(_Conversation) _then) = __$ConversationCopyWithImpl;
 @override @useResult
 $Res call({
- int id,@JsonKey(name: 'customer_id') int customerId,@JsonKey(name: 'shop_id') int shopId,@JsonKey(name: 'product_id') int? productId,@JsonKey(name: 'last_message_at') DateTime? lastMessageAt,@JsonKey(name: 'unread_count') int unreadCount,@JsonKey(name: 'other_participant') ConversationParticipant? otherParticipant, ConversationShop? shop, ConversationProduct? product,@JsonKey(name: 'latest_message') LatestMessage? latestMessage,@JsonKey(name: 'created_at') DateTime? createdAt
+ int id,@JsonKey(name: 'customer_id') int customerId,@JsonKey(name: 'shop_id') int? shopId,@JsonKey(name: 'seller_id') int? sellerId,@JsonKey(name: 'product_id') int? productId,@JsonKey(name: 'marketplace_item_id') int? marketplaceItemId,@JsonKey(name: 'last_message_at') DateTime? lastMessageAt,@JsonKey(name: 'unread_count') int unreadCount,@JsonKey(name: 'other_participant') ConversationParticipant? otherParticipant, ConversationShop? shop, ConversationProduct? product,@JsonKey(name: 'marketplace_item') ConversationMarketplaceItem? marketplaceItem,@JsonKey(name: 'latest_message') LatestMessage? latestMessage,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
-@override $ConversationParticipantCopyWith<$Res>? get otherParticipant;@override $ConversationShopCopyWith<$Res>? get shop;@override $ConversationProductCopyWith<$Res>? get product;@override $LatestMessageCopyWith<$Res>? get latestMessage;
+@override $ConversationParticipantCopyWith<$Res>? get otherParticipant;@override $ConversationShopCopyWith<$Res>? get shop;@override $ConversationProductCopyWith<$Res>? get product;@override $ConversationMarketplaceItemCopyWith<$Res>? get marketplaceItem;@override $LatestMessageCopyWith<$Res>? get latestMessage;
 
 }
 /// @nodoc
@@ -332,18 +350,21 @@ class __$ConversationCopyWithImpl<$Res>
 
 /// Create a copy of Conversation
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? customerId = null,Object? shopId = null,Object? productId = freezed,Object? lastMessageAt = freezed,Object? unreadCount = null,Object? otherParticipant = freezed,Object? shop = freezed,Object? product = freezed,Object? latestMessage = freezed,Object? createdAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? customerId = null,Object? shopId = freezed,Object? sellerId = freezed,Object? productId = freezed,Object? marketplaceItemId = freezed,Object? lastMessageAt = freezed,Object? unreadCount = null,Object? otherParticipant = freezed,Object? shop = freezed,Object? product = freezed,Object? marketplaceItem = freezed,Object? latestMessage = freezed,Object? createdAt = freezed,}) {
   return _then(_Conversation(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,customerId: null == customerId ? _self.customerId : customerId // ignore: cast_nullable_to_non_nullable
-as int,shopId: null == shopId ? _self.shopId : shopId // ignore: cast_nullable_to_non_nullable
-as int,productId: freezed == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
+as int,shopId: freezed == shopId ? _self.shopId : shopId // ignore: cast_nullable_to_non_nullable
+as int?,sellerId: freezed == sellerId ? _self.sellerId : sellerId // ignore: cast_nullable_to_non_nullable
+as int?,productId: freezed == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
+as int?,marketplaceItemId: freezed == marketplaceItemId ? _self.marketplaceItemId : marketplaceItemId // ignore: cast_nullable_to_non_nullable
 as int?,lastMessageAt: freezed == lastMessageAt ? _self.lastMessageAt : lastMessageAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,unreadCount: null == unreadCount ? _self.unreadCount : unreadCount // ignore: cast_nullable_to_non_nullable
 as int,otherParticipant: freezed == otherParticipant ? _self.otherParticipant : otherParticipant // ignore: cast_nullable_to_non_nullable
 as ConversationParticipant?,shop: freezed == shop ? _self.shop : shop // ignore: cast_nullable_to_non_nullable
 as ConversationShop?,product: freezed == product ? _self.product : product // ignore: cast_nullable_to_non_nullable
-as ConversationProduct?,latestMessage: freezed == latestMessage ? _self.latestMessage : latestMessage // ignore: cast_nullable_to_non_nullable
+as ConversationProduct?,marketplaceItem: freezed == marketplaceItem ? _self.marketplaceItem : marketplaceItem // ignore: cast_nullable_to_non_nullable
+as ConversationMarketplaceItem?,latestMessage: freezed == latestMessage ? _self.latestMessage : latestMessage // ignore: cast_nullable_to_non_nullable
 as LatestMessage?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
@@ -384,6 +405,18 @@ $ConversationProductCopyWith<$Res>? get product {
 
   return $ConversationProductCopyWith<$Res>(_self.product!, (value) {
     return _then(_self.copyWith(product: value));
+  });
+}/// Create a copy of Conversation
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ConversationMarketplaceItemCopyWith<$Res>? get marketplaceItem {
+    if (_self.marketplaceItem == null) {
+    return null;
+  }
+
+  return $ConversationMarketplaceItemCopyWith<$Res>(_self.marketplaceItem!, (value) {
+    return _then(_self.copyWith(marketplaceItem: value));
   });
 }/// Create a copy of Conversation
 /// with the given fields replaced by the non-null parameter values.
@@ -1199,6 +1232,278 @@ class __$ConversationProductCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? imageUrl = freezed,Object? price = null,}) {
   return _then(_ConversationProduct(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
+as String?,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$ConversationMarketplaceItem {
+
+ int get id; String get name;@JsonKey(name: 'image_url') String? get imageUrl; double get price;
+/// Create a copy of ConversationMarketplaceItem
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ConversationMarketplaceItemCopyWith<ConversationMarketplaceItem> get copyWith => _$ConversationMarketplaceItemCopyWithImpl<ConversationMarketplaceItem>(this as ConversationMarketplaceItem, _$identity);
+
+  /// Serializes this ConversationMarketplaceItem to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConversationMarketplaceItem&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.price, price) || other.price == price));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name,imageUrl,price);
+
+@override
+String toString() {
+  return 'ConversationMarketplaceItem(id: $id, name: $name, imageUrl: $imageUrl, price: $price)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ConversationMarketplaceItemCopyWith<$Res>  {
+  factory $ConversationMarketplaceItemCopyWith(ConversationMarketplaceItem value, $Res Function(ConversationMarketplaceItem) _then) = _$ConversationMarketplaceItemCopyWithImpl;
+@useResult
+$Res call({
+ int id, String name,@JsonKey(name: 'image_url') String? imageUrl, double price
+});
+
+
+
+
+}
+/// @nodoc
+class _$ConversationMarketplaceItemCopyWithImpl<$Res>
+    implements $ConversationMarketplaceItemCopyWith<$Res> {
+  _$ConversationMarketplaceItemCopyWithImpl(this._self, this._then);
+
+  final ConversationMarketplaceItem _self;
+  final $Res Function(ConversationMarketplaceItem) _then;
+
+/// Create a copy of ConversationMarketplaceItem
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? imageUrl = freezed,Object? price = null,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
+as String?,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as double,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [ConversationMarketplaceItem].
+extension ConversationMarketplaceItemPatterns on ConversationMarketplaceItem {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ConversationMarketplaceItem value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _ConversationMarketplaceItem() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ConversationMarketplaceItem value)  $default,){
+final _that = this;
+switch (_that) {
+case _ConversationMarketplaceItem():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ConversationMarketplaceItem value)?  $default,){
+final _that = this;
+switch (_that) {
+case _ConversationMarketplaceItem() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name, @JsonKey(name: 'image_url')  String? imageUrl,  double price)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _ConversationMarketplaceItem() when $default != null:
+return $default(_that.id,_that.name,_that.imageUrl,_that.price);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name, @JsonKey(name: 'image_url')  String? imageUrl,  double price)  $default,) {final _that = this;
+switch (_that) {
+case _ConversationMarketplaceItem():
+return $default(_that.id,_that.name,_that.imageUrl,_that.price);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name, @JsonKey(name: 'image_url')  String? imageUrl,  double price)?  $default,) {final _that = this;
+switch (_that) {
+case _ConversationMarketplaceItem() when $default != null:
+return $default(_that.id,_that.name,_that.imageUrl,_that.price);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _ConversationMarketplaceItem implements ConversationMarketplaceItem {
+  const _ConversationMarketplaceItem({required this.id, required this.name, @JsonKey(name: 'image_url') this.imageUrl, required this.price});
+  factory _ConversationMarketplaceItem.fromJson(Map<String, dynamic> json) => _$ConversationMarketplaceItemFromJson(json);
+
+@override final  int id;
+@override final  String name;
+@override@JsonKey(name: 'image_url') final  String? imageUrl;
+@override final  double price;
+
+/// Create a copy of ConversationMarketplaceItem
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ConversationMarketplaceItemCopyWith<_ConversationMarketplaceItem> get copyWith => __$ConversationMarketplaceItemCopyWithImpl<_ConversationMarketplaceItem>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$ConversationMarketplaceItemToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ConversationMarketplaceItem&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.price, price) || other.price == price));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name,imageUrl,price);
+
+@override
+String toString() {
+  return 'ConversationMarketplaceItem(id: $id, name: $name, imageUrl: $imageUrl, price: $price)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ConversationMarketplaceItemCopyWith<$Res> implements $ConversationMarketplaceItemCopyWith<$Res> {
+  factory _$ConversationMarketplaceItemCopyWith(_ConversationMarketplaceItem value, $Res Function(_ConversationMarketplaceItem) _then) = __$ConversationMarketplaceItemCopyWithImpl;
+@override @useResult
+$Res call({
+ int id, String name,@JsonKey(name: 'image_url') String? imageUrl, double price
+});
+
+
+
+
+}
+/// @nodoc
+class __$ConversationMarketplaceItemCopyWithImpl<$Res>
+    implements _$ConversationMarketplaceItemCopyWith<$Res> {
+  __$ConversationMarketplaceItemCopyWithImpl(this._self, this._then);
+
+  final _ConversationMarketplaceItem _self;
+  final $Res Function(_ConversationMarketplaceItem) _then;
+
+/// Create a copy of ConversationMarketplaceItem
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? imageUrl = freezed,Object? price = null,}) {
+  return _then(_ConversationMarketplaceItem(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable

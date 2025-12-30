@@ -10,8 +10,10 @@ class Conversation extends Model
 {
     protected $fillable = [
         'customer_id',
+        'seller_id',
         'shop_id',
         'product_id',
+        'marketplace_item_id',
         'last_message_at',
     ];
 
@@ -34,6 +36,16 @@ class Conversation extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function seller(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    public function marketplaceItem(): BelongsTo
+    {
+        return $this->belongsTo(MarketplaceItem::class);
     }
 
     public function messages(): HasMany
@@ -59,7 +71,7 @@ class Conversation extends Model
     {
         $userId = auth()->id();
         if ($this->customer_id == $userId) {
-            return $this->shop?->owner;
+            return $this->seller ?: $this->shop?->owner;
         }
         return $this->customer;
     }

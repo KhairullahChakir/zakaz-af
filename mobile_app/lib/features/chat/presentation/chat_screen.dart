@@ -176,6 +176,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
+                  if (conversation?.marketplaceItem != null)
+                    Text(
+                      conversation!.marketplaceItem!.name,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white.withValues(alpha: 0.8),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                 ],
               ),
             ),
@@ -383,7 +393,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     String? displayImage;
     bool isShopImage = false;
 
-    if (isMeCustomer) {
+    if (conversation.marketplaceItemId != null) {
+      displayImage = conversation.otherParticipant?.profileImageUrl;
+      isShopImage = false;
+    } else if (isMeCustomer) {
       displayImage = conversation.shop?.mainPhotoUrl;
       isShopImage = true;
     } else {
@@ -394,9 +407,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       return CustomCachedImage(
         imageUrl: displayImage,
         fit: BoxFit.cover,
-        borderRadius: 12,
+        borderRadius: 20,
         placeholder: Container(
-          color: context.softOrange,
+          color: kSoftOrange,
           child: Icon(
             isShopImage ? Icons.store : Icons.person,
             color: kPrimaryOrange.withValues(alpha: 0.5),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/theme_context.dart';
 import '../../../core/localization/language_provider.dart';
 import '../../../core/widgets/custom_cached_image.dart';
+import '../../chat/data/chat_repository.dart';
 import '../data/marketplace_repository.dart';
 import '../domain/marketplace_item.dart';
 
@@ -172,11 +174,32 @@ class MarketplaceDetailsScreen extends ConsumerWidget {
           const SizedBox(width: 16),
           Expanded(
             child: ElevatedButton.icon(
-              onPressed: () {
-                // Future: Integrate with chat system
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Chat system integration coming soon')),
-                );
+              onPressed: () async {
+                try {
+                  // Show loading
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => const Center(child: CircularProgressIndicator()),
+                  );
+
+                  final conversation = await ref.read(chatRepositoryProvider).startConversation(
+                        sellerId: item.userId,
+                        marketplaceItemId: item.id,
+                      );
+
+                  if (context.mounted) {
+                    Navigator.pop(context); // Pop loading
+                    context.push('/chat/${conversation.id}', extra: conversation);
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    Navigator.pop(context); // Pop loading
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error starting conversation: $e')),
+                    );
+                  }
+                }
               },
               icon: const Icon(Icons.chat),
               label: Text(ref.tr('chat')),

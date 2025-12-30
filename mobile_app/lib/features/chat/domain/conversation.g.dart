@@ -11,8 +11,10 @@ _Conversation _$ConversationFromJson(
 ) => _Conversation(
   id: (json['id'] as num).toInt(),
   customerId: (json['customer_id'] as num).toInt(),
-  shopId: (json['shop_id'] as num).toInt(),
+  shopId: (json['shop_id'] as num?)?.toInt(),
+  sellerId: (json['seller_id'] as num?)?.toInt(),
   productId: (json['product_id'] as num?)?.toInt(),
+  marketplaceItemId: (json['marketplace_item_id'] as num?)?.toInt(),
   lastMessageAt: json['last_message_at'] == null
       ? null
       : DateTime.parse(json['last_message_at'] as String),
@@ -28,6 +30,11 @@ _Conversation _$ConversationFromJson(
   product: json['product'] == null
       ? null
       : ConversationProduct.fromJson(json['product'] as Map<String, dynamic>),
+  marketplaceItem: json['marketplace_item'] == null
+      ? null
+      : ConversationMarketplaceItem.fromJson(
+          json['marketplace_item'] as Map<String, dynamic>,
+        ),
   latestMessage: json['latest_message'] == null
       ? null
       : LatestMessage.fromJson(json['latest_message'] as Map<String, dynamic>),
@@ -41,12 +48,15 @@ Map<String, dynamic> _$ConversationToJson(_Conversation instance) =>
       'id': instance.id,
       'customer_id': instance.customerId,
       'shop_id': instance.shopId,
+      'seller_id': instance.sellerId,
       'product_id': instance.productId,
+      'marketplace_item_id': instance.marketplaceItemId,
       'last_message_at': instance.lastMessageAt?.toIso8601String(),
       'unread_count': instance.unreadCount,
       'other_participant': instance.otherParticipant,
       'shop': instance.shop,
       'product': instance.product,
+      'marketplace_item': instance.marketplaceItem,
       'latest_message': instance.latestMessage,
       'created_at': instance.createdAt?.toIso8601String(),
     };
@@ -91,6 +101,24 @@ _ConversationProduct _$ConversationProductFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ConversationProductToJson(
   _ConversationProduct instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'name': instance.name,
+  'image_url': instance.imageUrl,
+  'price': instance.price,
+};
+
+_ConversationMarketplaceItem _$ConversationMarketplaceItemFromJson(
+  Map<String, dynamic> json,
+) => _ConversationMarketplaceItem(
+  id: (json['id'] as num).toInt(),
+  name: json['name'] as String,
+  imageUrl: json['image_url'] as String?,
+  price: (json['price'] as num).toDouble(),
+);
+
+Map<String, dynamic> _$ConversationMarketplaceItemToJson(
+  _ConversationMarketplaceItem instance,
 ) => <String, dynamic>{
   'id': instance.id,
   'name': instance.name,

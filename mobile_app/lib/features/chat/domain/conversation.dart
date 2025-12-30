@@ -8,13 +8,16 @@ abstract class Conversation with _$Conversation {
   const factory Conversation({
     required int id,
     @JsonKey(name: 'customer_id') required int customerId,
-    @JsonKey(name: 'shop_id') required int shopId,
+    @JsonKey(name: 'shop_id') int? shopId,
+    @JsonKey(name: 'seller_id') int? sellerId,
     @JsonKey(name: 'product_id') int? productId,
+    @JsonKey(name: 'marketplace_item_id') int? marketplaceItemId,
     @JsonKey(name: 'last_message_at') DateTime? lastMessageAt,
     @JsonKey(name: 'unread_count') @Default(0) int unreadCount,
     @JsonKey(name: 'other_participant') ConversationParticipant? otherParticipant,
     ConversationShop? shop,
     ConversationProduct? product,
+    @JsonKey(name: 'marketplace_item') ConversationMarketplaceItem? marketplaceItem,
     @JsonKey(name: 'latest_message') LatestMessage? latestMessage,
     @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _Conversation;
@@ -54,6 +57,18 @@ abstract class ConversationProduct with _$ConversationProduct {
   }) = _ConversationProduct;
 
   factory ConversationProduct.fromJson(Map<String, dynamic> json) => _$ConversationProductFromJson(json);
+}
+
+@freezed
+abstract class ConversationMarketplaceItem with _$ConversationMarketplaceItem {
+  const factory ConversationMarketplaceItem({
+    required int id,
+    required String name,
+    @JsonKey(name: 'image_url') String? imageUrl,
+    required double price,
+  }) = _ConversationMarketplaceItem;
+
+  factory ConversationMarketplaceItem.fromJson(Map<String, dynamic> json) => _$ConversationMarketplaceItemFromJson(json);
 }
 
 @freezed

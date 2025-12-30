@@ -138,7 +138,11 @@ class _ConversationTile extends ConsumerWidget {
     String? displayImage;
     bool isShopImage = false;
 
-    if (isMeCustomer) {
+    if (conversation.marketplaceItemId != null) {
+      displayName = participant?.name ?? ref.tr('user');
+      displayImage = participant?.profileImageUrl;
+      isShopImage = false;
+    } else if (isMeCustomer) {
       // Show Shop Info
       displayName = shop?.name ?? participant?.name ?? ref.tr('merchant');
       displayImage = shop?.mainPhotoUrl;
@@ -288,6 +292,33 @@ class _ConversationTile extends ConsumerWidget {
                               Flexible(
                                 child: Text(
                                   conversation.product!.name,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: context.textSecondary,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ] else if (conversation.marketplaceItem != null) ...[
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: context.inputFillColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.sell, size: 14, color: context.textSecondary),
+                              const SizedBox(width: 4),
+                              Flexible(
+                                child: Text(
+                                  conversation.marketplaceItem!.name,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: context.textSecondary,
