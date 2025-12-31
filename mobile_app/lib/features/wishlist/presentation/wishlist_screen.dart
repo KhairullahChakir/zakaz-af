@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'wishlist_provider.dart';
+import '../../auth/presentation/guest_provider.dart';
+import '../../../core/widgets/guest_placeholder.dart';
 import '../../../core/localization/language_provider.dart';
 import '../../../core/widgets/shimmer_loading.dart';
 import '../../../core/theme/theme_context.dart';
@@ -13,6 +15,23 @@ class WishlistScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (ref.watch(guestModeProvider)) {
+      return Scaffold(
+        backgroundColor: context.backgroundColor,
+        appBar: AppBar(
+          title: Text(ref.tr('wishlist_title'), style: TextStyle(color: context.textPrimary)),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: Navigator.canPop(context) ? BackButton(color: context.textPrimary) : null,
+          centerTitle: true,
+        ),
+        body: GuestPlaceholder(
+          title: ref.tr('login_required') ?? 'Login Required',
+          message: ref.tr('guest_wishlist_msg') ?? 'Please login to access your wishlist.',
+        ),
+      );
+    }
+
     final wishlistAsync = ref.watch(wishlistProvider);
 
     return Scaffold(

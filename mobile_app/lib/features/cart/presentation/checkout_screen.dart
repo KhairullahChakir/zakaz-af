@@ -841,7 +841,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: context.isDark ? kPrimaryOrange.withOpacity(0.1) : kSoftOrange,
+                    color: context.isDark ? kPrimaryOrange.withValues(alpha: 0.1) : kSoftOrange,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(icon, color: kPrimaryOrange, size: 20),
@@ -873,9 +873,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: context.isDark ? Colors.orange.withOpacity(0.1) : kSoftOrange,
+        color: context.isDark ? Colors.orange.withValues(alpha: 0.1) : kSoftOrange,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.isDark ? Colors.orange.withOpacity(0.3) : Colors.orange.shade200),
+        border: Border.all(color: context.isDark ? Colors.orange.withValues(alpha: 0.3) : Colors.orange.shade200),
       ),
       child: Column(
         children: [
@@ -912,7 +912,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected 
-              ? (context.isDark ? kPrimaryOrange.withOpacity(0.15) : kSoftOrange) 
+              ? (context.isDark ? kPrimaryOrange.withValues(alpha: 0.15) : kSoftOrange) 
               : context.inputFillColor,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
@@ -1010,7 +1010,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             child: Container(
               width: 56,
               height: 56,
-              color: context.isDark ? kPrimaryOrange.withOpacity(0.1) : kSoftOrange,
+              color: context.isDark ? kPrimaryOrange.withValues(alpha: 0.1) : kSoftOrange,
               child: imageUrl != null
                   ? CustomCachedImage(
                       imageUrl: imageUrl,

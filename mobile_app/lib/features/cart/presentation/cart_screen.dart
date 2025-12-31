@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/widgets/custom_cached_image.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import '../../../core/utils/guest_guard.dart';
 import 'cart_provider.dart';
 import '../../../core/theme/theme_context.dart';
 
@@ -21,6 +22,7 @@ class CartScreen extends ConsumerStatefulWidget {
 
 class _CartScreenState extends ConsumerState<CartScreen> {
   void _goToCheckout() {
+    if (GuestGuard.check(context, ref)) return;
     context.push('/checkout');
   }
 

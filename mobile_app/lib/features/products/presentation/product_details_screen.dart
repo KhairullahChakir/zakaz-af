@@ -15,6 +15,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/localization/language_provider.dart';
 import '../../../core/theme/theme_context.dart';
 import '../../auth/presentation/auth_controller.dart';
+import 'package:share_plus/share_plus.dart';
+import '../../../core/utils/guest_guard.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -41,21 +43,33 @@ class ProductDetailsScreen extends ConsumerWidget {
           productAsync.when(
             data: (product) {
               final isWishlisted = ref.watch(wishlistProvider).value?.any((p) => p.id == product.id) ?? false;
-              return IconButton(
-                icon: Icon(
-                  isWishlisted ? Icons.favorite : Icons.favorite_border,
-                  color: isWishlisted ? Colors.red : Colors.white,
-                ),
-                onPressed: () {
-                  ref.read(wishlistProvider.notifier).toggleWishlist(product);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(ref.tr(isWishlisted ? 'removed_from_wishlist' : 'added_to_wishlist')),
-                      backgroundColor: kPrimaryOrange,
-                      duration: const Duration(seconds: 1),
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                   IconButton(
+                    icon: const Icon(Icons.share, color: Colors.white),
+                    onPressed: () {
+                      Share.share('${product.name}\n${product.description ?? ""}\nCheck it out: https://zakaz.af/product/${product.id}');
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      isWishlisted ? Icons.favorite : Icons.favorite_border,
+                      color: isWishlisted ? Colors.red : Colors.white,
                     ),
-                  );
-                },
+                    onPressed: () {
+                      if (GuestGuard.check(context, ref)) return;
+                      ref.read(wishlistProvider.notifier).toggleWishlist(product);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(ref.tr(isWishlisted ? 'removed_from_wishlist' : 'added_to_wishlist')),
+                          backgroundColor: kPrimaryOrange,
+                          duration: const Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               );
             },
             loading: () => const SizedBox.shrink(),
@@ -201,7 +215,10 @@ class ProductDetailsScreen extends ConsumerWidget {
                                   ),
                                 ),
                                 TextButton.icon(
-                                  onPressed: () => _showAddReviewDialog(context, ref),
+                                  onPressed: () {
+                                    if (GuestGuard.check(context, ref)) return;
+                                    _showAddReviewDialog(context, ref);
+                                  },
                                   icon: const Icon(Icons.add_comment, color: kPrimaryOrange),
                                   label: Text(ref.tr('write_review'), style: const TextStyle(color: kPrimaryOrange)),
                                 ),
@@ -743,6 +760,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                 child: SafeArea(
                   child: FilledButton.icon(
                     onPressed: product.stock > 0 ? () {
+                      if (GuestGuard.check(context, ref)) return;
                       ref.read(cartProvider.notifier).addToCart(product);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
