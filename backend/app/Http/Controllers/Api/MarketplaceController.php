@@ -95,13 +95,42 @@ class MarketplaceController extends Controller
             'phone' => 'sometimes|string',
             'status' => 'sometimes|string|in:active,sold,archived',
             'location' => 'nullable|string',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120',
+            'deleted_images' => 'nullable|array',
         ]);
 
         $item->update($request->only([
             'name', 'description', 'price', 'condition', 'phone', 'status', 'location', 'category_id'
         ]));
 
-        return $item->load(['images', 'category']);
+        // Handle deleted images
+        if ($request->has('deleted_images')) {
+            foreach ($request->deleted_images as $deletedUrl) {
+                // Try to find the image by matching end of URL or path
+                $filename = basename($deletedUrl);
+                // Look for image where path ends with this filename
+                $image = $item->images()->where('image_path', 'like', "%$filename")->first();
+                if ($image) {
+                    \Storage::disk('public')->delete($image->image_path);
+                    $image->delete();
+                }
+            }
+        }
+
+        // Handle new images
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('marketplace', 'public');
+                MarketplaceItemImage::create([
+                    'marketplace_item_id' => $item->id,
+                    'image_path' => $path,
+                ]);
+            }
+        }
+
+        // Refresh relation
+        return $item->fresh(['images', 'category']);
     }
 
     public function destroy(Request $request, $id)

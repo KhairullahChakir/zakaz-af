@@ -68,8 +68,9 @@ class _MarketplaceScreenState extends ConsumerState<MarketplaceScreen> {
           await Future.delayed(const Duration(milliseconds: 500));
         },
         child: CustomScrollView(
-        slivers: [
-          // Header
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            // Header
           SliverAppBar(
             floating: true,
             backgroundColor: const Color(0xFFFF6B00),

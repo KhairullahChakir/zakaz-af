@@ -105,9 +105,12 @@ class MarketplaceRepository {
     String? status,
     int? categoryId,
     String? location,
+    List<File>? newImages,
+    List<String>? deletedImages,
   }) async {
     try {
-      final response = await _dio.post('/marketplace/$id', data: {
+      final mapData = {
+        // '_method': 'PUT', // REMOVED: Backend expects POST
         if (name != null) 'name': name,
         if (description != null) 'description': description,
         if (price != null) 'price': price,
@@ -116,10 +119,31 @@ class MarketplaceRepository {
         if (status != null) 'status': status,
         if (categoryId != null) 'category_id': categoryId,
         if (location != null) 'location': location,
-      });
+      };
+
+      // Add deleted images
+      if (deletedImages != null && deletedImages.isNotEmpty) {
+        for (var i = 0; i < deletedImages.length; i++) {
+          mapData['deleted_images[$i]'] = deletedImages[i];
+        }
+      }
+
+      final formData = FormData.fromMap(mapData);
+
+      // Add new images
+      if (newImages != null && newImages.isNotEmpty) {
+        for (var file in newImages) {
+          formData.files.add(MapEntry(
+            'images[]',
+            await MultipartFile.fromFile(file.path, filename: file.path.split('/').last),
+          ));
+        }
+      }
+
+      final response = await _dio.post('/marketplace/$id', data: formData);
       return MarketplaceItem.fromJson(response.data);
-    } catch (e) {
-      throw Exception('Failed to update listing');
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? 'Failed to update listing');
     }
   }
 
