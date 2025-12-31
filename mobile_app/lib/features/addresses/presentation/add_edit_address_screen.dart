@@ -5,6 +5,7 @@ import 'address_provider.dart';
 import '../domain/address.dart';
 import '../../../core/theme/theme_context.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/services/location_service.dart';
 
 // Afghanistan provinces - simplified list with major cities
 const List<String> afghanProvinces = [
@@ -39,6 +40,9 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
   
   String? _selectedProvince;
   bool _isDefault = false;
+  double? _latitude;
+  double? _longitude;
+  bool _isGettingLocation = false;
 
   @override
   void initState() {
@@ -65,6 +69,8 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
     
     _selectedProvince = addr?.province;
     _isDefault = addr?.isDefault ?? false;
+    _latitude = addr?.latitude;
+    _longitude = addr?.longitude;
   }
 
   @override
@@ -75,6 +81,30 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
     super.dispose();
   }
 
+  Future<void> _getCurrentLocation() async {
+    setState(() => _isGettingLocation = true);
+    try {
+      final position = await ref.read(locationServiceProvider).getCurrentPosition();
+      if (position != null) {
+        setState(() {
+          _latitude = position.latitude;
+          _longitude = position.longitude;
+        });
+        if (mounted) {
+           ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(ref.tr('location_fetched_success') ?? 'Location attached successfully!')),
+          );
+        }
+      } else {
+        if (mounted) _showError(ref.tr('location_permission_denied') ?? 'Could not get location. Check permissions.');
+      }
+    } catch (e) {
+      if (mounted) _showError('Error getting location: $e');
+    } finally {
+      if (mounted) setState(() => _isGettingLocation = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final addressState = ref.watch(addressesProvider);
@@ -83,7 +113,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
     final language = ref.watch(languageProvider);
     final isRTL = language.isRTL;
 
-    // Listen for errors and show them
     ref.listen<AsyncValue<List<Address>>>(addressesProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
         final errorMsg = next.error?.toString() ?? 'Error occurred';
@@ -108,7 +137,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              // Simple form
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(20),
@@ -155,6 +183,76 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
                           isRequired: true,
                           maxLines: 2,
                         ),
+                        const SizedBox(height: 16),
+
+                        // NEW: Get Location Button
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: (_latitude != null && _longitude != null) 
+                                ? Colors.green.shade50 
+                                : context.inputFillColor,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                               color: (_latitude != null && _longitude != null) 
+                                ? Colors.green 
+                                : context.dividerColor,
+                            ),
+                          ),
+                          child: InkWell(
+                            onTap: _isGettingLocation ? null : _getCurrentLocation,
+                            borderRadius: BorderRadius.circular(16),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                children: [
+                                  if (_isGettingLocation)
+                                    const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                                  else if (_latitude != null && _longitude != null)
+                                    const Icon(Icons.check_circle, color: Colors.green)
+                                  else
+                                    const Icon(Icons.my_location, color: kPrimaryOrange),
+                                  
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      (_latitude != null && _longitude != null) 
+                                          ? (ref.tr('location_attached') ?? 'Location Attached')
+                                          : (ref.tr('use_current_location') ?? 'Use Current Location'),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: (_latitude != null && _longitude != null)
+                                            ? Colors.green.shade700
+                                            : kPrimaryOrange,
+                                      ),
+                                    ),
+                                  ),
+                                  
+                                  // Clear button
+                                  if (_latitude != null && _longitude != null)
+                                    IconButton(
+                                      icon: const Icon(Icons.close, color: Colors.red),
+                                      onPressed: () {
+                                        setState(() {
+                                          _latitude = null;
+                                          _longitude = null;
+                                        });
+                                      },
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (_latitude != null && _longitude != null)
+                           Padding(
+                             padding: const EdgeInsets.only(top: 8, left: 16),
+                             child: Text(
+                               'Lat: ${_latitude!.toStringAsFixed(5)}, Lng: ${_longitude!.toStringAsFixed(5)}',
+                               style: TextStyle(fontSize: 12, color: context.textSecondary),
+                             ),
+                           ),
+
                         const SizedBox(height: 32),
                         
                         // 5. Default toggle - simple switch
@@ -167,7 +265,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
                 ),
               ),
               
-              // Big Save Button at bottom
               _buildSaveButton(isLoading),
             ],
           ),
@@ -187,10 +284,10 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
     List<TextInputFormatter>? inputFormatters,
     int maxLines = 1,
   }) {
+    // ... (rest of simple field logic is same as before, I'll inline it to be safe)
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Label with icon
         Row(
           children: [
             Container(
@@ -216,7 +313,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
         ),
         const SizedBox(height: 12),
         
-        // Input field - BIG and easy to tap
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
@@ -224,7 +320,7 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
           inputFormatters: inputFormatters,
           maxLines: maxLines,
           style: TextStyle(
-            fontSize: 18, // Bigger text
+            fontSize: 18,
             color: context.textPrimary,
           ),
           decoration: InputDecoration(
@@ -261,7 +357,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Label
         Row(
           children: [
             Container(
@@ -285,8 +380,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
           ],
         ),
         const SizedBox(height: 12),
-        
-        // Province Grid - Visual selection
         Container(
           decoration: BoxDecoration(
             color: context.inputFillColor,
@@ -340,7 +433,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
         ),
         child: Column(
           children: [
-            // Handle bar
             Container(
               margin: const EdgeInsets.only(top: 12),
               width: 40,
@@ -350,8 +442,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            
-            // Title
             Padding(
               padding: const EdgeInsets.all(20),
               child: Text(
@@ -363,8 +453,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
                 ),
               ),
             ),
-            
-            // Province grid
             Expanded(
               child: GridView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -378,7 +466,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
                 itemBuilder: (context, index) {
                   final province = afghanProvinces[index];
                   final isSelected = _selectedProvince == province;
-                  
                   return InkWell(
                     onTap: () {
                       setState(() => _selectedProvince = province);
@@ -434,7 +521,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
         ),
         child: Row(
           children: [
-            // Checkbox icon
             Container(
               width: 28,
               height: 28,
@@ -530,7 +616,6 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
   }
 
   Future<void> _submit() async {
-    // Simple validation
     if (_recipientNameController.text.trim().isEmpty) {
       _showError(ref.tr('enter_recipient_name'));
       return;
@@ -552,14 +637,16 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
     }
 
     final data = {
-      'label': _selectedProvince!, // Use province as label for simplicity
+      'label': _selectedProvince!,
       'recipient_name': _recipientNameController.text.trim(),
       'phone_primary': _phoneController.text.trim(),
       'country': 'Afghanistan',
-      'province': _selectedProvince,
-      'city': _selectedProvince, // Default city to province
+      'province': _selectedProvince!,
+      'city': _selectedProvince!,
       'street': _addressDescController.text.trim(),
       'is_default': _isDefault,
+      'latitude': _latitude,
+      'longitude': _longitude,
     };
 
     try {
@@ -569,17 +656,13 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
         await ref.read(addressesProvider.notifier).updateAddress(widget.address!.id, data);
       }
 
-      // Check the state after the operation
       final state = ref.read(addressesProvider);
       
       if (!mounted) return;
       
       if (state.hasError) {
-        // Show the error
-        final error = state.error?.toString() ?? 'Unknown error';
-        _showError(error);
+        _showError(state.error?.toString() ?? 'Unknown error');
       } else {
-        // Success!
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(

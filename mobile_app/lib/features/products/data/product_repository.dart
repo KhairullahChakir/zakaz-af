@@ -5,24 +5,32 @@ import 'package:flutter/foundation.dart' hide Category;
 import 'package:mobile_app/features/products/domain/category.dart';
 import 'package:mobile_app/features/products/domain/product.dart';
 
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mobile_app/core/storage/shared_prefs_provider.dart';
+
 part 'product_repository.g.dart';
 
 @riverpod
 ProductRepository productRepository(Ref ref) {
-  return ProductRepository(ref.watch(dioProvider));
+  return ProductRepository(
+    ref.watch(dioProvider),
+    ref.watch(sharedPrefsProvider),
+  );
 }
 
 class ProductRepository {
   final Dio _dio;
+  final SharedPreferences _prefs;
 
-  ProductRepository(this._dio);
+  ProductRepository(this._dio, this._prefs);
 
   Future<List<Category>> getCategories() async {
     try {
       final response = await _dio.get('/categories');
       final categories = (response.data as List).map((json) => Category.fromJson(json)).toSet().toList();
       
-      // Deduplicate manually by ID if Set doesn't work (requires equates/hashcode)
+      // Deduplicate manually by ID
       final ids = <int>{};
       final uniqueCategories = <Category>[];
       for (var c in categories) {
@@ -30,8 +38,18 @@ class ProductRepository {
           uniqueCategories.add(c);
         }
       }
+
+      // Cache the result
+      await _prefs.setString('cached_categories', jsonEncode(uniqueCategories.map((e) => e.toJson()).toList()));
+      
       return uniqueCategories;
     } catch (e) {
+      // Try to load from cache
+      final cachedJson = _prefs.getString('cached_categories');
+      if (cachedJson != null) {
+        final List<dynamic> decoded = jsonDecode(cachedJson);
+        return decoded.map((e) => Category.fromJson(e)).toList();
+      }
       throw Exception('Failed to load categories');
     }
   }
@@ -42,6 +60,10 @@ class ProductRepository {
     String? sortBy,
     String? sortOrder,
   }) async {
+    // Generate a cache key based on params
+    final isHomeFeed = categoryId == null && search == null && sortBy == null;
+    final cacheKey = 'cached_products_${categoryId ?? 'all'}_${search ?? 'none'}';
+
     try {
       final query = <String, dynamic>{};
       if (categoryId != null) query['category_id'] = categoryId;
@@ -51,10 +73,26 @@ class ProductRepository {
       
       final response = await _dio.get('/products', queryParameters: query);
       final List data = response.data;
-      return data.map((json) => Product.fromJson(json)).toList();
+      final products = data.map((json) => Product.fromJson(json)).toList();
+
+      // Cache home feed or simple category lists
+      if (isHomeFeed || categoryId != null) {
+         await _prefs.setString(cacheKey, jsonEncode(products.map((e) => e.toJson()).toList()));
+      }
+
+      return products;
     } catch (e, st) {
       debugPrint('Error loading products: $e');
-      debugPrint('Stack trace: $st');
+      
+      // Try cache
+      if (isHomeFeed || categoryId != null) {
+        final cachedJson = _prefs.getString(cacheKey);
+        if (cachedJson != null) {
+           final List<dynamic> decoded = jsonDecode(cachedJson);
+           return decoded.map((e) => Product.fromJson(e)).toList();
+        }
+      }
+
       throw Exception('Failed to load products');
     }
   }
@@ -62,8 +100,17 @@ class ProductRepository {
   Future<Product> getProduct(int id) async {
     try {
       final response = await _dio.get('/products/$id');
-      return Product.fromJson(response.data);
+      final product = Product.fromJson(response.data);
+      
+      // Cache detail
+      await _prefs.setString('cached_product_$id', jsonEncode(product.toJson()));
+      
+      return product;
     } catch (e) {
+      final cachedJson = _prefs.getString('cached_product_$id');
+      if (cachedJson != null) {
+        return Product.fromJson(jsonDecode(cachedJson));
+      }
       throw Exception('Failed to load product details');
     }
   }

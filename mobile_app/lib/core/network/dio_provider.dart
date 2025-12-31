@@ -13,7 +13,7 @@ part 'dio_provider.g.dart';
 // For PRODUCTION: Use the Railway URL
 // ===========================================
 
-const String baseUrl = 'http://172.20.10.13:8000/api';
+const String baseUrl = 'http://172.20.10.2:8000/api';
 // const String baseUrl = 'https://zakaz-af-production.up.railway.app/api';
 
 @Riverpod(keepAlive: true)
