@@ -11,18 +11,20 @@ abstract class MarketplaceItem with _$MarketplaceItem {
     required int id,
     @JsonKey(name: 'user_id', fromJson: _parseInt) required int userId,
     @JsonKey(name: 'category_id', fromJson: _parseIntNullable) int? categoryId,
-    required String name,
-    required String description,
+    @JsonKey(fromJson: _parseString) required String name,
+    @JsonKey(fromJson: _parseString) required String description,
     @JsonKey(fromJson: _parseDouble) required double price,
-    required String condition,
-    required String phone,
+    @JsonKey(fromJson: _parseString) required String condition,
+    @JsonKey(fromJson: _parseString) required String phone,
     String? location,
-    required String status,
+    @JsonKey(fromJson: _parseStringWithDefault) required String status,
     @JsonKey(name: 'main_image_url') String? mainImageUrl,
     @JsonKey(name: 'gallery_urls') List<String>? galleryUrls,
     User? user,
     Category? category,
     @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'is_boosted') @Default(false) bool isBoosted,
+    @JsonKey(name: 'boosted_until') String? boostedUntil,
   }) = _MarketplaceItem;
 
   factory MarketplaceItem.fromJson(Map<String, dynamic> json) => _$MarketplaceItemFromJson(json);
@@ -47,4 +49,14 @@ double _parseDouble(dynamic value) {
   if (value is num) return value.toDouble();
   if (value is String) return double.tryParse(value) ?? 0.0;
   return 0.0;
+}
+
+String _parseString(dynamic value) {
+  if (value == null) return '';
+  return value.toString();
+}
+
+String _parseStringWithDefault(dynamic value) {
+  if (value == null) return 'active';
+  return value.toString();
 }

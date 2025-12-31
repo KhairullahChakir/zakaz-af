@@ -7,26 +7,50 @@ import 'package:mobile_app/features/cart/presentation/cart_provider.dart';
 
 part 'auth_controller.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AuthController extends _$AuthController {
+  // Cache to avoid refetching on every rebuild
+  User? _cachedUser;
+  bool _hasInitialized = false;
+
   @override
   FutureOr<User?> build() async {
+    // Return cached user if already initialized
+    if (_hasInitialized && _cachedUser != null) {
+      return _cachedUser;
+    }
+
     String? token;
     try {
       token = await ref.read(secureStorageProvider).read(key: 'auth_token');
     } catch (e) {
-      // Storage read failed, assume no token
+      _hasInitialized = true;
       return null;
     }
     
-    if (token == null) return null;
+    if (token == null) {
+      _hasInitialized = true;
+      return null;
+    }
 
     try {
       final repo = ref.read(authRepositoryProvider);
-      return await repo.getUser(token);
+      final user = await repo.getUser(token);
+      _cachedUser = user;
+      _hasInitialized = true;
+      return user;
     } catch (e) {
-      // Token invalid or network error
-      await ref.read(secureStorageProvider).delete(key: 'auth_token');
+      // On any error (network or auth), just return null
+      // Don't rethrow to prevent Riverpod from infinitely retrying
+      _hasInitialized = true;
+      
+      // Only delete token if it's clearly an auth error
+      final isAuthError = e.toString().contains('401') || 
+                          e.toString().contains('403') || 
+                          e.toString().contains('Unauthenticated');
+      if (isAuthError) {
+        await ref.read(secureStorageProvider).delete(key: 'auth_token');
+      }
       return null;
     }
   }

@@ -216,7 +216,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: context.isDark ? Colors.green.withOpacity(0.2) : Colors.green.shade50,
+                  color: context.isDark ? Colors.green.withValues(alpha: 0.2) : Colors.green.shade50,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -442,7 +442,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   elevation: 4,
-                  shadowColor: kPrimaryOrange.withOpacity(0.3),
+                  shadowColor: kPrimaryOrange.withValues(alpha: 0.3),
                 ),
                 child: _isLoading
                     ? const SizedBox(
@@ -601,7 +601,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected
-              ? (context.isDark ? kPrimaryOrange.withOpacity(0.15) : kSoftOrange)
+              ? (context.isDark ? kPrimaryOrange.withValues(alpha: 0.15) : kSoftOrange)
               : context.inputFillColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
@@ -636,7 +636,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: iconColor?.withOpacity(0.1) ?? context.inputFillColor,
+                  color: iconColor?.withValues(alpha: 0.1) ?? context.inputFillColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: iconColor ?? context.textSecondary, size: 24),
@@ -741,7 +741,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected
-              ? (context.isDark ? kPrimaryOrange.withOpacity(0.15) : kSoftOrange)
+              ? (context.isDark ? kPrimaryOrange.withValues(alpha: 0.15) : kSoftOrange)
               : context.inputFillColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(

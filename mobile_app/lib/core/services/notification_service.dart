@@ -60,16 +60,25 @@ class NotificationService {
       String? token = await _fcm.getToken();
       if (token != null) {
         debugPrint('FCM Token: $token');
-        _updateToken(token);
+        // Don't update token here - wait for user to login
+        // _updateToken will be called when auth state changes from null to logged in
       }
 
-      // Listen for token refresh
-      _fcm.onTokenRefresh.listen(_updateToken);
+      // Listen for token refresh - only update if user is logged in
+      _fcm.onTokenRefresh.listen((newToken) {
+        token = newToken; // Update local token
+        _updateToken(newToken);
+      });
 
-      // Listen for auth changes to update token when user logs in
+      // Listen for auth changes - only update token on actual login (user ID changed)
       _ref.listen(authControllerProvider, (previous, next) {
-        if (next.hasValue && next.value != null && token != null) {
-          _updateToken(token);
+        final previousId = previous?.value?.id;
+        final newId = next.value?.id;
+        
+        // Only update token when user logs in (was null, now has value)
+        // Don't update on every auth state change to avoid infinite loop
+        if (newId != null && previousId == null && token != null) {
+          _updateToken(token!);
         }
       });
 
@@ -123,10 +132,16 @@ class NotificationService {
     }
   }
 
+  String? _lastSentToken;
+  
   void _updateToken(String token) {
+    // Don't send same token twice
+    if (_lastSentToken == token) return;
+    
     final authState = _ref.read(authControllerProvider);
     if (!authState.hasValue || authState.value == null) return;
     
+    _lastSentToken = token;
     final user = authState.value!;
     _ref.read(authControllerProvider.notifier).updateProfile(
       name: user.name,

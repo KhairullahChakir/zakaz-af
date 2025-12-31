@@ -41,10 +41,13 @@ class MarketplaceRepository {
 
   Future<MarketplaceItem> getItem(int id) async {
     try {
+      print('Fetching marketplace item: $id');
       final response = await _dio.get('/marketplace/$id');
+      print('Got response for item $id');
       return MarketplaceItem.fromJson(response.data);
     } catch (e) {
-      throw Exception('Failed to load marketplace item');
+      print('Error fetching marketplace item $id: $e');
+      throw Exception('Failed to load marketplace item: $e');
     }
   }
 
@@ -129,6 +132,26 @@ class MarketplaceRepository {
   }
 }
 
+// Cache marketplace items for 5 minutes to avoid refetching
+@Riverpod(keepAlive: true)
+class MarketplaceItemsCache extends _$MarketplaceItemsCache {
+  @override
+  Future<List<MarketplaceItem>> build() async {
+    // Auto-refresh after 5 minutes
+    ref.keepAlive();
+    final timer = Future.delayed(const Duration(minutes: 5), () {
+      ref.invalidateSelf();
+    });
+    ref.onDispose(() {}); // Timer will be garbage collected
+    
+    return ref.watch(marketplaceRepositoryProvider).getItems();
+  }
+  
+  Future<void> refresh() async {
+    ref.invalidateSelf();
+  }
+}
+
 @riverpod
 Future<List<MarketplaceItem>> marketplaceItems(Ref ref, {
     int? categoryId,
@@ -137,6 +160,12 @@ Future<List<MarketplaceItem>> marketplaceItems(Ref ref, {
     double? maxPrice,
     String? search,
 }) {
+  // Use cached data if no filters applied
+  if (categoryId == null && condition == null && minPrice == null && maxPrice == null && search == null) {
+    return ref.watch(marketplaceItemsCacheProvider.future);
+  }
+  
+  // Otherwise fetch with filters (no cache)
   return ref.watch(marketplaceRepositoryProvider).getItems(
     categoryId: categoryId,
     condition: condition,
@@ -146,12 +175,12 @@ Future<List<MarketplaceItem>> marketplaceItems(Ref ref, {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<MarketplaceItem>> myMarketplaceItems(Ref ref) {
   return ref.watch(marketplaceRepositoryProvider).getMyItems();
 }
 
-@riverpod
+@Riverpod(keepAlive: true) 
 Future<MarketplaceItem> marketplaceItemDetails(Ref ref, int id) {
   return ref.watch(marketplaceRepositoryProvider).getItem(id);
 }

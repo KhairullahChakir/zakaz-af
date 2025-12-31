@@ -230,7 +230,7 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-              color: context.textSecondary.withOpacity(0.5),
+              color: context.textSecondary.withValues(alpha: 0.5),
               fontSize: 16,
             ),
             filled: true,
@@ -309,7 +309,7 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
                         fontSize: 18,
                         color: _selectedProvince != null 
                             ? context.textPrimary 
-                            : context.textSecondary.withOpacity(0.5),
+                            : context.textSecondary.withValues(alpha: 0.5),
                       ),
                     ),
                   ),
@@ -487,7 +487,7 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
         color: context.cardColor,
         boxShadow: [
           BoxShadow(
-            color: context.shadowColor.withOpacity(0.1),
+            color: context.shadowColor.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, -4),
           ),

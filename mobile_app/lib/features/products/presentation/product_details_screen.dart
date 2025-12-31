@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/localization/language_provider.dart';
 import '../../../core/theme/theme_context.dart';
+import '../../auth/presentation/auth_controller.dart';
 
 // Orange Theme Colors
 const Color kPrimaryOrange = Color(0xFFFF6B00);
@@ -28,6 +29,7 @@ class ProductDetailsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final productAsync = ref.watch(productDetailsProvider(productId));
+    final currentUser = ref.watch(authControllerProvider).value;
 
     return Scaffold(
       backgroundColor: context.backgroundColor,
@@ -139,7 +141,32 @@ class ProductDetailsScreen extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                            
+                            if (product.shop?.owner?.id == currentUser?.id) ...[
+                              const SizedBox(height: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade100,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.info_outline, size: 14, color: Colors.blue.shade700),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      ref.tr('this_is_your_item'),
+                                      style: TextStyle(
+                                        color: Colors.blue.shade700,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                            const SizedBox(height: 16),
                             // Description
                             Text(
                               ref.tr('description'),
@@ -599,6 +626,17 @@ class ProductDetailsScreen extends ConsumerWidget {
                                               color: Colors.transparent,
                                               child: InkWell(
                                                 onTap: () async {
+                                                  // Prevent self-chat
+                                                  if (product.shop?.owner?.id == currentUser?.id) {
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(ref.tr('error_chat_self')),
+                                                        backgroundColor: Colors.red,
+                                                      ),
+                                                    );
+                                                    return;
+                                                  }
+
                                                   try {
                                                     final conversation = await ref
                                                         .read(chatRepositoryProvider)

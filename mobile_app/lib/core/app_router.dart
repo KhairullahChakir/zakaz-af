@@ -46,6 +46,8 @@ import '../features/marketplace/presentation/marketplace_screen.dart';
 import '../features/marketplace/presentation/add_listing_screen.dart';
 import '../features/marketplace/presentation/marketplace_details_screen.dart';
 import '../features/marketplace/presentation/my_listings_screen.dart';
+import '../features/marketplace/presentation/edit_listing_screen.dart';
+import '../features/marketplace/domain/marketplace_item.dart';
 
 import 'package:latlong2/latlong.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
@@ -92,14 +94,14 @@ GoRouter appRouter(Ref ref) {
         return '/login';
       }
 
-      // 3. Check Verification
-      if (isAuthenticated && !isVerified) {
-        if (isVerifying || isSplash) return null;
-        return '/verify-otp';
-      }
+      // 3. Check Verification (SKIPPED FOR DEVELOPMENT)
+      // if (isAuthenticated && !isVerified) {
+      //   if (isVerifying || isSplash) return null;
+      //   return '/verify-otp';
+      // }
 
       // 4. Check Logged In flow
-      if (isAuthenticated && isVerified && (isLoggingIn || isVerifying || isSplash || isOnboarding)) {
+      if (isAuthenticated && (isLoggingIn || isVerifying || isSplash || isOnboarding)) {
         return '/';
       }
 
@@ -337,6 +339,13 @@ GoRouter appRouter(Ref ref) {
           GoRoute(
             path: 'my-listings',
             builder: (context, state) => const MyListingsScreen(),
+          ),
+          GoRoute(
+            path: 'edit',
+            builder: (context, state) {
+              final item = state.extra as MarketplaceItem;
+              return EditListingScreen(item: item);
+            },
           ),
         ],
       ),

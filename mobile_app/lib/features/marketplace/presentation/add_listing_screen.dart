@@ -55,28 +55,31 @@ class _AddListingScreenState extends ConsumerState<AddListingScreen> {
 
     setState(() => _isLoading = true);
     try {
+      final locationText = _locationController.text.trim();
       await ref.read(marketplaceRepositoryProvider).createListing(
-        name: _nameController.text,
-        description: _descriptionController.text,
+        name: _nameController.text.trim(),
+        description: _descriptionController.text.trim(),
         price: double.parse(_priceController.text),
         condition: _selectedCondition,
-        phone: _phoneController.text,
+        phone: _phoneController.text.trim(),
         categoryId: _selectedCategoryId,
-        location: _locationController.text,
+        location: locationText.isEmpty ? null : locationText,
         images: _images,
       );
       
       if (mounted) {
         ref.invalidate(marketplaceItemsProvider);
+        ref.invalidate(marketplaceItemsCacheProvider);
         context.pop();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Listing posted successfully!')),
         );
       }
     } catch (e) {
+      print('Create listing error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(content: Text('Error: ${e.toString().replaceAll('Exception: ', '')}')),
         );
       }
     } finally {

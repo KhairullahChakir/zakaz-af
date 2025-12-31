@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MarketplaceItem {
 
- int get id;@JsonKey(name: 'user_id', fromJson: _parseInt) int get userId;@JsonKey(name: 'category_id', fromJson: _parseIntNullable) int? get categoryId; String get name; String get description;@JsonKey(fromJson: _parseDouble) double get price; String get condition; String get phone; String? get location; String get status;@JsonKey(name: 'main_image_url') String? get mainImageUrl;@JsonKey(name: 'gallery_urls') List<String>? get galleryUrls; User? get user; Category? get category;@JsonKey(name: 'created_at') String? get createdAt;
+ int get id;@JsonKey(name: 'user_id', fromJson: _parseInt) int get userId;@JsonKey(name: 'category_id', fromJson: _parseIntNullable) int? get categoryId;@JsonKey(fromJson: _parseString) String get name;@JsonKey(fromJson: _parseString) String get description;@JsonKey(fromJson: _parseDouble) double get price;@JsonKey(fromJson: _parseString) String get condition;@JsonKey(fromJson: _parseString) String get phone; String? get location;@JsonKey(fromJson: _parseStringWithDefault) String get status;@JsonKey(name: 'main_image_url') String? get mainImageUrl;@JsonKey(name: 'gallery_urls') List<String>? get galleryUrls; User? get user; Category? get category;@JsonKey(name: 'created_at') String? get createdAt;@JsonKey(name: 'is_boosted') bool get isBoosted;@JsonKey(name: 'boosted_until') String? get boostedUntil;
 /// Create a copy of MarketplaceItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $MarketplaceItemCopyWith<MarketplaceItem> get copyWith => _$MarketplaceItemCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MarketplaceItem&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.price, price) || other.price == price)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.location, location) || other.location == location)&&(identical(other.status, status) || other.status == status)&&(identical(other.mainImageUrl, mainImageUrl) || other.mainImageUrl == mainImageUrl)&&const DeepCollectionEquality().equals(other.galleryUrls, galleryUrls)&&(identical(other.user, user) || other.user == user)&&(identical(other.category, category) || other.category == category)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MarketplaceItem&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.price, price) || other.price == price)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.location, location) || other.location == location)&&(identical(other.status, status) || other.status == status)&&(identical(other.mainImageUrl, mainImageUrl) || other.mainImageUrl == mainImageUrl)&&const DeepCollectionEquality().equals(other.galleryUrls, galleryUrls)&&(identical(other.user, user) || other.user == user)&&(identical(other.category, category) || other.category == category)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isBoosted, isBoosted) || other.isBoosted == isBoosted)&&(identical(other.boostedUntil, boostedUntil) || other.boostedUntil == boostedUntil));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,categoryId,name,description,price,condition,phone,location,status,mainImageUrl,const DeepCollectionEquality().hash(galleryUrls),user,category,createdAt);
+int get hashCode => Object.hash(runtimeType,id,userId,categoryId,name,description,price,condition,phone,location,status,mainImageUrl,const DeepCollectionEquality().hash(galleryUrls),user,category,createdAt,isBoosted,boostedUntil);
 
 @override
 String toString() {
-  return 'MarketplaceItem(id: $id, userId: $userId, categoryId: $categoryId, name: $name, description: $description, price: $price, condition: $condition, phone: $phone, location: $location, status: $status, mainImageUrl: $mainImageUrl, galleryUrls: $galleryUrls, user: $user, category: $category, createdAt: $createdAt)';
+  return 'MarketplaceItem(id: $id, userId: $userId, categoryId: $categoryId, name: $name, description: $description, price: $price, condition: $condition, phone: $phone, location: $location, status: $status, mainImageUrl: $mainImageUrl, galleryUrls: $galleryUrls, user: $user, category: $category, createdAt: $createdAt, isBoosted: $isBoosted, boostedUntil: $boostedUntil)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $MarketplaceItemCopyWith<$Res>  {
   factory $MarketplaceItemCopyWith(MarketplaceItem value, $Res Function(MarketplaceItem) _then) = _$MarketplaceItemCopyWithImpl;
 @useResult
 $Res call({
- int id,@JsonKey(name: 'user_id', fromJson: _parseInt) int userId,@JsonKey(name: 'category_id', fromJson: _parseIntNullable) int? categoryId, String name, String description,@JsonKey(fromJson: _parseDouble) double price, String condition, String phone, String? location, String status,@JsonKey(name: 'main_image_url') String? mainImageUrl,@JsonKey(name: 'gallery_urls') List<String>? galleryUrls, User? user, Category? category,@JsonKey(name: 'created_at') String? createdAt
+ int id,@JsonKey(name: 'user_id', fromJson: _parseInt) int userId,@JsonKey(name: 'category_id', fromJson: _parseIntNullable) int? categoryId,@JsonKey(fromJson: _parseString) String name,@JsonKey(fromJson: _parseString) String description,@JsonKey(fromJson: _parseDouble) double price,@JsonKey(fromJson: _parseString) String condition,@JsonKey(fromJson: _parseString) String phone, String? location,@JsonKey(fromJson: _parseStringWithDefault) String status,@JsonKey(name: 'main_image_url') String? mainImageUrl,@JsonKey(name: 'gallery_urls') List<String>? galleryUrls, User? user, Category? category,@JsonKey(name: 'created_at') String? createdAt,@JsonKey(name: 'is_boosted') bool isBoosted,@JsonKey(name: 'boosted_until') String? boostedUntil
 });
 
 
@@ -65,7 +65,7 @@ class _$MarketplaceItemCopyWithImpl<$Res>
 
 /// Create a copy of MarketplaceItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? categoryId = freezed,Object? name = null,Object? description = null,Object? price = null,Object? condition = null,Object? phone = null,Object? location = freezed,Object? status = null,Object? mainImageUrl = freezed,Object? galleryUrls = freezed,Object? user = freezed,Object? category = freezed,Object? createdAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? categoryId = freezed,Object? name = null,Object? description = null,Object? price = null,Object? condition = null,Object? phone = null,Object? location = freezed,Object? status = null,Object? mainImageUrl = freezed,Object? galleryUrls = freezed,Object? user = freezed,Object? category = freezed,Object? createdAt = freezed,Object? isBoosted = null,Object? boostedUntil = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -82,6 +82,8 @@ as String?,galleryUrls: freezed == galleryUrls ? _self.galleryUrls : galleryUrls
 as List<String>?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as User?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as Category?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String?,isBoosted: null == isBoosted ? _self.isBoosted : isBoosted // ignore: cast_nullable_to_non_nullable
+as bool,boostedUntil: freezed == boostedUntil ? _self.boostedUntil : boostedUntil // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -179,10 +181,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'user_id', fromJson: _parseInt)  int userId, @JsonKey(name: 'category_id', fromJson: _parseIntNullable)  int? categoryId,  String name,  String description, @JsonKey(fromJson: _parseDouble)  double price,  String condition,  String phone,  String? location,  String status, @JsonKey(name: 'main_image_url')  String? mainImageUrl, @JsonKey(name: 'gallery_urls')  List<String>? galleryUrls,  User? user,  Category? category, @JsonKey(name: 'created_at')  String? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'user_id', fromJson: _parseInt)  int userId, @JsonKey(name: 'category_id', fromJson: _parseIntNullable)  int? categoryId, @JsonKey(fromJson: _parseString)  String name, @JsonKey(fromJson: _parseString)  String description, @JsonKey(fromJson: _parseDouble)  double price, @JsonKey(fromJson: _parseString)  String condition, @JsonKey(fromJson: _parseString)  String phone,  String? location, @JsonKey(fromJson: _parseStringWithDefault)  String status, @JsonKey(name: 'main_image_url')  String? mainImageUrl, @JsonKey(name: 'gallery_urls')  List<String>? galleryUrls,  User? user,  Category? category, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'is_boosted')  bool isBoosted, @JsonKey(name: 'boosted_until')  String? boostedUntil)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MarketplaceItem() when $default != null:
-return $default(_that.id,_that.userId,_that.categoryId,_that.name,_that.description,_that.price,_that.condition,_that.phone,_that.location,_that.status,_that.mainImageUrl,_that.galleryUrls,_that.user,_that.category,_that.createdAt);case _:
+return $default(_that.id,_that.userId,_that.categoryId,_that.name,_that.description,_that.price,_that.condition,_that.phone,_that.location,_that.status,_that.mainImageUrl,_that.galleryUrls,_that.user,_that.category,_that.createdAt,_that.isBoosted,_that.boostedUntil);case _:
   return orElse();
 
 }
@@ -200,10 +202,10 @@ return $default(_that.id,_that.userId,_that.categoryId,_that.name,_that.descript
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'user_id', fromJson: _parseInt)  int userId, @JsonKey(name: 'category_id', fromJson: _parseIntNullable)  int? categoryId,  String name,  String description, @JsonKey(fromJson: _parseDouble)  double price,  String condition,  String phone,  String? location,  String status, @JsonKey(name: 'main_image_url')  String? mainImageUrl, @JsonKey(name: 'gallery_urls')  List<String>? galleryUrls,  User? user,  Category? category, @JsonKey(name: 'created_at')  String? createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'user_id', fromJson: _parseInt)  int userId, @JsonKey(name: 'category_id', fromJson: _parseIntNullable)  int? categoryId, @JsonKey(fromJson: _parseString)  String name, @JsonKey(fromJson: _parseString)  String description, @JsonKey(fromJson: _parseDouble)  double price, @JsonKey(fromJson: _parseString)  String condition, @JsonKey(fromJson: _parseString)  String phone,  String? location, @JsonKey(fromJson: _parseStringWithDefault)  String status, @JsonKey(name: 'main_image_url')  String? mainImageUrl, @JsonKey(name: 'gallery_urls')  List<String>? galleryUrls,  User? user,  Category? category, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'is_boosted')  bool isBoosted, @JsonKey(name: 'boosted_until')  String? boostedUntil)  $default,) {final _that = this;
 switch (_that) {
 case _MarketplaceItem():
-return $default(_that.id,_that.userId,_that.categoryId,_that.name,_that.description,_that.price,_that.condition,_that.phone,_that.location,_that.status,_that.mainImageUrl,_that.galleryUrls,_that.user,_that.category,_that.createdAt);case _:
+return $default(_that.id,_that.userId,_that.categoryId,_that.name,_that.description,_that.price,_that.condition,_that.phone,_that.location,_that.status,_that.mainImageUrl,_that.galleryUrls,_that.user,_that.category,_that.createdAt,_that.isBoosted,_that.boostedUntil);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -220,10 +222,10 @@ return $default(_that.id,_that.userId,_that.categoryId,_that.name,_that.descript
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'user_id', fromJson: _parseInt)  int userId, @JsonKey(name: 'category_id', fromJson: _parseIntNullable)  int? categoryId,  String name,  String description, @JsonKey(fromJson: _parseDouble)  double price,  String condition,  String phone,  String? location,  String status, @JsonKey(name: 'main_image_url')  String? mainImageUrl, @JsonKey(name: 'gallery_urls')  List<String>? galleryUrls,  User? user,  Category? category, @JsonKey(name: 'created_at')  String? createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'user_id', fromJson: _parseInt)  int userId, @JsonKey(name: 'category_id', fromJson: _parseIntNullable)  int? categoryId, @JsonKey(fromJson: _parseString)  String name, @JsonKey(fromJson: _parseString)  String description, @JsonKey(fromJson: _parseDouble)  double price, @JsonKey(fromJson: _parseString)  String condition, @JsonKey(fromJson: _parseString)  String phone,  String? location, @JsonKey(fromJson: _parseStringWithDefault)  String status, @JsonKey(name: 'main_image_url')  String? mainImageUrl, @JsonKey(name: 'gallery_urls')  List<String>? galleryUrls,  User? user,  Category? category, @JsonKey(name: 'created_at')  String? createdAt, @JsonKey(name: 'is_boosted')  bool isBoosted, @JsonKey(name: 'boosted_until')  String? boostedUntil)?  $default,) {final _that = this;
 switch (_that) {
 case _MarketplaceItem() when $default != null:
-return $default(_that.id,_that.userId,_that.categoryId,_that.name,_that.description,_that.price,_that.condition,_that.phone,_that.location,_that.status,_that.mainImageUrl,_that.galleryUrls,_that.user,_that.category,_that.createdAt);case _:
+return $default(_that.id,_that.userId,_that.categoryId,_that.name,_that.description,_that.price,_that.condition,_that.phone,_that.location,_that.status,_that.mainImageUrl,_that.galleryUrls,_that.user,_that.category,_that.createdAt,_that.isBoosted,_that.boostedUntil);case _:
   return null;
 
 }
@@ -235,19 +237,19 @@ return $default(_that.id,_that.userId,_that.categoryId,_that.name,_that.descript
 @JsonSerializable()
 
 class _MarketplaceItem implements MarketplaceItem {
-  const _MarketplaceItem({required this.id, @JsonKey(name: 'user_id', fromJson: _parseInt) required this.userId, @JsonKey(name: 'category_id', fromJson: _parseIntNullable) this.categoryId, required this.name, required this.description, @JsonKey(fromJson: _parseDouble) required this.price, required this.condition, required this.phone, this.location, required this.status, @JsonKey(name: 'main_image_url') this.mainImageUrl, @JsonKey(name: 'gallery_urls') final  List<String>? galleryUrls, this.user, this.category, @JsonKey(name: 'created_at') this.createdAt}): _galleryUrls = galleryUrls;
+  const _MarketplaceItem({required this.id, @JsonKey(name: 'user_id', fromJson: _parseInt) required this.userId, @JsonKey(name: 'category_id', fromJson: _parseIntNullable) this.categoryId, @JsonKey(fromJson: _parseString) required this.name, @JsonKey(fromJson: _parseString) required this.description, @JsonKey(fromJson: _parseDouble) required this.price, @JsonKey(fromJson: _parseString) required this.condition, @JsonKey(fromJson: _parseString) required this.phone, this.location, @JsonKey(fromJson: _parseStringWithDefault) required this.status, @JsonKey(name: 'main_image_url') this.mainImageUrl, @JsonKey(name: 'gallery_urls') final  List<String>? galleryUrls, this.user, this.category, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'is_boosted') this.isBoosted = false, @JsonKey(name: 'boosted_until') this.boostedUntil}): _galleryUrls = galleryUrls;
   factory _MarketplaceItem.fromJson(Map<String, dynamic> json) => _$MarketplaceItemFromJson(json);
 
 @override final  int id;
 @override@JsonKey(name: 'user_id', fromJson: _parseInt) final  int userId;
 @override@JsonKey(name: 'category_id', fromJson: _parseIntNullable) final  int? categoryId;
-@override final  String name;
-@override final  String description;
+@override@JsonKey(fromJson: _parseString) final  String name;
+@override@JsonKey(fromJson: _parseString) final  String description;
 @override@JsonKey(fromJson: _parseDouble) final  double price;
-@override final  String condition;
-@override final  String phone;
+@override@JsonKey(fromJson: _parseString) final  String condition;
+@override@JsonKey(fromJson: _parseString) final  String phone;
 @override final  String? location;
-@override final  String status;
+@override@JsonKey(fromJson: _parseStringWithDefault) final  String status;
 @override@JsonKey(name: 'main_image_url') final  String? mainImageUrl;
  final  List<String>? _galleryUrls;
 @override@JsonKey(name: 'gallery_urls') List<String>? get galleryUrls {
@@ -261,6 +263,8 @@ class _MarketplaceItem implements MarketplaceItem {
 @override final  User? user;
 @override final  Category? category;
 @override@JsonKey(name: 'created_at') final  String? createdAt;
+@override@JsonKey(name: 'is_boosted') final  bool isBoosted;
+@override@JsonKey(name: 'boosted_until') final  String? boostedUntil;
 
 /// Create a copy of MarketplaceItem
 /// with the given fields replaced by the non-null parameter values.
@@ -275,16 +279,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MarketplaceItem&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.price, price) || other.price == price)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.location, location) || other.location == location)&&(identical(other.status, status) || other.status == status)&&(identical(other.mainImageUrl, mainImageUrl) || other.mainImageUrl == mainImageUrl)&&const DeepCollectionEquality().equals(other._galleryUrls, _galleryUrls)&&(identical(other.user, user) || other.user == user)&&(identical(other.category, category) || other.category == category)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MarketplaceItem&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.price, price) || other.price == price)&&(identical(other.condition, condition) || other.condition == condition)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.location, location) || other.location == location)&&(identical(other.status, status) || other.status == status)&&(identical(other.mainImageUrl, mainImageUrl) || other.mainImageUrl == mainImageUrl)&&const DeepCollectionEquality().equals(other._galleryUrls, _galleryUrls)&&(identical(other.user, user) || other.user == user)&&(identical(other.category, category) || other.category == category)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isBoosted, isBoosted) || other.isBoosted == isBoosted)&&(identical(other.boostedUntil, boostedUntil) || other.boostedUntil == boostedUntil));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,categoryId,name,description,price,condition,phone,location,status,mainImageUrl,const DeepCollectionEquality().hash(_galleryUrls),user,category,createdAt);
+int get hashCode => Object.hash(runtimeType,id,userId,categoryId,name,description,price,condition,phone,location,status,mainImageUrl,const DeepCollectionEquality().hash(_galleryUrls),user,category,createdAt,isBoosted,boostedUntil);
 
 @override
 String toString() {
-  return 'MarketplaceItem(id: $id, userId: $userId, categoryId: $categoryId, name: $name, description: $description, price: $price, condition: $condition, phone: $phone, location: $location, status: $status, mainImageUrl: $mainImageUrl, galleryUrls: $galleryUrls, user: $user, category: $category, createdAt: $createdAt)';
+  return 'MarketplaceItem(id: $id, userId: $userId, categoryId: $categoryId, name: $name, description: $description, price: $price, condition: $condition, phone: $phone, location: $location, status: $status, mainImageUrl: $mainImageUrl, galleryUrls: $galleryUrls, user: $user, category: $category, createdAt: $createdAt, isBoosted: $isBoosted, boostedUntil: $boostedUntil)';
 }
 
 
@@ -295,7 +299,7 @@ abstract mixin class _$MarketplaceItemCopyWith<$Res> implements $MarketplaceItem
   factory _$MarketplaceItemCopyWith(_MarketplaceItem value, $Res Function(_MarketplaceItem) _then) = __$MarketplaceItemCopyWithImpl;
 @override @useResult
 $Res call({
- int id,@JsonKey(name: 'user_id', fromJson: _parseInt) int userId,@JsonKey(name: 'category_id', fromJson: _parseIntNullable) int? categoryId, String name, String description,@JsonKey(fromJson: _parseDouble) double price, String condition, String phone, String? location, String status,@JsonKey(name: 'main_image_url') String? mainImageUrl,@JsonKey(name: 'gallery_urls') List<String>? galleryUrls, User? user, Category? category,@JsonKey(name: 'created_at') String? createdAt
+ int id,@JsonKey(name: 'user_id', fromJson: _parseInt) int userId,@JsonKey(name: 'category_id', fromJson: _parseIntNullable) int? categoryId,@JsonKey(fromJson: _parseString) String name,@JsonKey(fromJson: _parseString) String description,@JsonKey(fromJson: _parseDouble) double price,@JsonKey(fromJson: _parseString) String condition,@JsonKey(fromJson: _parseString) String phone, String? location,@JsonKey(fromJson: _parseStringWithDefault) String status,@JsonKey(name: 'main_image_url') String? mainImageUrl,@JsonKey(name: 'gallery_urls') List<String>? galleryUrls, User? user, Category? category,@JsonKey(name: 'created_at') String? createdAt,@JsonKey(name: 'is_boosted') bool isBoosted,@JsonKey(name: 'boosted_until') String? boostedUntil
 });
 
 
@@ -312,7 +316,7 @@ class __$MarketplaceItemCopyWithImpl<$Res>
 
 /// Create a copy of MarketplaceItem
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? categoryId = freezed,Object? name = null,Object? description = null,Object? price = null,Object? condition = null,Object? phone = null,Object? location = freezed,Object? status = null,Object? mainImageUrl = freezed,Object? galleryUrls = freezed,Object? user = freezed,Object? category = freezed,Object? createdAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? categoryId = freezed,Object? name = null,Object? description = null,Object? price = null,Object? condition = null,Object? phone = null,Object? location = freezed,Object? status = null,Object? mainImageUrl = freezed,Object? galleryUrls = freezed,Object? user = freezed,Object? category = freezed,Object? createdAt = freezed,Object? isBoosted = null,Object? boostedUntil = freezed,}) {
   return _then(_MarketplaceItem(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -329,6 +333,8 @@ as String?,galleryUrls: freezed == galleryUrls ? _self._galleryUrls : galleryUrl
 as List<String>?,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as User?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as Category?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String?,isBoosted: null == isBoosted ? _self.isBoosted : isBoosted // ignore: cast_nullable_to_non_nullable
+as bool,boostedUntil: freezed == boostedUntil ? _self.boostedUntil : boostedUntil // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

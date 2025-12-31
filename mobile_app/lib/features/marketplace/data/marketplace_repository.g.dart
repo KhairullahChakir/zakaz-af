@@ -57,6 +57,59 @@ final class MarketplaceRepositoryProvider
 String _$marketplaceRepositoryHash() =>
     r'12d424b8aa2977a9d42515b734c7971e7b460f60';
 
+@ProviderFor(MarketplaceItemsCache)
+const marketplaceItemsCacheProvider = MarketplaceItemsCacheProvider._();
+
+final class MarketplaceItemsCacheProvider
+    extends
+        $AsyncNotifierProvider<MarketplaceItemsCache, List<MarketplaceItem>> {
+  const MarketplaceItemsCacheProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'marketplaceItemsCacheProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$marketplaceItemsCacheHash();
+
+  @$internal
+  @override
+  MarketplaceItemsCache create() => MarketplaceItemsCache();
+}
+
+String _$marketplaceItemsCacheHash() =>
+    r'54cf99796394a2bb6fffc23f92f9132764f6a60d';
+
+abstract class _$MarketplaceItemsCache
+    extends $AsyncNotifier<List<MarketplaceItem>> {
+  FutureOr<List<MarketplaceItem>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref =
+        this.ref
+            as $Ref<AsyncValue<List<MarketplaceItem>>, List<MarketplaceItem>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<List<MarketplaceItem>>,
+                List<MarketplaceItem>
+              >,
+              AsyncValue<List<MarketplaceItem>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(marketplaceItems)
 const marketplaceItemsProvider = MarketplaceItemsFamily._();
 
@@ -136,7 +189,7 @@ final class MarketplaceItemsProvider
   }
 }
 
-String _$marketplaceItemsHash() => r'02f7ccf0730cba5570e788b3edd19e88eeab46b0';
+String _$marketplaceItemsHash() => r'051f283bd44f77adf0c46dc57739991d8a38c59a';
 
 final class MarketplaceItemsFamily extends $Family
     with
@@ -199,7 +252,7 @@ final class MyMarketplaceItemsProvider
         argument: null,
         retry: null,
         name: r'myMarketplaceItemsProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -220,7 +273,7 @@ final class MyMarketplaceItemsProvider
 }
 
 String _$myMarketplaceItemsHash() =>
-    r'a837f33fc34a2ab6d41795d27b65190b507e106b';
+    r'b0a66579d9630d63da2b56a502987b6cb3a1ebcb';
 
 @ProviderFor(marketplaceItemDetails)
 const marketplaceItemDetailsProvider = MarketplaceItemDetailsFamily._();
@@ -239,7 +292,7 @@ final class MarketplaceItemDetailsProvider
   }) : super(
          retry: null,
          name: r'marketplaceItemDetailsProvider',
-         isAutoDispose: true,
+         isAutoDispose: false,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
@@ -279,7 +332,7 @@ final class MarketplaceItemDetailsProvider
 }
 
 String _$marketplaceItemDetailsHash() =>
-    r'248cfb98df04c5ba2e062535cca6140e187bc4ad';
+    r'0aa0d00ec55c04c99cdb0eb001fe5f50876e1f27';
 
 final class MarketplaceItemDetailsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<MarketplaceItem>, int> {
@@ -289,7 +342,7 @@ final class MarketplaceItemDetailsFamily extends $Family
         name: r'marketplaceItemDetailsProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
-        isAutoDispose: true,
+        isAutoDispose: false,
       );
 
   MarketplaceItemDetailsProvider call(int id) =>

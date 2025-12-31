@@ -48,7 +48,7 @@ class AddressScreen extends ConsumerWidget {
               children: [
                 Icon(Icons.error_outline, size: 64, color: Colors.red.shade300),
                 const SizedBox(height: 16),
-                Text('${ref.tr('error')}', style: TextStyle(color: Colors.grey[600], fontSize: 16)),
+                Text(ref.tr('error'), style: TextStyle(color: Colors.grey[600], fontSize: 16)),
                 const SizedBox(height: 24),
                 SizedBox(
                   height: 56,
@@ -160,7 +160,7 @@ class AddressScreen extends ConsumerWidget {
             : null,
         boxShadow: [
           BoxShadow(
-            color: context.shadowColor.withOpacity(0.08),
+            color: context.shadowColor.withValues(alpha: 0.08),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

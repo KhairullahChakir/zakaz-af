@@ -20,7 +20,17 @@ class ProductRepository {
   Future<List<Category>> getCategories() async {
     try {
       final response = await _dio.get('/categories');
-      return (response.data as List).map((json) => Category.fromJson(json)).toList();
+      final categories = (response.data as List).map((json) => Category.fromJson(json)).toSet().toList();
+      
+      // Deduplicate manually by ID if Set doesn't work (requires equates/hashcode)
+      final ids = <int>{};
+      final uniqueCategories = <Category>[];
+      for (var c in categories) {
+        if (ids.add(c.id)) {
+          uniqueCategories.add(c);
+        }
+      }
+      return uniqueCategories;
     } catch (e) {
       throw Exception('Failed to load categories');
     }

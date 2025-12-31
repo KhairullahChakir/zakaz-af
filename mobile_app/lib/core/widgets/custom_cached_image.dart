@@ -22,12 +22,24 @@ class CustomCachedImage extends StatelessWidget {
     this.errorWidget,
   });
 
+  /// Normalizes URL to use HTTPS for production servers
+  String _normalizeUrl(String url) {
+    // Fix Railway URLs that come as http instead of https
+    if (url.contains('railway.app') && url.startsWith('http://')) {
+      return url.replaceFirst('http://', 'https://');
+    }
+    return url;
+  }
+
   @override
   Widget build(BuildContext context) {
+    var normalizedUrl = _normalizeUrl(imageUrl);
+    // debugPrint('Loading Image: $normalizedUrl'); // Uncomment for debugging
+    
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: CachedNetworkImage(
-        imageUrl: imageUrl,
+        imageUrl: normalizedUrl,
         width: width,
         height: height,
         fit: fit,
@@ -48,7 +60,19 @@ class CustomCachedImage extends StatelessWidget {
               width: width,
               height: height,
               color: Colors.grey[200],
-              child: const Icon(Icons.error_outline, color: Colors.grey),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.image_not_supported_outlined, color: Colors.grey[400], size: 32),
+                  if (height != null && height! > 60) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      'No Image', 
+                      style: TextStyle(color: Colors.grey[500], fontSize: 10),
+                    ),
+                  ],
+                ],
+              ),
             ),
       ),
     );

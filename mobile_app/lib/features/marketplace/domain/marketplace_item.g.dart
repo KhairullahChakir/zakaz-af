@@ -11,13 +11,13 @@ _MarketplaceItem _$MarketplaceItemFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num).toInt(),
       userId: _parseInt(json['user_id']),
       categoryId: _parseIntNullable(json['category_id']),
-      name: json['name'] as String,
-      description: json['description'] as String,
+      name: _parseString(json['name']),
+      description: _parseString(json['description']),
       price: _parseDouble(json['price']),
-      condition: json['condition'] as String,
-      phone: json['phone'] as String,
+      condition: _parseString(json['condition']),
+      phone: _parseString(json['phone']),
       location: json['location'] as String?,
-      status: json['status'] as String,
+      status: _parseStringWithDefault(json['status']),
       mainImageUrl: json['main_image_url'] as String?,
       galleryUrls: (json['gallery_urls'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -29,6 +29,8 @@ _MarketplaceItem _$MarketplaceItemFromJson(Map<String, dynamic> json) =>
           ? null
           : Category.fromJson(json['category'] as Map<String, dynamic>),
       createdAt: json['created_at'] as String?,
+      isBoosted: json['is_boosted'] as bool? ?? false,
+      boostedUntil: json['boosted_until'] as String?,
     );
 
 Map<String, dynamic> _$MarketplaceItemToJson(_MarketplaceItem instance) =>
@@ -48,4 +50,6 @@ Map<String, dynamic> _$MarketplaceItemToJson(_MarketplaceItem instance) =>
       'user': instance.user,
       'category': instance.category,
       'created_at': instance.createdAt,
+      'is_boosted': instance.isBoosted,
+      'boosted_until': instance.boostedUntil,
     };

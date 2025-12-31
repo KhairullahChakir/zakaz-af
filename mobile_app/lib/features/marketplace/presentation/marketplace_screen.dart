@@ -21,6 +21,24 @@ class _MarketplaceScreenState extends ConsumerState<MarketplaceScreen> {
   int? _selectedCategoryId;
   String? _searchQuery;
   final TextEditingController _searchController = TextEditingController();
+  
+  // Debounce timer for search
+  DateTime? _lastSearchTime;
+  static const _searchDebounce = Duration(milliseconds: 500);
+
+  void _onSearchChanged(String value) {
+    _lastSearchTime = DateTime.now();
+    
+    // Debounce: wait before searching
+    Future.delayed(_searchDebounce, () {
+      if (_lastSearchTime != null && 
+          DateTime.now().difference(_lastSearchTime!) >= _searchDebounce) {
+        if (mounted) {
+          setState(() => _searchQuery = value.isEmpty ? null : value);
+        }
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -41,7 +59,15 @@ class _MarketplaceScreenState extends ConsumerState<MarketplaceScreen> {
 
     return Scaffold(
       backgroundColor: context.backgroundColor,
-      body: CustomScrollView(
+      body: RefreshIndicator(
+        color: const Color(0xFFFF6B00),
+        onRefresh: () async {
+          ref.invalidate(marketplaceItemsProvider);
+          ref.invalidate(marketplaceItemsCacheProvider);
+          // Small delay to ensure the refresh indicator is visible
+          await Future.delayed(const Duration(milliseconds: 500));
+        },
+        child: CustomScrollView(
         slivers: [
           // Header
           SliverAppBar(
@@ -73,7 +99,7 @@ class _MarketplaceScreenState extends ConsumerState<MarketplaceScreen> {
                 ),
                 child: TextField(
                   controller: _searchController,
-                  onChanged: (val) => setState(() => _searchQuery = val.isEmpty ? null : val),
+                  onChanged: _onSearchChanged,
                   decoration: InputDecoration(
                     hintText: ref.tr('marketplace_search_hint'),
                     prefixIcon: const Icon(Icons.search),
@@ -164,8 +190,12 @@ class _MarketplaceScreenState extends ConsumerState<MarketplaceScreen> {
                         mainAxisSpacing: 16,
                       ),
                       delegate: SliverChildBuilderDelegate(
-                        (context, index) => _MarketplaceCard(item: items[index]),
+                        (context, index) => RepaintBoundary(
+                          child: _MarketplaceCard(item: items[index]),
+                        ),
                         childCount: items.length,
+                        addRepaintBoundaries: true,
+                        addAutomaticKeepAlives: false, // Don't keep all items alive
                       ),
                     ),
                   ),
@@ -192,6 +222,7 @@ class _MarketplaceScreenState extends ConsumerState<MarketplaceScreen> {
           const SliverToBoxAdapter(child: SizedBox(height: 80)),
         ],
       ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/marketplace/add'),
         backgroundColor: const Color(0xFFFF6B00),
@@ -208,6 +239,8 @@ class _MarketplaceCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isSold = item.status == 'sold';
+    
     return GestureDetector(
       onTap: () => context.push('/marketplace/details/${item.id}'),
       child: Container(
@@ -242,21 +275,84 @@ class _MarketplaceCard extends ConsumerWidget {
                             child: const Center(child: Icon(Icons.image, color: Color(0xFFFF6B00))),
                           ),
                   ),
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.6),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        ref.tr('condition_${item.condition}'),
-                        style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                  
+                  // SOLD Overlay
+                  if (isSold)
+                    Positioned.fill(
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                        child: Container(
+                          color: Colors.black.withValues(alpha: 0.5),
+                          child: Center(
+                            child: Transform.rotate(
+                              angle: -0.3,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: Colors.white, width: 2),
+                                ),
+                                child: Text(
+                                  ref.tr('sold'),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 2,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  
+                  // Condition Badge
+                  if (!isSold)
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.6),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          ref.tr('condition_${item.condition}'),
+                          style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  
+                  // Boosted Badge
+                  if (item.isBoosted && !isSold)
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Colors.orange, Colors.deepOrange],
+                          ),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.rocket_launch, size: 10, color: Colors.white),
+                            const SizedBox(width: 3),
+                            Text(
+                              ref.tr('featured'),
+                              style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -271,15 +367,20 @@ class _MarketplaceCard extends ConsumerWidget {
                     item.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, 
+                      fontSize: 14,
+                      color: isSold ? Colors.grey : null,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     '${item.price.toInt()} ${ref.tr('afn')}',
-                    style: const TextStyle(
-                      color: Color(0xFFFF6B00),
+                    style: TextStyle(
+                      color: isSold ? Colors.grey : const Color(0xFFFF6B00),
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
+                      decoration: isSold ? TextDecoration.lineThrough : null,
                     ),
                   ),
                   const SizedBox(height: 4),
