@@ -131,26 +131,27 @@ flutter:
 
 # App Icon Configuration
 # App Icon Configuration
+# App Icon Configuration
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/zakaz_new.png"
+  image_path: "assets/images/final_logo.png"
   adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/images/zakaz_new.png"
+  adaptive_icon_foreground: "assets/images/final_logo.png"
   min_sdk_android: 21
   remove_alpha_ios: true
 
 # Native Splash Screen Configuration
 flutter_native_splash:
   color: "#FFFFFF"
-  image: assets/images/zakaz_new.png
+  image: assets/images/final_logo.png
   color_dark: "#FFFFFF"
-  image_dark: assets/images/zakaz_new.png
+  image_dark: assets/images/final_logo.png
   android_12:
     color: "#FFFFFF"
-    image: assets/images/zakaz_new.png
+    image: assets/images/final_logo.png
     color_dark: "#FFFFFF"
-    image_dark: assets/images/zakaz_new.png
+    image_dark: assets/images/final_logo.png
   ios: true
   android: true
   web: false
