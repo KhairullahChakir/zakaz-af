@@ -72,7 +72,8 @@ class _MyListingCard extends ConsumerWidget {
     final shareText = ref.tr('share_listing_text')
         .replaceAll('{name}', item.name)
         .replaceAll('{price}', item.price.toStringAsFixed(0));
-    SharePlus.share(shareText);
+    // ignore: deprecated_member_use
+    Share.share(shareText);
   }
 
   @override

@@ -76,7 +76,6 @@ class _AddListingScreenState extends ConsumerState<AddListingScreen> {
         );
       }
     } catch (e) {
-      print('Create listing error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: ${e.toString().replaceAll('Exception: ', '')}')),
