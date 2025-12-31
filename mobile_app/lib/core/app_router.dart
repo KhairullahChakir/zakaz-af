@@ -65,7 +65,6 @@ part 'app_router.g.dart';
 GoRouter appRouter(Ref ref) {
   // Use select on the state (AsyncValue) to only trigger rebuilds when auth status changes.
   final isAuthenticated = ref.watch(authControllerProvider.select((s) => s.value != null));
-  final isVerified = ref.watch(authControllerProvider.select((s) => s.value?.isVerified ?? false));
   final isInitialLoading = ref.watch(authControllerProvider.select((s) => s.isLoading && !s.hasValue));
   final hasError = ref.watch(authControllerProvider.select((s) => s.hasError));
   final onboardingState = ref.watch(onboardingStatusControllerProvider);

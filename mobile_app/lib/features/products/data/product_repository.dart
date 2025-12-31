@@ -81,7 +81,7 @@ class ProductRepository {
       }
 
       return products;
-    } catch (e, st) {
+    } catch (e) {
       debugPrint('Error loading products: $e');
       
       // Try cache

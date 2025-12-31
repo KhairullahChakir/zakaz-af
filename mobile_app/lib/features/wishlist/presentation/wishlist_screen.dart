@@ -26,8 +26,8 @@ class WishlistScreen extends ConsumerWidget {
           centerTitle: true,
         ),
         body: GuestPlaceholder(
-          title: ref.tr('login_required') ?? 'Login Required',
-          message: ref.tr('guest_wishlist_msg') ?? 'Please login to access your wishlist.',
+          title: ref.tr('login_required'),
+          message: ref.tr('guest_wishlist_msg'),
         ),
       );
     }

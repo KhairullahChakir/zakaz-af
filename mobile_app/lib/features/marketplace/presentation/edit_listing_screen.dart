@@ -93,7 +93,7 @@ class _EditListingScreenState extends ConsumerState<EditListingScreen> {
     // Validate at least one image remains
     if (_currentImages.isEmpty && _newImages.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(ref.tr('image_required') ?? 'At least one image is required')),
+        SnackBar(content: Text(ref.tr('image_required')),),
       );
       return;
     }
@@ -129,7 +129,6 @@ class _EditListingScreenState extends ConsumerState<EditListingScreen> {
       }
     } catch (e) {
       if (mounted) {
-        print('Error updating: $e');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.toString().replaceAll('Exception: ', '')), 

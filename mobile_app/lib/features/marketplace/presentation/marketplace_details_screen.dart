@@ -28,7 +28,7 @@ class MarketplaceDetailsScreen extends ConsumerWidget {
     final shareText = ref.tr('share_listing_text')
         .replaceAll('{name}', item.name)
         .replaceAll('{price}', item.price.toStringAsFixed(0));
-    Share.share(shareText);
+    SharePlus.share(shareText);
   }
 
   void _showReportDialog(BuildContext context, WidgetRef ref, MarketplaceItem item) {

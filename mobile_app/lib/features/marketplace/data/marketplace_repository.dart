@@ -41,12 +41,9 @@ class MarketplaceRepository {
 
   Future<MarketplaceItem> getItem(int id) async {
     try {
-      print('Fetching marketplace item: $id');
       final response = await _dio.get('/marketplace/$id');
-      print('Got response for item $id');
       return MarketplaceItem.fromJson(response.data);
     } catch (e) {
-      print('Error fetching marketplace item $id: $e');
       throw Exception('Failed to load marketplace item: $e');
     }
   }
@@ -163,7 +160,7 @@ class MarketplaceItemsCache extends _$MarketplaceItemsCache {
   Future<List<MarketplaceItem>> build() async {
     // Auto-refresh after 5 minutes
     ref.keepAlive();
-    final timer = Future.delayed(const Duration(minutes: 5), () {
+    Future.delayed(const Duration(minutes: 5), () {
       ref.invalidateSelf();
     });
     ref.onDispose(() {}); // Timer will be garbage collected

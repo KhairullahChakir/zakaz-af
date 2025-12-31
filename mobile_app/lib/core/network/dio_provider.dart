@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../core/storage/storage_provider.dart';
@@ -39,7 +40,7 @@ Dio dio(Ref ref) {
     responseHeader: false,
     responseBody: false,
     error: true,
-    logPrint: (o) => print('*** DioException ***:\n$o'),
+    logPrint: (o) => debugPrint('*** DioException ***:\n$o'),
   ));
 
   return dio;

@@ -92,11 +92,11 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
         });
         if (mounted) {
            ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(ref.tr('location_fetched_success') ?? 'Location attached successfully!')),
+            SnackBar(content: Text(ref.tr('location_fetched_success'))),
           );
         }
       } else {
-        if (mounted) _showError(ref.tr('location_permission_denied') ?? 'Could not get location. Check permissions.');
+        if (mounted) _showError(ref.tr('location_permission_denied'));
       }
     } catch (e) {
       if (mounted) _showError('Error getting location: $e');
@@ -217,8 +217,8 @@ class _AddEditAddressScreenState extends ConsumerState<AddEditAddressScreen> {
                                   Expanded(
                                     child: Text(
                                       (_latitude != null && _longitude != null) 
-                                          ? (ref.tr('location_attached') ?? 'Location Attached')
-                                          : (ref.tr('use_current_location') ?? 'Use Current Location'),
+                                          ? ref.tr('location_attached')
+                                          : ref.tr('use_current_location'),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: (_latitude != null && _longitude != null)

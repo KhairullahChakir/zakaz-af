@@ -49,7 +49,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                    IconButton(
                     icon: const Icon(Icons.share, color: Colors.white),
                     onPressed: () {
-                      Share.share('${product.name}\n${product.description ?? ""}\nCheck it out: https://zakaz.af/product/${product.id}');
+                      SharePlus.share('${product.name}\n${product.description ?? ""}\nCheck it out: https://zakaz.af/product/${product.id}');
                     },
                   ),
                   IconButton(

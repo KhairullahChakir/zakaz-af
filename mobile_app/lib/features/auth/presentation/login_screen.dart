@@ -251,7 +251,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       if (context.mounted) context.go('/');
                     },
                     child: Text(
-                      ref.tr('continue_as_guest') ?? 'Continue as Guest', 
+                      ref.tr('continue_as_guest'), 
                       style: TextStyle(
                         color: context.textSecondary,
                         fontSize: 16,
