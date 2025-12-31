@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'auth_controller.dart';
+import 'guest_provider.dart';
 import '../../../core/localization/language_provider.dart';
 import '../../../core/services/biometric_service.dart';
 import '../../../core/theme/theme_context.dart';
@@ -239,6 +240,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ref.tr('sign_in'),
                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Guest Mode Button
+                  TextButton(
+                    onPressed: () async {
+                      await ref.read(guestModeProvider.notifier).enable();
+                      if (context.mounted) context.go('/');
+                    },
+                    child: Text(
+                      ref.tr('continue_as_guest') ?? 'Continue as Guest', 
+                      style: TextStyle(
+                        color: context.textSecondary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                   
                   const SizedBox(height: 40),

@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import '../features/auth/presentation/guest_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:mobile_app/features/auth/presentation/auth_controller.dart';
@@ -57,21 +58,27 @@ import '../core/widgets/splash_screen.dart';
 
 part 'app_router.g.dart';
 
+
+// ... (existing imports)
+
 @Riverpod(keepAlive: true)
 GoRouter appRouter(Ref ref) {
   // Use select on the state (AsyncValue) to only trigger rebuilds when auth status changes.
-  // This prevents the "weird loading" and app resets during name/avatar updates.
   final isAuthenticated = ref.watch(authControllerProvider.select((s) => s.value != null));
   final isVerified = ref.watch(authControllerProvider.select((s) => s.value?.isVerified ?? false));
   final isInitialLoading = ref.watch(authControllerProvider.select((s) => s.isLoading && !s.hasValue));
   final hasError = ref.watch(authControllerProvider.select((s) => s.hasError));
   final onboardingState = ref.watch(onboardingStatusControllerProvider);
+  final isGuest = ref.watch(guestModeProvider);
 
   return GoRouter(
     initialLocation: '/',
     redirect: (context, state) {
       if (isInitialLoading) return '/splash';
-      if (hasError && !isAuthenticated) return '/login';
+      
+      // If error (e.g. offline) and not authenticated and not guest -> login
+      // If guest, we proceed even with error (offline guest)
+      if (hasError && !isAuthenticated && !isGuest) return '/login';
 
       final isLoggingIn = state.uri.path == '/login' || state.uri.path == '/register';
       final isVerifying = state.uri.path == '/verify-otp';
@@ -89,7 +96,7 @@ GoRouter appRouter(Ref ref) {
       }
 
       // 2. Check Auth
-      if (!isAuthenticated) {
+      if (!isAuthenticated && !isGuest) {
         if (isLoggingIn || isVerifying || isForgot || isSplash || isOnboarding) return null;
         return '/login';
       }
@@ -100,9 +107,19 @@ GoRouter appRouter(Ref ref) {
       //   return '/verify-otp';
       // }
 
-      // 4. Check Logged In flow
-      if (isAuthenticated && (isLoggingIn || isVerifying || isSplash || isOnboarding)) {
-        return '/';
+      // 4. Check Logged In flow (User or Guest trying to access Auth pages)
+      if ((isAuthenticated || isGuest) && (isLoggingIn || isVerifying || isSplash || isOnboarding)) {
+        // If guest tries to go to login, allow it? 
+        // Usually YES, guests need to be able to go to /login to upgrade.
+        // So we only redirect if AUTHENTICATED.
+        if (isAuthenticated) return '/';
+        
+        // If Guest is on Login/Register pages, allow them to stay there (to sign up)
+        // But if Guest is on Splash/Onboarding, go Home.
+        if (isSplash || isOnboarding) return '/';
+        
+        // Guest on Login/Register -> Authorized to be there.
+        return null;
       }
 
       return null;

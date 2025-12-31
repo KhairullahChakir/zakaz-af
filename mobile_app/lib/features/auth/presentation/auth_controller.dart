@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:mobile_app/core/storage/storage_provider.dart';
+import 'package:mobile_app/core/storage/shared_prefs_provider.dart';
 import 'package:mobile_app/features/auth/data/auth_repository.dart';
 import 'package:mobile_app/features/auth/domain/user.dart';
 import 'package:mobile_app/features/cart/presentation/cart_provider.dart';
@@ -9,13 +11,11 @@ part 'auth_controller.g.dart';
 
 @Riverpod(keepAlive: true)
 class AuthController extends _$AuthController {
-  // Cache to avoid refetching on every rebuild
   User? _cachedUser;
   bool _hasInitialized = false;
 
   @override
   FutureOr<User?> build() async {
-    // Return cached user if already initialized
     if (_hasInitialized && _cachedUser != null) {
       return _cachedUser;
     }
@@ -38,18 +38,39 @@ class AuthController extends _$AuthController {
       final user = await repo.getUser(token);
       _cachedUser = user;
       _hasInitialized = true;
+      
+      // Save user to cache for offline mode
+      try {
+        await ref.read(sharedPrefsProvider).setString('cached_user_profile', jsonEncode(user.toJson()));
+      } catch (_) {}
+      
       return user;
     } catch (e) {
-      // On any error (network or auth), just return null
-      // Don't rethrow to prevent Riverpod from infinitely retrying
+      // Offline fallback: Try to load from cache
+      final isNetworkError = e.toString().contains('connection error') || 
+                             e.toString().contains('SocketException') ||
+                             e.toString().contains('No route to host'); // Specific to our current issue
+                             
+      if (isNetworkError) {
+        try {
+          final cachedJson = ref.read(sharedPrefsProvider).getString('cached_user_profile');
+          if (cachedJson != null) {
+            final user = User.fromJson(jsonDecode(cachedJson));
+            _cachedUser = user;
+            _hasInitialized = true;
+            return user;
+          }
+        } catch (_) {}
+      }
+
       _hasInitialized = true;
       
-      // Only delete token if it's clearly an auth error
       final isAuthError = e.toString().contains('401') || 
                           e.toString().contains('403') || 
                           e.toString().contains('Unauthenticated');
       if (isAuthError) {
         await ref.read(secureStorageProvider).delete(key: 'auth_token');
+        await ref.read(sharedPrefsProvider).remove('cached_user_profile');
       }
       return null;
     }
@@ -61,10 +82,11 @@ class AuthController extends _$AuthController {
       final repo = ref.read(authRepositoryProvider);
       final result = await repo.login(login, password);
       
-      // Save token
       await ref.read(secureStorageProvider).write(key: 'auth_token', value: result.token);
       
-      // Clear cart for new login session
+      // Save cache
+      await ref.read(sharedPrefsProvider).setString('cached_user_profile', jsonEncode(result.user.toJson()));
+
       await ref.read(cartProvider.notifier).clearCart();
       
       state = AsyncValue.data(result.user);
