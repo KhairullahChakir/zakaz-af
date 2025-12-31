@@ -82,12 +82,11 @@ class AuthController extends _$AuthController {
       final repo = ref.read(authRepositoryProvider);
       final result = await repo.login(login, password);
       
-      await ref.read(secureStorageProvider).write(key: 'auth_token', value: result.token);
-      
-      // Save cache
-      await ref.read(sharedPrefsProvider).setString('cached_user_profile', jsonEncode(result.user.toJson()));
-
-      await ref.read(cartProvider.notifier).clearCart();
+      await Future.wait([
+        ref.read(secureStorageProvider).write(key: 'auth_token', value: result.token),
+        ref.read(sharedPrefsProvider).setString('cached_user_profile', jsonEncode(result.user.toJson())),
+        ref.read(cartProvider.notifier).clearCart(),
+      ]);
       
       state = AsyncValue.data(result.user);
     } catch (e, st) {
@@ -170,11 +169,15 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> logout() async {
-    // TODO: Call API logout
-    await ref.read(secureStorageProvider).delete(key: 'auth_token');
-    // Clear cart on logout
-    await ref.read(cartProvider.notifier).clearCart();
+    // Optimistic logout
     state = const AsyncValue.data(null);
+    try {
+      await Future.wait([
+        ref.read(secureStorageProvider).delete(key: 'auth_token'),
+        ref.read(cartProvider.notifier).clearCart(),
+        ref.read(sharedPrefsProvider).remove('cached_user_profile'),
+      ]);
+    } catch (_) {}
   }
 
   Future<void> updateProfile({
