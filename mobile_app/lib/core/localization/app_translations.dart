@@ -213,12 +213,23 @@ class AppTranslations {
     'last_updated_v': 'Last Updated: {v}',
     'discover_products_msg': 'Looks like you haven\'t added anything yet.\nDiscover amazing local products!',
 
-    // Wishlist
-    'wishlist_title': 'My Wishlist',
-    'wishlist': 'Wishlist',
-    'wishlist_empty': 'Your Wishlist is Empty',
-    'wishlist_start_msg': 'Save your favorite items here to buy them later!',
-    'browse_products': 'Browse Products',
+    // Privacy Policy Keys
+    'privacy_intro_title': 'Introduction',
+    'privacy_intro_content': 'Welcome to Zakaz-AF. We are committed to protecting your personal information and your right to privacy. This policy explains how we handle your data.',
+    'privacy_data_collect_title': 'Information We Collect',
+    'privacy_data_collect_content': 'We collect your name, email, phone number, and delivery address to fulfill orders. We also track app version and notification tokens to keep your app functional.',
+    'privacy_whatsapp_title': 'Chat & WhatsApp',
+    'privacy_whatsapp_content': 'Communications with sellers occur via WhatsApp. These messages are protected by WhatsApp\'s end-to-end encryption. Zakaz-AF does not store or monitor your private chat messages.',
+    'privacy_usage_title': 'How We Use Your Info',
+    'privacy_usage_content': 'Your data is used to process orders, improve our service, and prepare for future features like GPS-based shop discovery and secure digital payments.',
+    'privacy_security_title': 'Data Security',
+    'privacy_security_content': 'We use industry-standard SSL/HTTPS encryption for data transfer. Passwords are never stored in plain text but are securely hashed on our servers.',
+    'privacy_rights_title': 'Your Rights & Deletion',
+    'privacy_rights_content': 'You have the right to access, correct, or delete your data. To request full account and data deletion, please email support@zakaz-af.com.',
+    'privacy_children_title': 'Children\'s Privacy',
+    'privacy_children_content': 'Zakaz-AF is intended for users aged 13 and older. We do not knowingly collect data from children under this age.',
+    'privacy_contact_title': 'Contact Support',
+    'privacy_contact_content': 'For any privacy concerns, contact us at support@zakaz-af.com or visit our office in Kabul.',
 
     // Checkout
     'checkout': 'Checkout',
@@ -1689,10 +1700,23 @@ class AppTranslations {
     'invite_friends_msg': 'دوستان خود را دعوت کنید و ۵۰ افغانی بگیرید',
     'contact_support': 'تماس با پشتیبانی',
     'chat_on_whatsapp': 'چت در واتساپ',
-    'vibration_on': 'لرزش روشن',
-    'vibration_off': 'لرزش خاموش',
-    'last_updated_v': 'آخرین بروزرسانی: {v}',
-  };
+    // Privacy Policy Keys
+    'privacy_intro_title': 'مقدمه',
+    'privacy_intro_content': 'به زکاز-اف خوش آمدید. ما متعهد به محافظت از اطلاعات شخصی و حق حریم خصوصی شما هستیم. این سیاست نحوه مدیریت داده‌های شما را توضیح می‌دهد.',
+    'privacy_data_collect_title': 'اطلاعاتی که ما جمع‌آوری می‌کنیم',
+    'privacy_data_collect_content': 'ما نام، ایمیل، شماره تلفن و آدرس تحویل شما را برای انجام سفارش‌ها جمع‌آوری می‌کنیم. همچنین نسخه اپلیکیشن و توکن‌های اعلان را برای عملکرد بهتر برنامه پیگیری می‌کنیم.',
+    'privacy_whatsapp_title': 'چت و واتساپ',
+    'privacy_whatsapp_content': 'ارتباط با فروشندگان از طریق واتساپ انجام می‌شود. این پیام‌ها توسط رمزگذاری سرتاسری واتساپ محافظت می‌شوند. زکاز-اف پیام‌های چت خصوصی شما را ذخیره یا نظارت نمی‌کند.',
+    'privacy_usage_title': 'نحوه استفاده از اطلاعات',
+    'privacy_usage_content': 'داده‌های شما برای پردازش سفارش‌ها، بهبود خدمات ما و آماده‌سازی برای ویژگی‌های آینده مانند کشف فروشگاه مبتنی بر GPS و پرداخت‌های دیجیتال امن استفاده می‌شود.',
+    'privacy_security_title': 'امنیت داده‌ها',
+    'privacy_security_content': 'ما از رمزگذاری استاندارد SSL/HTTPS برای انتقال داده‌ها استفاده می‌کنیم. گذرواژه‌ها هرگز به صورت متن ساده ذخیره نمی‌شوند بلکه به صورت ایمن در سرورهای ما هش می‌شوند.',
+    'privacy_rights_title': 'حقوق شما و حذف داده‌ها',
+    'privacy_rights_content': 'شما حق دسترسی، اصلاح یا حذف داده‌های خود را دارید. برای درخواست حذف کامل حساب و داده‌ها، لطفاً به support@zakaz-af.com ایمیل بزنید.',
+    'privacy_children_title': 'حریم خصوصی کودکان',
+    'privacy_children_content': 'زکاز-اف برای کاربران ۱۳ سال به بالا در نظر گرفته شده است. ما آگاهانه داده‌های کودکان زیر این سن را جمع‌آوری نمی‌کنیم.',
+    'privacy_contact_title': 'تماس با پشتیبانی',
+    'privacy_contact_content': 'برای هرگونه نگرانی در مورد حریم خصوصی، با ما در support@zakaz-af.com تماس بگیرید یا به دفتر ما در کابل مراجعه کنید.',
 
   static const Map<String, String> _pashto = {
     // Common
@@ -2532,8 +2556,21 @@ class AppTranslations {
     'invite_friends_msg': 'ملګرو ته بلنه ورکړئ او ۵۰ افغانۍ ترلاسه کړئ',
     'contact_support': 'د ملاتړ سره اړیکه',
     'chat_on_whatsapp': 'په واټساپ کې چټ کول',
-    'vibration_on': 'لرزش فعال',
-    'vibration_off': 'لرزش غیرفعال',
-    'last_updated_v': 'وروستی تازه: {v}',
-  };
+    // Privacy Policy Keys
+    'privacy_intro_title': 'پیژندنه',
+    'privacy_intro_content': 'زکاز-اف ته ښه راغلاست. موږ ستاسو د شخصي معلوماتو او محرمیت حق ساتلو ته ژمن یو. دا پالیسي تشریح کوي چې موږ ستاسو ډاټا څنګه اداره کوو.',
+    'privacy_data_collect_title': 'هغه معلومات چې موږ یې راټولوو',
+    'privacy_data_collect_content': 'موږ ستاسو نوم، بریښنالیک، تلیفون شمیره، او د تحویل پته د فرمایشونو پوره کولو لپاره راټولوو. موږ د اپلیکیشن نسخه او د خبرتیا ټوکنونه هم تعقیب کوو.',
+    'privacy_whatsapp_title': 'چت او واټساپ',
+    'privacy_whatsapp_content': 'له پلورونکو سره اړیکې د واټساپ له لارې ترسره کیږي. دا پیغامونه د واټساپ د کوډ کولو (end-to-end encryption) لخوا خوندي شوي. زکاز-اف ستاسو شخصي پیغامونه نه ذخیره کوي.',
+    'privacy_usage_title': 'موږ ستاسو معلومات څنګه کاروو',
+    'privacy_usage_content': 'ستاسو ډاټا د فرمایشونو پروسس کولو، زموږ د خدماتو ښه کولو، او د راتلونکو ځانګړتیاوو لکه د GPS پر بنسټ لټون او ډیجیټل تادیاتو لپاره کارول کیږي.',
+    'privacy_security_title': 'د معلوماتو امنیت',
+    'privacy_security_content': 'موږ د معلوماتو لیږد لپاره SSL/HTTPS کوډ کولو څخه کار اخلو. پاسورډونه هیڅکله په ساده متن کې نه ذخیره کیږي بلکې زموږ په سرورونو کې په خوندي ډول هش کیږي.',
+    'privacy_rights_title': 'ستاسو حقونه او د معلوماتو حذف کول',
+    'privacy_rights_content': 'تاسو حق لرئ چې خپلو معلوماتو ته لاسرسی ومومئ، هغه سم کړئ یا یې حذف کړئ. د حساب او ډاټا بشپړ حذف کولو غوښتنې لپاره support@zakaz-af.com ته بریښنالیک واستوئ.',
+    'privacy_children_title': 'د ماشومانو محرمیت',
+    'privacy_children_content': 'زکاز-اف د ۱۳ کلونو او پورته کاروونکو لپاره دی. موږ په قصدي ډول له دې څخه د کم عمره ماشومانو معلومات نه راټولوو.',
+    'privacy_contact_title': 'له ملاتړ سره اړیکه',
+    'privacy_contact_content': 'د محرمیت په اړه د هرې پوښتنې لپاره، له موږ سره په support@zakaz-af.com کې اړیکه ونیسئ یا په کابل کې زموږ دفتر ته راشئ.',
 }
