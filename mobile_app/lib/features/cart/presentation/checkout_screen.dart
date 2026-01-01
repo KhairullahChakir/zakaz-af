@@ -156,8 +156,34 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       message.writeln('📞 ${_selectedAddress!.phonePrimary}');
     }
 
-    // WhatsApp business number for Zakaz-AF
-    const whatsappNumber = '93701234567'; // Replace with actual business number
+    // Determine the WhatsApp target number dynamically
+    String whatsappNumber = '93701234567'; // Default platform number
+    
+    // Check if all items belong to the same shop
+    final shopIds = items.map((item) => item.product.shopId).toSet();
+    if (shopIds.length == 1 && shopIds.first != null) {
+      final shop = items.first.product.shop;
+      final targetPhone = shop?.phone ?? shop?.owner?.phone;
+      
+      if (shop != null && targetPhone != null && targetPhone.isNotEmpty) {
+        // Sanitize phone number (remove +, spaces, dashes)
+        String cleaned = targetPhone.replaceAll(RegExp(r'[^\d]'), '');
+        // Handle common Afghan number formats
+        if (cleaned.startsWith('0')) {
+          cleaned = '93${cleaned.substring(1)}';
+        } else if (cleaned.length == 9) {
+          cleaned = '93$cleaned';
+        }
+        
+        if (cleaned.isNotEmpty) {
+          whatsappNumber = cleaned;
+          // Add shop info to the message
+          message.writeln('🏪 *Shop: ${shop.name}*');
+          message.writeln('');
+        }
+      }
+    }
+
     final encodedMessage = Uri.encodeComponent(message.toString());
     final whatsappUrl = 'https://wa.me/$whatsappNumber?text=$encodedMessage';
     
