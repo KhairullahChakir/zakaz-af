@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
 import '../../../core/theme/theme_context.dart';
+import '../../../core/services/app_settings_service.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
@@ -178,45 +180,12 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                   // Contact Info
                   _buildSectionTitle(context, ref.tr('contact_us')),
                   const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: context.cardColor,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: context.shadowColor,
-                          blurRadius: 15,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        _buildContactRow(context, Icons.email_outlined, 'khairullahanosh9626@gmail.com'),
-                        const Divider(height: 24),
-                        _buildContactRow(context, Icons.phone_outlined, '+77073756623'),
-                        const Divider(height: 24),
-                        _buildContactRow(context, Icons.location_on_outlined, 'Sheberghan, Jawzjan'),
-                      ],
-                    ),
-                  ),
+                  _buildContactSection(),
 
                   const SizedBox(height: 24),
 
                   // Social Links
-                  _buildSectionTitle(context, ref.tr('follow_us')),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildSocialButton(Icons.facebook, Colors.blue),
-                      _buildSocialButton(Icons.camera_alt, Colors.purple),
-                      _buildSocialButton(Icons.music_note, context.isDark ? Colors.white : Colors.black),
-                      _buildSocialButton(Icons.send, Colors.lightBlue),
-                      _buildSocialButton(Icons.phone, Colors.green),
-                    ],
-                  ),
+                  _buildSocialSection(),
 
                   const SizedBox(height: 32),
 
@@ -345,17 +314,6 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
     );
   }
 
-  Widget _buildSocialButton(IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        shape: BoxShape.circle,
-      ),
-      child: Icon(icon, color: color, size: 28),
-    );
-  }
-
   Widget _buildLinkTile(BuildContext context, String title, VoidCallback onTap) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 4),
@@ -384,5 +342,146 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildContactSection() {
+    final settingsAsync = ref.watch(appSettingsProvider);
+    
+    return settingsAsync.when(
+      data: (settings) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: context.cardColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: context.shadowColor,
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            _buildContactRow(context, Icons.email_outlined, settings.contact.email),
+            const Divider(height: 24),
+            _buildContactRow(context, Icons.phone_outlined, settings.contact.phone),
+            const Divider(height: 24),
+            _buildContactRow(context, Icons.location_on_outlined, settings.contact.location),
+          ],
+        ),
+      ),
+      loading: () => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: context.cardColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Center(child: CircularProgressIndicator()),
+      ),
+      error: (_, __) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: context.cardColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: context.shadowColor,
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            _buildContactRow(context, Icons.email_outlined, 'khairullahanosh9626@gmail.com'),
+            const Divider(height: 24),
+            _buildContactRow(context, Icons.phone_outlined, '+77073756623'),
+            const Divider(height: 24),
+            _buildContactRow(context, Icons.location_on_outlined, 'Sheberghan, Jawzjan'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialSection() {
+    final settingsAsync = ref.watch(appSettingsProvider);
+    
+    return settingsAsync.when(
+      data: (settings) {
+        final activeLinks = settings.social.activeLinks;
+        
+        // If no social links configured, hide the section
+        if (activeLinks.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSectionTitle(context, ref.tr('follow_us')),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: activeLinks.map((link) => _buildDynamicSocialButton(link)).toList(),
+            ),
+          ],
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+
+  Widget _buildDynamicSocialButton(SocialLinkItem link) {
+    IconData icon;
+    Color color;
+    
+    switch (link.type) {
+      case 'facebook':
+        icon = Icons.facebook;
+        color = Colors.blue;
+        break;
+      case 'instagram':
+        icon = Icons.camera_alt;
+        color = Colors.purple;
+        break;
+      case 'tiktok':
+        icon = Icons.music_note;
+        color = context.isDark ? Colors.white : Colors.black;
+        break;
+      case 'telegram':
+        icon = Icons.send;
+        color = Colors.lightBlue;
+        break;
+      case 'youtube':
+        icon = Icons.play_arrow;
+        color = Colors.red;
+        break;
+      default:
+        icon = Icons.link;
+        color = kPrimaryOrange;
+    }
+    
+    return GestureDetector(
+      onTap: () => _launchUrl(link.url),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: color, size: 28),
+      ),
+    );
+  }
+
+  Future<void> _launchUrl(String url) async {
+    if (url.isEmpty) return;
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 }

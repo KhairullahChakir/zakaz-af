@@ -36,7 +36,7 @@ final class VersionNotifierProvider
   VersionNotifier create() => VersionNotifier();
 }
 
-String _$versionNotifierHash() => r'50aeaf110daf1c904a32f2da1b1209293427b3c1';
+String _$versionNotifierHash() => r'e4ffa027bc82b8ddc3285ecc19a77ddfa3041e8f';
 
 /// Version check service
 

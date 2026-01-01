@@ -21,6 +21,9 @@ Route::get('/shops', [App\Http\Controllers\Api\ShopController::class, 'index']);
 Route::get('/shops/types', [App\Http\Controllers\Api\ShopController::class, 'types']);
 Route::get('/shops/{id}', [App\Http\Controllers\Api\ShopController::class, 'show']);
 
+// App Settings (public - for mobile app)
+Route::get('/app-settings', [App\Http\Controllers\Api\AppSettingsController::class, 'index']);
+
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:6,1');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 Route::post('/auth/google', [AuthController::class, 'googleLogin'])->middleware('throttle:10,1');
@@ -71,6 +74,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/shops/{id}/approve', [App\Http\Controllers\Api\ShopApplicationController::class, 'approve']);
         Route::post('/shops/{id}/reject', [App\Http\Controllers\Api\ShopApplicationController::class, 'reject']);
         Route::post('/shops/{id}/suspend', [App\Http\Controllers\Api\ShopApplicationController::class, 'suspend']);
+        
+        // App Settings management
+        Route::get('/settings', [App\Http\Controllers\Api\AppSettingsController::class, 'adminIndex']);
+        Route::put('/settings/{key}', [App\Http\Controllers\Api\AppSettingsController::class, 'update']);
+        Route::post('/settings/bulk', [App\Http\Controllers\Api\AppSettingsController::class, 'bulkUpdate']);
     });
     
     // Shop application (for customers wanting to become shopkeepers)
