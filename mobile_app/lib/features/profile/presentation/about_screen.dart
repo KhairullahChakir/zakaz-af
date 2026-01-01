@@ -3,6 +3,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/theme/theme_context.dart';
 import '../../../core/services/app_settings_service.dart';
 
@@ -444,11 +445,11 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
         color = Colors.blue;
         break;
       case 'instagram':
-        icon = Icons.camera_alt;
+        icon = FontAwesomeIcons.instagram;
         color = Colors.purple;
         break;
       case 'tiktok':
-        icon = Icons.music_note;
+        icon = FontAwesomeIcons.tiktok;
         color = context.isDark ? Colors.white : Colors.black;
         break;
       case 'telegram':

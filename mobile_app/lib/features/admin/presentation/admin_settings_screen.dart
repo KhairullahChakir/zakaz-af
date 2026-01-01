@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/theme/theme_context.dart';
 import '../../../core/network/dio_provider.dart';
 
@@ -235,7 +236,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                       label: 'Instagram',
                       hint: 'https://instagram.com/your-profile',
                       color: Colors.purple,
-                      icon: Icons.camera_alt,
+                      icon: FontAwesomeIcons.instagram,
                     ),
                     const SizedBox(height: 16),
                     _buildSocialField(
@@ -243,7 +244,7 @@ class _AdminSettingsScreenState extends ConsumerState<AdminSettingsScreen> {
                       label: 'TikTok',
                       hint: 'https://tiktok.com/@your-account',
                       color: context.isDark ? Colors.white : Colors.black,
-                      icon: Icons.music_note,
+                      icon: FontAwesomeIcons.tiktok,
                     ),
                     const SizedBox(height: 16),
                     _buildSocialField(
