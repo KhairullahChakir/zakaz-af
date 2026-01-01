@@ -5,6 +5,7 @@ import 'package:mobile_app/core/localization/language_provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/theme/theme_context.dart';
 import '../../../core/services/app_settings_service.dart';
+import '../../../core/widgets/shimmer_loading.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
@@ -74,7 +75,41 @@ class _HelpCenterScreenState extends ConsumerState<HelpCenterScreen> {
       ),
       body: settingsAsync.when(
         data: (settings) => _buildContent(context, settings),
-        loading: () => const Center(child: CircularProgressIndicator(color: kPrimaryOrange)),
+        loading: () => ShimmerLoading(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SkeletonBox(height: 50, width: double.infinity, borderRadius: 12),
+                const SizedBox(height: 24),
+                const SkeletonBox(height: 20, width: 150),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(child: const SkeletonBox(height: 80, borderRadius: 16)),
+                    const SizedBox(width: 12),
+                    Expanded(child: const SkeletonBox(height: 80, borderRadius: 16)),
+                    const SizedBox(width: 12),
+                    Expanded(child: const SkeletonBox(height: 80, borderRadius: 16)),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                const SkeletonBox(height: 20, width: 150),
+                const SizedBox(height: 12),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 4,
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: const SkeletonBox(height: 70, borderRadius: 16),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         error: (_, __) => _buildContent(context, AppSettingsData.empty()),
       ),
     );

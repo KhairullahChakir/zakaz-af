@@ -6,6 +6,7 @@ import 'package:mobile_app/core/localization/language_provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/theme/theme_context.dart';
 import '../../../core/services/app_settings_service.dart';
+import '../../../core/widgets/shimmer_loading.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
@@ -395,13 +396,23 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
           ],
         ),
       ),
-      loading: () => Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: context.cardColor,
-          borderRadius: BorderRadius.circular(20),
+      loading: () => ShimmerLoading(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: context.cardColor,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Column(
+            children: [
+              SkeletonBox(height: 18, width: double.infinity),
+              Divider(height: 16),
+              SkeletonBox(height: 18, width: double.infinity),
+              Divider(height: 16),
+              SkeletonBox(height: 18, width: double.infinity),
+            ],
+          ),
         ),
-        child: const Center(child: CircularProgressIndicator()),
       ),
       error: (_, __) => Container(
         padding: const EdgeInsets.all(20),
@@ -463,7 +474,19 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
           ],
         );
       },
-      loading: () => const SizedBox.shrink(),
+      loading: () => ShimmerLoading(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SkeletonBox(height: 20, width: 120, borderRadius: 10),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(4, (index) => const SkeletonBox(width: 56, height: 56, borderRadius: 28)),
+            ),
+          ],
+        ),
+      ),
       error: (_, __) => const SizedBox.shrink(),
     );
   }

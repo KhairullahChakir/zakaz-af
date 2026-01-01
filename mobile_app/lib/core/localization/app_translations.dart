@@ -230,6 +230,21 @@ class AppTranslations {
     'privacy_contact_title': 'Contact Support',
     'privacy_contact_content': 'For any privacy concerns, contact us via WhatsApp at +77073756623 or email khairullahanosh9626@gmail.com. We operate in Sheberghan, Jawzjan, Afghanistan.',
 
+    // Terms of Use Keys
+    'terms_of_use': 'Terms of Use',
+    'terms_intro_title': 'Acceptance of Terms',
+    'terms_intro_content': 'By accessing and using Zakaz-AF, you agree to be bound by these Terms of Use. If you do not agree, please do not use the application.',
+    'terms_account_title': 'User Accounts',
+    'terms_account_content': 'You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account.',
+    'terms_property_title': 'Intellectual Property',
+    'terms_property_content': 'All content on Zakaz-AF, including logos, text, and images, is the property of Zakaz-AF and protected by copyright laws.',
+    'terms_conduct_title': 'User Conduct',
+    'terms_conduct_content': 'Users agree not to engage in any fraudulent activity, harassment, or any action that may damage the platform or other users\' experience.',
+    'terms_liability_title': 'Limitation of Liability',
+    'terms_liability_content': 'Zakaz-AF is not liable for any direct or indirect damages arising from the use or inability to use the application or services.',
+    'terms_changes_title': 'Changes to Terms',
+    'terms_changes_content': 'We reserve the right to modify these terms at any time. Your continued use of the app after changes indicates your acceptance of the new terms.',
+
     // Checkout
     'checkout': 'Checkout',
     'delivery_address': 'Delivery Address',
@@ -1789,6 +1804,21 @@ class AppTranslations {
     'privacy_children_content': 'Zakaz-AF برای کاربران ۱۳ سال به بالا در نظر گرفته شده است. ما آگاهانه داده‌های کودکان زیر این سن را جمع‌آوری نمی‌کنیم.',
     'privacy_contact_title': 'تماس با پشتیبانی',
     'privacy_contact_content': 'برای هرگونه نگرانی، با واتساپ +77073756623 یا ایمیل khairullahanosh9626@gmail.com تماس بگیرید. ما در شبرغان، جوزجان، افغانستان فعالیت می‌کنیم.',
+
+    // Terms of Use Keys
+    'terms_of_use': 'شرایط استفاده',
+    'terms_intro_title': 'پذیرش شرایط',
+    'terms_intro_content': 'با دسترسی و استفاده از Zakaz-AF، شما موافقت می‌کنید که پایبند به این شرایط استفاده باشید. اگر موافق نیستید، لطفاً از برنامه استفاده نکنید.',
+    'terms_account_title': 'حساب‌های کاربری',
+    'terms_account_content': 'شما مسئول حفظ محرمانه بودن حساب و رمز عبور خود هستید. شما موافقت می‌کنید که مسئولیت تمام فعالیت‌هایی که تحت حساب شما انجام می‌شود را بپذیرید.',
+    'terms_property_title': 'مالکیت فکری',
+    'terms_property_content': 'تمام محتوای Zakaz-AF، از جمله لوگوها، متن و تصاویر، متعلق به Zakaz-AF بوده و تحت حمایت قوانین کپی‌رایت است.',
+    'terms_conduct_title': 'رفتار کاربر',
+    'terms_conduct_content': 'کاربران موافقت می‌کنند که در هیچ گونه فعالیت تقلبی، مزاحمت یا هر اقدامی که ممکن است به پلتفرم یا تجربه سایر کاربران آسیب برساند، شرکت نکنند.',
+    'terms_liability_title': 'محدودیت مسئولیت',
+    'terms_liability_content': 'Zakaz-AF در قبال آسیب‌های مستقیم یا غیرمستقیم ناشی از استفاده یا عدم توانایی در استفاده از برنامه یا خدمات مسئول نیست.',
+    'terms_changes_title': 'تغییرات در شرایط',
+    'terms_changes_content': 'ما حق تغییر این شرایط را در هر زمان برای خود محفوظ می‌داریم. ادامه استفاده شما از برنامه پس از تغییرات به منزله پذیرش شرایط جدید است.',
   };
 
   static const Map<String, String> _pashto = {
@@ -2682,5 +2712,20 @@ class AppTranslations {
     'privacy_children_content': 'Zakaz-AF د ۱۳ کلونو او پورته کاروونکو لپاره دی. موږ په قصدي ډول له دې څخه د کم عمره ماشومانو معلومات نه راټولوو.',
     'privacy_contact_title': 'له ملاتړ سره اړیکه',
     'privacy_contact_content': 'د هرې پوښتنې لپاره، واټساپ +77073756623 یا بریښنالیک khairullahanosh9626@gmail.com. موږ په شبرغان، جوزجان، افغانستان کې فعالیت لرو.',
+
+    // Terms of Use Keys
+    'terms_of_use': 'د کارولو شرایط',
+    'terms_intro_title': 'د شرایطو منل',
+    'terms_intro_content': 'Zakaz-AF ته په لاسرسي او کارولو سره، تاسو موافقه کوئ چې د دې کارولو شرایطو ته پابند اوسئ. که تاسو موافق نه یاست، مهرباني وکړئ اپلیکیشن مه کاروئ.',
+    'terms_account_title': 'د کارونکي حسابونه',
+    'terms_account_content': 'تاسو د خپل حساب او پټنوم د محرمیت ساتلو مسؤل یاست. تاسو موافقه کوئ چې د هغو ټولو فعالیتونو مسؤلیت ومنئ چې ستاسو د حساب لاندې ترسره کیږي.',
+    'terms_property_title': 'فکري ملکیت',
+    'terms_property_content': 'په Zakaz-AF کې ټول مواد، په شمول د لوگوګانو، متن او انځورونو، د Zakaz-AF ملکیت دی او د کاپي رایټ قوانینو لخوا خوندي شوی.',
+    'terms_conduct_title': 'د کارونکي چلند',
+    'terms_conduct_content': 'کارونکي موافقه کوي چې په هیڅ ډول درغلي، ځورونې، یا کوم عمل کې برخه وانخلي چې پلیټ فارم یا د نورو کاروونکو تجربې ته زیان ورسوي.',
+    'terms_liability_title': 'د مسؤلیت محدودیت',
+    'terms_liability_content': 'Zakaz-AF د اپلیکیشن یا خدماتو کارولو یا نه کارولو له امله رامینځته شوي مستقیم یا غیر مستقیم زیانونو مسؤل ندی.',
+    'terms_changes_title': 'په شرایطو کې بدلونونه',
+    'terms_changes_content': 'موږ حق لرو چې په هر وخت کې دا شرایط بدل کړو. له بدلونونو وروسته ستا د اپلیکیشن کارول د نويو شرایطو د منلو په مانا ده.',
   };
 }

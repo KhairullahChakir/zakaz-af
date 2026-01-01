@@ -18,6 +18,7 @@ import '../../cart/presentation/cart_screen.dart';
 import '../../profile/presentation/help_center_screen.dart';
 import '../../profile/presentation/about_screen.dart';
 import '../../profile/presentation/privacy_policy_screen.dart';
+import '../../profile/presentation/terms_of_use_screen.dart';
 import 'product_search_modal.dart';
 import '../../profile/presentation/notification_settings_screen.dart';
 import '../../profile/presentation/account_security_screen.dart';
@@ -1486,6 +1487,7 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                     _buildProfileOption(Icons.help_outline, ref.tr('help_center'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HelpCenterScreen()))),
                     _buildProfileOption(Icons.info_outline, ref.tr('about_app'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutScreen()))),
                     _buildProfileOption(Icons.privacy_tip_outlined, ref.tr('privacy_policy'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen()))),
+                    _buildProfileOption(Icons.description_outlined, ref.tr('terms_of_use'), () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TermsOfUseScreen()))),
                   ]),
 
                   const SizedBox(height: 32),
