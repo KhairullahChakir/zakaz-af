@@ -861,6 +861,16 @@ class AppTranslations {
     'pay_with_mpaisa': 'Pay with M-Paisa',
     'pay_with_azipay': 'Pay with AZi Pay',
     'pay_with_atoma': 'Pay with ATOMA Pay',
+    
+    // Admin Settings
+    'app_settings': 'App Settings',
+    'contact_info': 'Contact Information',
+    'contact_info_desc': 'Manage your business contact details',
+    'social_media': 'Social Media',
+    'social_media_desc': 'Add links to your social profiles',
+    'settings_saved': 'Settings saved successfully',
+    'location': 'Location',
+    'manage_app_settings_desc': 'Manage contact info and social links',
   };
 
   static const Map<String, String> _dari = {
@@ -1690,6 +1700,16 @@ class AppTranslations {
     'pay_with_mpaisa': 'پرداخت با ام-پیسه',
     'pay_with_azipay': 'پرداخت با عزی-پی',
     'pay_with_atoma': 'پرداخت با اتوما-پی',
+    
+    // Admin Settings
+    'app_settings': 'تنظیمات برنامه',
+    'contact_info': 'اطلاعات تماس',
+    'contact_info_desc': 'مدیریت اطلاعات تماس کسب‌وکار شما',
+    'social_media': 'شبکه‌های اجتماعی',
+    'social_media_desc': 'لینک‌های پروفایل اجتماعی خود را اضافه کنید',
+    'settings_saved': 'تنظیمات با موفقیت ذخیره شد',
+    'location': 'موقعیت',
+    'manage_app_settings_desc': 'مدیریت اطلاعات تماس و لینک‌های اجتماعی',
 
     // Profile Enhancements
     'my_wallet': 'کیف پول من',
@@ -2547,6 +2567,16 @@ class AppTranslations {
     'pay_with_mpaisa': 'د ام-پیسه له لارې تادیه',
     'pay_with_azipay': 'د عزی-پی له لارې تادیه',
     'pay_with_atoma': 'د اتوما-پی له لارې تادیه',
+    
+    // Admin Settings
+    'app_settings': 'د اپلیکیشن تنظیمات',
+    'contact_info': 'د اړیکو معلومات',
+    'contact_info_desc': 'د خپل سوداګرۍ اړیکې معلومات اداره کړئ',
+    'social_media': 'ټولنیز رسنۍ',
+    'social_media_desc': 'د خپلو ټولنیزو پروفایلونو لینکونه اضافه کړئ',
+    'settings_saved': 'تنظیمات په بریالیتوب سره خوندي شول',
+    'location': 'موقعیت',
+    'manage_app_settings_desc': 'د اړیکو معلومات او ټولنیز لینکونه اداره کړئ',
 
     // Profile Enhancements
     'my_wallet': 'زما بټوه',

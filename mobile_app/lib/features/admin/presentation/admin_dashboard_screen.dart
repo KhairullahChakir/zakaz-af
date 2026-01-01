@@ -567,6 +567,14 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
             const Color(0xFF8B5CF6),
             () => context.push('/admin/categories'),
           ),
+          const Divider(height: 24),
+          _buildActionItem(
+            Icons.settings_outlined,
+            ref.tr('app_settings'),
+            ref.tr('manage_app_settings_desc'),
+            const Color(0xFF6366F1),
+            () => context.push('/admin/settings'),
+          ),
         ],
       ),
     );
