@@ -198,8 +198,6 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                         _buildContactRow(context, Icons.phone_outlined, '+77073756623'),
                         const Divider(height: 24),
                         _buildContactRow(context, Icons.location_on_outlined, 'Sheberghan, Jawzjan'),
-                        const Divider(height: 24),
-                        _buildContactRow(context, Icons.language_outlined, 'www.zakaz-af.com'),
                       ],
                     ),
                   ),
