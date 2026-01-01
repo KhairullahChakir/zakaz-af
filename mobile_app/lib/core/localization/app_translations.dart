@@ -225,11 +225,11 @@ class AppTranslations {
     'privacy_security_title': 'Data Security',
     'privacy_security_content': 'We use industry-standard SSL/HTTPS encryption for data transfer. Passwords are never stored in plain text but are securely hashed on our servers.',
     'privacy_rights_title': 'Your Rights & Deletion',
-    'privacy_rights_content': 'You have the right to access, correct, or delete your data. To request full account and data deletion, please email support@zakaz-af.com.',
+    'privacy_rights_content': 'You have the right to access, correct, or delete your data. To request full account and data deletion, please email khairullahanosh9626@gmail.com or WhatsApp +77073756623.',
     'privacy_children_title': 'Children\'s Privacy',
     'privacy_children_content': 'Zakaz-AF is intended for users aged 13 and older. We do not knowingly collect data from children under this age.',
     'privacy_contact_title': 'Contact Support',
-    'privacy_contact_content': 'For any privacy concerns, contact us at support@zakaz-af.com or visit our office in Kabul.',
+    'privacy_contact_content': 'For any privacy concerns, contact us via WhatsApp at +77073756623 or email khairullahanosh9626@gmail.com. We operate in Sheberghan, Jawzjan, Afghanistan.',
 
     // Checkout
     'checkout': 'Checkout',
@@ -1712,11 +1712,11 @@ class AppTranslations {
     'privacy_security_title': 'امنیت داده‌ها',
     'privacy_security_content': 'ما از رمزگذاری استاندارد SSL/HTTPS برای انتقال داده‌ها استفاده می‌کنیم. گذرواژه‌ها هرگز به صورت متن ساده ذخیره نمی‌شوند بلکه به صورت ایمن در سرورهای ما هش می‌شوند.',
     'privacy_rights_title': 'حقوق شما و حذف داده‌ها',
-    'privacy_rights_content': 'شما حق دسترسی، اصلاح یا حذف داده‌های خود را دارید. برای درخواست حذف کامل حساب و داده‌ها، لطفاً به support@zakaz-af.com ایمیل بزنید.',
+    'privacy_rights_content': 'شما حق دسترسی، اصلاح یا حذف داده‌های خود را دارید. برای درخواست حذف کامل حساب، به khairullahanosh9626@gmail.com ایمیل بزنید یا با واتساپ +77073756623 تماس بگیرید.',
     'privacy_children_title': 'حریم خصوصی کودکان',
     'privacy_children_content': 'زکاز-اف برای کاربران ۱۳ سال به بالا در نظر گرفته شده است. ما آگاهانه داده‌های کودکان زیر این سن را جمع‌آوری نمی‌کنیم.',
     'privacy_contact_title': 'تماس با پشتیبانی',
-    'privacy_contact_content': 'برای هرگونه نگرانی در مورد حریم خصوصی، با ما در support@zakaz-af.com تماس بگیرید یا به دفتر ما در کابل مراجعه کنید.',
+    'privacy_contact_content': 'برای هرگونه نگرانی، با واتساپ +77073756623 یا ایمیل khairullahanosh9626@gmail.com تماس بگیرید. ما در شبرغان، جوزجان، افغانستان فعالیت می‌کنیم.',
   };
 
   static const Map<String, String> _pashto = {
@@ -2569,10 +2569,10 @@ class AppTranslations {
     'privacy_security_title': 'د معلوماتو امنیت',
     'privacy_security_content': 'موږ د معلوماتو لیږد لپاره SSL/HTTPS کوډ کولو څخه کار اخلو. پاسورډونه هیڅکله په ساده متن کې نه ذخیره کیږي بلکې زموږ په سرورونو کې په خوندي ډول هش کیږي.',
     'privacy_rights_title': 'ستاسو حقونه او د معلوماتو حذف کول',
-    'privacy_rights_content': 'تاسو حق لرئ چې خپلو معلوماتو ته لاسرسی ومومئ، هغه سم کړئ یا یې حذف کړئ. د حساب او ډاټا بشپړ حذف کولو غوښتنې لپاره support@zakaz-af.com ته بریښنالیک واستوئ.',
+    'privacy_rights_content': 'تاسو حق لرئ چې خپلو معلوماتو ته لاسرسی ومومئ، هغه سم کړئ یا یې حذف کړئ. د حساب حذف لپاره khairullahanosh9626@gmail.com ته بریښنالیک واستوئ یا واټساپ +77073756623.',
     'privacy_children_title': 'د ماشومانو محرمیت',
     'privacy_children_content': 'زکاز-اف د ۱۳ کلونو او پورته کاروونکو لپاره دی. موږ په قصدي ډول له دې څخه د کم عمره ماشومانو معلومات نه راټولوو.',
     'privacy_contact_title': 'له ملاتړ سره اړیکه',
-    'privacy_contact_content': 'د محرمیت په اړه د هرې پوښتنې لپاره، له موږ سره په support@zakaz-af.com کې اړیکه ونیسئ یا په کابل کې زموږ دفتر ته راشئ.',
+    'privacy_contact_content': 'د هرې پوښتنې لپاره، واټساپ +77073756623 یا بریښنالیک khairullahanosh9626@gmail.com. موږ په شبرغان، جوزجان، افغانستان کې فعالیت لرو.',
   };
 }
