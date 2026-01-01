@@ -1427,8 +1427,6 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                   if (user != null) ...[
                     _buildWalletCard(padding),
                     const SizedBox(height: 24),
-                    _buildOrderStatusRow(padding),
-                    const SizedBox(height: 24),
                   ],
 
                   // Become a Seller Promotion (only if not already a seller)
@@ -1748,49 +1746,6 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
     );
   }
 
-  Widget _buildOrderStatusRow(double padding) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      decoration: BoxDecoration(
-        color: context.cardColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: context.shadowColor,
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildStatusItem(Icons.pending_actions_outlined, ref.tr('pending'), '2'),
-          _buildStatusItem(Icons.inventory_2_outlined, ref.tr('processing'), '1'),
-          _buildStatusItem(Icons.local_shipping_outlined, ref.tr('shipped'), '0'),
-          _buildStatusItem(Icons.check_circle_outline, ref.tr('delivered'), '12'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusItem(IconData icon, String label, String count) {
-    return Column(
-      children: [
-        Badge(
-          label: Text(count),
-          isLabelVisible: count != '0',
-          backgroundColor: kPrimaryOrange,
-          child: Icon(icon, color: context.textSecondary, size: 28),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(fontSize: 11, color: context.textSecondary),
-        ),
-      ],
-    );
-  }
 
   Widget _buildProfileOption(
     IconData icon, 
