@@ -220,7 +220,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Image.asset(
-                  'assets/images/logo.png',
+                  'assets/images/final_logo.png',
                   width: Responsive.value(context, mobile: 32, tablet: 38),
                   height: Responsive.value(context, mobile: 32, tablet: 38),
                   fit: BoxFit.contain,

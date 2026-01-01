@@ -80,7 +80,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                       ],
                     ),
                     child: Image.asset(
-                      'assets/images/logo.png',
+                      'assets/images/final_logo.png',
                       width: 60,
                       height: 60,
                       errorBuilder: (context, error, stackTrace) => const Icon(
@@ -375,7 +375,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
       applicationIcon: Container(
         padding: const EdgeInsets.all(12),
         child: Image.asset(
-          'assets/images/logo.png',
+          'assets/images/final_logo.png',
           width: 48,
           height: 48,
           errorBuilder: (context, error, stackTrace) => const Icon(
