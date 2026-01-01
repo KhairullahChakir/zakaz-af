@@ -408,6 +408,33 @@ class AppTranslations {
     'faq_categories': 'FAQ Categories',
     'still_need_help': 'Still need help?',
     'support_24_7_assist': 'Our team is available 24/7 to assist you',
+    'contact_directly': 'Contact Directly',
+    'get_support': 'Get Support',
+    'chat_on_whatsapp': 'Chat on WhatsApp',
+    
+    // Help Center Categories
+    'cat_orders_title': 'Orders & Shipping',
+    'cat_orders_desc': 'Track orders, shipping info, delivery issues',
+    'cat_payments_title': 'Payments & Refunds',
+    'cat_payments_desc': 'Payment methods, refund process, billing',
+    'cat_account_title': 'Account & Profile',
+    'cat_account_desc': 'Settings, password, security',
+    'cat_selling_title': 'Selling on Zakaz-AF',
+    'cat_selling_desc': 'Become a seller, shop management',
+
+    // FAQ Items
+    'q_track_order': 'How do I track my order?',
+    'a_track_order': 'Once your order is shipped, you will receive a message via WhatsApp. You can also view your order status in the "My Orders" section of the app.',
+    'q_shipping_options': 'What are the shipping options?',
+    'a_shipping_options': 'We offer reliable delivery in Sheberghan, Jawzjan and surrounding regions.',
+    'q_payment_methods': 'What payment methods are accepted?',
+    'a_payment_methods': 'We accept Cash on Delivery, WhatsApp payments, and local mobile money (M-Paisa, HesabPay).',
+    'q_refund_policy': 'How do I request a refund?',
+    'a_refund_policy': 'Contact our support via WhatsApp within 24 hours of delivery if there is an issue with your order.',
+    'q_account_delete': 'How do I delete my account?',
+    'a_account_delete': 'Please contact our support team at khairullahanosh9626@gmail.com to request account deletion.',
+    'q_become_seller': 'How do I become a seller?',
+    'a_become_seller': 'Go to Profile > Become a Seller and fill out the application form. Our team will review it within 24 hours.',
     'get_support': 'Get Support',
     'i_understand': 'I Understand',
     'last_updated': 'Last updated: January 2026',
@@ -871,6 +898,7 @@ class AppTranslations {
     'settings_saved': 'Settings saved successfully',
     'location': 'Location',
     'manage_app_settings_desc': 'Manage contact info and social links',
+    'no_results_found': 'No results found',
   };
 
   static const Map<String, String> _dari = {
@@ -1247,8 +1275,34 @@ class AppTranslations {
     'call_us': 'تماس با ما',
     'faq_categories': 'دسته‌بندی‌های سوالات متداول',
     'still_need_help': 'هنوز به کمک نیاز دارید؟',
-    'support_24_7_assist': 'تیم ما ۲۴/۷ برای کمک به شما در دسترس است',
+    'support_24_7_assist': 'تیم ما ۲۴/۷ برای کمک به شما آماده است',
+    'contact_directly': 'تماس مستقیم',
     'get_support': 'دریافت پشتیبانی',
+    'chat_on_whatsapp': 'چت در واتساپ',
+
+    // Help Center Categories
+    'cat_orders_title': 'سفارشات و ارسال',
+    'cat_orders_desc': 'پیگیری سفارش، اطلاعات ارسال، مشکلات تحویل',
+    'cat_payments_title': 'پرداخت و بازگشت وجه',
+    'cat_payments_desc': 'روش‌های پرداخت، فرآیند بازگشت وجه، صورتحساب',
+    'cat_account_title': 'حساب کاربری و پروفایل',
+    'cat_account_desc': 'تنظیمات، رمز عبور، امنیت',
+    'cat_selling_title': 'فروش در Zakaz-AF',
+    'cat_selling_desc': 'فروشنده شوید، مدیریت فروشگاه',
+
+    // FAQ Items
+    'q_track_order': 'چگونه سفارش خود را پیگیری کنم؟',
+    'a_track_order': 'پس از ارسال سفارش، پیامی از طریق واتساپ دریافت خواهید کرد. همچنین می‌توانید وضعیت سفارش خود را در بخش "سفارشات من" در برنامه مشاهده کنید.',
+    'q_shipping_options': 'گزینه‌های ارسال چیست؟',
+    'a_shipping_options': 'ما تحویل قابل اعتماد در شبرغان، جوزجان و مناطق اطراف را ارائه می‌دهیم.',
+    'q_payment_methods': 'چه روش‌های پرداختی پذیرفته می‌شود؟',
+    'a_payment_methods': 'ما پرداخت نقدی هنگام تحویل، پرداخت از طریق واتساپ و پول موبایلی محلی (M-Paisa، HesabPay) را می‌پذیریم.',
+    'q_refund_policy': 'چگونه درخواست بازگشت وجه بدهم؟',
+    'a_refund_policy': 'اگر مشکلی در سفارش شما وجود دارد، ظرف ۲۴ ساعت پس از تحویل از طریق واتساپ با پشتیبانی ما تماس بگیرید.',
+    'q_account_delete': 'چگونه حساب خود را حذف کنم؟',
+    'a_account_delete': 'لطفاً برای درخواست حذف حساب با تیم پشتیبانی ما به آدرس khairullahanosh9626@gmail.com تماس بگیرید.',
+    'q_become_seller': 'چگونه فروشنده شوم؟',
+    'a_become_seller': 'به بخش پروفایل > فروشنده شوید بروید و فرم درخواست را پر کنید. تیم ما ظرف ۲۴ ساعت آن را بررسی خواهد کرد.',
     'i_understand': 'متوجه شدم',
     'last_updated': 'آخرین بروزرسانی: جنوری ۲۰۲۶',
 
@@ -1710,6 +1764,7 @@ class AppTranslations {
     'settings_saved': 'تنظیمات با موفقیت ذخیره شد',
     'location': 'موقعیت',
     'manage_app_settings_desc': 'مدیریت اطلاعات تماس و لینک‌های اجتماعی',
+    'no_results_found': 'نتیجه‌ای یافت نشد',
 
     // Profile Enhancements
     'my_wallet': 'کیف پول من',
@@ -2110,9 +2165,35 @@ class AppTranslations {
     'email_us': 'موږ ته بریښنالیک واستوئ',
     'call_us': 'موږ ته زنګ ووهئ',
     'faq_categories': 'د عامو پوښتنو کټګورۍ',
-    'still_need_help': 'لا هم مرستې ته اړتیا لرئ؟',
+    'still_need_help': 'بیا هم مرستې ته اړتیا لرئ؟',
     'support_24_7_assist': 'زموږ ټیم ۲۴/۷ ستاسو سره مرستې ته چمتو دی',
+    'contact_directly': 'مخامخ اړیکه',
     'get_support': 'مرسته ترلاسه کړئ',
+    'chat_on_whatsapp': 'په واټساپ کې خبرې وکړئ',
+
+    // Help Center Categories
+    'cat_orders_title': 'سپارښتنې او لیږد',
+    'cat_orders_desc': 'د سپارښتنې تعقیب، د لیږد معلومات، د سپارلو ستونزې',
+    'cat_payments_title': 'تادیات او بیرته ورکول',
+    'cat_payments_desc': 'د تادیې طریقې، د پیسو بیرته ورکولو پروسه، بلینګ',
+    'cat_account_title': 'حساب او پروفایل',
+    'cat_account_desc': 'تنظیمات، پټنوم، امنیت',
+    'cat_selling_title': 'په Zakaz-AF پلورل',
+    'cat_selling_desc': 'پلورونکی شئ، د پلورنځي مدیریت',
+
+    // FAQ Items
+    'q_track_order': 'زه څنګه خپله سپارښتنه تعقیب کړم؟',
+    'a_track_order': 'کله چې ستاسو سپارښتنه واستول شي، تاسو به د واټساپ له لارې یو پیغام ترلاسه کړئ. تاسو کولی شئ د اپلیکیشن "زما سپارښتنې" برخه کې هم خپل حالت وګورئ.',
+    'q_shipping_options': 'د لیږد اختیارونه کوم دي؟',
+    'a_shipping_options': 'موږ په شبرغان، جوزجان او شاوخوا سیمو کې د باور وړ لیږد وړاندیز کوو.',
+    'q_payment_methods': 'د تادیې کومې طریقې منل کیږي؟',
+    'a_payment_methods': 'موږ د تحویل پرمهال نغدي تادیه، واټساپ تادیات، او محلي موبایل پیسې (M-Paisa، HesabPay) منو.',
+    'q_refund_policy': 'زه څنګه د پیسو بیرته ورکولو غوښتنه وکړم؟',
+    'a_refund_policy': 'که ستاسو په سپارښتنه کې ستونزه وي، د تحویل نه وروسته په ۲۴ ساعتونو کې د واټساپ له لارې زموږ د ملاتړ ټیم سره اړیکه ونیسئ.',
+    'q_account_delete': 'زه څنګه خپل حساب حذف کړم؟',
+    'a_account_delete': 'مهرباني وکړئ د حساب حذف کولو غوښتنې لپاره زموږ د ملاتړ ټیم سره په khairullahanosh9626@gmail.com اړیکه ونیسئ.',
+    'q_become_seller': 'زه څنګه پلورونکی شم؟',
+    'a_become_seller': 'پروفایل > پلورونکی شئ برخې ته لاړ شئ او فورمه ډکه کړئ. زموږ ټیم به په ۲۴ ساعتونو کې بیاکتنه وکړي.',
     'i_understand': 'زه پوه شوم',
     'last_updated': 'وروستی ځل تازه شوی: جنوري ۲۰۲۶',
 
@@ -2577,6 +2658,7 @@ class AppTranslations {
     'settings_saved': 'تنظیمات په بریالیتوب سره خوندي شول',
     'location': 'موقعیت',
     'manage_app_settings_desc': 'د اړیکو معلومات او ټولنیز لینکونه اداره کړئ',
+    'no_results_found': 'هیڅ پایله ونه موندل شوه',
 
     // Profile Enhancements
     'my_wallet': 'زما بټوه',
