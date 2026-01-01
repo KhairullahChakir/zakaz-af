@@ -410,7 +410,7 @@ class AppTranslations {
     'support_24_7_assist': 'Our team is available 24/7 to assist you',
     'get_support': 'Get Support',
     'i_understand': 'I Understand',
-    'last_updated': 'Last updated: December 2024',
+    'last_updated': 'Last updated: January 2026',
 
     // Shop/Seller
     'my_shop': 'My Shop',
@@ -1240,7 +1240,7 @@ class AppTranslations {
     'support_24_7_assist': 'تیم ما ۲۴/۷ برای کمک به شما در دسترس است',
     'get_support': 'دریافت پشتیبانی',
     'i_understand': 'متوجه شدم',
-    'last_updated': 'آخرین بروزرسانی: دسامبر ۲۰۲۴',
+    'last_updated': 'آخرین بروزرسانی: جنوری ۲۰۲۶',
 
     // Shop/Seller
     'my_shop': 'فروشگاه من',
@@ -2094,7 +2094,7 @@ class AppTranslations {
     'support_24_7_assist': 'زموږ ټیم ۲۴/۷ ستاسو سره مرستې ته چمتو دی',
     'get_support': 'مرسته ترلاسه کړئ',
     'i_understand': 'زه پوه شوم',
-    'last_updated': 'وروستی ځل تازه شوی: ډسمبر ۲۰۲۴',
+    'last_updated': 'وروستی ځل تازه شوی: جنوري ۲۰۲۶',
 
     // Shop/Seller
     'my_shop': 'زما دوکان',
