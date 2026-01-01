@@ -61,7 +61,7 @@ class VersionNotifier extends _$VersionNotifier {
         updateRequired: false,
         updateAvailable: false,
       ));
-    } catch (e, st) {
+    } catch (e) {
       // On error, just use current version
       final info = await PackageInfo.fromPlatform();
       state = AsyncValue.data(AppVersion(
@@ -76,7 +76,7 @@ class VersionNotifier extends _$VersionNotifier {
     // Android Play Store URL
     const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.zakaz.af';
     // iOS App Store URL (if applicable)
-    const appStoreUrl = 'https://apps.apple.com/app/zakaz-af/id1234567890';
+    // iOS App Store URL: https://apps.apple.com/app/zakaz-af/id1234567890
     
     final uri = Uri.parse(playStoreUrl);
     if (await canLaunchUrl(uri)) {
@@ -111,7 +111,7 @@ class UpdateDialog extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.orange.withOpacity(0.1),
+              color: Colors.orange.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(Icons.system_update, color: Color(0xFFFF6B00)),

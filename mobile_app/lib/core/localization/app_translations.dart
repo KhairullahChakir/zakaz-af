@@ -798,7 +798,7 @@ class AppTranslations {
     'offline_data_shown': 'Showing cached data',
     'connect_to_update': 'Connect to internet to update',
     'cached_data': 'Cached Data',
-    'last_updated': 'Last updated: {time}',
+    'last_synced': 'Last synced: {time}',
     'available_offline': 'Available offline',
     'sync_when_online': 'Will sync when online',
     
@@ -1607,7 +1607,7 @@ class AppTranslations {
     'offline_data_shown': 'نمایش داده‌های ذخیره شده',
     'connect_to_update': 'برای به‌روزرسانی به اینترنت وصل شوید',
     'cached_data': 'داده‌های ذخیره شده',
-    'last_updated': 'آخرین به‌روزرسانی: {time}',
+    'last_synced': 'آخرین همگام‌سازی: {time}',
     'available_offline': 'آفلاین در دسترس',
     'sync_when_online': 'هنگام آنلاین شدن همگام‌سازی می‌شود',
     
@@ -2417,7 +2417,7 @@ class AppTranslations {
     'offline_data_shown': 'زیرمه شوي معلومات ښودل کیږي',
     'connect_to_update': 'د تازه کولو لپاره انټرنیټ سره وصل شئ',
     'cached_data': 'زیرمه شوي معلومات',
-    'last_updated': 'وروستی تازه: {time}',
+    'last_synced': 'وروستی همغږي: {time}',
     'available_offline': 'آفلاین شتون لري',
     'sync_when_online': 'کله چې آنلاین شئ همغږي کیږي',
     
