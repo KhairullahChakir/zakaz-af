@@ -1,7 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:dio/dio.dart';
-import '../../../core/network/dio_provider.dart';
+import '../network/dio_provider.dart';
 
 part 'app_settings_service.g.dart';
 
