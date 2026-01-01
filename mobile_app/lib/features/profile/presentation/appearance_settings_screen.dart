@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/theme_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/localization/language_provider.dart';
+import '../../../core/services/haptic_service.dart';
 
 class AppearanceSettingsScreen extends ConsumerWidget {
   const AppearanceSettingsScreen({super.key});
@@ -10,6 +11,7 @@ class AppearanceSettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTheme = ref.watch(themePreferenceProvider);
+    final hapticEnabled = ref.watch(hapticEnabledProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
     return Scaffold(
@@ -67,6 +69,65 @@ class AppearanceSettingsScreen extends ConsumerWidget {
             const SizedBox(height: 12),
             
             _buildPreviewCard(context, ref, isDark),
+            
+            const SizedBox(height: 32),
+            
+            // Haptic Feedback Section
+            _buildSectionTitle(ref.tr('haptic_feedback'), isDark),
+            const SizedBox(height: 12),
+            
+            Container(
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.darkCard : Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
+                    blurRadius: 10,
+                  ),
+                ],
+              ),
+              child: SwitchListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                title: Text(
+                  ref.tr('haptic_feedback'),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? AppColors.darkText : AppColors.lightText,
+                  ),
+                ),
+                subtitle: Text(
+                  ref.tr('haptic_feedback_desc'),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: isDark ? AppColors.darkTextSecondary : Colors.grey[600],
+                  ),
+                ),
+                secondary: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: hapticEnabled
+                        ? AppColors.primaryOrange.withValues(alpha: 0.15)
+                        : isDark
+                            ? AppColors.darkCardElevated
+                            : Colors.grey[100],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.vibration,
+                    color: hapticEnabled ? AppColors.primaryOrange : Colors.grey,
+                  ),
+                ),
+                value: hapticEnabled,
+                activeColor: AppColors.primaryOrange,
+                onChanged: (value) async {
+                  await ref.read(hapticEnabledProvider.notifier).toggle();
+                  if (value) {
+                    HapticService.mediumTap();
+                  }
+                },
+              ),
+            ),
             
             const SizedBox(height: 32),
             

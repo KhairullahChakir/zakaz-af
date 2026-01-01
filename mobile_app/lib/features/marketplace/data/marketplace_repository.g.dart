@@ -83,7 +83,7 @@ final class MarketplaceItemsCacheProvider
 }
 
 String _$marketplaceItemsCacheHash() =>
-    r'54cf99796394a2bb6fffc23f92f9132764f6a60d';
+    r'ebe233cc13b041683e176edee091a87723217277';
 
 abstract class _$MarketplaceItemsCache
     extends $AsyncNotifier<List<MarketplaceItem>> {

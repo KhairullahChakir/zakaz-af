@@ -775,6 +775,48 @@ class AppTranslations {
     'enter_phone_number': 'Enter phone number',
     'select_province_error': 'Select province',
     'enter_address': 'Enter address',
+    
+    // Pull-to-Refresh & Loading
+    'pull_to_refresh': 'Pull to refresh',
+    'refreshing': 'Refreshing...',
+    'release_to_refresh': 'Release to refresh',
+    'refresh_complete': 'Refresh complete',
+    'loading_products': 'Loading products...',
+    'loading_categories': 'Loading categories...',
+    'loading_orders': 'Loading orders...',
+    
+    // Rate Limiting
+    'too_many_attempts': 'Too many attempts',
+    'please_wait_seconds': 'Please wait {seconds} seconds',
+    'try_again_later': 'Try again later',
+    'account_locked': 'Account temporarily locked',
+    'unlock_in': 'Unlock in {time}',
+    
+    // Offline Mode
+    'offline_mode': 'Offline Mode',
+    'no_internet': 'No internet connection',
+    'offline_data_shown': 'Showing cached data',
+    'connect_to_update': 'Connect to internet to update',
+    'cached_data': 'Cached Data',
+    'last_updated': 'Last updated: {time}',
+    'available_offline': 'Available offline',
+    'sync_when_online': 'Will sync when online',
+    
+    // App Version Check
+    'update_available': 'Update Available',
+    'new_version': 'New version {version} available',
+    'update_now': 'Update Now',
+    'update_later': 'Later',
+    'force_update_title': 'Update Required',
+    'force_update_msg': 'Please update to continue using the app',
+    'downloading_update': 'Downloading update...',
+    'current_version': 'Current version: {version}',
+    
+    // Haptic Feedback
+    'haptic_feedback': 'Haptic Feedback',
+    'haptic_feedback_desc': 'Vibration on button taps',
+    'vibration_enabled': 'Vibration enabled',
+    'vibration_disabled': 'Vibration disabled',
   };
 
   static const Map<String, String> _dari = {
@@ -1542,6 +1584,48 @@ class AppTranslations {
     'enter_address': 'آدرس را وارد کنید',
     'error_chat_self': 'شما نمی‌توانید با خودتان چت کنید',
     'this_is_your_item': 'این محصول شماست',
+    
+    // Pull-to-Refresh & Loading
+    'pull_to_refresh': 'برای تازه‌سازی بکشید',
+    'refreshing': 'در حال تازه‌سازی...',
+    'release_to_refresh': 'برای تازه‌سازی رها کنید',
+    'refresh_complete': 'تازه‌سازی کامل شد',
+    'loading_products': 'در حال بارگذاری محصولات...',
+    'loading_categories': 'در حال بارگذاری دسته‌بندی‌ها...',
+    'loading_orders': 'در حال بارگذاری سفارشات...',
+    
+    // Rate Limiting
+    'too_many_attempts': 'تلاش‌های زیاد',
+    'please_wait_seconds': 'لطفاً {seconds} ثانیه صبر کنید',
+    'try_again_later': 'بعداً دوباره تلاش کنید',
+    'account_locked': 'حساب موقتاً قفل شد',
+    'unlock_in': 'باز شدن در {time}',
+    
+    // Offline Mode
+    'offline_mode': 'حالت آفلاین',
+    'no_internet': 'اتصال اینترنت نیست',
+    'offline_data_shown': 'نمایش داده‌های ذخیره شده',
+    'connect_to_update': 'برای به‌روزرسانی به اینترنت وصل شوید',
+    'cached_data': 'داده‌های ذخیره شده',
+    'last_updated': 'آخرین به‌روزرسانی: {time}',
+    'available_offline': 'آفلاین در دسترس',
+    'sync_when_online': 'هنگام آنلاین شدن همگام‌سازی می‌شود',
+    
+    // App Version Check
+    'update_available': 'به‌روزرسانی موجود است',
+    'new_version': 'نسخه جدید {version} موجود است',
+    'update_now': 'الان به‌روزرسانی',
+    'update_later': 'بعداً',
+    'force_update_title': 'به‌روزرسانی لازم است',
+    'force_update_msg': 'لطفاً برای ادامه استفاده از برنامه به‌روزرسانی کنید',
+    'downloading_update': 'در حال دانلود به‌روزرسانی...',
+    'current_version': 'نسخه فعلی: {version}',
+    
+    // Haptic Feedback
+    'haptic_feedback': 'بازخورد لمسی',
+    'haptic_feedback_desc': 'لرزش هنگام لمس دکمه‌ها',
+    'vibration_enabled': 'لرزش فعال شد',
+    'vibration_disabled': 'لرزش غیرفعال شد',
   };
 
   static const Map<String, String> _pashto = {
@@ -2310,5 +2394,47 @@ class AppTranslations {
     'enter_address': 'پته ولیکئ',
     'error_chat_self': 'تاسو نشئ کولی له خپل ځان سره چټ وکړئ',
     'this_is_your_item': 'دا ستاسو توکی دی',
+    
+    // Pull-to-Refresh & Loading
+    'pull_to_refresh': 'د تازه کولو لپاره راکش کړئ',
+    'refreshing': 'تازه کول...',
+    'release_to_refresh': 'د تازه کولو لپاره پریږدئ',
+    'refresh_complete': 'تازه کول بشپړ شو',
+    'loading_products': 'محصولات لوډیږي...',
+    'loading_categories': 'کټګورۍ لوډیږي...',
+    'loading_orders': 'امرونه لوډیږي...',
+    
+    // Rate Limiting
+    'too_many_attempts': 'ډیرې هڅې',
+    'please_wait_seconds': 'مهرباني وکړئ {seconds} ثانیې انتظار وکړئ',
+    'try_again_later': 'وروسته بیا هڅه وکړئ',
+    'account_locked': 'حساب په لنډمهاله توګه تړل شوی',
+    'unlock_in': 'په {time} کې پرانیستل',
+    
+    // Offline Mode
+    'offline_mode': 'آفلاین حالت',
+    'no_internet': 'انټرنیټ اتصال نشته',
+    'offline_data_shown': 'زیرمه شوي معلومات ښودل کیږي',
+    'connect_to_update': 'د تازه کولو لپاره انټرنیټ سره وصل شئ',
+    'cached_data': 'زیرمه شوي معلومات',
+    'last_updated': 'وروستی تازه: {time}',
+    'available_offline': 'آفلاین شتون لري',
+    'sync_when_online': 'کله چې آنلاین شئ همغږي کیږي',
+    
+    // App Version Check
+    'update_available': 'اپډیټ شتون لري',
+    'new_version': 'نوې نسخه {version} شتون لري',
+    'update_now': 'اوس اپډیټ کړئ',
+    'update_later': 'وروسته',
+    'force_update_title': 'اپډیټ اړین دی',
+    'force_update_msg': 'مهرباني وکړئ د ایپ کارولو لپاره اپډیټ کړئ',
+    'downloading_update': 'اپډیټ ډاونلوډیږي...',
+    'current_version': 'اوسنۍ نسخه: {version}',
+    
+    // Haptic Feedback
+    'haptic_feedback': 'لمسي فیډبیک',
+    'haptic_feedback_desc': 'د تڼیو لمسولو پر مهال لړزان',
+    'vibration_enabled': 'لړزان فعال شو',
+    'vibration_disabled': 'لړزان غیرفعال شو',
   };
 }
