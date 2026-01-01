@@ -193,11 +193,11 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                     ),
                     child: Column(
                       children: [
-                        _buildContactRow(context, Icons.email_outlined, 'support@zakaz-af.com'),
+                        _buildContactRow(context, Icons.email_outlined, 'khairullahanosh9626@gmail.com'),
                         const Divider(height: 24),
-                        _buildContactRow(context, Icons.phone_outlined, '+93 70 123 4567'),
+                        _buildContactRow(context, Icons.phone_outlined, '+77073756623'),
                         const Divider(height: 24),
-                        _buildContactRow(context, Icons.location_on_outlined, ref.tr('kabul_afghanistan')),
+                        _buildContactRow(context, Icons.location_on_outlined, 'Sheberghan, Jawzjan'),
                         const Divider(height: 24),
                         _buildContactRow(context, Icons.language_outlined, 'www.zakaz-af.com'),
                       ],
@@ -252,7 +252,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
                   // Copyright
                   Center(
                     child: Text(
-                      '© 2024 ${ref.tr('app_name')}. ${ref.tr('all_rights_reserved')}.',
+                      '© 2026 ${ref.tr('app_name')}. ${ref.tr('all_rights_reserved')}.',
                       style: TextStyle(
                         fontSize: 12,
                         color: context.textSecondary,
