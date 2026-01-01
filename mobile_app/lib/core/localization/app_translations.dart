@@ -828,6 +828,16 @@ class AppTranslations {
     'confirm_on_whatsapp': 'Check WhatsApp to confirm your order and payment details.',
     'popular': 'Popular',
     'coming_soon': 'Coming Soon',
+    
+    // Afghan Mobile Payments
+    'mobile_payment': 'Mobile Payment',
+    'mpaisa_desc': 'Pay securely with M-Paisa account',
+    'azipay_desc': 'Quick payment via AziPay',
+    'hesabpay_desc': 'Pay with your HesabPay wallet',
+    'atomapay_desc': 'Smart payment via ATOMA Pay',
+    'pay_with_mpaisa': 'Pay with M-Paisa',
+    'pay_with_azipay': 'Pay with AZi Pay',
+    'pay_with_atoma': 'Pay with ATOMA Pay',
   };
 
   static const Map<String, String> _dari = {
@@ -1648,6 +1658,16 @@ class AppTranslations {
     'confirm_on_whatsapp': 'واتساپ را بررسی کنید تا سفارش و جزئیات پرداخت خود را تأیید کنید.',
     'popular': 'محبوب',
     'coming_soon': 'به زودی',
+    
+    // Afghan Mobile Payments
+    'mobile_payment': 'پرداخت موبایلی',
+    'mpaisa_desc': 'پرداخت امن با حساب ام-پیسه',
+    'azipay_desc': 'پرداخت سریع از طریق عزی-پی',
+    'hesabpay_desc': 'پرداخت با کیف پول حساب-پی',
+    'atomapay_desc': 'پرداخت هوشمند از طریق اتوما-پی',
+    'pay_with_mpaisa': 'پرداخت با ام-پیسه',
+    'pay_with_azipay': 'پرداخت با عزی-پی',
+    'pay_with_atoma': 'پرداخت با اتوما-پی',
   };
 
   static const Map<String, String> _pashto = {
@@ -2469,5 +2489,15 @@ class AppTranslations {
     'confirm_on_whatsapp': 'واټساپ وګورئ ترڅو خپل امر او د تادیې جزئیات تایید کړئ.',
     'popular': 'مشهور',
     'coming_soon': 'په راتلونکي کې',
+    
+    // Afghan Mobile Payments
+    'mobile_payment': 'موبایل تادیه',
+    'mpaisa_desc': 'د ام-پیسه حساب له لارې خوندي تادیه',
+    'azipay_desc': 'د عزی-پی له لارې ګړندۍ تادیه',
+    'hesabpay_desc': 'د حساب-پی بټوې له لارې تادیه',
+    'atomapay_desc': 'د اتوما-پی له لارې هوښیاره تادیه',
+    'pay_with_mpaisa': 'د ام-پیسه له لارې تادیه',
+    'pay_with_azipay': 'د عزی-پی له لارې تادیه',
+    'pay_with_atoma': 'د اتوما-پی له لارې تادیه',
   };
 }

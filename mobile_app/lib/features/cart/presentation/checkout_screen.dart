@@ -20,7 +20,10 @@ const Color kSoftOrange = Color(0xFFFFF3E6);
 enum PaymentMethod {
   cashOnDelivery,
   whatsapp,
+  mPaisa,
+  aziPay,
   hesabPay,
+  atomaPay,
   card,
 }
 
@@ -84,8 +87,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         case PaymentMethod.whatsapp:
           await _processWithWhatsApp(items);
           break;
+        case PaymentMethod.mPaisa:
+          _showPaymentComingSoon('M-Paisa');
+          break;
+        case PaymentMethod.aziPay:
+          _showPaymentComingSoon('AZi Pay');
+          break;
         case PaymentMethod.hesabPay:
           await _processWithHesabPay(items);
+          break;
+        case PaymentMethod.atomaPay:
+          _showPaymentComingSoon('ATOMA Pay');
           break;
         case PaymentMethod.card:
           await _processWithCard(items);
@@ -596,6 +608,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         return Icons.local_shipping_outlined;
       case PaymentMethod.whatsapp:
         return Icons.chat;
+      case PaymentMethod.mPaisa:
+      case PaymentMethod.aziPay:
+      case PaymentMethod.atomaPay:
+        return Icons.phone_android;
       case PaymentMethod.hesabPay:
         return Icons.account_balance_wallet_outlined;
       case PaymentMethod.card:
@@ -609,8 +625,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         return ref.tr('place_order');
       case PaymentMethod.whatsapp:
         return ref.tr('order_via_whatsapp');
+      case PaymentMethod.mPaisa:
+        return ref.tr('pay_with_mpaisa');
+      case PaymentMethod.aziPay:
+        return ref.tr('pay_with_azipay');
       case PaymentMethod.hesabPay:
         return ref.tr('pay_with_hesabpay');
+      case PaymentMethod.atomaPay:
+        return ref.tr('pay_with_atoma');
       case PaymentMethod.card:
         return ref.tr('pay_with_card');
     }
@@ -631,7 +653,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         ),
         const SizedBox(height: 12),
         
-        // WhatsApp Payment - NEW!
+        // WhatsApp Payment
         _buildPaymentOption(
           method: PaymentMethod.whatsapp,
           icon: Icons.chat,
@@ -640,15 +662,67 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           subtitle: ref.tr('whatsapp_payment_desc'),
           badge: ref.tr('popular'),
         ),
+        
+        const SizedBox(height: 16),
+        
+        // Section Header for Mobile Payments
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Row(
+            children: [
+              Icon(Icons.phone_android, size: 16, color: context.textSecondary),
+              const SizedBox(width: 8),
+              Text(
+                ref.tr('mobile_payment'),
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: context.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        
+        // M-Paisa (ام پیسه)
+        _buildPaymentOption(
+          method: PaymentMethod.mPaisa,
+          customIcon: _buildMPaisaLogo(),
+          title: 'M-Paisa',
+          subtitle: ref.tr('mpaisa_desc'),
+          badge: ref.tr('coming_soon'),
+          isDisabled: true,
+        ),
+        const SizedBox(height: 12),
+        
+        // AZi Pay
+        _buildPaymentOption(
+          method: PaymentMethod.aziPay,
+          customIcon: _buildAziPayLogo(),
+          title: 'AZi Pay',
+          subtitle: ref.tr('azipay_desc'),
+          badge: ref.tr('coming_soon'),
+          isDisabled: true,
+        ),
         const SizedBox(height: 12),
         
         // HesabPay
         _buildPaymentOption(
           method: PaymentMethod.hesabPay,
-          icon: Icons.account_balance_wallet_outlined,
-          iconColor: const Color(0xFF1976D2), // HesabPay blue
+          customIcon: _buildHesabPayLogo(),
           title: 'HesabPay',
           subtitle: ref.tr('hesabpay_desc'),
+          badge: ref.tr('coming_soon'),
+          isDisabled: true,
+        ),
+        const SizedBox(height: 12),
+        
+        // ATOMA Pay
+        _buildPaymentOption(
+          method: PaymentMethod.atomaPay,
+          customIcon: _buildAtomaPayLogo(),
+          title: 'ATOMA Pay',
+          subtitle: ref.tr('atomapay_desc'),
           badge: ref.tr('coming_soon'),
           isDisabled: true,
         ),
@@ -664,6 +738,55 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           isDisabled: true,
         ),
       ],
+    );
+  }
+
+  // Custom logo builders for Afghan payment methods
+  Widget _buildMPaisaLogo() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(6),
+      child: Image.asset(
+        'assets/images/payment/mpaisa.png',
+        width: 40,
+        height: 28,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  Widget _buildAziPayLogo() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(6),
+      child: Image.asset(
+        'assets/images/payment/azipay.png',
+        width: 40,
+        height: 28,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  Widget _buildHesabPayLogo() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(6),
+      child: Image.asset(
+        'assets/images/payment/hesabpay.png',
+        width: 40,
+        height: 28,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  Widget _buildAtomaPayLogo() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(6),
+      child: Image.asset(
+        'assets/images/payment/atomapay.png',
+        width: 40,
+        height: 28,
+        fit: BoxFit.contain,
+      ),
     );
   }
 
