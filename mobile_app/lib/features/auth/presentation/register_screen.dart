@@ -135,7 +135,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 // Header section
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.all(16),
+                    height: 100,
+                    width: 100,
                     decoration: BoxDecoration(
                       color: context.cardColor,
                       borderRadius: BorderRadius.circular(24),
@@ -147,7 +148,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         ),
                       ],
                     ),
-                    child: const Icon(Icons.person_add_rounded, size: 48, color: kPrimaryOrange),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: Image.asset(
+                        'assets/images/final_logo.png',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),

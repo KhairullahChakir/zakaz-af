@@ -48,6 +48,7 @@ Dio dio(Ref ref) {
 
 class AuthInterceptor extends Interceptor {
   final Ref _ref;
+  bool _isRefreshing = false;
 
   AuthInterceptor(this._ref);
 
@@ -67,7 +68,42 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    // Handle 401 Unauthorized - attempt token refresh
+    if (err.response?.statusCode == 401 && !_isRefreshing) {
+      _isRefreshing = true;
+      
+      try {
+        // Try to refresh the token
+        final dio = Dio(BaseOptions(baseUrl: baseUrl));
+        final storage = _ref.read(secureStorageProvider);
+        final oldToken = await storage.read(key: 'auth_token');
+        
+        if (oldToken != null) {
+          final response = await dio.post(
+            '/auth/refresh',
+            options: Options(headers: {'Authorization': 'Bearer $oldToken'}),
+          );
+          
+          final newToken = response.data['access_token'];
+          if (newToken != null) {
+            await storage.write(key: 'auth_token', value: newToken);
+            
+            // Retry the original request with new token
+            err.requestOptions.headers['Authorization'] = 'Bearer $newToken';
+            final retryResponse = await dio.fetch(err.requestOptions);
+            _isRefreshing = false;
+            return handler.resolve(retryResponse);
+          }
+        }
+      } catch (refreshError) {
+        // Token refresh failed - user needs to re-login
+        debugPrint('Token refresh failed: $refreshError');
+      }
+      
+      _isRefreshing = false;
+    }
+    
     // Extract validation errors or message from response
     if (err.response?.data != null) {
       final data = err.response!.data;

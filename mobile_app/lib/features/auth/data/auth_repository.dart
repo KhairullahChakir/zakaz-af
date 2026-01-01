@@ -186,4 +186,14 @@ class AuthRepository {
       throw Exception(e.response?.data['message'] ?? 'Failed to change password');
     }
   }
+
+  /// Refresh the auth token to extend session
+  Future<String?> refreshToken() async {
+    try {
+      final response = await _dio.post('/auth/refresh');
+      return response.data['access_token'] as String?;
+    } on DioException {
+      return null; // Token refresh failed, user needs to re-login
+    }
+  }
 }
