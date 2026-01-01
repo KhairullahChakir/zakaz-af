@@ -302,16 +302,25 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
     );
   }
 
-  Widget _buildContactRow(BuildContext context, IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(icon, color: kPrimaryOrange, size: 22),
-        const SizedBox(width: 16),
-        Text(
-          text,
-          style: TextStyle(fontSize: 14, color: context.textPrimary),
+  Widget _buildContactRow(BuildContext context, IconData icon, String text, [VoidCallback? onTap]) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        child: Row(
+          children: [
+            Icon(icon, color: kPrimaryOrange, size: 22),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 14, color: context.textPrimary),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -364,11 +373,25 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
         ),
         child: Column(
           children: [
-            _buildContactRow(context, Icons.email_outlined, settings.contact.email),
-            const Divider(height: 24),
-            _buildContactRow(context, Icons.phone_outlined, settings.contact.phone),
-            const Divider(height: 24),
-            _buildContactRow(context, Icons.location_on_outlined, settings.contact.location),
+            _buildContactRow(
+              context, 
+              Icons.email_outlined, 
+              settings.contact.email,
+              () => _launchUrl('mailto:${settings.contact.email}'),
+            ),
+            const Divider(height: 16),
+            _buildContactRow(
+              context, 
+              Icons.phone_outlined, 
+              settings.contact.phone,
+              () => _launchUrl('tel:${settings.contact.phone}'),
+            ),
+            const Divider(height: 16),
+            _buildContactRow(
+              context, 
+              Icons.location_on_outlined, 
+              settings.contact.location,
+            ),
           ],
         ),
       ),
@@ -395,10 +418,20 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
         ),
         child: Column(
           children: [
-            _buildContactRow(context, Icons.email_outlined, 'khairullahanosh9626@gmail.com'),
-            const Divider(height: 24),
-            _buildContactRow(context, Icons.phone_outlined, '+77073756623'),
-            const Divider(height: 24),
+            _buildContactRow(
+              context, 
+              Icons.email_outlined, 
+              'khairullahanosh9626@gmail.com',
+              () => _launchUrl('mailto:khairullahanosh9626@gmail.com'),
+            ),
+            const Divider(height: 16),
+            _buildContactRow(
+              context, 
+              Icons.phone_outlined, 
+              '+77073756623',
+              () => _launchUrl('tel:+77073756623'),
+            ),
+            const Divider(height: 16),
             _buildContactRow(context, Icons.location_on_outlined, 'Sheberghan, Jawzjan'),
           ],
         ),
@@ -480,9 +513,32 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
 
   Future<void> _launchUrl(String url) async {
     if (url.isEmpty) return;
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    
+    // Clean up phone numbers for tel: scheme
+    String finalUrl = url;
+    if (url.startsWith('tel:')) {
+      final number = url.substring(4).replaceAll(RegExp(r'[^\d+]'), '');
+      finalUrl = 'tel:$number';
+    }
+
+    final uri = Uri.parse(finalUrl);
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(
+          uri, 
+          mode: (url.startsWith('http') || url.startsWith('https')) 
+              ? LaunchMode.externalApplication 
+              : LaunchMode.platformDefault,
+        );
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Could not open $url')),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('Error launching $url: $e');
     }
   }
 }

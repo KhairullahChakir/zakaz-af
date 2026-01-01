@@ -27,9 +27,36 @@ class _HelpCenterScreenState extends ConsumerState<HelpCenterScreen> {
   }
 
   Future<void> _launchUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (url.isEmpty) return;
+    
+    // Clean up phone numbers to ensure they work with tel:
+    String finalUrl = url;
+    if (url.startsWith('tel:')) {
+      // Keep the scheme but clean the number part
+      final number = url.substring(4).replaceAll(RegExp(r'[^\d+]'), '');
+      finalUrl = 'tel:$number';
+    }
+
+    final uri = Uri.parse(finalUrl);
+    try {
+      if (await canLaunchUrl(uri)) {
+        // use platformDefault for tel/mailto for better compatibility
+        await launchUrl(
+          uri, 
+          mode: (url.startsWith('http') || url.startsWith('https')) 
+              ? LaunchMode.externalApplication 
+              : LaunchMode.platformDefault,
+        );
+      } else {
+        debugPrint('Could not launch $url');
+        if (mounted) {
+           ScaffoldMessenger.of(context).showSnackBar(
+             SnackBar(content: Text('Could not open $url')),
+           );
+        }
+      }
+    } catch (e) {
+      debugPrint('Error launching $url: $e');
     }
   }
 

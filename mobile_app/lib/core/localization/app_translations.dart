@@ -207,7 +207,6 @@ class AppTranslations {
     'refer_and_earn': 'Refer & Earn',
     'invite_friends_msg': 'Invite friends and get 50 AFN',
     'contact_support': 'Contact Support',
-    'chat_on_whatsapp': 'Chat on WhatsApp',
     'vibration_on': 'Vibration On',
     'vibration_off': 'Vibration Off',
     'last_updated_v': 'Last Updated: {v}',
@@ -435,7 +434,6 @@ class AppTranslations {
     'a_account_delete': 'Please contact our support team at khairullahanosh9626@gmail.com to request account deletion.',
     'q_become_seller': 'How do I become a seller?',
     'a_become_seller': 'Go to Profile > Become a Seller and fill out the application form. Our team will review it within 24 hours.',
-    'get_support': 'Get Support',
     'i_understand': 'I Understand',
     'last_updated': 'Last updated: January 2026',
 
@@ -1774,7 +1772,6 @@ class AppTranslations {
     'refer_and_earn': 'معرفی و کسب درآمد',
     'invite_friends_msg': 'دوستان خود را دعوت کنید و ۵۰ افغانی بگیرید',
     'contact_support': 'تماس با پشتیبانی',
-    'chat_on_whatsapp': 'چت در واتساپ',
     // Privacy Policy Keys
     'privacy_intro_title': 'مقدمه',
     'privacy_intro_content': 'به Zakaz-AF خوش آمدید. ما متعهد به محافظت از اطلاعات شخصی و حق حریم خصوصی شما هستیم. این سیاست نحوه مدیریت داده‌های شما را توضیح می‌دهد.',
@@ -2668,7 +2665,6 @@ class AppTranslations {
     'refer_and_earn': 'بلنه او ګټه',
     'invite_friends_msg': 'ملګرو ته بلنه ورکړئ او ۵۰ افغانۍ ترلاسه کړئ',
     'contact_support': 'د ملاتړ سره اړیکه',
-    'chat_on_whatsapp': 'په واټساپ کې چټ کول',
     // Privacy Policy Keys
     'privacy_intro_title': 'پیژندنه',
     'privacy_intro_content': 'Zakaz-AF ته ښه راغلاست. موږ ستاسو د شخصي معلوماتو او محرمیت حق ساتلو ته ژمن یو. دا پالیسي تشریح کوي چې موږ ستاسو ډاټا څنګه اداره کوو.',
