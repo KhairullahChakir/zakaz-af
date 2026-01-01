@@ -1423,11 +1423,6 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Wallet & Points Card (for logged in users)
-                  if (user != null) ...[
-                    _buildWalletCard(padding),
-                    const SizedBox(height: 24),
-                  ],
 
                   // Become a Seller Promotion (only if not already a seller)
                   if (user?.isShopkeeper == false && user?.isAdmin == false)
@@ -1641,110 +1636,6 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
     );
   }
 
-  Widget _buildWalletCard(double padding) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: context.cardColor,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: context.shadowColor,
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        ref.tr('zakaz_balance'),
-                        style: TextStyle(color: context.textSecondary, fontSize: 13),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '1,250 ${ref.tr('afn')}',
-                        style: TextStyle(
-                          color: context.textPrimary, 
-                          fontSize: 24, 
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 1,
-                  height: 40,
-                  color: context.dividerColor,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          ref.tr('reward_points'),
-                          style: TextStyle(color: context.textSecondary, fontSize: 13),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            const Icon(Icons.stars, color: Colors.amber, size: 18),
-                            const SizedBox(width: 4),
-                            Text(
-                              '450',
-                              style: TextStyle(
-                                color: context.textPrimary, 
-                                fontSize: 24, 
-                                fontWeight: FontWeight.bold
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            decoration: BoxDecoration(
-              color: kPrimaryOrange.withValues(alpha: 0.05),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(24),
-                bottomRight: Radius.circular(24),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  ref.tr('refer_and_earn'),
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
-                ),
-                Text(
-                  ref.tr('invite_friends_msg'),
-                  style: TextStyle(color: kPrimaryOrange, fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
 
   Widget _buildProfileOption(
