@@ -817,6 +817,17 @@ class AppTranslations {
     'haptic_feedback_desc': 'Vibration on button taps',
     'vibration_enabled': 'Vibration enabled',
     'vibration_disabled': 'Vibration disabled',
+    
+    // WhatsApp Payment
+    'whatsapp_payment': 'Pay via WhatsApp',
+    'whatsapp_payment_desc': 'Chat with us to complete payment',
+    'order_via_whatsapp': 'Order via WhatsApp',
+    'whatsapp_not_installed': 'WhatsApp is not installed',
+    'order_sent': 'Order Sent!',
+    'whatsapp_payment_msg': 'Your order has been sent to our WhatsApp. Please complete the payment in the chat.',
+    'confirm_on_whatsapp': 'Check WhatsApp to confirm your order and payment details.',
+    'popular': 'Popular',
+    'coming_soon': 'Coming Soon',
   };
 
   static const Map<String, String> _dari = {
@@ -1626,6 +1637,17 @@ class AppTranslations {
     'haptic_feedback_desc': 'لرزش هنگام لمس دکمه‌ها',
     'vibration_enabled': 'لرزش فعال شد',
     'vibration_disabled': 'لرزش غیرفعال شد',
+    
+    // WhatsApp Payment
+    'whatsapp_payment': 'پرداخت از طریق واتساپ',
+    'whatsapp_payment_desc': 'برای تکمیل پرداخت با ما چت کنید',
+    'order_via_whatsapp': 'سفارش از طریق واتساپ',
+    'whatsapp_not_installed': 'واتساپ نصب نیست',
+    'order_sent': 'سفارش ارسال شد!',
+    'whatsapp_payment_msg': 'سفارش شما به واتساپ ما ارسال شد. لطفاً پرداخت را در چت تکمیل کنید.',
+    'confirm_on_whatsapp': 'واتساپ را بررسی کنید تا سفارش و جزئیات پرداخت خود را تأیید کنید.',
+    'popular': 'محبوب',
+    'coming_soon': 'به زودی',
   };
 
   static const Map<String, String> _pashto = {
@@ -2436,5 +2458,16 @@ class AppTranslations {
     'haptic_feedback_desc': 'د تڼیو لمسولو پر مهال لړزان',
     'vibration_enabled': 'لړزان فعال شو',
     'vibration_disabled': 'لړزان غیرفعال شو',
+    
+    // WhatsApp Payment
+    'whatsapp_payment': 'د واټساپ له لارې تادیه',
+    'whatsapp_payment_desc': 'د تادیې بشپړولو لپاره له موږ سره خبرې وکړئ',
+    'order_via_whatsapp': 'د واټساپ له لارې امر',
+    'whatsapp_not_installed': 'واټساپ نصب نه دی',
+    'order_sent': 'امر واستول شو!',
+    'whatsapp_payment_msg': 'ستاسو امر زموږ واټساپ ته واستول شو. مهرباني وکړئ په چټ کې تادیه بشپړه کړئ.',
+    'confirm_on_whatsapp': 'واټساپ وګورئ ترڅو خپل امر او د تادیې جزئیات تایید کړئ.',
+    'popular': 'مشهور',
+    'coming_soon': 'په راتلونکي کې',
   };
 }

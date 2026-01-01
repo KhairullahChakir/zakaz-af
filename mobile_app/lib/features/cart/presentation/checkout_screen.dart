@@ -10,6 +10,7 @@ import '../domain/cart_item.dart';
 import 'cart_provider.dart';
 import '../../../core/theme/theme_context.dart';
 import '../../../core/services/stripe_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const Color kPrimaryOrange = Color(0xFFFF6B00);
 const Color kDarkOrange = Color(0xFFE55A00);
@@ -18,6 +19,7 @@ const Color kSoftOrange = Color(0xFFFFF3E6);
 // Payment method enum
 enum PaymentMethod {
   cashOnDelivery,
+  whatsapp,
   hesabPay,
   card,
 }
@@ -79,6 +81,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         case PaymentMethod.cashOnDelivery:
           await _processWithCashOnDelivery(items);
           break;
+        case PaymentMethod.whatsapp:
+          await _processWithWhatsApp(items);
+          break;
         case PaymentMethod.hesabPay:
           await _processWithHesabPay(items);
           break;
@@ -112,6 +117,119 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     );
     ref.read(cartProvider.notifier).clearCart();
     if (mounted) _showOrderSuccessDialog();
+  }
+
+  Future<void> _processWithWhatsApp(List<CartItem> items) async {
+    // Build order summary message
+    final StringBuffer message = StringBuffer();
+    message.writeln('🛒 *New Order from Zakaz-AF*');
+    message.writeln('');
+    message.writeln('📦 *Order Details:*');
+    
+    double total = 0;
+    for (final item in items) {
+      final itemTotal = (item.product.price) * item.quantity;
+      total += itemTotal;
+      message.writeln('• ${item.product.name} x${item.quantity} = ${itemTotal.toInt()} AFN');
+    }
+    
+    message.writeln('');
+    message.writeln('💰 *Total: ${total.toInt()} AFN*');
+    message.writeln('');
+    message.writeln('📍 *Delivery Address:*');
+    if (_selectedAddress != null) {
+      message.writeln('${_selectedAddress!.recipientName}');
+      message.writeln('${_selectedAddress!.province}, ${_selectedAddress!.district ?? ''}');
+      message.writeln('${_selectedAddress!.street ?? ''} ${_selectedAddress!.houseNumber ?? ''}');
+      message.writeln('📞 ${_selectedAddress!.phone}');
+    }
+
+    // WhatsApp business number for Zakaz-AF
+    const whatsappNumber = '93701234567'; // Replace with actual business number
+    final encodedMessage = Uri.encodeComponent(message.toString());
+    final whatsappUrl = 'https://wa.me/$whatsappNumber?text=$encodedMessage';
+    
+    final uri = Uri.parse(whatsappUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      
+      // Place order in system with pending payment status
+      await ref.read(orderRepositoryProvider).placeOrder(
+        items,
+        addressId: _selectedAddress!.id,
+        paymentMethod: 'whatsapp',
+        deliveryMethod: _getDeliveryMethodKey(),
+      );
+      ref.read(cartProvider.notifier).clearCart();
+      if (mounted) _showWhatsAppPaymentDialog();
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(ref.tr('whatsapp_not_installed')),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _showWhatsAppPaymentDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFF25D366).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(Icons.check_circle, color: Color(0xFF25D366), size: 28),
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: Text(ref.tr('order_sent'))),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(ref.tr('whatsapp_payment_msg')),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.orange.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.info_outline, color: Colors.orange, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(child: Text(ref.tr('confirm_on_whatsapp'), style: const TextStyle(fontSize: 13))),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              context.go('/');
+            },
+            style: FilledButton.styleFrom(
+              backgroundColor: kPrimaryOrange,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: Text(ref.tr('done')),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _processWithHesabPay(List<CartItem> items) async {
@@ -476,6 +594,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     switch (_selectedPayment) {
       case PaymentMethod.cashOnDelivery:
         return Icons.local_shipping_outlined;
+      case PaymentMethod.whatsapp:
+        return Icons.chat;
       case PaymentMethod.hesabPay:
         return Icons.account_balance_wallet_outlined;
       case PaymentMethod.card:
@@ -487,6 +607,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     switch (_selectedPayment) {
       case PaymentMethod.cashOnDelivery:
         return ref.tr('place_order');
+      case PaymentMethod.whatsapp:
+        return ref.tr('order_via_whatsapp');
       case PaymentMethod.hesabPay:
         return ref.tr('pay_with_hesabpay');
       case PaymentMethod.card:
@@ -509,6 +631,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         ),
         const SizedBox(height: 12),
         
+        // WhatsApp Payment - NEW!
+        _buildPaymentOption(
+          method: PaymentMethod.whatsapp,
+          icon: Icons.chat,
+          iconColor: const Color(0xFF25D366), // WhatsApp green
+          title: ref.tr('whatsapp_payment'),
+          subtitle: ref.tr('whatsapp_payment_desc'),
+          badge: ref.tr('popular'),
+        ),
+        const SizedBox(height: 12),
+        
         // HesabPay
         _buildPaymentOption(
           method: PaymentMethod.hesabPay,
@@ -516,7 +649,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           iconColor: const Color(0xFF1976D2), // HesabPay blue
           title: 'HesabPay',
           subtitle: ref.tr('hesabpay_desc'),
-          badge: ref.tr('recommended'),
+          badge: ref.tr('coming_soon'),
+          isDisabled: true,
         ),
         const SizedBox(height: 12),
         
@@ -526,6 +660,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           customIcon: _buildCardLogos(),
           title: ref.tr('visa_mastercard'),
           subtitle: ref.tr('card_payment_desc'),
+          badge: ref.tr('coming_soon'),
+          isDisabled: true,
         ),
       ],
     );
@@ -591,11 +727,12 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     required String title,
     required String subtitle,
     String? badge,
+    bool isDisabled = false,
   }) {
     final isSelected = _selectedPayment == method;
 
     return InkWell(
-      onTap: () => setState(() => _selectedPayment = method),
+      onTap: isDisabled ? null : () => setState(() => _selectedPayment = method),
       borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: const EdgeInsets.all(16),
