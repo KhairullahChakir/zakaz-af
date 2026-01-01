@@ -1717,6 +1717,7 @@ class AppTranslations {
     'privacy_children_content': 'زکاز-اف برای کاربران ۱۳ سال به بالا در نظر گرفته شده است. ما آگاهانه داده‌های کودکان زیر این سن را جمع‌آوری نمی‌کنیم.',
     'privacy_contact_title': 'تماس با پشتیبانی',
     'privacy_contact_content': 'برای هرگونه نگرانی در مورد حریم خصوصی، با ما در support@zakaz-af.com تماس بگیرید یا به دفتر ما در کابل مراجعه کنید.',
+  };
 
   static const Map<String, String> _pashto = {
     // Common
@@ -2573,4 +2574,5 @@ class AppTranslations {
     'privacy_children_content': 'زکاز-اف د ۱۳ کلونو او پورته کاروونکو لپاره دی. موږ په قصدي ډول له دې څخه د کم عمره ماشومانو معلومات نه راټولوو.',
     'privacy_contact_title': 'له ملاتړ سره اړیکه',
     'privacy_contact_content': 'د محرمیت په اړه د هرې پوښتنې لپاره، له موږ سره په support@zakaz-af.com کې اړیکه ونیسئ یا په کابل کې زموږ دفتر ته راشئ.',
+  };
 }
