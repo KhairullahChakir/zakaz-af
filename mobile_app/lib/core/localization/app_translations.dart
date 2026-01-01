@@ -827,13 +827,12 @@ class AppTranslations {
     'whatsapp_payment_msg': 'Your order has been sent to our WhatsApp. Please complete the payment in the chat.',
     'confirm_on_whatsapp': 'Check WhatsApp to confirm your order and payment details.',
     'popular': 'Popular',
-    'coming_soon': 'Coming Soon',
     
     // Afghan Mobile Payments
     'mobile_payment': 'Mobile Payment',
     'mpaisa_desc': 'Pay securely with M-Paisa account',
     'azipay_desc': 'Quick payment via AziPay',
-    'hesabpay_desc': 'Pay with your HesabPay wallet',
+    'hesabpay_desc_wallet': 'Pay with your HesabPay wallet',
     'atomapay_desc': 'Smart payment via ATOMA Pay',
     'pay_with_mpaisa': 'Pay with M-Paisa',
     'pay_with_azipay': 'Pay with AZi Pay',
@@ -1657,13 +1656,12 @@ class AppTranslations {
     'whatsapp_payment_msg': 'سفارش شما به واتساپ ما ارسال شد. لطفاً پرداخت را در چت تکمیل کنید.',
     'confirm_on_whatsapp': 'واتساپ را بررسی کنید تا سفارش و جزئیات پرداخت خود را تأیید کنید.',
     'popular': 'محبوب',
-    'coming_soon': 'به زودی',
     
     // Afghan Mobile Payments
     'mobile_payment': 'پرداخت موبایلی',
     'mpaisa_desc': 'پرداخت امن با حساب ام-پیسه',
     'azipay_desc': 'پرداخت سریع از طریق عزی-پی',
-    'hesabpay_desc': 'پرداخت با کیف پول حساب-پی',
+    'hesabpay_desc_wallet': 'پرداخت با کیف پول حساب-پی',
     'atomapay_desc': 'پرداخت هوشمند از طریق اتوما-پی',
     'pay_with_mpaisa': 'پرداخت با ام-پیسه',
     'pay_with_azipay': 'پرداخت با عزی-پی',
@@ -2488,13 +2486,12 @@ class AppTranslations {
     'whatsapp_payment_msg': 'ستاسو امر زموږ واټساپ ته واستول شو. مهرباني وکړئ په چټ کې تادیه بشپړه کړئ.',
     'confirm_on_whatsapp': 'واټساپ وګورئ ترڅو خپل امر او د تادیې جزئیات تایید کړئ.',
     'popular': 'مشهور',
-    'coming_soon': 'په راتلونکي کې',
     
     // Afghan Mobile Payments
     'mobile_payment': 'موبایل تادیه',
     'mpaisa_desc': 'د ام-پیسه حساب له لارې خوندي تادیه',
     'azipay_desc': 'د عزی-پی له لارې ګړندۍ تادیه',
-    'hesabpay_desc': 'د حساب-پی بټوې له لارې تادیه',
+    'hesabpay_desc_wallet': 'د حساب-پی بټوې له لارې تادیه',
     'atomapay_desc': 'د اتوما-پی له لارې هوښیاره تادیه',
     'pay_with_mpaisa': 'د ام-پیسه له لارې تادیه',
     'pay_with_azipay': 'د عزی-پی له لارې تادیه',

@@ -18,12 +18,12 @@ class GuestGuard {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(ref.tr('login_required') ?? 'Login Required'),
-        content: Text(ref.tr('guest_action_restricted') ?? 'Please login or register to perform this action.'),
+        title: Text(ref.tr('login_required')),
+        content: Text(ref.tr('guest_action_restricted')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(ref.tr('cancel') ?? 'Cancel'),
+            child: Text(ref.tr('cancel')),
           ),
           FilledButton(
             onPressed: () {
@@ -32,7 +32,7 @@ class GuestGuard {
               // We use push so they can come back if they change their mind
               context.push('/login'); 
             },
-            child: Text(ref.tr('login') ?? 'Login'),
+            child: Text(ref.tr('login')),
           ),
         ],
       ),

@@ -38,7 +38,7 @@ class GuestPlaceholder extends ConsumerWidget {
             FilledButton.icon(
               onPressed: () => context.push('/login'),
               icon: const Icon(Icons.login),
-              label: Text(ref.tr('login') ?? 'Login'),
+              label: Text(ref.tr('login')),
               style: FilledButton.styleFrom(
                 backgroundColor: const Color(0xFFFF6B00),
                 minimumSize: const Size(200, 50),

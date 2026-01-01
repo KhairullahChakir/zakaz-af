@@ -153,7 +153,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       message.writeln('${_selectedAddress!.recipientName}');
       message.writeln('${_selectedAddress!.province}, ${_selectedAddress!.district ?? ''}');
       message.writeln('${_selectedAddress!.street ?? ''} ${_selectedAddress!.houseNumber ?? ''}');
-      message.writeln('📞 ${_selectedAddress!.phone}');
+      message.writeln('📞 ${_selectedAddress!.phonePrimary}');
     }
 
     // WhatsApp business number for Zakaz-AF
@@ -711,7 +711,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           method: PaymentMethod.hesabPay,
           customIcon: _buildHesabPayLogo(),
           title: 'HesabPay',
-          subtitle: ref.tr('hesabpay_desc'),
+          subtitle: ref.tr('hesabpay_desc_wallet'),
           badge: ref.tr('coming_soon'),
           isDisabled: true,
         ),
