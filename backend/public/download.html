@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakaz AF - Download App</title>
+    <title>Zakaz-AF - Download App</title>
+    <meta name="description"
+        content="Download Zakaz-AF - Shop from local Afghan stores. Fresh groceries, fashion, electronics & more.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,10 +14,11 @@
         :root {
             --primary: #FF6B00;
             --primary-dark: #E55D00;
-            --bg-dark: #0A0A0A;
+            --primary-light: #FF8533;
+            --bg-dark: #0D0D0D;
             --bg-card: #1A1A1A;
             --text-primary: #FFFFFF;
-            --text-secondary: #A0A0A0;
+            --text-secondary: #9CA3AF;
         }
 
         * {
@@ -32,12 +35,11 @@
             overflow-x: hidden;
         }
 
-        /* RTL Support for Dari/Pashto */
         [dir="rtl"] {
             font-family: 'Vazirmatn', 'Inter', sans-serif;
         }
 
-        /* Background gradient */
+        /* Background */
         .bg-gradient {
             position: fixed;
             top: 0;
@@ -45,17 +47,17 @@
             right: 0;
             bottom: 0;
             background:
-                radial-gradient(ellipse at top right, rgba(255, 107, 0, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at bottom left, rgba(255, 107, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 20% 20%, rgba(255, 107, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 0, 0.1) 0%, transparent 40%),
                 var(--bg-dark);
             z-index: -1;
         }
 
         /* Language Switcher */
         .lang-switcher {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+            position: absolute;
+            top: 24px;
+            right: 24px;
             display: flex;
             gap: 8px;
             z-index: 100;
@@ -63,32 +65,37 @@
 
         [dir="rtl"] .lang-switcher {
             right: auto;
-            left: 20px;
+            left: 24px;
         }
 
         .lang-btn {
-            padding: 8px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 16px;
+            border: none;
+            background: rgba(255, 255, 255, 0.08);
             color: var(--text-secondary);
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 500;
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
-        .lang-btn:hover,
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
         .lang-btn.active {
             background: var(--primary);
-            border-color: var(--primary);
             color: white;
         }
 
         /* Main Container */
         .container {
-            max-width: 1200px;
+            max-width: 600px;
             margin: 0 auto;
-            padding: 60px 24px;
+            padding: 80px 24px 40px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -99,101 +106,83 @@
 
         /* Logo */
         .logo {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 28px;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 32px;
-            box-shadow: 0 20px 60px rgba(255, 107, 0, 0.3);
+            margin-bottom: 24px;
+            box-shadow:
+                0 20px 50px rgba(255, 107, 0, 0.4),
+                0 0 80px rgba(255, 107, 0, 0.2);
+            animation: float 3s ease-in-out infinite;
         }
 
-        .logo svg {
-            width: 60px;
-            height: 60px;
-            fill: white;
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
         }
 
-        /* Typography */
-        .title {
-            font-size: clamp(2.5rem, 6vw, 4rem);
+        .logo span {
+            font-size: 42px;
             font-weight: 800;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .subtitle {
-            font-size: clamp(1.1rem, 3vw, 1.5rem);
-            color: var(--text-secondary);
-            margin-bottom: 48px;
-            max-width: 600px;
-            line-height: 1.6;
-        }
-
-        /* Features */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 24px;
-            margin-bottom: 48px;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .feature {
-            background: var(--bg-card);
-            padding: 24px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .feature:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 40px rgba(255, 107, 0, 0.1);
-        }
-
-        .feature-icon {
+        /* App Name */
+        .app-name {
             font-size: 32px;
-            margin-bottom: 12px;
-        }
-
-        .feature-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-weight: 800;
             margin-bottom: 8px;
+            color: white;
         }
 
-        .feature-desc {
-            font-size: 14px;
+        .app-name span {
+            color: var(--primary);
+        }
+
+        /* Tagline */
+        .tagline {
+            font-size: 16px;
             color: var(--text-secondary);
-            line-height: 1.5;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 400px;
         }
 
         /* Download Button */
         .download-btn {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            padding: 18px 40px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            gap: 14px;
+            padding: 18px 48px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
             color: white;
             text-decoration: none;
             border-radius: 16px;
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 700;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 40px rgba(255, 107, 0, 0.3);
+            box-shadow:
+                0 10px 40px rgba(255, 107, 0, 0.4),
+                0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 50px rgba(255, 107, 0, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow:
+                0 15px 50px rgba(255, 107, 0, 0.5),
+                0 6px 20px rgba(0, 0, 0, 0.4);
         }
 
         .download-btn svg {
@@ -202,65 +191,88 @@
             fill: white;
         }
 
-        /* Version info */
+        /* Version */
         .version {
-            margin-top: 24px;
-            font-size: 14px;
+            margin-top: 16px;
+            font-size: 13px;
             color: var(--text-secondary);
+        }
+
+        /* Features */
+        .features {
+            display: flex;
+            gap: 32px;
+            margin-top: 48px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 107, 0, 0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
         }
 
         /* Footer */
         .footer {
-            margin-top: 60px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 14px;
+            margin-top: auto;
+            padding-top: 40px;
+            font-size: 13px;
             color: var(--text-secondary);
+            opacity: 0.7;
         }
 
-        /* Phone Mockup */
-        .phone-mockup {
-            position: absolute;
-            right: 5%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 280px;
-            opacity: 0.1;
-            pointer-events: none;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 100px 20px 40px;
-            }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
-
-            .lang-switcher {
-                top: 10px;
-                right: 10px;
-            }
-
-            .lang-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .phone-mockup {
-                display: none;
-            }
-        }
-
-        /* Hidden content for language switching */
+        /* Content visibility */
         .lang-content {
             display: none;
+            width: 100%;
         }
 
         .lang-content.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 100px 20px 30px;
+            }
+
+            .lang-switcher {
+                top: 16px;
+                right: 16px;
+                gap: 6px;
+            }
+
+            .lang-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            .features {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .download-btn {
+                padding: 16px 36px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -270,7 +282,7 @@
 
     <!-- Language Switcher -->
     <div class="lang-switcher">
-        <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+        <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
         <button class="lang-btn" onclick="setLanguage('fa')">دری</button>
         <button class="lang-btn" onclick="setLanguage('ps')">پښتو</button>
     </div>
@@ -278,116 +290,107 @@
     <div class="container">
         <!-- Logo -->
         <div class="logo">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-7 14l-5-5h3V9h4v5h3l-5 5z" />
-            </svg>
+            <span>Z</span>
         </div>
 
         <!-- English Content -->
         <div class="lang-content active" id="content-en">
-            <h1 class="title">Zakaz AF</h1>
-            <p class="subtitle">Shop from local Afghan stores. Fresh groceries, fashion, electronics & more — delivered
-                to your door.</p>
-
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">🏪</div>
-                    <div class="feature-title">Local Shops</div>
-                    <div class="feature-desc">Discover products from local Afghan shopkeepers</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🚀</div>
-                    <div class="feature-title">Fast Delivery</div>
-                    <div class="feature-desc">Quick & reliable delivery to your doorstep</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🔒</div>
-                    <div class="feature-title">Secure</div>
-                    <div class="feature-desc">Safe payments with cash on delivery</div>
-                </div>
-            </div>
+            <h1 class="app-name">Zakaz<span>-AF</span></h1>
+            <p class="tagline">Shop from local Afghan stores. Groceries, fashion, electronics & more — delivered to your
+                door.</p>
 
             <a href="https://github.com/KhairullahChakir/courseaf-site/releases/download/v.1%2C1%2C1/zakaz-af.apk"
                 class="download-btn">
                 <svg viewBox="0 0 24 24">
-                    <path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z" />
+                    <path
+                        d="M17.523 2H6.477C5.768 2 5.25 2.768 5.25 3.477v17.046c0 .709.518 1.477 1.227 1.477h11.046c.709 0 1.227-.768 1.227-1.477V3.477c0-.709-.518-1.477-1.227-1.477zM12 19.5c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25zm4-4H8V5h8v10.5z" />
                 </svg>
                 Download for Android
             </a>
-            <p class="version">Version 1.0.0 • 80 MB</p>
+            <p class="version">Version 1.0.0 • 80 MB • Android 7.0+</p>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🏪</div>
+                    <span>Local Shops</span>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚀</div>
+                    <span>Fast Delivery</span>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <span>Secure</span>
+                </div>
+            </div>
         </div>
 
         <!-- Dari Content -->
         <div class="lang-content" id="content-fa">
-            <h1 class="title">زاکاز اِی‌اِف</h1>
-            <p class="subtitle">از دوکان‌های محلی افغانستان خرید کنید. مواد غذایی تازه، لباس، الکترونیک و موارد دیگر —
-                به درب منزل شما تحویل داده می‌شود.</p>
-
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">🏪</div>
-                    <div class="feature-title">دوکان‌های محلی</div>
-                    <div class="feature-desc">محصولات را از دوکانداران محلی افغان کشف کنید</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🚀</div>
-                    <div class="feature-title">تحویل سریع</div>
-                    <div class="feature-desc">تحویل سریع و مطمئن به درب منزل شما</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🔒</div>
-                    <div class="feature-title">امن</div>
-                    <div class="feature-desc">پرداخت امن با پول نقد در هنگام تحویل</div>
-                </div>
-            </div>
+            <h1 class="app-name">زاکاز<span>-اِی‌اِف</span></h1>
+            <p class="tagline">از دوکان‌های محلی افغانستان خرید کنید. مواد غذایی، لباس، الکترونیک و موارد دیگر — به درب
+                منزل شما.</p>
 
             <a href="https://github.com/KhairullahChakir/courseaf-site/releases/download/v.1%2C1%2C1/zakaz-af.apk"
                 class="download-btn">
                 <svg viewBox="0 0 24 24">
-                    <path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z" />
+                    <path
+                        d="M17.523 2H6.477C5.768 2 5.25 2.768 5.25 3.477v17.046c0 .709.518 1.477 1.227 1.477h11.046c.709 0 1.227-.768 1.227-1.477V3.477c0-.709-.518-1.477-1.227-1.477zM12 19.5c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25zm4-4H8V5h8v10.5z" />
                 </svg>
                 دانلود برای اندروید
             </a>
-            <p class="version">نسخه ۱.۰.۰ • ۸۰ مگابایت</p>
+            <p class="version">نسخه ۱.۰.۰ • ۸۰ مگابایت • اندروید ۷.۰+</p>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🏪</div>
+                    <span>دوکان‌های محلی</span>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚀</div>
+                    <span>تحویل سریع</span>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <span>امن</span>
+                </div>
+            </div>
         </div>
 
         <!-- Pashto Content -->
         <div class="lang-content" id="content-ps">
-            <h1 class="title">زاکاز اې‌اِف</h1>
-            <p class="subtitle">له ځایی افغان دوکانونو څخه پیرودنه وکړئ. تازه خوراکي توکي، کالي، بریښنایی وسایل او نور —
-                ستاسو کور ته رسول کیږي.</p>
-
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">🏪</div>
-                    <div class="feature-title">ځایی دوکانونه</div>
-                    <div class="feature-desc">له ځایی افغان دوکانونو محصولات ومومئ</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🚀</div>
-                    <div class="feature-title">ګړندی رسول</div>
-                    <div class="feature-desc">ستاسو کور ته ګړندی او باوري رسول</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🔒</div>
-                    <div class="feature-title">خوندي</div>
-                    <div class="feature-desc">د رسولو په وخت نغدو پیسو سره خوندي تادیه</div>
-                </div>
-            </div>
+            <h1 class="app-name">زاکاز<span>-اې‌اِف</span></h1>
+            <p class="tagline">له ځایی افغان دوکانونو څخه پیرودنه وکړئ. خوراکي توکي، کالي، بریښنایی وسایل او نور — ستاسو
+                کور ته.</p>
 
             <a href="https://github.com/KhairullahChakir/courseaf-site/releases/download/v.1%2C1%2C1/zakaz-af.apk"
                 class="download-btn">
                 <svg viewBox="0 0 24 24">
-                    <path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z" />
+                    <path
+                        d="M17.523 2H6.477C5.768 2 5.25 2.768 5.25 3.477v17.046c0 .709.518 1.477 1.227 1.477h11.046c.709 0 1.227-.768 1.227-1.477V3.477c0-.709-.518-1.477-1.227-1.477zM12 19.5c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25zm4-4H8V5h8v10.5z" />
                 </svg>
                 د اندروید لپاره ډاونلوډ
             </a>
-            <p class="version">نسخه ۱.۰.۰ • ۸۰ مګابایټ</p>
+            <p class="version">نسخه ۱.۰.۰ • ۸۰ مګابایټ • اندروید ۷.۰+</p>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🏪</div>
+                    <span>ځایی دوکانونه</span>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚀</div>
+                    <span>ګړندی رسول</span>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <span>خوندي</span>
+                </div>
+            </div>
         </div>
 
         <div class="footer">
-            © 2026 Zakaz AF. All rights reserved.
+            © 2026 Zakaz-AF. All rights reserved.
         </div>
     </div>
 
