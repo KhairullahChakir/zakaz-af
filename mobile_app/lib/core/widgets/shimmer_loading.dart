@@ -531,4 +531,60 @@ class CategoriesSkeleton extends StatelessWidget {
     );
   }
 }
+/// Skeleton for order list items
+class OrderListItemSkeleton extends StatelessWidget {
+  const OrderListItemSkeleton({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SkeletonBox(height: 20, width: 120),
+              SkeletonBox(height: 24, width: 80, borderRadius: 12),
+            ],
+          ),
+          SizedBox(height: 12),
+          SkeletonBox(height: 14, width: 150),
+          SizedBox(height: 8),
+          SkeletonBox(height: 18, width: 100),
+        ],
+      ),
+    );
+  }
+}
+
+/// A list of order item skeletons
+class OrdersSkeleton extends StatelessWidget {
+  final int itemCount;
+  
+  const OrdersSkeleton({super.key, this.itemCount = 5});
+
+  @override
+  Widget build(BuildContext context) {
+    return ShimmerLoading(
+      child: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: itemCount,
+        itemBuilder: (context, index) => const OrderListItemSkeleton(),
+      ),
+    );
+  }
+}

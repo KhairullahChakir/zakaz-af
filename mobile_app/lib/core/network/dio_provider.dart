@@ -14,8 +14,9 @@ part 'dio_provider.g.dart';
 // For PRODUCTION: Use the Railway URL
 // ===========================================
 
-const String baseUrl = 'http://172.20.10.2:8000/api';
-// const String baseUrl = 'https://zakaz-af-production.up.railway.app/api';
+// const String baseUrl = 'http://172.20.10.2:8000/api'; // Local development
+// const String baseUrl = 'http://185.197.31.25/api'; // VPS IP (HTTP)
+const String baseUrl = 'https://api.zakaz-af.store/api'; // Production (HTTPS)
 
 @Riverpod(keepAlive: true)
 Dio dio(Ref ref) {

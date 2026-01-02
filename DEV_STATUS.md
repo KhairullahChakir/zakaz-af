@@ -123,9 +123,15 @@
 - `POST /admin/shops/{id}/approve`, `POST /admin/shops/{id}/reject`
 - `POST /admin/shops/{id}/suspend`
 
+## Project Status Updates
+### Localization & Professional Polish (Completed)
+- **Multi-language**: Comprehensive support for English, Dari, and Pashto.
+- **RTL Support**: Full Right-to-Left layout adjustment for Dari/Pashto.
+- **Dynamic Help Center**: Searchable FAQs and dynamic contact buttons.
+- **Professional UX**: Shimmer loading skeletons and refined UI transitions.
+
 ## Remaining Features
-1. **Multi-language**: Complete Dari/Pashto/English support (Translations & Layout)
-2. **Advanced Features**: Live Order Tracking (Driver App) or Analytics
+1. **Advanced Features**: Live Order Tracking (Driver App) or Analytics
 
 ## Tech Stack
 - **Backend**: Laravel 11, MariaDB, Sanctum

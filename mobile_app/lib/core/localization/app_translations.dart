@@ -284,7 +284,6 @@ class AppTranslations {
     'manage': 'Manage',
     'no_addresses_saved': 'No addresses saved',
     'add_new_address': 'Add New Address',
-    'qty': 'Qty',
     'my_addresses': 'My Addresses',
     'add_new': 'Add New',
     'no_addresses_yet': 'No Addresses Yet',
@@ -1777,7 +1776,6 @@ class AppTranslations {
     'settings_saved': 'تنظیمات با موفقیت ذخیره شد',
     'location': 'موقعیت',
     'manage_app_settings_desc': 'مدیریت اطلاعات تماس و لینک‌های اجتماعی',
-    'no_results_found': 'نتیجه‌ای یافت نشد',
 
     // Profile Enhancements
     'my_wallet': 'کیف پول من',

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../data/order_repository.dart';
 import 'package:mobile_app/core/localization/language_provider.dart';
 import '../../../core/theme/theme_context.dart';
+import '../../../core/widgets/shimmer_loading.dart';
 
 class OrderDetailsScreen extends ConsumerWidget {
   final int orderId;
@@ -25,172 +26,227 @@ class OrderDetailsScreen extends ConsumerWidget {
       ),
       body: orderAsync.when(
         data: (order) => SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Order Header
-              Card(
-                elevation: 2,
-                color: context.cardColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '${ref.tr('order_number')}${order.id}',
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: context.cardColor,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: context.shadowColor,
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${ref.tr('order_number')}${order.id}',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              dateFormat.format(order.createdAt),
+                              style: TextStyle(
+                                color: context.textSecondary,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                        _buildStatusChip(context, ref, order.status),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Order Timeline
+              _buildSectionTitle(context, ref.tr('order_status')),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: context.cardColor,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: context.shadowColor,
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: _buildTimeline(context, ref, order.status),
+              ),
+              const SizedBox(height: 24),
+
+              // Order Items
+              _buildSectionTitle(context, ref.tr('items')),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: context.cardColor,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: context.shadowColor,
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ...order.items.map((item) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 60,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  color: context.isDark ? Colors.grey[800] : Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: item.product?.imageUrl != null
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.network(
+                                          item.product!.imageUrl!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : Icon(Icons.inventory_2_outlined,
+                                        color: context.textSecondary),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.product?.name ?? ref.tr('product'),
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: context.textPrimary),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '${item.price} ${ref.tr('afn')} x ${item.quantity}',
+                                      style: TextStyle(
+                                        color: context.textSecondary,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                '${item.price * item.quantity} ${ref.tr('afn')}',
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: context.textPrimary,
                                 ),
+                              ),
+                            ],
                           ),
-                          _buildStatusChip(context, ref, order.status),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        dateFormat.format(order.createdAt),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: context.textSecondary,
-                            ),
-                      ),
-                    ],
-                  ),
+                        )),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Divider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          ref.tr('total'),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '${order.totalAmount} ${ref.tr('afn')}',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: context.primaryOrange,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
+              const SizedBox(height: 32),
+            ],
+          ),
+        ),
+        loading: () => ShimmerLoading(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SkeletonBox(height: 100, borderRadius: 20),
+                const SizedBox(height: 24),
+                const SkeletonBox(height: 20, width: 120, borderRadius: 10),
+                const SizedBox(height: 12),
+                const SkeletonBox(height: 200, borderRadius: 20),
+                const SizedBox(height: 24),
+                const SkeletonBox(height: 20, width: 120, borderRadius: 10),
+                const SizedBox(height: 12),
+                const SkeletonBox(height: 250, borderRadius: 20),
+              ],
+            ),
+          ),
+        ),
+        error: (e, _) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
-
-              // Order Timeline
-              Card(
-                elevation: 2,
-                color: context.cardColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        ref.tr('order_status'),
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: context.textPrimary,
-                            ),
-                      ),
-                      const SizedBox(height: 16),
-                      _buildTimeline(context, ref, order.status),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Order Items
-              Card(
-                elevation: 2,
-                color: context.cardColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        ref.tr('items'),
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: context.textPrimary,
-                            ),
-                      ),
-                      const SizedBox(height: 12),
-                      ...order.items.map((item) => Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: context.isDark ? Colors.grey[800] : Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: item.product?.imageUrl != null
-                                      ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(8),
-                                          child: Image.network(
-                                            item.product!.imageUrl!,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )
-                                      : Icon(Icons.inventory_2_outlined,
-                                          color: context.textSecondary),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item.product?.name ?? ref.tr('product'),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500, color: context.textPrimary),
-                                      ),
-                                      Text(
-                                        '${item.price} ${ref.tr('afn')} x ${item.quantity}',
-                                        style: TextStyle(
-                                          color: context.textSecondary,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  '${item.price * item.quantity} ${ref.tr('afn')}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: context.textPrimary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )),
-                      const Divider(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            ref.tr('total'),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: context.textPrimary,
-                            ),
-                          ),
-                          Text(
-                            '${order.totalAmount} ${ref.tr('afn')}',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: context.primaryOrange,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+              Text('${ref.tr('error')}: $e'),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () => ref.refresh(orderDetailsProvider(orderId)),
+                child: Text(ref.tr('retry')),
               ),
             ],
           ),
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('${ref.tr('error')}: $e')),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(BuildContext context, String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
       ),
     );
   }
