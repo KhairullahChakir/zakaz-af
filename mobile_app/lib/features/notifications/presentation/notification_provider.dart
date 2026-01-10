@@ -16,7 +16,12 @@ final unreadNotificationCountProvider = FutureProvider.autoDispose<int>((ref) as
   });
   ref.onDispose(() => subscription.cancel());
 
-  return ref.read(notificationRepositoryProvider).getUnreadCount();
+  try {
+    return await ref.read(notificationRepositoryProvider).getUnreadCount();
+  } catch (e) {
+    // Silently fail and return 0 - don't spam logs
+    return 0;
+  }
 });
 
 // Mark as read

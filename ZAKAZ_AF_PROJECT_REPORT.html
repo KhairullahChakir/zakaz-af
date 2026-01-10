@@ -1,0 +1,1804 @@
+<!DOCTYPE html><html><head><title></title><meta charset="utf-8"><style>* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 100%;
+}
+
+body {
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+		'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	line-height: 1.6;
+	font-size: 0.6875em; /* 11 pt */
+	color: #111;
+	margin: 0;
+}
+
+body > :first-child {
+	padding-top: 0;
+	margin-top: 0;
+}
+
+body > :last-child {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+	padding: 0.5em 0 0.25em;
+}
+
+h5,
+h6 {
+	padding: 0;
+}
+
+h5 {
+	font-size: 1em;
+}
+
+h6 {
+	font-size: 0.875em;
+	text-transform: uppercase;
+}
+
+p {
+	margin: 0.25em 0 1em;
+}
+
+blockquote {
+	margin: 0.5em 0 1em;
+	padding-left: 0.5em;
+	padding-right: 1em;
+	border-left: 4px solid gainsboro;
+	font-style: italic;
+}
+
+ul,
+ol {
+	margin: 0;
+	margin-left: 1em;
+	padding: 0 1.5em 0.5em;
+}
+
+pre {
+	white-space: pre-wrap;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code,
+p code,
+li code,
+pre code {
+	background-color: #f8f8f8;
+	padding: 0.1em 0.375em;
+	border: 1px solid #f8f8f8;
+	border-radius: 0.25em;
+	font-family: monospace;
+	font-size: 1.2em;
+}
+
+pre code {
+	display: block;
+	padding: 0.5em;
+}
+
+.page-break {
+	page-break-after: always;
+}
+
+img {
+	max-width: 100%;
+	margin: 1em 0;
+}
+
+table {
+	border-spacing: 0;
+	border-collapse: collapse;
+	display: block;
+	margin: 0 0 1em;
+	width: 100%;
+	overflow: auto;
+}
+
+table th,
+table td {
+	padding: 0.5em 1em;
+	border: 1px solid gainsboro;
+}
+
+table th {
+	font-weight: 600;
+}
+
+table tr {
+	background-color: white;
+	border-top: 1px solid gainsboro;
+}
+
+table tr:nth-child(2n) {
+	background-color: whitesmoke;
+}
+/*# sourceURL=C:\Users\khair\AppData\Local\npm-cache\_npx\55158e48eb5c59f7\node_modules\md-to-pdf\markdown.css*/</style><style>pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1em
+}
+code.hljs {
+  padding: 3px 5px
+}
+/*!
+  Theme: GitHub
+  Description: Light theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-light
+  Current colors taken from GitHub's CSS
+*/
+.hljs {
+  color: #24292e;
+  background: #ffffff
+}
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  /* prettylights-syntax-keyword */
+  color: #d73a49
+}
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  /* prettylights-syntax-entity */
+  color: #6f42c1
+}
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id {
+  /* prettylights-syntax-constant */
+  color: #005cc5
+}
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+  /* prettylights-syntax-string */
+  color: #032f62
+}
+.hljs-built_in,
+.hljs-symbol {
+  /* prettylights-syntax-variable */
+  color: #e36209
+}
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+  /* prettylights-syntax-comment */
+  color: #6a737d
+}
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+  /* prettylights-syntax-entity-tag */
+  color: #22863a
+}
+.hljs-subst {
+  /* prettylights-syntax-storage-modifier-import */
+  color: #24292e
+}
+.hljs-section {
+  /* prettylights-syntax-markup-heading */
+  color: #005cc5;
+  font-weight: bold
+}
+.hljs-bullet {
+  /* prettylights-syntax-markup-list */
+  color: #735c0f
+}
+.hljs-emphasis {
+  /* prettylights-syntax-markup-italic */
+  color: #24292e;
+  font-style: italic
+}
+.hljs-strong {
+  /* prettylights-syntax-markup-bold */
+  color: #24292e;
+  font-weight: bold
+}
+.hljs-addition {
+  /* prettylights-syntax-markup-inserted */
+  color: #22863a;
+  background-color: #f0fff4
+}
+.hljs-deletion {
+  /* prettylights-syntax-markup-deleted */
+  color: #b31d28;
+  background-color: #ffeef0
+}
+.hljs-char.escape_,
+.hljs-link,
+.hljs-params,
+.hljs-property,
+.hljs-punctuation,
+.hljs-tag {
+  /* purposely ignored */
+  
+}/*# sourceURL=C:\Users\khair\AppData\Local\npm-cache\_npx\55158e48eb5c59f7\node_modules\highlight.js\styles\github.css*/</style></head>
+	<body class="">
+		<h1 id="zakaz-af-e-commerce-platform">Zakaz-AF E-Commerce Platform</h1>
+<h2 id="complete-project-report">Complete Project Report</h2>
+<p><strong>Project Name:</strong> Zakaz-AF<br><strong>Developer:</strong> Khairullah Chakir<br><strong>Completion Date:</strong> January 2, 2026<br><strong>Platform:</strong> Android Mobile Application with Laravel Backend<br><strong>Live URL:</strong> <a href="https://zakaz-af.store">https://zakaz-af.store</a><br><strong>API Endpoint:</strong> <a href="https://api.zakaz-af.store/api">https://api.zakaz-af.store/api</a></p>
+<hr>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#1-executive-summary">Executive Summary</a></li>
+<li><a href="#2-project-overview">Project Overview</a></li>
+<li><a href="#3-technical-architecture">Technical Architecture</a></li>
+<li><a href="#4-technology-stack">Technology Stack</a></li>
+<li><a href="#5-mobile-application-features">Mobile Application Features</a></li>
+<li><a href="#6-backend-api">Backend API</a></li>
+<li><a href="#7-database-design">Database Design</a></li>
+<li><a href="#8-security-implementation">Security Implementation</a></li>
+<li><a href="#9-deployment-infrastructure">Deployment Infrastructure</a></li>
+<li><a href="#10-localization--internationalization">Localization &amp; Internationalization</a></li>
+<li><a href="#11-user-roles--permissions">User Roles &amp; Permissions</a></li>
+<li><a href="#12-cost-analysis">Cost Analysis</a></li>
+<li><a href="#13-future-enhancements">Future Enhancements</a></li>
+<li><a href="#14-conclusion">Conclusion</a></li>
+</ol>
+<hr>
+<h2 id="1-executive-summary">1. Executive Summary</h2>
+<p>Zakaz-AF is a comprehensive e-commerce mobile application designed specifically for the Afghan market. The platform enables local Afghan shopkeepers to sell their products online while providing customers with a convenient way to shop for groceries, fashion, electronics, and more with home delivery.</p>
+<h3 id="key-achievements">Key Achievements:</h3>
+<ul>
+<li>✅ Fully functional Android mobile application</li>
+<li>✅ Secure Laravel REST API backend</li>
+<li>✅ Production deployment with SSL/HTTPS</li>
+<li>✅ Multi-language support (English, Dari, Pashto)</li>
+<li>✅ Real-time chat between buyers and sellers</li>
+<li>✅ Push notifications for order updates</li>
+<li>✅ Marketplace for user-to-user selling</li>
+<li>✅ Admin dashboard for store management</li>
+</ul>
+<hr>
+<h2 id="2-project-overview">2. Project Overview</h2>
+<h3 id="21-problem-statement">2.1 Problem Statement</h3>
+<p>Afghanistan lacks a comprehensive local e-commerce solution that:</p>
+<ul>
+<li>Supports local languages (Dari and Pashto)</li>
+<li>Works reliably with limited internet connectivity</li>
+<li>Connects local shopkeepers with customers</li>
+<li>Provides cash-on-delivery payment options</li>
+</ul>
+<h3 id="22-solution">2.2 Solution</h3>
+<p>Zakaz-AF addresses these challenges by providing:</p>
+<ul>
+<li>A user-friendly mobile app with RTL (Right-to-Left) support</li>
+<li>Offline-first architecture for poor connectivity areas</li>
+<li>Direct communication between buyers and sellers</li>
+<li>Multiple payment options including cash on delivery</li>
+<li>A marketplace for peer-to-peer selling</li>
+</ul>
+<h3 id="23-target-audience">2.3 Target Audience</h3>
+<table>
+<thead>
+<tr>
+<th>User Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Customers</strong></td>
+<td>Afghan residents looking to shop online</td>
+</tr>
+<tr>
+<td><strong>Shop Owners</strong></td>
+<td>Local Afghan shopkeepers wanting to sell online</td>
+</tr>
+<tr>
+<td><strong>Marketplace Sellers</strong></td>
+<td>Individuals wanting to sell used/new items</td>
+</tr>
+<tr>
+<td><strong>Administrators</strong></td>
+<td>Platform managers and moderators</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-technical-architecture">3. Technical Architecture</h2>
+<h3 id="31-system-architecture">3.1 System Architecture</h3>
+<pre><code>┌─────────────────┐     HTTPS      ┌─────────────────┐
+│                 │ ◄────────────► │                 │
+│  Flutter App    │                │   Nginx Server  │
+│  (Android)      │                │  (Reverse Proxy)│
+│                 │                │                 │
+└─────────────────┘                └────────┬────────┘
+                                            │
+                                            ▼
+                                   ┌─────────────────┐
+                                   │                 │
+                                   │   Laravel API   │
+                                   │   (PHP 8.3)     │
+                                   │                 │
+                                   └────────┬────────┘
+                                            │
+                                            ▼
+                                   ┌─────────────────┐
+                                   │                 │
+                                   │     MySQL       │
+                                   │   Database      │
+                                   │                 │
+                                   └─────────────────┘
+</code></pre>
+<h3 id="32-directory-structure">3.2 Directory Structure</h3>
+<pre><code>zakaz-af/
+├── backend/                    # Laravel Backend
+│   ├── app/
+│   │   ├── Http/Controllers/   # API Controllers
+│   │   ├── Models/             # Eloquent Models
+│   │   └── Services/           # Business Logic
+│   ├── database/
+│   │   ├── migrations/         # Database Migrations
+│   │   └── seeders/            # Database Seeders
+│   ├── routes/
+│   │   └── api.php             # API Routes
+│   └── public/
+│       └── download.html       # App Download Page
+│
+├── mobile_app/                 # Flutter Application
+│   ├── lib/
+│   │   ├── core/               # Core utilities
+│   │   │   ├── network/        # API client (Dio)
+│   │   │   ├── localization/   # Translations
+│   │   │   ├── services/       # App services
+│   │   │   └── widgets/        # Reusable widgets
+│   │   └── features/           # Feature modules
+│   │       ├── auth/           # Authentication
+│   │       ├── home/           # Home screen
+│   │       ├── products/       # Product catalog
+│   │       ├── cart/           # Shopping cart
+│   │       ├── orders/         # Order management
+│   │       ├── chat/           # Real-time messaging
+│   │       ├── marketplace/    # P2P marketplace
+│   │       ├── profile/        # User profile
+│   │       └── admin/          # Admin dashboard
+│   └── android/                # Android configuration
+│
+└── DEV_STATUS.md               # Development status
+</code></pre>
+<hr>
+<h2 id="4-technology-stack">4. Technology Stack</h2>
+<h3 id="41-mobile-application">4.1 Mobile Application</h3>
+<table>
+<thead>
+<tr>
+<th>Technology</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Flutter</td>
+<td>3.x</td>
+<td>Cross-platform UI framework</td>
+</tr>
+<tr>
+<td>Dart</td>
+<td>3.x</td>
+<td>Programming language</td>
+</tr>
+<tr>
+<td>Riverpod</td>
+<td>2.x</td>
+<td>State management</td>
+</tr>
+<tr>
+<td>Dio</td>
+<td>5.x</td>
+<td>HTTP client</td>
+</tr>
+<tr>
+<td>Go Router</td>
+<td>6.x</td>
+<td>Navigation</td>
+</tr>
+<tr>
+<td>Firebase</td>
+<td>Latest</td>
+<td>Push notifications</td>
+</tr>
+<tr>
+<td>SharedPreferences</td>
+<td>-</td>
+<td>Local storage</td>
+</tr>
+<tr>
+<td>Cached Network Image</td>
+<td>-</td>
+<td>Image caching</td>
+</tr>
+</tbody></table>
+<h3 id="42-backend">4.2 Backend</h3>
+<table>
+<thead>
+<tr>
+<th>Technology</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Laravel</td>
+<td>12.x</td>
+<td>PHP Framework</td>
+</tr>
+<tr>
+<td>PHP</td>
+<td>8.3</td>
+<td>Server-side language</td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td>8.0</td>
+<td>Database</td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td>Latest</td>
+<td>Web server</td>
+</tr>
+<tr>
+<td>Composer</td>
+<td>2.x</td>
+<td>Dependency management</td>
+</tr>
+<tr>
+<td>Laravel Sanctum</td>
+<td>-</td>
+<td>API authentication</td>
+</tr>
+</tbody></table>
+<h3 id="43-infrastructure">4.3 Infrastructure</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Provider</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VPS Server</td>
+<td>VPSDime</td>
+<td>Ubuntu 24.04 LTS</td>
+</tr>
+<tr>
+<td>Domain</td>
+<td>Namecheap</td>
+<td>zakaz-af.store</td>
+</tr>
+<tr>
+<td>SSL Certificate</td>
+<td>Let's Encrypt</td>
+<td>Auto-renewal enabled</td>
+</tr>
+<tr>
+<td>Code Repository</td>
+<td>GitHub</td>
+<td>Private repository</td>
+</tr>
+<tr>
+<td>APK Hosting</td>
+<td>GitHub Releases</td>
+<td>Free hosting</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="5-mobile-application-features">5. Mobile Application Features</h2>
+<h3 id="51-authentication-module">5.1 Authentication Module</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Email/Password Login</td>
+<td>Traditional authentication</td>
+</tr>
+<tr>
+<td>Google Sign-In</td>
+<td>OAuth 2.0 integration</td>
+</tr>
+<tr>
+<td>OTP Verification</td>
+<td>Phone number verification</td>
+</tr>
+<tr>
+<td>Password Reset</td>
+<td>Email-based recovery</td>
+</tr>
+<tr>
+<td>Guest Mode</td>
+<td>Browse without account</td>
+</tr>
+<tr>
+<td>Token Refresh</td>
+<td>Automatic session renewal</td>
+</tr>
+</tbody></table>
+<h3 id="52-product-catalog">5.2 Product Catalog</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Category Browsing</td>
+<td>Organized product categories</td>
+</tr>
+<tr>
+<td>Product Search</td>
+<td>Full-text search capability</td>
+</tr>
+<tr>
+<td>Product Details</td>
+<td>Images, description, reviews</td>
+</tr>
+<tr>
+<td>Wishlist</td>
+<td>Save favorite products</td>
+</tr>
+<tr>
+<td>Product Reviews</td>
+<td>Star ratings and comments</td>
+</tr>
+<tr>
+<td>Sort &amp; Filter</td>
+<td>Price, popularity, rating</td>
+</tr>
+</tbody></table>
+<h3 id="53-shopping-cart">5.3 Shopping Cart</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Add/Remove Items</td>
+<td>Cart management</td>
+</tr>
+<tr>
+<td>Quantity Adjustment</td>
+<td>Update item quantities</td>
+</tr>
+<tr>
+<td>Price Calculation</td>
+<td>Real-time total updates</td>
+</tr>
+<tr>
+<td>Multi-shop Checkout</td>
+<td>Combined orders</td>
+</tr>
+<tr>
+<td>Saved Cart</td>
+<td>Persistent across sessions</td>
+</tr>
+</tbody></table>
+<h3 id="54-order-management">5.4 Order Management</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Order Placement</td>
+<td>Complete checkout flow</td>
+</tr>
+<tr>
+<td>Order Tracking</td>
+<td>Real-time status updates</td>
+</tr>
+<tr>
+<td>Order History</td>
+<td>View past orders</td>
+</tr>
+<tr>
+<td>Order Details</td>
+<td>Full order information</td>
+</tr>
+<tr>
+<td>Push Notifications</td>
+<td>Status change alerts</td>
+</tr>
+</tbody></table>
+<h3 id="55-chat-system">5.5 Chat System</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Buyer-Seller Chat</td>
+<td>Direct messaging</td>
+</tr>
+<tr>
+<td>Marketplace Chat</td>
+<td>P2P communication</td>
+</tr>
+<tr>
+<td>Image Sharing</td>
+<td>Send photos in chat</td>
+</tr>
+<tr>
+<td>Message Notifications</td>
+<td>Real-time alerts</td>
+</tr>
+<tr>
+<td>Conversation List</td>
+<td>All active chats</td>
+</tr>
+</tbody></table>
+<h3 id="56-marketplace-p2p">5.6 Marketplace (P2P)</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Create Listing</td>
+<td>Sell personal items</td>
+</tr>
+<tr>
+<td>Edit/Delete Listing</td>
+<td>Manage your listings</td>
+</tr>
+<tr>
+<td>Image Upload</td>
+<td>Multiple photos per listing</td>
+</tr>
+<tr>
+<td>Contact Seller</td>
+<td>In-app messaging</td>
+</tr>
+<tr>
+<td>Listing Categories</td>
+<td>Organized browsing</td>
+</tr>
+</tbody></table>
+<h3 id="57-user-profile">5.7 User Profile</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Profile Management</td>
+<td>Edit personal info</td>
+</tr>
+<tr>
+<td>Address Book</td>
+<td>Multiple delivery addresses</td>
+</tr>
+<tr>
+<td>Notification Settings</td>
+<td>Customize alerts</td>
+</tr>
+<tr>
+<td>Language Selection</td>
+<td>EN, Dari, Pashto</td>
+</tr>
+<tr>
+<td>Theme Selection</td>
+<td>Light/Dark mode</td>
+</tr>
+<tr>
+<td>Help Center</td>
+<td>FAQ and support</td>
+</tr>
+<tr>
+<td>About</td>
+<td>App information</td>
+</tr>
+<tr>
+<td>Privacy Policy</td>
+<td>Legal information</td>
+</tr>
+<tr>
+<td>Terms of Use</td>
+<td>User agreements</td>
+</tr>
+</tbody></table>
+<h3 id="58-admin-features">5.8 Admin Features</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dashboard</td>
+<td>Sales overview</td>
+</tr>
+<tr>
+<td>Product Management</td>
+<td>Add/edit/delete products</td>
+</tr>
+<tr>
+<td>Category Management</td>
+<td>Organize categories</td>
+</tr>
+<tr>
+<td>Order Management</td>
+<td>Process orders</td>
+</tr>
+<tr>
+<td>User Management</td>
+<td>Manage customers</td>
+</tr>
+<tr>
+<td>Shop Settings</td>
+<td>Configure store</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="6-backend-api">6. Backend API</h2>
+<h3 id="61-api-endpoints">6.1 API Endpoints</h3>
+<h4 id="authentication">Authentication</h4>
+<pre><code>POST   /api/auth/register          # User registration
+POST   /api/auth/login             # User login
+POST   /api/auth/google            # Google OAuth
+POST   /api/auth/logout            # User logout
+POST   /api/auth/refresh           # Refresh token
+POST   /api/auth/forgot-password   # Password reset request
+POST   /api/auth/reset-password    # Password reset
+POST   /api/auth/verify-otp        # OTP verification
+</code></pre>
+<h4 id="products">Products</h4>
+<pre><code>GET    /api/products               # List products
+GET    /api/products/{id}          # Product details
+POST   /api/products               # Create product (admin)
+PUT    /api/products/{id}          # Update product (admin)
+DELETE /api/products/{id}          # Delete product (admin)
+GET    /api/products/search        # Search products
+</code></pre>
+<h4 id="categories">Categories</h4>
+<pre><code>GET    /api/categories             # List categories
+GET    /api/categories/{id}        # Category details
+POST   /api/categories             # Create category (admin)
+PUT    /api/categories/{id}        # Update category (admin)
+DELETE /api/categories/{id}        # Delete category (admin)
+</code></pre>
+<h4 id="cart">Cart</h4>
+<pre><code>GET    /api/cart                   # Get user's cart
+POST   /api/cart                   # Add to cart
+PUT    /api/cart/{id}              # Update cart item
+DELETE /api/cart/{id}              # Remove from cart
+DELETE /api/cart                   # Clear cart
+</code></pre>
+<h4 id="orders">Orders</h4>
+<pre><code>GET    /api/orders                 # List user's orders
+GET    /api/orders/{id}            # Order details
+POST   /api/orders                 # Create order
+PUT    /api/orders/{id}/status     # Update order status
+</code></pre>
+<h4 id="marketplace">Marketplace</h4>
+<pre><code>GET    /api/marketplace            # List marketplace items
+GET    /api/marketplace/{id}       # Item details
+POST   /api/marketplace            # Create listing
+PUT    /api/marketplace/{id}       # Update listing
+DELETE /api/marketplace/{id}       # Delete listing
+GET    /api/marketplace/my-items   # User's listings
+</code></pre>
+<h4 id="chat">Chat</h4>
+<pre><code>GET    /api/conversations          # List conversations
+GET    /api/conversations/{id}     # Conversation messages
+POST   /api/conversations          # Start conversation
+POST   /api/messages               # Send message
+</code></pre>
+<h4 id="user">User</h4>
+<pre><code>GET    /api/user                   # Current user profile
+PUT    /api/user                   # Update profile
+PUT    /api/user/fcm-token         # Update FCM token
+GET    /api/addresses              # List addresses
+POST   /api/addresses              # Add address
+PUT    /api/addresses/{id}         # Update address
+DELETE /api/addresses/{id}         # Delete address
+</code></pre>
+<h4 id="wishlist">Wishlist</h4>
+<pre><code>GET    /api/wishlist               # Get wishlist
+POST   /api/wishlist               # Add to wishlist
+DELETE /api/wishlist/{id}          # Remove from wishlist
+</code></pre>
+<h4 id="reviews">Reviews</h4>
+<pre><code>GET    /api/products/{id}/reviews  # Product reviews
+POST   /api/products/{id}/reviews  # Add review
+</code></pre>
+<h4 id="app-settings">App Settings</h4>
+<pre><code>GET    /api/app-settings           # Get app configuration
+</code></pre>
+<h3 id="62-api-response-format">6.2 API Response Format</h3>
+<pre><code class="hljs json"><span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">"success"</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">"message"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"Operation successful"</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">"data"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+        <span class="hljs-comment">// Response data</span>
+    <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<h3 id="63-error-response-format">6.3 Error Response Format</h3>
+<pre><code class="hljs json"><span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">"success"</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">"message"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"Error description"</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">"errors"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+        <span class="hljs-attr">"field"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">"Validation error message"</span><span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<hr>
+<h2 id="7-database-design">7. Database Design</h2>
+<h3 id="71-entity-relationship-diagram">7.1 Entity Relationship Diagram</h3>
+<pre><code>┌──────────────┐       ┌──────────────┐       ┌──────────────┐
+│    users     │       │   products   │       │  categories  │
+├──────────────┤       ├──────────────┤       ├──────────────┤
+│ id           │       │ id           │       │ id           │
+│ name         │       │ name         │       │ name         │
+│ email        │       │ description  │       │ image        │
+│ password     │       │ price        │       │ parent_id    │
+│ role         │       │ category_id  │◄──────│ created_at   │
+│ fcm_token    │       │ shop_id      │       └──────────────┘
+│ profile_image│       │ stock        │
+│ created_at   │       │ images       │
+└──────┬───────┘       │ created_at   │
+       │               └──────┬───────┘
+       │                      │
+       ▼                      ▼
+┌──────────────┐       ┌──────────────┐
+│   orders     │       │    shops     │
+├──────────────┤       ├──────────────┤
+│ id           │       │ id           │
+│ user_id      │       │ name         │
+│ status       │       │ description  │
+│ total        │       │ owner_id     │
+│ address_id   │       │ logo         │
+│ payment_type │       │ created_at   │
+│ created_at   │       └──────────────┘
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│ order_items  │
+├──────────────┤
+│ id           │
+│ order_id     │
+│ product_id   │
+│ quantity     │
+│ price        │
+└──────────────┘
+</code></pre>
+<h3 id="72-database-tables">7.2 Database Tables</h3>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Description</th>
+<th>Records</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>users</td>
+<td>User accounts</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>categories</td>
+<td>Product categories</td>
+<td>~20</td>
+</tr>
+<tr>
+<td>products</td>
+<td>Store products</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>product_images</td>
+<td>Product photos</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>shops</td>
+<td>Store information</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>orders</td>
+<td>Customer orders</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>order_items</td>
+<td>Order line items</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>addresses</td>
+<td>Delivery addresses</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>wishlists</td>
+<td>User favorites</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>reviews</td>
+<td>Product reviews</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>conversations</td>
+<td>Chat threads</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>messages</td>
+<td>Chat messages</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>marketplace_items</td>
+<td>P2P listings</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>marketplace_item_images</td>
+<td>P2P listing photos</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>notifications</td>
+<td>Push notifications</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>app_settings</td>
+<td>App configuration</td>
+<td>~10</td>
+</tr>
+<tr>
+<td>cache</td>
+<td>Laravel cache</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>sessions</td>
+<td>User sessions</td>
+<td>Dynamic</td>
+</tr>
+<tr>
+<td>jobs</td>
+<td>Background tasks</td>
+<td>Dynamic</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="8-security-implementation">8. Security Implementation</h2>
+<h3 id="81-authentication-security">8.1 Authentication Security</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Password Hashing</td>
+<td>Bcrypt (12 rounds)</td>
+</tr>
+<tr>
+<td>Token Authentication</td>
+<td>Laravel Sanctum</td>
+</tr>
+<tr>
+<td>Token Expiration</td>
+<td>30 days</td>
+</tr>
+<tr>
+<td>Automatic Refresh</td>
+<td>On 401 response</td>
+</tr>
+<tr>
+<td>Google OAuth</td>
+<td>Secure OAuth 2.0</td>
+</tr>
+</tbody></table>
+<h3 id="82-api-security">8.2 API Security</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HTTPS</td>
+<td>SSL/TLS encryption</td>
+</tr>
+<tr>
+<td>CORS</td>
+<td>Configured for mobile app</td>
+</tr>
+<tr>
+<td>Rate Limiting</td>
+<td>Laravel rate limiter</td>
+</tr>
+<tr>
+<td>Input Validation</td>
+<td>Request validation</td>
+</tr>
+<tr>
+<td>SQL Injection</td>
+<td>Eloquent ORM protection</td>
+</tr>
+<tr>
+<td>XSS Prevention</td>
+<td>Response sanitization</td>
+</tr>
+</tbody></table>
+<h3 id="83-mobile-app-security">8.3 Mobile App Security</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Secure Storage</td>
+<td>SharedPreferences (encrypted)</td>
+</tr>
+<tr>
+<td>Certificate Pinning</td>
+<td>Optional (future)</td>
+</tr>
+<tr>
+<td>Obfuscation</td>
+<td>ProGuard enabled</td>
+</tr>
+<tr>
+<td>Biometric Auth</td>
+<td>Optional (future)</td>
+</tr>
+</tbody></table>
+<h3 id="84-server-security">8.4 Server Security</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Firewall</td>
+<td>UFW (Nginx, SSH only)</td>
+</tr>
+<tr>
+<td>SSH Access</td>
+<td>Key-based (recommended)</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>Local access only</td>
+</tr>
+<tr>
+<td>File Permissions</td>
+<td>Proper ownership</td>
+</tr>
+<tr>
+<td>SSL Certificate</td>
+<td>Let's Encrypt (auto-renewal)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="9-deployment-infrastructure">9. Deployment Infrastructure</h2>
+<h3 id="91-server-specifications">9.1 Server Specifications</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Specification</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Provider</td>
+<td>VPSDime</td>
+</tr>
+<tr>
+<td>OS</td>
+<td>Ubuntu 24.04 LTS</td>
+</tr>
+<tr>
+<td>IP Address</td>
+<td>185.197.31.25</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>SSD</td>
+</tr>
+<tr>
+<td>Bandwidth</td>
+<td>Unmetered</td>
+</tr>
+</tbody></table>
+<h3 id="92-software-stack">9.2 Software Stack</h3>
+<table>
+<thead>
+<tr>
+<th>Software</th>
+<th>Version</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Nginx</td>
+<td>Latest</td>
+<td>✅ Running</td>
+</tr>
+<tr>
+<td>PHP</td>
+<td>8.3</td>
+<td>✅ Running</td>
+</tr>
+<tr>
+<td>PHP-FPM</td>
+<td>8.3</td>
+<td>✅ Running</td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td>8.0</td>
+<td>✅ Running</td>
+</tr>
+<tr>
+<td>Composer</td>
+<td>2.x</td>
+<td>✅ Installed</td>
+</tr>
+<tr>
+<td>Certbot</td>
+<td>Latest</td>
+<td>✅ Installed</td>
+</tr>
+<tr>
+<td>Git</td>
+<td>Latest</td>
+<td>✅ Installed</td>
+</tr>
+</tbody></table>
+<h3 id="93-domain-configuration">9.3 Domain Configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Purpose</th>
+<th>SSL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>zakaz-af.store</td>
+<td>Main website</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>api.zakaz-af.store</td>
+<td>API endpoint</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><a href="http://www.zakaz-af.store">www.zakaz-af.store</a></td>
+<td>WWW redirect</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<h3 id="94-nginx-configuration">9.4 Nginx Configuration</h3>
+<pre><code class="hljs nginx"><span class="hljs-section">server</span> {
+    <span class="hljs-attribute">listen</span> <span class="hljs-number">443</span> ssl;
+    <span class="hljs-attribute">server_name</span> zakaz-af.store www.zakaz-af.store api.zakaz-af.store;
+    <span class="hljs-attribute">root</span> /var/www/zakaz-af/backend/public;
+    
+    <span class="hljs-attribute">ssl_certificate</span> /etc/letsencrypt/live/zakaz-af.store/fullchain.pem;
+    <span class="hljs-attribute">ssl_certificate_key</span> /etc/letsencrypt/live/zakaz-af.store/privkey.pem;
+    
+    <span class="hljs-attribute">index</span> index.php;
+    
+    <span class="hljs-section">location</span> / {
+        <span class="hljs-attribute">try_files</span> <span class="hljs-variable">$uri</span> <span class="hljs-variable">$uri</span>/ /index.php?<span class="hljs-variable">$query_string</span>;
+    }
+    
+    <span class="hljs-section">location</span> <span class="hljs-regexp">~ \.php$</span> {
+        <span class="hljs-attribute">fastcgi_pass</span> unix:/var/run/php/php8.3-fpm.sock;
+        <span class="hljs-attribute">fastcgi_param</span> SCRIPT_FILENAME <span class="hljs-variable">$realpath_root</span><span class="hljs-variable">$fastcgi_script_name</span>;
+        <span class="hljs-attribute">include</span> fastcgi_params;
+    }
+}
+</code></pre>
+<h3 id="95-deployment-process">9.5 Deployment Process</h3>
+<ol>
+<li><strong>Code Push</strong> - Developer pushes to GitHub</li>
+<li><strong>Server Pull</strong> - Run <code>git pull</code> on server</li>
+<li><strong>Dependencies</strong> - Run <code>composer install --no-dev</code></li>
+<li><strong>Migrations</strong> - Run <code>php artisan migrate --force</code></li>
+<li><strong>Cache Clear</strong> - Run <code>php artisan config:clear</code></li>
+<li><strong>Restart</strong> - Restart PHP-FPM if needed</li>
+</ol>
+<hr>
+<h2 id="10-localization--internationalization">10. Localization &amp; Internationalization</h2>
+<h3 id="101-supported-languages">10.1 Supported Languages</h3>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Code</th>
+<th>Direction</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>English</td>
+<td>en</td>
+<td>LTR</td>
+<td>✅ Complete</td>
+</tr>
+<tr>
+<td>Dari (Persian)</td>
+<td>fa</td>
+<td>RTL</td>
+<td>✅ Complete</td>
+</tr>
+<tr>
+<td>Pashto</td>
+<td>ps</td>
+<td>RTL</td>
+<td>✅ Complete</td>
+</tr>
+</tbody></table>
+<h3 id="102-translation-coverage">10.2 Translation Coverage</h3>
+<ul>
+<li><strong>Authentication screens</strong> - 100%</li>
+<li><strong>Home screen</strong> - 100%</li>
+<li><strong>Product screens</strong> - 100%</li>
+<li><strong>Cart &amp; Checkout</strong> - 100%</li>
+<li><strong>Orders</strong> - 100%</li>
+<li><strong>Profile</strong> - 100%</li>
+<li><strong>Chat</strong> - 100%</li>
+<li><strong>Marketplace</strong> - 100%</li>
+<li><strong>Admin</strong> - 100%</li>
+<li><strong>Error messages</strong> - 100%</li>
+</ul>
+<h3 id="103-rtl-support">10.3 RTL Support</h3>
+<ul>
+<li>Complete mirror layout for RTL languages</li>
+<li>Proper text alignment</li>
+<li>Correct icon placement</li>
+<li>Appropriate font rendering</li>
+</ul>
+<hr>
+<h2 id="11-user-roles--permissions">11. User Roles &amp; Permissions</h2>
+<h3 id="111-role-hierarchy">11.1 Role Hierarchy</h3>
+<pre><code>Admin
+  └── Shop Owner
+        └── Customer
+              └── Guest
+</code></pre>
+<h3 id="112-permissions-matrix">11.2 Permissions Matrix</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Guest</th>
+<th>Customer</th>
+<th>Shop Owner</th>
+<th>Admin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Browse Products</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>View Product Details</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Add to Cart</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Place Orders</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>View Order History</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Chat with Seller</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Create Marketplace Listing</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Write Reviews</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Manage Own Shop</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Add Products to Shop</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>View Shop Orders</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Access Admin Dashboard</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Manage All Products</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Manage Categories</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Manage Users</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>View All Orders</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="12-cost-analysis">12. Cost Analysis</h2>
+<h3 id="121-monthly-costs">12.1 Monthly Costs</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Cost</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VPS Hosting</td>
+<td>$5.00</td>
+<td>VPSDime</td>
+</tr>
+<tr>
+<td>Domain</td>
+<td>$0.17</td>
+<td>$2/year ÷ 12</td>
+</tr>
+<tr>
+<td>SSL Certificate</td>
+<td>$0.00</td>
+<td>Let's Encrypt (free)</td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td>$0.00</td>
+<td>Free tier</td>
+</tr>
+<tr>
+<td>Firebase</td>
+<td>$0.00</td>
+<td>Free tier</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>$5.17</strong></td>
+<td>Per month</td>
+</tr>
+</tbody></table>
+<h3 id="122-annual-costs">12.2 Annual Costs</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VPS Hosting</td>
+<td>$60.00</td>
+</tr>
+<tr>
+<td>Domain Renewal</td>
+<td>$2.00</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>$62.00</strong></td>
+</tr>
+</tbody></table>
+<h3 id="123-development-costs">12.3 Development Costs</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Estimated Hours</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mobile App Development</td>
+<td>200+</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Backend Development</td>
+<td>100+</td>
+<td>-</td>
+</tr>
+<tr>
+<td>UI/UX Design</td>
+<td>50+</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Testing</td>
+<td>30+</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>10+</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>390+</strong></td>
+<td>-</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="13-future-enhancements">13. Future Enhancements</h2>
+<h3 id="131-short-term-1-3-months">13.1 Short-term (1-3 months)</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Priority</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iOS App</td>
+<td>High</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>Email Notifications</td>
+<td>Medium</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>SMS Notifications</td>
+<td>Medium</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>Payment Gateway Integration</td>
+<td>High</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>Advanced Analytics</td>
+<td>Medium</td>
+<td>Planned</td>
+</tr>
+</tbody></table>
+<h3 id="132-medium-term-3-6-months">13.2 Medium-term (3-6 months)</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Priority</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Seller Dashboard Web App</td>
+<td>High</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>Inventory Management</td>
+<td>Medium</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>Promotional Codes</td>
+<td>Medium</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>Flash Sales</td>
+<td>Low</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>Product Recommendations</td>
+<td>Medium</td>
+<td>Planned</td>
+</tr>
+</tbody></table>
+<h3 id="133-long-term-6-12-months">13.3 Long-term (6-12 months)</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Priority</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Multi-vendor Marketplace</td>
+<td>High</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>Delivery Tracking GPS</td>
+<td>High</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>AI-powered Search</td>
+<td>Medium</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>Voice Search</td>
+<td>Low</td>
+<td>Planned</td>
+</tr>
+<tr>
+<td>Augmented Reality Preview</td>
+<td>Low</td>
+<td>Planned</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="14-conclusion">14. Conclusion</h2>
+<p>Zakaz-AF represents a significant step forward in bringing e-commerce capabilities to the Afghan market. The platform successfully addresses the unique challenges of the region including:</p>
+<ul>
+<li><strong>Language barriers</strong> - Full support for English, Dari, and Pashto</li>
+<li><strong>Limited connectivity</strong> - Efficient data usage and caching</li>
+<li><strong>Payment preferences</strong> - Cash on delivery option</li>
+<li><strong>Local focus</strong> - Connecting local shopkeepers with customers</li>
+</ul>
+<p>The technical implementation follows modern best practices:</p>
+<ul>
+<li>Clean architecture with separation of concerns</li>
+<li>Secure API with proper authentication</li>
+<li>Scalable infrastructure with room for growth</li>
+<li>Comprehensive feature set for all user types</li>
+</ul>
+<p>With the successful deployment of the production environment, Zakaz-AF is ready to serve the Afghan e-commerce market and has the foundation for future growth and enhancement.</p>
+<hr>
+<h2 id="appendix">Appendix</h2>
+<h3 id="a-admin-credentials">A. Admin Credentials</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Email</td>
+<td><a href="mailto:khairullahanosh9626@gmail.com">khairullahanosh9626@gmail.com</a></td>
+</tr>
+<tr>
+<td>Role</td>
+<td>Admin</td>
+</tr>
+</tbody></table>
+<h3 id="b-server-access">B. Server Access</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IP</td>
+<td>185.197.31.25</td>
+</tr>
+<tr>
+<td>SSH</td>
+<td><code>ssh root@185.197.31.25</code></td>
+</tr>
+</tbody></table>
+<h3 id="c-database">C. Database</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Type</td>
+<td>MySQL 8.0</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>zakaz_db</td>
+</tr>
+<tr>
+<td>User</td>
+<td>zakaz_user</td>
+</tr>
+</tbody></table>
+<h3 id="d-important-urls">D. Important URLs</h3>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://zakaz-af.store">https://zakaz-af.store</a></td>
+<td>Main domain</td>
+</tr>
+<tr>
+<td><a href="https://zakaz-af.store/download.html">https://zakaz-af.store/download.html</a></td>
+<td>APK download page</td>
+</tr>
+<tr>
+<td><a href="https://api.zakaz-af.store/api">https://api.zakaz-af.store/api</a></td>
+<td>API endpoint</td>
+</tr>
+<tr>
+<td><a href="https://github.com/KhairullahChakir/zakaz-af">https://github.com/KhairullahChakir/zakaz-af</a></td>
+<td>Source code</td>
+</tr>
+</tbody></table>
+<h3 id="e-apk-information">E. APK Information</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Package ID</td>
+<td>com.zakaz.af</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td>Min Android</td>
+<td>7.0 (API 24)</td>
+</tr>
+<tr>
+<td>Target Android</td>
+<td>14 (API 36)</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>~80 MB</td>
+</tr>
+<tr>
+<td>Signed</td>
+<td>Yes (Release key)</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>Report Generated:</strong> January 2, 2026<br><strong>Author:</strong> Antigravity AI Assistant<br><strong>Project Developer:</strong> Khairullah Chakir</p>
+<hr>
+<p><em>© 2026 Zakaz-AF. All rights reserved.</em></p>
+
+	
+
+</body></html>

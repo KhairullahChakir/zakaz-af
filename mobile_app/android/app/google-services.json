@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "595873251328-t6g8dpdu3njj9dq2t7asg6mbrrd5uhbb.apps.googleusercontent.com",
+          "client_id": "595873251328-75onr4174rvdgur17mbr0dmtth4ib1t2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.zakaz.af",
-            "certificate_hash": "49e24e290e30657af79f2937dacb22ffa2e2798b"
+            "certificate_hash": "a5539ed0170ce47ba78b805bd33f9d7ea36fc9cc"
           }
         },
         {
