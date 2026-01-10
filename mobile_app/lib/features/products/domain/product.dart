@@ -35,7 +35,6 @@ double? _parseRating(dynamic value) {
   return null;
 }
 
-/// Parses gallery_urls from either List<String> or List<Map> (with image_url key)
 List<String>? _parseGalleryUrls(dynamic value) {
   if (value == null) return null;
   if (value is! List) return null;

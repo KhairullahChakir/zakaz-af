@@ -580,7 +580,23 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                   onTap: () async {
                                                     try {
                                                       final phone = product.shop!.phone!.replaceAll(RegExp(r'[^0-9]'), '');
-                                                      final message = ref.tr('whatsapp_msg', args: {'name': product.name});
+                                                      
+                                                      // Construct Professional Message
+                                                      final StringBuffer sb = StringBuffer();
+                                                      sb.writeln('*${ref.tr('wa_inquiry_header')}*');
+                                                      sb.writeln('');
+                                                      sb.writeln('📦 *${ref.tr('wa_product')}:* ${product.name}');
+                                                      sb.writeln('💰 *${ref.tr('price')}:* ${product.price.toInt()} AFN');
+                                                      sb.writeln('🔢 *${ref.tr('wa_id')}:* #${product.id}');
+                                                      if (product.imageUrl != null) {
+                                                        sb.writeln('🖼️ *${ref.tr('wa_photo')}:* ${product.imageUrl}');
+                                                      }
+                                                      sb.writeln('');
+                                                      sb.writeln('${ref.tr('wa_availability')}');
+                                                      sb.writeln('');
+                                                      sb.writeln('_ ${ref.tr('wa_sent_via')} _');
+
+                                                      final message = sb.toString();
                                                       final whatsappUrl = Uri.parse('https://wa.me/$phone?text=${Uri.encodeComponent(message)}');
                                                       await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
                                                     } catch (e) {

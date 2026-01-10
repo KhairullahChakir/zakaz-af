@@ -132,11 +132,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   }
 
   Future<void> _processWithWhatsApp(List<CartItem> items) async {
-    // Build order summary message
+    // Build professional order summary message
     final StringBuffer message = StringBuffer();
-    message.writeln('🛒 *New Order from Zakaz-AF*');
+    message.writeln('*${ref.tr('wa_order_header')}*');
     message.writeln('');
-    message.writeln('📦 *Order Details:*');
+    message.writeln('🛍️ *${ref.tr('order_details')}:*');
     
     double total = 0;
     for (final item in items) {
@@ -146,13 +146,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     }
     
     message.writeln('');
-    message.writeln('💰 *Total: ${total.toInt()} AFN*');
+    message.writeln('💵 *${ref.tr('cart_total')}: ${total.toInt()} AFN*');
     message.writeln('');
-    message.writeln('📍 *Delivery Address:*');
+    
     if (_selectedAddress != null) {
-      message.writeln('${_selectedAddress!.recipientName}');
-      message.writeln('${_selectedAddress!.province}, ${_selectedAddress!.district ?? ''}');
-      message.writeln('${_selectedAddress!.street ?? ''} ${_selectedAddress!.houseNumber ?? ''}');
+      message.writeln('📍 *${ref.tr('wa_delivery_area')}:*');
+      message.writeln('👤 ${_selectedAddress!.recipientName}');
+      message.writeln('🏛️ ${_selectedAddress!.province}, ${_selectedAddress!.district ?? ''}');
       message.writeln('📞 ${_selectedAddress!.phonePrimary}');
     }
 
@@ -178,11 +178,16 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         if (cleaned.isNotEmpty) {
           whatsappNumber = cleaned;
           // Add shop info to the message
-          message.writeln('🏪 *Shop: ${shop.name}*');
           message.writeln('');
+          message.writeln('🏪 *${ref.tr('nav_my_shop')}: ${shop.name}*');
         }
       }
     }
+    
+    message.writeln('');
+    message.writeln('${ref.tr('wa_confirm_order')}');
+    message.writeln('');
+    message.writeln('_ ${ref.tr('wa_sent_via')} _');
 
     final encodedMessage = Uri.encodeComponent(message.toString());
     final whatsappUrl = 'https://wa.me/$whatsappNumber?text=$encodedMessage';

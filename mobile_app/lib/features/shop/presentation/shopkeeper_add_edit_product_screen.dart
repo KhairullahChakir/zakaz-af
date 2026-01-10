@@ -348,7 +348,7 @@ class _ShopkeeperAddEditProductScreenState extends ConsumerState<ShopkeeperAddEd
                           child: TextFormField(
                             controller: _stockController,
                             decoration: InputDecoration(
-                              labelText: ref.tr('stock_label'),
+                              labelText: ref.tr('stock'),
                               border: const OutlineInputBorder(),
                             ),
                             keyboardType: TextInputType.number,
