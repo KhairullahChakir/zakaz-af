@@ -55,7 +55,8 @@ class ShopkeeperRepository {
       final response = await _dio.get('/shopkeeper/dashboard');
       return ShopkeeperDashboard.fromJson(response.data);
     } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? 'Failed to fetch dashboard');
+      final message = _extractMessage(e);
+      throw Exception(message ?? 'Failed to fetch dashboard');
     }
   }
 
@@ -65,7 +66,8 @@ class ShopkeeperRepository {
       final List<dynamic> data = response.data;
       return data.map((json) => Product.fromJson(json)).toList();
     } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? 'Failed to fetch products');
+      final message = _extractMessage(e);
+      throw Exception(message ?? 'Failed to fetch products');
     }
   }
 
@@ -96,7 +98,8 @@ class ShopkeeperRepository {
       final response = await _dio.post('/shopkeeper/products', data: formData);
       return Product.fromJson(response.data['product']);
     } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? 'Failed to create product');
+      final message = _extractMessage(e);
+      throw Exception(message ?? 'Failed to create product');
     }
   }
 
@@ -131,7 +134,8 @@ class ShopkeeperRepository {
       final response = await _dio.post('/shopkeeper/products/$id', data: formData);
       return Product.fromJson(response.data['product']);
     } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? 'Failed to update product');
+      final message = _extractMessage(e);
+      throw Exception(message ?? 'Failed to update product');
     }
   }
 
@@ -139,7 +143,8 @@ class ShopkeeperRepository {
     try {
       await _dio.delete('/shopkeeper/products/$id');
     } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? 'Failed to delete product');
+      final message = _extractMessage(e);
+      throw Exception(message ?? 'Failed to delete product');
     }
   }
 
@@ -149,7 +154,8 @@ class ShopkeeperRepository {
       final List<dynamic> data = response.data;
       return data.map((json) => OrderModel.fromJson(json)).toList();
     } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? 'Failed to fetch orders');
+      final message = _extractMessage(e);
+      throw Exception(message ?? 'Failed to fetch orders');
     }
   }
 
@@ -160,7 +166,8 @@ class ShopkeeperRepository {
       });
       return OrderModel.fromJson(response.data['order']);
     } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? 'Failed to update order status');
+      final message = _extractMessage(e);
+      throw Exception(message ?? 'Failed to update order status');
     }
   }
 
@@ -189,8 +196,21 @@ class ShopkeeperRepository {
       });
       return Shop.fromJson(response.data['shop']);
     } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? 'Failed to update shop settings');
+      final message = _extractMessage(e);
+      throw Exception(message ?? 'Failed to update shop settings');
     }
+  }
+
+  String? _extractMessage(DioException e) {
+    if (e.response?.data == null) return e.message;
+    final data = e.response!.data;
+    if (data is Map) {
+      return data['message']?.toString() ?? data['error']?.toString();
+    }
+    if (data is String) {
+      return data;
+    }
+    return e.message;
   }
 }
 
