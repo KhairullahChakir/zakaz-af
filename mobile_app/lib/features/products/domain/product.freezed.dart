@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Product {
 
- int get id; String get name; String? get description; double get price; String? get image;@JsonKey(name: 'image_url') String? get imageUrl; int get stock;@JsonKey(name: 'category_id') int get categoryId;@JsonKey(name: 'shop_id') int? get shopId;@JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) double? get reviewsAvgRating;@JsonKey(name: 'order_count') int? get orderCount;@JsonKey(name: 'gallery_urls') List<String>? get galleryUrls; Category? get category; ProductShop? get shop;
+ int get id; String get name; String? get description; double get price; String? get image;@JsonKey(name: 'image_url') String? get imageUrl; int get stock;@JsonKey(name: 'category_id') int get categoryId;@JsonKey(name: 'shop_id') int? get shopId;@JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) double? get reviewsAvgRating;@JsonKey(name: 'order_count') int? get orderCount;@JsonKey(name: 'gallery_urls', fromJson: _parseGalleryUrls) List<String>? get galleryUrls; Category? get category; ProductShop? get shop;
 /// Create a copy of Product
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ProductCopyWith<$Res>  {
   factory $ProductCopyWith(Product value, $Res Function(Product) _then) = _$ProductCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, String? description, double price, String? image,@JsonKey(name: 'image_url') String? imageUrl, int stock,@JsonKey(name: 'category_id') int categoryId,@JsonKey(name: 'shop_id') int? shopId,@JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) double? reviewsAvgRating,@JsonKey(name: 'order_count') int? orderCount,@JsonKey(name: 'gallery_urls') List<String>? galleryUrls, Category? category, ProductShop? shop
+ int id, String name, String? description, double price, String? image,@JsonKey(name: 'image_url') String? imageUrl, int stock,@JsonKey(name: 'category_id') int categoryId,@JsonKey(name: 'shop_id') int? shopId,@JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) double? reviewsAvgRating,@JsonKey(name: 'order_count') int? orderCount,@JsonKey(name: 'gallery_urls', fromJson: _parseGalleryUrls) List<String>? galleryUrls, Category? category, ProductShop? shop
 });
 
 
@@ -190,7 +190,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String? description,  double price,  String? image, @JsonKey(name: 'image_url')  String? imageUrl,  int stock, @JsonKey(name: 'category_id')  int categoryId, @JsonKey(name: 'shop_id')  int? shopId, @JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating)  double? reviewsAvgRating, @JsonKey(name: 'order_count')  int? orderCount, @JsonKey(name: 'gallery_urls')  List<String>? galleryUrls,  Category? category,  ProductShop? shop)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String? description,  double price,  String? image, @JsonKey(name: 'image_url')  String? imageUrl,  int stock, @JsonKey(name: 'category_id')  int categoryId, @JsonKey(name: 'shop_id')  int? shopId, @JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating)  double? reviewsAvgRating, @JsonKey(name: 'order_count')  int? orderCount, @JsonKey(name: 'gallery_urls', fromJson: _parseGalleryUrls)  List<String>? galleryUrls,  Category? category,  ProductShop? shop)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Product() when $default != null:
 return $default(_that.id,_that.name,_that.description,_that.price,_that.image,_that.imageUrl,_that.stock,_that.categoryId,_that.shopId,_that.reviewsAvgRating,_that.orderCount,_that.galleryUrls,_that.category,_that.shop);case _:
@@ -211,7 +211,7 @@ return $default(_that.id,_that.name,_that.description,_that.price,_that.image,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String? description,  double price,  String? image, @JsonKey(name: 'image_url')  String? imageUrl,  int stock, @JsonKey(name: 'category_id')  int categoryId, @JsonKey(name: 'shop_id')  int? shopId, @JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating)  double? reviewsAvgRating, @JsonKey(name: 'order_count')  int? orderCount, @JsonKey(name: 'gallery_urls')  List<String>? galleryUrls,  Category? category,  ProductShop? shop)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String? description,  double price,  String? image, @JsonKey(name: 'image_url')  String? imageUrl,  int stock, @JsonKey(name: 'category_id')  int categoryId, @JsonKey(name: 'shop_id')  int? shopId, @JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating)  double? reviewsAvgRating, @JsonKey(name: 'order_count')  int? orderCount, @JsonKey(name: 'gallery_urls', fromJson: _parseGalleryUrls)  List<String>? galleryUrls,  Category? category,  ProductShop? shop)  $default,) {final _that = this;
 switch (_that) {
 case _Product():
 return $default(_that.id,_that.name,_that.description,_that.price,_that.image,_that.imageUrl,_that.stock,_that.categoryId,_that.shopId,_that.reviewsAvgRating,_that.orderCount,_that.galleryUrls,_that.category,_that.shop);case _:
@@ -231,7 +231,7 @@ return $default(_that.id,_that.name,_that.description,_that.price,_that.image,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String? description,  double price,  String? image, @JsonKey(name: 'image_url')  String? imageUrl,  int stock, @JsonKey(name: 'category_id')  int categoryId, @JsonKey(name: 'shop_id')  int? shopId, @JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating)  double? reviewsAvgRating, @JsonKey(name: 'order_count')  int? orderCount, @JsonKey(name: 'gallery_urls')  List<String>? galleryUrls,  Category? category,  ProductShop? shop)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String? description,  double price,  String? image, @JsonKey(name: 'image_url')  String? imageUrl,  int stock, @JsonKey(name: 'category_id')  int categoryId, @JsonKey(name: 'shop_id')  int? shopId, @JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating)  double? reviewsAvgRating, @JsonKey(name: 'order_count')  int? orderCount, @JsonKey(name: 'gallery_urls', fromJson: _parseGalleryUrls)  List<String>? galleryUrls,  Category? category,  ProductShop? shop)?  $default,) {final _that = this;
 switch (_that) {
 case _Product() when $default != null:
 return $default(_that.id,_that.name,_that.description,_that.price,_that.image,_that.imageUrl,_that.stock,_that.categoryId,_that.shopId,_that.reviewsAvgRating,_that.orderCount,_that.galleryUrls,_that.category,_that.shop);case _:
@@ -246,7 +246,7 @@ return $default(_that.id,_that.name,_that.description,_that.price,_that.image,_t
 @JsonSerializable()
 
 class _Product implements Product {
-  const _Product({required this.id, required this.name, required this.description, required this.price, this.image, @JsonKey(name: 'image_url') this.imageUrl, required this.stock, @JsonKey(name: 'category_id') required this.categoryId, @JsonKey(name: 'shop_id') this.shopId, @JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) this.reviewsAvgRating, @JsonKey(name: 'order_count') this.orderCount, @JsonKey(name: 'gallery_urls') final  List<String>? galleryUrls, this.category, this.shop}): _galleryUrls = galleryUrls;
+  const _Product({required this.id, required this.name, required this.description, required this.price, this.image, @JsonKey(name: 'image_url') this.imageUrl, required this.stock, @JsonKey(name: 'category_id') required this.categoryId, @JsonKey(name: 'shop_id') this.shopId, @JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) this.reviewsAvgRating, @JsonKey(name: 'order_count') this.orderCount, @JsonKey(name: 'gallery_urls', fromJson: _parseGalleryUrls) final  List<String>? galleryUrls, this.category, this.shop}): _galleryUrls = galleryUrls;
   factory _Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
 
 @override final  int id;
@@ -261,7 +261,7 @@ class _Product implements Product {
 @override@JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) final  double? reviewsAvgRating;
 @override@JsonKey(name: 'order_count') final  int? orderCount;
  final  List<String>? _galleryUrls;
-@override@JsonKey(name: 'gallery_urls') List<String>? get galleryUrls {
+@override@JsonKey(name: 'gallery_urls', fromJson: _parseGalleryUrls) List<String>? get galleryUrls {
   final value = _galleryUrls;
   if (value == null) return null;
   if (_galleryUrls is EqualUnmodifiableListView) return _galleryUrls;
@@ -305,7 +305,7 @@ abstract mixin class _$ProductCopyWith<$Res> implements $ProductCopyWith<$Res> {
   factory _$ProductCopyWith(_Product value, $Res Function(_Product) _then) = __$ProductCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, String? description, double price, String? image,@JsonKey(name: 'image_url') String? imageUrl, int stock,@JsonKey(name: 'category_id') int categoryId,@JsonKey(name: 'shop_id') int? shopId,@JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) double? reviewsAvgRating,@JsonKey(name: 'order_count') int? orderCount,@JsonKey(name: 'gallery_urls') List<String>? galleryUrls, Category? category, ProductShop? shop
+ int id, String name, String? description, double price, String? image,@JsonKey(name: 'image_url') String? imageUrl, int stock,@JsonKey(name: 'category_id') int categoryId,@JsonKey(name: 'shop_id') int? shopId,@JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) double? reviewsAvgRating,@JsonKey(name: 'order_count') int? orderCount,@JsonKey(name: 'gallery_urls', fromJson: _parseGalleryUrls) List<String>? galleryUrls, Category? category, ProductShop? shop
 });
 
 

@@ -19,7 +19,7 @@ abstract class Product with _$Product {
     @JsonKey(name: 'shop_id') int? shopId,
     @JsonKey(name: 'reviews_avg_rating', fromJson: _parseRating) double? reviewsAvgRating,
     @JsonKey(name: 'order_count') int? orderCount,
-    @JsonKey(name: 'gallery_urls') List<String>? galleryUrls,
+    @JsonKey(name: 'gallery_urls', fromJson: _parseGalleryUrls) List<String>? galleryUrls,
     Category? category,
     ProductShop? shop,
   }) = _Product;
@@ -33,4 +33,16 @@ double? _parseRating(dynamic value) {
   if (value is num) return value.toDouble();
   if (value is String) return double.tryParse(value);
   return null;
+}
+
+/// Parses gallery_urls from either List<String> or List<Map> (with image_url key)
+List<String>? _parseGalleryUrls(dynamic value) {
+  if (value == null) return null;
+  if (value is! List) return null;
+  
+  return value.map<String>((item) {
+    if (item is String) return item;
+    if (item is Map && item['image_url'] != null) return item['image_url'].toString();
+    return '';
+  }).where((url) => url.isNotEmpty).toList();
 }

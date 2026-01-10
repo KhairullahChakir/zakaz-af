@@ -18,9 +18,7 @@ _Product _$ProductFromJson(Map<String, dynamic> json) => _Product(
   shopId: (json['shop_id'] as num?)?.toInt(),
   reviewsAvgRating: _parseRating(json['reviews_avg_rating']),
   orderCount: (json['order_count'] as num?)?.toInt(),
-  galleryUrls: (json['gallery_urls'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  galleryUrls: _parseGalleryUrls(json['gallery_urls']),
   category: json['category'] == null
       ? null
       : Category.fromJson(json['category'] as Map<String, dynamic>),
