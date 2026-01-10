@@ -586,7 +586,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                                                       sb.writeln('*${ref.tr('wa_inquiry_header')}*');
                                                       sb.writeln('');
                                                       sb.writeln('📦 *${ref.tr('wa_product')}:* ${product.name}');
-                                                      sb.writeln('💰 *${ref.tr('price')}:* ${product.price.toInt()} AFN');
+                                                      sb.writeln('💰 *${ref.tr('price')}:* ${product.price.toInt()} ${ref.tr('afn')}');
                                                       sb.writeln('🔢 *${ref.tr('wa_id')}:* #${product.id}');
                                                       if (product.imageUrl != null) {
                                                         sb.writeln('🖼️ *${ref.tr('wa_photo')}:* ${product.imageUrl}');
