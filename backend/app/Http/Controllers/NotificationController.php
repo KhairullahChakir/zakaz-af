@@ -27,7 +27,7 @@ class NotificationController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $notification->update(['is_read' => true]);
+        $notification->update(['read' => true]);
         return response()->json(['message' => 'Marked as read']);
     }
 
@@ -35,8 +35,8 @@ class NotificationController extends Controller
     public function markAllAsRead(Request $request)
     {
         Notification::where('user_id', $request->user()->id)
-            ->where('is_read', false)
-            ->update(['is_read' => true]);
+            ->where('read', false)
+            ->update(['read' => true]);
 
         return response()->json(['message' => 'All marked as read']);
     }
@@ -45,7 +45,7 @@ class NotificationController extends Controller
     public function unreadCount(Request $request)
     {
         $count = Notification::where('user_id', $request->user()->id)
-            ->where('is_read', false)
+            ->where('read', false)
             ->count();
 
         return response()->json(['count' => $count]);

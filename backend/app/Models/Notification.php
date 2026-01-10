@@ -13,12 +13,12 @@ class Notification extends Model
         'body',
         'type',
         'data',
-        'is_read',
+        'read',
     ];
 
     protected $casts = [
         'data' => 'array',
-        'is_read' => 'boolean',
+        'read' => 'boolean',
     ];
 
     public function user(): BelongsTo
