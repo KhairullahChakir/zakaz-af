@@ -33,15 +33,16 @@ Dio dio(Ref ref) {
 
   dio.interceptors.add(AuthInterceptor(ref));
   
-  // Only log errors for cleaner console
-  dio.interceptors.add(LogInterceptor(
-    request: false,
-    requestHeader: false,
-    requestBody: false,
-    responseHeader: false,
-    responseBody: false,
-    error: true,
-    logPrint: (o) => debugPrint('*** DioException ***:\n$o'),
+  // Only log actual errors for cleaner console
+  dio.interceptors.add(InterceptorsWrapper(
+    onError: (DioException e, ErrorInterceptorHandler handler) {
+      // Only log server errors (not response parsing)
+      if (e.response?.statusCode != null && e.response!.statusCode! >= 400) {
+        debugPrint('🔴 API Error [${e.response?.statusCode}]: ${e.requestOptions.path}');
+        debugPrint('   Message: ${e.message}');
+      }
+      handler.next(e);
+    },
   ));
 
   return dio;
