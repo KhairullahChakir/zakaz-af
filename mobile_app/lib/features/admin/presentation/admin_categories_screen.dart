@@ -125,9 +125,9 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                             borderRadius: BorderRadius.circular(8),
                             child: Image.file(imageFile!, fit: BoxFit.cover),
                           )
-                        : (category?.image != null && imageFile == null)
+                        : (category?.imageUrl != null && imageFile == null)
                             ? CustomCachedImage(
-                                imageUrl: category!.image!,
+                                imageUrl: category!.imageUrl!,
                                 borderRadius: 8,
                                 fit: BoxFit.cover,
                               )
@@ -255,9 +255,9 @@ class _AdminCategoriesScreenState extends ConsumerState<AdminCategoriesScreen> {
                               color: context.inputFillColor,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: category.image != null
+                            child: category.imageUrl != null
                                 ? CustomCachedImage(
-                                    imageUrl: category.image!,
+                                    imageUrl: category.imageUrl!,
                                     fit: BoxFit.cover,
                                     borderRadius: 8,
                                     placeholder: Icon(Icons.category, color: context.textSecondary),

@@ -722,7 +722,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final iconSize = Responsive.value<double>(context, mobile: 28, tablet: 34);
 
     // Check if category has a photo (database or asset)
-    final hasPhoto = category.image != null || 
+    final hasPhoto = category.imageUrl != null || 
         ['grocer', 'cloth', 'tech'].any((t) => category.name.toLowerCase().contains(t));
 
     return GestureDetector(
@@ -774,13 +774,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildCategoryIcon(Category category, bool isSelected, double size) {
-    if (category.image != null) {
-      final imageUrl = category.image!.startsWith('http') 
-          ? category.image! 
-          : 'http://172.20.10.2:8000/storage/${category.image}';
-
+    if (category.imageUrl != null) {
       return CustomCachedImage(
-        imageUrl: imageUrl, 
+        imageUrl: category.imageUrl!, 
         width: size,
         height: size,
         fit: BoxFit.cover,

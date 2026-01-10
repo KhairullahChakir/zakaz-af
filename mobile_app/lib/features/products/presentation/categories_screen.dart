@@ -94,13 +94,9 @@ class CategoriesScreen extends ConsumerWidget {
 
   Widget _buildCategoryIcon(Category category) {
     // Check if category has an image from the backend
-    if (category.image != null) {
-      final imageUrl = category.image!.startsWith('http') 
-          ? category.image! 
-          : 'http://172.20.10.2:8000/storage/${category.image}';
-
+    if (category.imageUrl != null) {
       return CustomCachedImage(
-        imageUrl: imageUrl,
+        imageUrl: category.imageUrl!,
         width: 60,
         height: 60,
         fit: BoxFit.cover,
