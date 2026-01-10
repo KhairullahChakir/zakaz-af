@@ -138,21 +138,36 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     message.writeln('');
     message.writeln('🛍️ *${ref.tr('order_details')}:*');
     
+    final afn = ref.tr('afn');
     double total = 0;
     for (final item in items) {
       final itemTotal = (item.product.price) * item.quantity;
       total += itemTotal;
-      message.writeln('• ${item.product.name} x${item.quantity} = ${itemTotal.toInt()} AFN');
+      message.writeln('• ${item.product.name} x${item.quantity} = ${itemTotal.toInt()} $afn');
     }
     
     message.writeln('');
-    message.writeln('💵 *${ref.tr('cart_total')}: ${total.toInt()} AFN*');
+    message.writeln('💵 *${ref.tr('cart_total')}: ${total.toInt()} $afn*');
     message.writeln('');
     
     if (_selectedAddress != null) {
       message.writeln('📍 *${ref.tr('wa_delivery_area')}:*');
-      message.writeln('👤 ${_selectedAddress!.recipientName}');
-      message.writeln('🏛️ ${_selectedAddress!.province}, ${_selectedAddress!.district ?? ''}');
+      message.writeln('👤 ${ref.tr('full_name')}: ${_selectedAddress!.recipientName}');
+      
+      final addressParts = [
+        _selectedAddress!.province,
+        if (_selectedAddress!.district != null) _selectedAddress!.district,
+      ];
+      message.writeln('🏙️ ${addressParts.join(', ')}');
+      
+      final streetParts = [
+        if (_selectedAddress!.street != null) _selectedAddress!.street,
+        if (_selectedAddress!.houseNumber != null) _selectedAddress!.houseNumber,
+      ];
+      if (streetParts.isNotEmpty) {
+        message.writeln('🏠 ${streetParts.join(', ')}');
+      }
+      
       message.writeln('📞 ${_selectedAddress!.phonePrimary}');
     }
 
@@ -179,7 +194,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           whatsappNumber = cleaned;
           // Add shop info to the message
           message.writeln('');
-          message.writeln('🏪 *${ref.tr('nav_my_shop')}: ${shop.name}*');
+          message.writeln('🏪 *${ref.tr('sold_by')}: ${shop.name}*');
         }
       }
     }
