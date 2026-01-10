@@ -190,15 +190,31 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        $request->validate([
+        // Build validation rules - only require email/phone if user doesn't have one already
+        $requiresContact = !$user->email && !$user->phone;
+        
+        $rules = [
             'name' => 'required|string|max:255',
-            'email' => 'required_without:phone|email|unique:users,email,'.$user->id.'|nullable',
-            'phone' => 'required_without:email|string|unique:users,phone,'.$user->id.'|nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'fcm_token' => 'nullable|string',
-        ]);
+        ];
+        
+        // Only apply required_without rules if user has no contact info
+        if ($requiresContact) {
+            $rules['email'] = 'required_without:phone|email|unique:users,email,'.$user->id.'|nullable';
+            $rules['phone'] = 'required_without:email|string|unique:users,phone,'.$user->id.'|nullable';
+        } else {
+            // User already has contact info, make these optional
+            $rules['email'] = 'nullable|email|unique:users,email,'.$user->id;
+            $rules['phone'] = 'nullable|string|unique:users,phone,'.$user->id;
+        }
+
+        $request->validate($rules);
 
         $data = $request->only('name', 'email', 'phone', 'fcm_token');
+        
+        // Remove null values to avoid overwriting existing data
+        $data = array_filter($data, fn($value) => $value !== null);
 
         if ($request->hasFile('image')) {
             // Delete old image

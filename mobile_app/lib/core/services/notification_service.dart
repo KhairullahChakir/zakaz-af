@@ -145,6 +145,8 @@ class NotificationService {
     final user = authState.value!;
     _ref.read(authControllerProvider.notifier).updateProfile(
       name: user.name,
+      email: user.email,
+      phone: user.phone,
       fcmToken: token,
     );
   }
