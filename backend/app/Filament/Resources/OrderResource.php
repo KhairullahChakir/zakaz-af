@@ -99,7 +99,9 @@ class OrderResource extends Resource
                         'whatsapp' => 'WhatsApp',
                         'card' => 'Card',
                     ]),
-            ])
+            ], layout: Tables\Enums\FiltersLayout::AboveContent)
+            ->filtersFormColumns(2)
+            ->persistFiltersInSession()
             ->actions([
                 \Filament\Actions\ViewAction::make(),
                 \Filament\Actions\EditAction::make(),

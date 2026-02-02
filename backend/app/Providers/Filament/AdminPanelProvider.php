@@ -32,6 +32,20 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->font('Inter')
             ->brandName('Zakaz-AF Admin')
+            ->sidebarCollapsibleOnDesktop()
+            ->sidebarWidth('16rem')
+            ->renderHook(
+                'panels::head.end',
+                fn() => '<style>
+                    html, body { overflow-x: hidden !important; max-width: 100vw !important; }
+                    .fi-layout { overflow-x: hidden !important; max-width: 100vw !important; }
+                    .fi-main { overflow-x: hidden !important; }
+                    .fi-main-ctn { overflow-x: auto !important; max-width: 100% !important; }
+                    .fi-ta { overflow-x: auto !important; max-width: 100% !important; }
+                    .fi-ta-header-ctn { overflow-x: visible !important; }
+                    table { max-width: 100% !important; }
+                </style>'
+            )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

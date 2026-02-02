@@ -1,0 +1,32 @@
+/* Custom CSS fixes for Filament Admin Panel */
+
+/* Fix content overflow on right side */
+.fi-main {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.fi-ta {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* Ensure tables scroll horizontally on smaller viewports */
+.fi-ta-content {
+    overflow-x: auto;
+}
+
+/* Fix for column toggle dropdown positioning */
+.fi-dropdown-panel {
+    max-width: calc(100vw - 2rem);
+}
+
+/* Ensure sidebar doesn't cause overflow */
+.fi-layout {
+    overflow-x: hidden;
+}
+
+/* Table action buttons */
+.fi-ta-actions {
+    flex-wrap: nowrap;
+}
