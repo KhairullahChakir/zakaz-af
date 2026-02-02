@@ -15,7 +15,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.zakaz.af"
+    namespace = "com.zakaz.af.store"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
 
@@ -39,7 +39,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.zakaz.af"
+        applicationId = "com.zakaz.af.store"
         minSdk = 24
         targetSdk = 36
         versionCode = flutter.versionCode

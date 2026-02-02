@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:595873251328:android:99ea65f6e1836b10da18e5",
         "android_client_info": {
-          "package_name": "com.zakaz.af"
+          "package_name": "com.zakaz.af.store"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "595873251328-75onr4174rvdgur17mbr0dmtth4ib1t2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.zakaz.af",
+            "package_name": "com.zakaz.af.store",
             "certificate_hash": "a5539ed0170ce47ba78b805bd33f9d7ea36fc9cc"
           }
         },
