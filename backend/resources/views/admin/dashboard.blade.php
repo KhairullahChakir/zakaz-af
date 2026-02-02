@@ -137,7 +137,7 @@
                         <h4 class="font-medium">{{ $shop->name }}</h4>
                         <span class="text-xs text-gray-400">{{ $shop->created_at->diffForHumans() }}</span>
                     </div>
-                    <p class="text-sm text-gray-400 mb-3">{{ $shop->user->name ?? 'Unknown' }}</p>
+                    <p class="text-sm text-gray-400 mb-3">{{ $shop->owner->name ?? 'Unknown' }}</p>
                     <div class="flex gap-2">
                         <form action="{{ route('admin.shops.approve', $shop) }}" method="POST" class="flex-1">
                             @csrf

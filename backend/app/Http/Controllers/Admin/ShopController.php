@@ -10,7 +10,7 @@ class ShopController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Shop::with('user');
+        $query = Shop::with('owner');
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -27,7 +27,7 @@ class ShopController extends Controller
 
     public function show(Shop $shop)
     {
-        $shop->load(['user', 'products']);
+        $shop->load(['owner', 'products']);
         return view('admin.shops.show', compact('shop'));
     }
 

@@ -29,7 +29,7 @@ class DashboardController extends Controller
             ->get();
 
         $pendingShops = Shop::where('status', 'pending')
-            ->with('user')
+            ->with('owner')
             ->take(5)
             ->get();
 

@@ -46,8 +46,8 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div>{{ $shop->user->name ?? 'N/A' }}</div>
-                                        <div class="text-sm text-gray-400">{{ $shop->user->email ?? '' }}</div>
+                                        <div>{{ $shop->owner->name ?? 'N/A' }}</div>
+                                        <div class="text-sm text-gray-400">{{ $shop->owner->email ?? '' }}</div>
                     </div>
                     </td>
                     <td class="px-6 py-4">

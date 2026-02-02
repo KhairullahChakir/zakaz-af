@@ -68,12 +68,12 @@
     <div class="space-y-6">
         <div class="bg-gray-800 rounded-xl border border-gray-700 p-6">
             <h3 class="text-lg font-semibold mb-4">Owner</h3>
-            @if($shop->user)
+            @if($shop->owner)
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold">{{ substr($shop->user->name, 0, 1) }}</div>
-                    <div><p class="font-medium">{{ $shop->user->name }}</p><p class="text-sm text-gray-400">{{ $shop->user->email }}</p></div>
+                    <div class="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold">{{ substr($shop->owner->name, 0, 1) }}</div>
+                    <div><p class="font-medium">{{ $shop->owner->name }}</p><p class="text-sm text-gray-400">{{ $shop->owner->email }}</p></div>
                 </div>
-                <a href="{{ route('admin.users.show', $shop->user) }}" class="text-primary-500 hover:text-primary-400 text-sm">View User Profile</a>
+                <a href="{{ route('admin.users.show', $shop->owner) }}" class="text-primary-500 hover:text-primary-400 text-sm">View User Profile</a>
             @endif
         </div>
 
